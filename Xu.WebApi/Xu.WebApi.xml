@@ -1,0 +1,747 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Xu.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Xu.WebApi.CacheAOP">
+            <summary>
+            面向切面的缓存使用
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.CacheAOPbase.Intercept(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            AOP的拦截方法
+            </summary>
+            <param name="invocation"></param>
+        </member>
+        <member name="M:Xu.WebApi.CacheAOPbase.CustomCacheKey(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            自定义缓存的key
+            </summary>
+            <param name="invocation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.CacheAOPbase.GetArgumentValue(System.Object)">
+            <summary>
+            object 转 string
+            </summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.LogAOP">
+            <summary>
+            拦截器LogAOP 继承IInterceptor接口
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.LogAOP.Intercept(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            实例化IInterceptor唯一方法
+            </summary>
+            <param name="invocation">包含被拦截方法的信息</param>
+        </member>
+        <member name="T:Xu.WebApi.RedisCacheAOP">
+            <summary>
+            面向切面的缓存使用
+            如果你使用Redis，需要安装Redis服务端，安装和使用说明地址：
+            https://www.cnblogs.com/laozhang-is-phi/p/9554210.html#autoid-3-4-0 ，端口是 6319 ，注意！
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.TranAOP">
+            <summary>
+            事务拦截器TranAOP 继承IInterceptor接口
+            建立事务AOP，解决多仓储内的事务操作
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.TranAOP.Intercept(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            实例化IInterceptor唯一方法
+            </summary>
+            <param name="invocation">包含被拦截方法的信息</param>
+        </member>
+        <member name="M:Xu.WebApi.JwtHelper.IssueJwt(Xu.WebApi.TokenModelJwt)">
+            <summary>
+            颁发JWT字符串
+            </summary>
+            <param name="tokenModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.JwtHelper.SerializeJwt(System.String)">
+            <summary>
+            解析
+            </summary>
+            <param name="jwtStr"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.TokenModelJwt">
+            <summary>
+            令牌
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.TokenModelJwt.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.TokenModelJwt.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.TokenModelJwt.Work">
+            <summary>
+            职能
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.JwtTokenAuth">
+            <summary>
+            中间件
+            原做为自定义授权中间件
+            先做检查 header token的使用
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.JwtTokenAuth._next">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Xu.WebApi.JwtTokenAuth.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+             <summary>
+            
+             </summary>
+             <param name="next"></param>
+        </member>
+        <member name="M:Xu.WebApi.JwtTokenAuth.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+             <summary>
+            
+             </summary>
+             <param name="httpContext"></param>
+             <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.JwtToken">
+            <summary>
+            JWTToken生成类
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.JwtToken.BuildJwtToken(System.Security.Claims.Claim[],Xu.WebApi.PermissionRequirement)">
+            <summary>
+            获取基于JWT的Token
+            </summary>
+            <param name="claims">需要在登陆的时候配置</param>
+            <param name="permissionRequirement">在startup中定义的参数</param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.PermissionHandler">
+            <summary>
+            权限授权处理器
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionHandler.Schemes">
+            <summary>
+            验证方案提供对象
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.PermissionHandler.#ctor(Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider,Xu.IServices.IRoleSvc,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            构造函数注入
+            </summary>
+            <param name="schemes"></param>
+            <param name="roleSvc"></param>
+            <param name="accessor"></param>
+        </member>
+        <member name="T:Xu.WebApi.PermissionItem">
+            <summary>
+            用户或角色或其他凭据实体,就像是订单详情一样
+            之前的名字是 Permission
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionItem.Role">
+            <summary>
+            用户或角色或其他凭据名称
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionItem.Url">
+            <summary>
+            请求Url
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.PermissionRequirement">
+            <summary>
+            必要参数类，类似一个订单信息
+            继承 IAuthorizationRequirement，用于设计自定义权限处理器PermissionHandler
+            因为AuthorizationHandler 中的泛型参数 TRequirement 必须继承 IAuthorizationRequirement
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.Permissions">
+            <summary>
+            用户权限集合，一个订单包含了很多详情，
+            同理，一个网站的认证发行中，也有很多权限详情(这里是Role和URL的关系)
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.DeniedAction">
+            <summary>
+            无权限action
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.ClaimType">
+            <summary>
+            认证授权类型
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.LoginPath">
+            <summary>
+            请求路径
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.Issuer">
+            <summary>
+            发行人
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.Audience">
+            <summary>
+            订阅人
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.Expiration">
+            <summary>
+            过期时间
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.PermissionRequirement.SigningCredentials">
+            <summary>
+            签名验证
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.PermissionRequirement.#ctor(System.String,System.Collections.Generic.List{Xu.WebApi.PermissionItem},System.String,System.String,System.String,Microsoft.IdentityModel.Tokens.SigningCredentials,System.TimeSpan)">
+            <summary>
+            构造
+            </summary>
+            <param name="deniedAction">拒约请求的url</param>
+            <param name="permissions">权限集合</param>
+            <param name="claimType">声明类型</param>
+            <param name="issuer">发行人</param>
+            <param name="audience">订阅人</param>
+            <param name="signingCredentials">签名验证实体</param>
+            <param name="expiration">过期时间</param>
+        </member>
+        <member name="T:Xu.WebApi.AutoMapperConfig">
+            <summary>
+            静态全局 AutoMapper 配置文件
+            </summary>
+            <remarks>
+            Automapper是一种实体转换关系的模型，AutoMapper是一个.NET的对象映射工具。
+            主要作用是进行领域对象与模型（DTO）之间的转换、数据库查询结果映射至实体对象。
+            </remarks>
+        </member>
+        <member name="M:Xu.WebApi.CustomProfile.#ctor">
+            <summary>
+            配置构造函数，用来创建关系映射
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.LoginController">
+            <summary>
+            登录管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.WebApi.PermissionRequirement)">
+            <summary>
+            构造函数注入
+            </summary>
+            <param name="userSvc"></param>
+            <param name="roleSvc"></param>
+            <param name="requirement"></param>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.LoginController.GetJwtToken(System.String,System.String)">
+            <summary>
+            获取JWT的方法（登录接口）
+            </summary>
+            <param name="name">登录名</param>
+            <param name="pass">登录密码</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.LoginController.RefreshToken(System.String)">
+            <summary>
+            请求刷新Token（以旧换新）
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.LoginController.Getjsonp(System.String,System.Int64,System.String)">
+            <summary>
+            获取JWT的方法4：给 JSONP 测试
+            </summary>
+            <param name="callBack"></param>
+            <param name="id"></param>
+            <param name="sub"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.MenuController">
+            <summary>
+            菜单管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.Get(System.Int32,System.Int32,System.String)">
+            <summary>
+            获取全部菜单并分页
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="menuName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetByIds(System.String,System.String)">
+            <summary>
+            根据菜单Ids集合获取菜单
+            </summary>
+            <param name="ids"></param>
+            <param name="isParent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.Post(Xu.Model.Menu)">
+            <summary>
+            添加菜单
+            </summary>
+            <param name="menu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.Put(Xu.Model.Menu)">
+            <summary>
+            更新菜单
+            </summary>
+            <param name="menu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.Delete(System.Int32)">
+            <summary>
+            删除菜单
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.Disable(System.Int32,System.Boolean)">
+            <summary>
+            禁用菜单
+            </summary>
+            <param name="id"></param>
+            <param name="falg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.RoleController">
+            <summary>
+            角色管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.Get(System.Int32,System.Int32,System.String)">
+            <summary>
+            获取全部角色并分页
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.GetByIds(System.String)">
+            <summary>
+            根据用户Ids集合获取角色
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.Post(Xu.Model.Role)">
+            <summary>
+            添加角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.Put(Xu.Model.Role)">
+            <summary>
+            更新角色
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.Delete(System.Int32)">
+            <summary>
+            删除角色
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.Disable(System.Int32,System.Boolean)">
+            <summary>
+            禁用角色
+            </summary>
+            <param name="id"></param>
+            <param name="falg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.UserController">
+            <summary>
+            用户管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.#ctor(Xu.IRepository.IUnitOfWork,Xu.IServices.IUserSvc)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="unitOfWork"></param>
+            <param name="userSvc"></param>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.Get(System.Int32,System.Int32,System.String)">
+            <summary>
+            获取全部用户并分页
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.GetByIds(System.String)">
+            <summary>
+            根据用户Ids集合获取用户
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.GetInfoByToken(System.String)">
+            <summary>
+            根据token获取用户详情
+            </summary>
+            <param name="token">令牌</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.Post(Xu.Model.User)">
+            <summary>
+            添加用户
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.Put(Xu.Model.User)">
+            <summary>
+            更新用户
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.Delete(System.Int32)">
+            <summary>
+            删除用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.Disable(System.Int32,System.Boolean)">
+            <summary>
+            禁用用户
+            </summary>
+            <param name="id"></param>
+            <param name="falg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.AuthorizationSetup">
+            <summary>
+            配置认证服务
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.AutoMapperSetup">
+            <summary>
+            Automapper 启动服务
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.CorsSetup">
+            <summary>
+            Cors 启动服务
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.DbSetup">
+            <summary>
+            Db 启动服务（自动化初始数据库）
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.HttpContextSetup">
+            <summary>
+            Db 启动服务
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.JobSetup">
+            <summary>
+            IHostedService  启动服务
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.JobSetup.AddJobSetup(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            实现定时任务
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:Xu.WebApi.MemoryCacheSetup">
+            <summary>
+            Caching 启动Caching 启动缓存
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.MiniProfilerSetup">
+            <summary>
+            MiniProfiler 启动服务 （接口执行时间分析）
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.SqlsugarSetup">
+            <summary>
+            SqlSugar 启动服务
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.SwaggerSetup">
+            <summary>
+            Swagger 启动服务
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.GlobalRouteAuthorizeConvention">
+            <summary>
+            Summary:全局路由权限公约
+            Remarks:目的是针对不同的路由，采用不同的授权过滤器
+            如果 controller 上不加 [Authorize] 特性，默认都是 Permission 策略
+            否则，如果想特例其他授权机制的话，需要在 controller 上带上  [Authorize]，然后再action上自定义授权即可，比如 [Authorize(Roles = "Admin")]
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.GlobalAuthorizeFilter">
+            <summary>
+            全局权限过滤器【无效】
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.GlobalExceptionsFilter">
+            <summary>
+            全局异常错误日志
+            </summary>
+            <remarks>
+            1、Filter过滤器是基于当前Http请求的，也就是接口层面的，颗粒度比较大；
+            2、而AOP是基于服务切面的，是 Service 层的请求，颗粒度比较小；
+            </remarks>
+        </member>
+        <member name="M:Xu.WebApi.GlobalExceptionsFilter.WriteLog(System.String,System.Exception)">
+            <summary>
+            自定义返回格式
+            </summary>
+            <param name="throwMsg"></param>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Xu.WebApi.JsonErrorResponse.Message">
+            <summary>
+            生产环境的消息
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.JsonErrorResponse.DevelopmentMessage">
+            <summary>
+            开发环境的消息
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.GlobalRoutePrefixFilter">
+            <summary>
+            全局路由前缀公约
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.IPLogMildd">
+            <summary>
+            中间件
+            记录IP请求数据
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.IPLogMildd._next">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Xu.WebApi.IPLogMildd.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+             <summary>
+            
+             </summary>
+             <param name="next"></param>
+        </member>
+        <member name="M:Xu.WebApi.MiddlewareHelpers.UseJwtTokenAuth(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            自定义授权中间件
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.MiddlewareHelpers.UseReuestResponseLog(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            请求响应中间件
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.MiddlewareHelpers.UseSignalRSendMildd(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            SignalR中间件
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.MiddlewareHelpers.UseExceptionHandlerMidd(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            异常处理中间件
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.MiddlewareHelpers.UseIPLogMildd(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            IP请求中间件
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.RequRespLogMildd">
+            <summary>
+            中间件
+            记录请求和响应数据
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.RequRespLogMildd._next">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Xu.WebApi.RequRespLogMildd.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+             <summary>
+            
+             </summary>
+             <param name="next"></param>
+        </member>
+        <member name="T:Xu.WebApi.SignalRSendMildd">
+            <summary>
+            中间件
+            记录请求和响应数据
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.SignalRSendMildd._next">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Xu.WebApi.SignalRSendMildd.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.AspNetCore.SignalR.IHubContext{Xu.Common.ChatHub})">
+             <summary>
+            
+             </summary>
+             <param name="next"></param>
+             <param name="hubContext"></param>
+        </member>
+        <member name="P:Xu.WebApi.Startup.Repository">
+            <summary>
+            log4net 仓储库
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+            <remarks>
+            权重：AddSingleton→AddTransient→AddScoped
+            AddSingleton的生命周期：项目启动-项目关闭 相当于静态类  只会有一个
+            AddScoped   的生命周期：请求开始-请求结束  在这次请求中获取的对象都是同一个
+            AddTransient的生命周期：请求获取-（GC回收-主动释放） 每一次获取的对象都不是同一个
+            </remarks>
+        </member>
+        <member name="T:Xu.WebApi.CustomApiVersion">
+            <summary>
+            自定义版本
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.CustomApiVersion.ApiVersions">
+            <summary>
+            Api接口版本 自定义
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.CustomApiVersion.ApiVersions.V1">
+            <summary>
+            V1 版本
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.CustomApiVersion.ApiVersions.V2">
+            <summary>
+            V2 版本
+            </summary>
+        </member>
+        <member name="T:Xu.WebApi.CustomRouteAttribute">
+            <summary>
+            自定义路由 /api/{version}/[controler]/[action]
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.CustomRouteAttribute.GroupName">
+            <summary>
+            分组名称,是来实现接口 IApiDescriptionGroupNameProvider
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.CustomRouteAttribute.#ctor(System.String)">
+            <summary>
+            自定义路由构造函数，继承基类路由
+            </summary>
+            <param name="actionName"></param>
+        </member>
+        <member name="M:Xu.WebApi.CustomRouteAttribute.#ctor(Xu.WebApi.CustomApiVersion.ApiVersions,System.String)">
+            <summary>
+            自定义版本+路由构造函数，继承基类路由
+            </summary>
+            <param name="actionName"></param>
+            <param name="version"></param>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.#ctor(Xu.Model.MyContext)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="myContext"></param>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.GetFrameFiles">
+            <summary>
+            获取 整体框架 文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.GetModelFiles">
+            <summary>
+            获取 Model 层文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.GetIRepositoryFiles">
+            <summary>
+            获取 IRepository 层文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.GetRepositoryFiles">
+            <summary>
+            获取 Repository 层文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.GetIServiceFiles">
+            <summary>
+            获取 IService 层文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Core.Controllers.DbFirstController.GetServicesFiles">
+            <summary>
+            获取 Services 层文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Model.EFContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            数据库链接配置
+            </summary>
+            <param name="optionsBuilder"></param>
+        </member>
+        <member name="T:Xu.Model.EFContext.Student">
+            <summary>
+            模型创建重载,重写DbContext默认的OnModelCreating方法,使用自定义的方法动态加载实体映射类型
+            </summary>
+            <param name="modelBuilder">模型创建器</param>
+        </member>
+    </members>
+</doc>
