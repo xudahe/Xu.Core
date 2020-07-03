@@ -26,9 +26,9 @@
         public string Icon { get; set; }
 
         /// <summary>
-        /// 父级菜单
+        /// 父级菜单Id
         /// </summary>
-        public string ParentName { get; set; }
+        public int? ParentId { get; set; }
 
         /// <summary>
         /// 加载方式
@@ -36,7 +36,7 @@
         public string LoadWay { get; set; }
 
         /// <summary>
-        /// 加载序號
+        /// 加载序号
         /// </summary>
         public string Index { get; set; }
 

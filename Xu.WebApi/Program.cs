@@ -75,7 +75,7 @@ namespace Xu.WebApi
                    serverOptions.AllowSynchronousIO = true;//启用同步 IO
                })
                .UseStartup<Startup>()
-               .UseUrls("http://localhost:1081", "http://localhost:1082")
+               .UseUrls("http://*:1081", "http://*:1082")
                .ConfigureLogging((hostingContext, builder) =>
                {
                    builder.ClearProviders();
@@ -83,6 +83,10 @@ namespace Xu.WebApi
                    builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                    builder.AddConsole();
                    builder.AddDebug();
+
+                   //过滤掉系统默认的一些日志
+                   builder.AddFilter("System",LogLevel.Error);
+                   builder.AddFilter("Microsoft",LogLevel.Error);
                });
            });
     }

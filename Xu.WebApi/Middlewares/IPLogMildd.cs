@@ -53,7 +53,7 @@ namespace Xu.WebApi
                         {
                             Parallel.For(0, 1, e =>
                             {
-                                LogLock.OutSql2Log("ReqLog", new string[] { requestInfo + "," }, false);
+                                LogLock.OutSql2Log("RequestIpInfoLog", new string[] { requestInfo + "," }, false);
                             });
 
                             request.Body.Position = 0;

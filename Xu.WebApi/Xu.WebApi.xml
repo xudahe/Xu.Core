@@ -152,7 +152,6 @@
         <member name="T:Xu.WebApi.PermissionItem">
             <summary>
             用户或角色或其他凭据实体,就像是订单详情一样
-            之前的名字是 Permission
             </summary>
         </member>
         <member name="P:Xu.WebApi.PermissionItem.Role">
@@ -290,12 +289,11 @@
             <param name="menuName"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.GetByIds(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetByIds(System.String)">
             <summary>
             根据菜单Ids集合获取菜单
             </summary>
             <param name="ids"></param>
-            <param name="isParent"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.Post(Xu.Model.Menu)">

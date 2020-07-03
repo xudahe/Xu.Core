@@ -89,9 +89,9 @@
             菜单图标
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.ParentName">
+        <member name="P:Xu.Model.Menu.ParentId">
             <summary>
-            父级菜单
+            父级菜单Id
             </summary>
         </member>
         <member name="P:Xu.Model.Menu.LoadWay">
@@ -101,7 +101,7 @@
         </member>
         <member name="P:Xu.Model.Menu.Index">
             <summary>
-            加载序號
+            加载序号
             </summary>
         </member>
         <member name="P:Xu.Model.Menu.Enabled">

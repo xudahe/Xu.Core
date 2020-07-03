@@ -45,7 +45,6 @@ namespace Xu.WebApi.Controllers
         /// <param name="pass">登录密码</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetJwtToken")]
         public async Task<object> GetJwtToken(string name = "", string pass = "")
         {
             string jwtStr = string.Empty;
@@ -107,7 +106,6 @@ namespace Xu.WebApi.Controllers
         /// <param name="token"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("RefreshToken")]
         public async Task<object> RefreshToken(string token = "")
         {
             string jwtStr = string.Empty;
@@ -158,7 +156,6 @@ namespace Xu.WebApi.Controllers
         /// <param name="sub"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("jsonp")]
         public void Getjsonp(string callBack, long id = 1, string sub = "Permission")
         {
             TokenModelJwt tokenModel = new TokenModelJwt

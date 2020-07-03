@@ -49,30 +49,42 @@ namespace Xu.WebApi.Controllers
         /// 根据菜单Ids集合获取菜单
         /// </summary>
         /// <param name="ids"></param>
-        /// <param name="isParent"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetByIds(string ids, string isParent = "")
+        [AllowAnonymous]
+        public async Task<object> GetByIds(string ids)
         {
-            var data = new MessageModel<List<Menu>>();
-            if (!string.IsNullOrEmpty(ids))
+            var menuList = new List<Menu>();
+            if (string.IsNullOrEmpty(ids)) {
+                menuList = await _menuSvc.Query(s => s.Enabled == false);
+            }
+            else
             {
-                var menuList = await _menuSvc.QueryByIds(ids.Split(","));
-
-                if (menuList.Count > 0 && !string.IsNullOrEmpty(isParent))
-                {
-                    if (isParent.ToBoolReq())
-                        menuList = menuList.Where(s => string.IsNullOrEmpty(s.ParentName)).ToList();
-                    else
-                        menuList = menuList.Where(s => !string.IsNullOrEmpty(s.ParentName)).ToList();
-                }
-
-                data.Response = menuList;
-                data.Success = menuList.Count >= 0;
-                data.Msg = "获取成功";
+                var menuIds = ids.SplitInt(",");
+                menuList = await _menuSvc.Query(s => s.Enabled == false && menuIds.Contains(s.Id));
             }
 
-            return data;
+            var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s=>s.Index).ToList(); //获取一级菜单（顶部）
+
+            IDictionary<Menu, object> dic1 = new Dictionary<Menu, object>();
+            for (int i = 0; i < menuList1.Count(); i++)
+            {
+                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
+
+                IDictionary<Menu, object> dic2 = new Dictionary<Menu, object>();
+                for (int j = 0; j < menuList2.Count(); j++)
+                {
+                    var menuList3 = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
+                    dic2.Add(menuList2[i], menuList3);
+                }
+                dic1.Add(menuList1[i], dic2);
+            }
+                
+            return new MessageModel<object>() {
+                Response = dic1,
+                Success = dic1.Count >= 0,
+                Msg = "获取成功"
+            };
         }
 
         /// <summary>

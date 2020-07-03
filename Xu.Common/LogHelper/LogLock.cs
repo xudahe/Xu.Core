@@ -176,7 +176,7 @@ namespace Xu.Common
 
             try
             {
-                var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "ReqLog.log"), Encoding.UTF8) + "]");
+                var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "RequestIpInfoLog"), Encoding.UTF8) + "]");
 
                 Logs = Logs.Where(d => d.Datetime.ToDateTimeReq() >= DateTime.Today).ToList();
 
@@ -220,7 +220,7 @@ namespace Xu.Common
 
             try
             {
-                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "ReqLog.log"), Encoding.UTF8) + "]");
+                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "RequestIpInfoLog"), Encoding.UTF8) + "]");
 
                 var ddd = Logs.Where(d => d.Week == "周日").ToList();
 
@@ -284,7 +284,7 @@ namespace Xu.Common
             List<ApiDate> apiDates = new List<ApiDate>();
             try
             {
-                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "ReqLog.log"), Encoding.UTF8) + "]");
+                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "RequestIpInfoLog"), Encoding.UTF8) + "]");
 
                 apiDates = (from n in Logs
                             group n by new { n.Date } into g
@@ -313,7 +313,7 @@ namespace Xu.Common
             List<ApiDate> apiDates = new List<ApiDate>();
             try
             {
-                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "ReqLog.log"), Encoding.UTF8) + "]");
+                Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", "RequestIpInfoLog"), Encoding.UTF8) + "]");
 
                 apiDates = (from n in Logs
                             where n.Datetime.ToDateTimeReq() >= DateTime.Today
