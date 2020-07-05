@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
 using Xu.Model;
+using Xu.Model.Models;
 
 namespace Xu.WebApi.Controllers
 {
@@ -39,8 +40,8 @@ namespace Xu.WebApi.Controllers
 
             return new MessageModel<PageModel<Role>>()
             {
-                Msg = "获取成功",
-                Success = data.DataCount >= 0,
+                Message = "获取成功",
+                Success = true,
                 Response = data
             };
         }
@@ -59,8 +60,8 @@ namespace Xu.WebApi.Controllers
                 var roleList = await _roleSvc.QueryByIds(ids.Split(","));
 
                 data.Response = roleList;
-                data.Success = roleList.Count >= 0;
-                data.Msg = "获取成功";
+                data.Success = true;
+                data.Message = "获取成功";
             }
 
             return data;
@@ -79,7 +80,7 @@ namespace Xu.WebApi.Controllers
 
             return new MessageModel<Role>()
             {
-                Msg = "添加成功",
+                Message = "添加成功",
                 Success = true,
                 Response = model
             };
@@ -99,7 +100,7 @@ namespace Xu.WebApi.Controllers
                 data.Success = await _roleSvc.Update(role);
                 if (data.Success)
                 {
-                    data.Msg = "更新成功";
+                    data.Message = "更新成功";
                     data.Response = role?.Id.ToString();
                 }
             }
@@ -123,7 +124,7 @@ namespace Xu.WebApi.Controllers
                 data.Success = await _roleSvc.Update(role);
                 if (data.Success)
                 {
-                    data.Msg = "删除成功";
+                    data.Message = "删除成功";
                     data.Response = role?.Id.ToString();
                 }
             }
@@ -150,7 +151,7 @@ namespace Xu.WebApi.Controllers
 
             if (data.Success)
             {
-                data.Msg = falg ? "禁用成功" : "启用成功";
+                data.Message = falg ? "禁用成功" : "启用成功";
                 data.Response = role?.Id.ToString();
             }
 

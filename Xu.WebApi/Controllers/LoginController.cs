@@ -58,9 +58,9 @@ namespace Xu.WebApi.Controllers
                 });
             }
 
-            pass = MD5Helper.MD5Encrypt32(pass);
+            //pass = MD5Helper.MD5Encrypt32(pass);
 
-            var user = (await _userSvc.Query(d => d.LoginName == name && d.LoginPwd == pass)).FirstOrDefault();
+            var user = (await _userSvc.Query(d => d.Enabled == false && d.LoginName == name && d.LoginPwd == pass)).FirstOrDefault();
             if (user != null)
             {
                 var userRoles = await _roleSvc.QueryByIds(user.RoleIds.Split(","));
@@ -82,6 +82,14 @@ namespace Xu.WebApi.Controllers
                 //            }).ToList();
 
                 //_requirement.Permissions = list;
+
+                _requirement.Permissions = (from item in userRoles
+                                            orderby item.Id
+                                            select new PermissionItem
+                                            {
+                                                Url = "",
+                                                Role = item?.RoleName
+                                            }).ToList();
 
                 //用户标识
                 var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
@@ -114,7 +122,7 @@ namespace Xu.WebApi.Controllers
             {
                 return new JsonResult(new
                 {
-                    Status = false,
+                    success = false,
                     message = "token无效，请重新登录！"
                 });
             }

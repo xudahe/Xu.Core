@@ -1,4 +1,6 @@
-﻿namespace Xu.Model
+﻿using SqlSugar;
+
+namespace Xu.Model.Models
 {
     /// <summary>
     /// 部门管理
@@ -18,11 +20,13 @@
         /// <summary>
         /// 部门负责人
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string DeptManager { get; set; }
 
         /// <summary>
         /// 上级部门
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string ParentDept { get; set; }
 
         /// <summary>
@@ -33,6 +37,7 @@
         /// <summary>
         /// 备注
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Remark { get; set; }
     }
 }

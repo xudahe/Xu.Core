@@ -87,8 +87,8 @@ namespace Xu.WebApi
             {
                 //忽略循环引用
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                //不使用驼峰样式的key
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                //修改属性名称的序列化方式，首字母小写
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 //设置时间格式
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             });
@@ -226,7 +226,7 @@ namespace Xu.WebApi
                     //c.InjectOnCompleteJavaScript();
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{ApiName} {version}");
                 });
-                // 将swagger首页，设置成我们自定义的页面，记得这个字符串的写法：解决方案名.index.html
+                // 将swagger首页，设置成我们自定义的页面，记得这个字符串的写法：解决方案名.index.html,记得属性设置为嵌入的资源
                 c.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("Xu.WebApi.index.html");//这里是配合MiniProfiler进行性能监控的,如果你不需要，可以暂时先注释掉，不影响大局。
                 c.RoutePrefix = ""; //路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
             });

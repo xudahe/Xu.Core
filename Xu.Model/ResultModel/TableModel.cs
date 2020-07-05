@@ -15,7 +15,7 @@ namespace Xu.Model
         /// <summary>
         /// 返回信息
         /// </summary>
-        public string Msg { get; set; }
+        public string Message { get; set; }
 
         /// <summary>
         /// 记录总数

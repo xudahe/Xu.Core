@@ -92,8 +92,6 @@ namespace Xu.WebApi
                         httpContext.User = result.Principal;
 
                         //权限中是否存在请求的url
-                        //if (requirement.Permissions.GroupBy(g => g.Url).Where(w => w.Key?.ToLower() == questUrl).Count() > 0)
-                        //if (isMatchUrl)
                         if (true)
                         {
                             // 获取当前用户的角色信息
@@ -107,11 +105,12 @@ namespace Xu.WebApi
                             {
                                 try
                                 {
-                                    if (Regex.Match(questUrl, item.Url?.ObjToString().ToLower())?.Value == questUrl)
-                                    {
-                                        isMatchRole = true;
-                                        break;
-                                    }
+                                    //暂时注释
+                                    //if (Regex.Match(questUrl, item.Url?.ObjToString().ToLower())?.Value == questUrl)
+                                    //{
+                                    isMatchRole = true;
+                                    break;
+                                    //}
                                 }
                                 catch (Exception)
                                 {
@@ -120,7 +119,6 @@ namespace Xu.WebApi
                             }
 
                             //验证权限
-                            //if (currentUserRoles.Count <= 0 || requirement.Permissions.Where(w => currentUserRoles.Contains(w.Role) && w.Url.ToLower() == questUrl).Count() <= 0)
                             if (currentUserRoles.Count <= 0 || !isMatchRole)
                             {
                                 context.Fail();

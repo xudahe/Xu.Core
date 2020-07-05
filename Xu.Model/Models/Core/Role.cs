@@ -1,4 +1,6 @@
-﻿namespace Xu.Model
+﻿using SqlSugar;
+
+namespace Xu.Model.Models
 {
     /// <summary>
     /// 角色表
@@ -16,13 +18,15 @@
         public string RoleName { get; set; }
 
         /// <summary>
-        /// 菜单Ids(无父级)
+        /// 菜单Ids(三级菜单)
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string MenuIds { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Remark { get; set; }
 
         /// <summary>

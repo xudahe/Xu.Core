@@ -296,14 +296,14 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Post(Xu.Model.Menu)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.Post(Xu.Model.Models.Menu)">
             <summary>
             添加菜单
             </summary>
             <param name="menu"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Put(Xu.Model.Menu)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.Put(Xu.Model.Models.Menu)">
             <summary>
             更新菜单
             </summary>
@@ -346,14 +346,14 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Post(Xu.Model.Role)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.Post(Xu.Model.Models.Role)">
             <summary>
             添加角色
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Put(Xu.Model.Role)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.Put(Xu.Model.Models.Role)">
             <summary>
             更新角色
             </summary>
@@ -410,14 +410,14 @@
             <param name="token">令牌</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Post(Xu.Model.User)">
+        <member name="M:Xu.WebApi.Controllers.UserController.Post(Xu.Model.Models.User)">
             <summary>
             添加用户
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Put(Xu.Model.User)">
+        <member name="M:Xu.WebApi.Controllers.UserController.Put(Xu.Model.Models.User)">
             <summary>
             更新用户
             </summary>

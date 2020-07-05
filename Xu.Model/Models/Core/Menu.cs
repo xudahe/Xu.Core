@@ -1,7 +1,10 @@
-﻿namespace Xu.Model
+﻿using SqlSugar;
+using System.Collections.Generic;
+
+namespace Xu.Model.Models
 {
     /// <summary>
-    /// 菜单配置表
+    /// 菜单配置表（目前菜单共三级）
     /// </summary>
     public class Menu : ModelBase
     {
@@ -23,11 +26,19 @@
         /// <summary>
         /// 菜单图标
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Icon { get; set; }
+
+        /// <summary>
+        /// 菜单路由
+        /// </summary>
+        [SugarColumn(IsNullable = true)]
+        public string RouterUrl { get; set; }
 
         /// <summary>
         /// 父级菜单Id
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public int? ParentId { get; set; }
 
         /// <summary>
@@ -38,6 +49,7 @@
         /// <summary>
         /// 加载序号
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Index { get; set; }
 
         /// <summary>
@@ -48,6 +60,10 @@
         /// <summary>
         /// 备注
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Remark { get; set; }
+
+        [SugarColumn(IsIgnore = true)]
+        public List<Menu> Children { get; set; }
     }
 }

@@ -29,182 +29,187 @@
             删除时间（不为空代表该条数据已删除），逻辑上的删除，非物理删除
             </summary>
         </member>
-        <member name="T:Xu.Model.Dept">
+        <member name="T:Xu.Model.Models.Dept">
             <summary>
             部门管理
             </summary>
         </member>
-        <member name="P:Xu.Model.Dept.DeptCode">
+        <member name="P:Xu.Model.Models.Dept.DeptCode">
             <summary>
             部门编码
             </summary>
         </member>
-        <member name="P:Xu.Model.Dept.DeptName">
+        <member name="P:Xu.Model.Models.Dept.DeptName">
             <summary>
             部门名称
             </summary>
         </member>
-        <member name="P:Xu.Model.Dept.DeptManager">
+        <member name="P:Xu.Model.Models.Dept.DeptManager">
             <summary>
             部门负责人
             </summary>
         </member>
-        <member name="P:Xu.Model.Dept.ParentDept">
+        <member name="P:Xu.Model.Models.Dept.ParentDept">
             <summary>
             上级部门
             </summary>
         </member>
-        <member name="P:Xu.Model.Dept.Enabled">
+        <member name="P:Xu.Model.Models.Dept.Enabled">
             <summary>
             是否禁用
             </summary>
         </member>
-        <member name="P:Xu.Model.Dept.Remark">
+        <member name="P:Xu.Model.Models.Dept.Remark">
             <summary>
             备注
             </summary>
         </member>
-        <member name="T:Xu.Model.Menu">
+        <member name="T:Xu.Model.Models.Menu">
             <summary>
-            菜单配置表
+            菜单配置表（目前菜单共三级）
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.SystemName">
+        <member name="P:Xu.Model.Models.Menu.SystemName">
             <summary>
             系统名称(大屏/应用)
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.ClassName">
+        <member name="P:Xu.Model.Models.Menu.ClassName">
             <summary>
             菜单类名
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.MenuName">
+        <member name="P:Xu.Model.Models.Menu.MenuName">
             <summary>
             菜单名称
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.Icon">
+        <member name="P:Xu.Model.Models.Menu.Icon">
             <summary>
             菜单图标
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.ParentId">
+        <member name="P:Xu.Model.Models.Menu.RouterUrl">
+            <summary>
+            菜单路由
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Menu.ParentId">
             <summary>
             父级菜单Id
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.LoadWay">
+        <member name="P:Xu.Model.Models.Menu.LoadWay">
             <summary>
             加载方式
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.Index">
+        <member name="P:Xu.Model.Models.Menu.Index">
             <summary>
             加载序号
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.Enabled">
+        <member name="P:Xu.Model.Models.Menu.Enabled">
             <summary>
             是否禁用
             </summary>
         </member>
-        <member name="P:Xu.Model.Menu.Remark">
+        <member name="P:Xu.Model.Models.Menu.Remark">
             <summary>
             备注
             </summary>
         </member>
-        <member name="T:Xu.Model.Role">
+        <member name="T:Xu.Model.Models.Role">
             <summary>
             角色表
             </summary>
         </member>
-        <member name="P:Xu.Model.Role.RoleCode">
+        <member name="P:Xu.Model.Models.Role.RoleCode">
             <summary>
             角色编码
             </summary>
         </member>
-        <member name="P:Xu.Model.Role.RoleName">
+        <member name="P:Xu.Model.Models.Role.RoleName">
             <summary>
             角色名称
             </summary>
         </member>
-        <member name="P:Xu.Model.Role.MenuIds">
+        <member name="P:Xu.Model.Models.Role.MenuIds">
             <summary>
-            菜单Ids(无父级)
+            菜单Ids(三级菜单)
             </summary>
         </member>
-        <member name="P:Xu.Model.Role.Remark">
+        <member name="P:Xu.Model.Models.Role.Remark">
             <summary>
             备注
             </summary>
         </member>
-        <member name="P:Xu.Model.Role.Enabled">
+        <member name="P:Xu.Model.Models.Role.Enabled">
             <summary>
             是否禁用
             </summary>
         </member>
-        <member name="T:Xu.Model.User">
+        <member name="T:Xu.Model.Models.User">
             <summary>
             用户信息表
             </summary>
         </member>
-        <member name="P:Xu.Model.User.LoginName">
+        <member name="P:Xu.Model.Models.User.LoginName">
             <summary>
             登录账号(用户名)
             </summary>
         </member>
-        <member name="P:Xu.Model.User.LoginPwd">
+        <member name="P:Xu.Model.Models.User.LoginPwd">
             <summary>
             登录密码
             </summary>
         </member>
-        <member name="P:Xu.Model.User.RealName">
+        <member name="P:Xu.Model.Models.User.RealName">
             <summary>
             真实姓名
             </summary>
         </member>
-        <member name="P:Xu.Model.User.DeptName">
+        <member name="P:Xu.Model.Models.User.DeptName">
             <summary>
             所屬部门
             </summary>
         </member>
-        <member name="P:Xu.Model.User.Remark">
+        <member name="P:Xu.Model.Models.User.Remark">
             <summary>
             备注
             </summary>
         </member>
-        <member name="P:Xu.Model.User.LastErrTime">
+        <member name="P:Xu.Model.Models.User.LastErrTime">
             <summary>
             最后登录时间
             </summary>
         </member>
-        <member name="P:Xu.Model.User.ErrorCount">
+        <member name="P:Xu.Model.Models.User.ErrorCount">
             <summary>
             错误次数
             </summary>
         </member>
-        <member name="P:Xu.Model.User.Sex">
+        <member name="P:Xu.Model.Models.User.Sex">
             <summary>
             性别
             </summary>
         </member>
-        <member name="P:Xu.Model.User.Birth">
+        <member name="P:Xu.Model.Models.User.Birth">
             <summary>
             生日
             </summary>
         </member>
-        <member name="P:Xu.Model.User.Address">
+        <member name="P:Xu.Model.Models.User.Address">
             <summary>
             地址
             </summary>
         </member>
-        <member name="P:Xu.Model.User.Enabled">
+        <member name="P:Xu.Model.Models.User.Enabled">
             <summary>
             是否禁用
             </summary>
         </member>
-        <member name="P:Xu.Model.User.RoleIds">
+        <member name="P:Xu.Model.Models.User.RoleIds">
             <summary>
             角色ids
             </summary>
@@ -219,7 +224,7 @@
             操作是否成功
             </summary>
         </member>
-        <member name="P:Xu.Model.MessageModel`1.Msg">
+        <member name="P:Xu.Model.MessageModel`1.Message">
             <summary>
             返回信息
             </summary>
@@ -284,7 +289,7 @@
             返回编码
             </summary>
         </member>
-        <member name="P:Xu.Model.TableModel`1.Msg">
+        <member name="P:Xu.Model.TableModel`1.Message">
             <summary>
             返回信息
             </summary>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
 using Xu.Model;
+using Xu.Model.Models;
 
 namespace Xu.WebApi.Controllers
 {
@@ -39,7 +40,7 @@ namespace Xu.WebApi.Controllers
 
             return new MessageModel<PageModel<Menu>>()
             {
-                Msg = "获取成功",
+                Message = "获取成功",
                 Success = true,
                 Response = data
             };
@@ -54,36 +55,47 @@ namespace Xu.WebApi.Controllers
         [AllowAnonymous]
         public async Task<object> GetByIds(string ids)
         {
-            var menuList = new List<Menu>();
-            if (string.IsNullOrEmpty(ids)) {
-                menuList = await _menuSvc.Query(s => s.Enabled == false);
+            var menuList = await _menuSvc.Query(s => s.Enabled == false);
+
+            var menuList1 = new List<Menu>();
+            if (string.IsNullOrEmpty(ids))
+            {
+                menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
+
+                for (int i = 0; i < menuList1.Count(); i++)
+                {
+                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
+
+                    for (int j = 0; j < menuList2.Count(); j++)
+                    {
+                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
+                    }
+                    menuList1[i].Children = menuList2;
+                }
             }
             else
             {
-                var menuIds = ids.SplitInt(",");
-                menuList = await _menuSvc.Query(s => s.Enabled == false && menuIds.Contains(s.Id));
-            }
+                var menuList3 = menuList.Where(s => ids.SplitInt(",").Contains(s.Id)).ToList();
+                var menuList2 = menuList.Where(s => menuList3.Select(d => d.ParentId).Contains(s.Id)).ToList();
+                menuList1 = menuList.Where(s => menuList2.Select(d => d.ParentId).Contains(s.Id)).ToList();
 
-            var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s=>s.Index).ToList(); //获取一级菜单（顶部）
-
-            IDictionary<Menu, object> dic1 = new Dictionary<Menu, object>();
-            for (int i = 0; i < menuList1.Count(); i++)
-            {
-                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
-
-                IDictionary<Menu, object> dic2 = new Dictionary<Menu, object>();
-                for (int j = 0; j < menuList2.Count(); j++)
+                for (int i = 0; i < menuList1.Count(); i++)
                 {
-                    var menuList3 = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
-                    dic2.Add(menuList2[i], menuList3);
+                    var menuList_2 = menuList2.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
+
+                    for (int j = 0; j < menuList_2.Count(); j++)
+                    {
+                        menuList_2[j].Children = menuList3.Where(s => s.ParentId == menuList_2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
+                    }
+                    menuList1[i].Children = menuList_2;
                 }
-                dic1.Add(menuList1[i], dic2);
             }
-                
-            return new MessageModel<object>() {
-                Response = dic1,
-                Success = dic1.Count >= 0,
-                Msg = "获取成功"
+
+            return new MessageModel<object>()
+            {
+                Response = menuList1,
+                Success = true,
+                Message = "获取成功"
             };
         }
 
@@ -99,7 +111,7 @@ namespace Xu.WebApi.Controllers
 
             return new MessageModel<Menu>()
             {
-                Msg = "添加成功",
+                Message = "添加成功",
                 Success = true,
                 Response = model
             };
@@ -119,7 +131,7 @@ namespace Xu.WebApi.Controllers
                 data.Success = await _menuSvc.Update(menu);
                 if (data.Success)
                 {
-                    data.Msg = "更新成功";
+                    data.Message = "更新成功";
                     data.Response = menu?.Id.ToString();
                 }
             }
@@ -143,7 +155,7 @@ namespace Xu.WebApi.Controllers
                 data.Success = await _menuSvc.Update(menu);
                 if (data.Success)
                 {
-                    data.Msg = "删除成功";
+                    data.Message = "删除成功";
                     data.Response = menu?.Id.ToString();
                 }
             }
@@ -170,7 +182,7 @@ namespace Xu.WebApi.Controllers
 
             if (data.Success)
             {
-                data.Msg = falg ? "禁用成功" : "启用成功";
+                data.Message = falg ? "禁用成功" : "启用成功";
                 data.Response = menu?.Id.ToString();
             }
 

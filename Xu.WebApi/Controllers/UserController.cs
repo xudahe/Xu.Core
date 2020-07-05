@@ -7,6 +7,7 @@ using Xu.Common;
 using Xu.IRepository;
 using Xu.IServices;
 using Xu.Model;
+using Xu.Model.Models;
 
 namespace Xu.WebApi.Controllers
 {
@@ -46,7 +47,7 @@ namespace Xu.WebApi.Controllers
 
             return new MessageModel<PageModel<User>>()
             {
-                Msg = "获取成功",
+                Message = "获取成功",
                 Success = true,
                 Response = data
             };
@@ -66,8 +67,8 @@ namespace Xu.WebApi.Controllers
                 var userList = await _userSvc.QueryByIds(ids.Split(","));
 
                 data.Response = userList;
-                data.Success = userList.Count >= 0;
-                data.Msg = "获取成功";
+                data.Success = true;
+                data.Message = "获取成功";
             }
 
             return data;
@@ -92,7 +93,7 @@ namespace Xu.WebApi.Controllers
                     {
                         data.Response = user;
                         data.Success = true;
-                        data.Msg = "获取成功";
+                        data.Message = "获取成功";
                     }
                 }
             }
@@ -112,7 +113,7 @@ namespace Xu.WebApi.Controllers
 
             return new MessageModel<User>()
             {
-                Msg = "添加成功",
+                Message = "添加成功",
                 Success = true,
                 Response = model
             };
@@ -140,7 +141,7 @@ namespace Xu.WebApi.Controllers
 
                     if (data.Success)
                     {
-                        data.Msg = "更新成功";
+                        data.Message = "更新成功";
                         data.Response = user?.Id.ToString();
                     }
                 }
@@ -169,7 +170,7 @@ namespace Xu.WebApi.Controllers
                 data.Success = await _userSvc.Update(menu);
                 if (data.Success)
                 {
-                    data.Msg = "删除成功";
+                    data.Message = "删除成功";
                     data.Response = menu?.Id.ToString();
                 }
             }
@@ -196,7 +197,7 @@ namespace Xu.WebApi.Controllers
 
             if (data.Success)
             {
-                data.Msg = falg ? "禁用成功" : "启用成功";
+                data.Message = falg ? "禁用成功" : "启用成功";
                 data.Response = user?.Id.ToString();
             }
 

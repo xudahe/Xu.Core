@@ -1,6 +1,7 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 
-namespace Xu.Model
+namespace Xu.Model.Models
 {
     /// <summary>
     /// 用户信息表
@@ -26,36 +27,43 @@ namespace Xu.Model
         /// <summary>
         /// 所屬部门
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string DeptName { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Remark { get; set; }
 
         /// <summary>
         /// 最后登录时间
         /// </summary>
-        public DateTime LastErrTime { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public DateTime? LastErrTime { get; set; }
 
         /// <summary>
         /// 错误次数
         /// </summary>
-        public int ErrorCount { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public int? ErrorCount { get; set; }
 
         /// <summary>
         /// 性别
         /// </summary>
-        public int Sex { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public int? Sex { get; set; }
 
         /// <summary>
         /// 生日
         /// </summary>
-        public DateTime Birth { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public DateTime? Birth { get; set; }
 
         /// <summary>
         /// 地址
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string Address { get; set; }
 
         /// <summary>
@@ -66,6 +74,7 @@ namespace Xu.Model
         /// <summary>
         /// 角色ids
         /// </summary>
+        [SugarColumn(IsNullable = true)]
         public string RoleIds { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace Xu.WebApi
             // 1【授权】、这个很简单，其他什么都不用做， 只需要在API层的controller上边，增加特性即可，注意，只能是角色的:
             // [Authorize(Roles = "Admin,System")]
 
-            #endregion
+            #endregion 1、基于角色的API授权
 
             #region 2、基于策略的授权（简单版）
 
@@ -68,7 +68,7 @@ namespace Xu.WebApi
                 options.AddPolicy("A_S_O", policy => policy.RequireRole("Admin", "System", "Others"));
             });
 
-            #endregion
+            #endregion 2、基于策略的授权（简单版）
 
             #region 参数
 
@@ -92,10 +92,10 @@ namespace Xu.WebApi
                 Issuer,//发行人
                 Audience,//听众
                 signingCredentials,//签名凭据
-                expiration: TimeSpan.FromSeconds(60 * 60)//接口的过期时间
+                expiration: TimeSpan.FromSeconds(60 * 60)//接口的过期时间，1小时
                 );
 
-            #endregion
+            #endregion 参数
 
             // 3、复杂的策略授权
             services.AddAuthorization(options =>
