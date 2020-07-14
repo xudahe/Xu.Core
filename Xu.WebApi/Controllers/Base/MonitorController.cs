@@ -22,7 +22,7 @@ namespace Blog.Core.Controllers
     /// </summary>
     [Route("api/[Controller]/[action]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Permissions.Name)]
     public class MonitorController : Controller
     {
         private readonly IHubContext<ChatHub> _hubContext;

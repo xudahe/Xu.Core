@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
 
@@ -18,7 +19,7 @@ namespace Xu.WebApi.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
-    [AllowAnonymous]
+    [Authorize(Permissions.Name)]
     public class LoginController : Controller
     {
         private readonly IUserSvc _userSvc;
@@ -45,6 +46,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="pass">登录密码</param>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<object> GetJwtToken(string name = "", string pass = "")
         {
             string jwtStr = string.Empty;
