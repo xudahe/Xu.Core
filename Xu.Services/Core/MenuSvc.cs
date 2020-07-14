@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Xu.IRepository;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
 
 namespace Xu.Services.Core

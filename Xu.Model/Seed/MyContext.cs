@@ -1,42 +1,49 @@
 ﻿using SqlSugar;
 using System;
-using System.Linq;
 using Xu.Common;
 
 namespace Xu.Model
 {
     public class MyContext
     {
-        private static string _connectionString = BaseDBConfig.ConnectionString;
-        private static DbType _dbType = (DbType)BaseDBConfig.DbType;
-        private SqlSugarClient _db;
+        private static MutiDBOperate ConnectObject => GetMainConnectionDb();
+        public static string ConnId = ConnectObject.ConnId;
 
         /// <summary>
         /// 连接字符串
         /// </summary>
-        public static string ConnectionString
+        public static MutiDBOperate GetMainConnectionDb()
         {
-            get { return _connectionString; }
-            set { _connectionString = value; }
+            var mainConnetctDb = BaseDBConfig.MutiConnectionString.Item1.Find(x => x.ConnId == MainDb.CurrentDbConnId);
+            if (BaseDBConfig.MutiConnectionString.Item1.Count > 0)
+            {
+                if (mainConnetctDb == null)
+                {
+                    mainConnetctDb = BaseDBConfig.MutiConnectionString.Item1[0];
+                }
+            }
+            else
+            {
+                throw new Exception("请确保appsettigns.json中配置连接字符串,并设置Enabled为true;");
+            }
+
+            return mainConnetctDb;
         }
+
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        public static string ConnectionString { get; set; } = ConnectObject.Connection;
 
         /// <summary>
         /// 数据库类型
         /// </summary>
-        public static DbType DbType
-        {
-            get { return _dbType; }
-            set { _dbType = value; }
-        }
+        public static DbType DbType { get; set; } = (DbType)ConnectObject.DbType;
 
         /// <summary>
         /// 数据连接对象
         /// </summary>
-        public SqlSugarClient Db
-        {
-            get { return _db; }
-            private set { _db = value; }
-        }
+        public SqlSugarClient Db { get; private set; }
 
         /// <summary>
         /// 数据库上下文实例（自动关闭连接）
@@ -54,266 +61,25 @@ namespace Xu.Model
         /// </summary>
         public MyContext()
         {
-            if (string.IsNullOrEmpty(_connectionString))
+            if (string.IsNullOrEmpty(ConnectionString))
                 throw new ArgumentNullException("数据库连接字符串为空");
-            _db = new SqlSugarClient(new ConnectionConfig()
+            Db = new SqlSugarClient(new ConnectionConfig()
             {
-                ConnectionString = _connectionString, //必填, 数据库连接字符串
-                DbType = _dbType, //必填, 数据库类型
-                IsAutoCloseConnection = true, //是否自动关闭连接
-                IsShardSameThread = false,//启用异步多线程
-                InitKeyType = InitKeyType.Attribute,//字段信息读取, 如：该属性是不是主键，是不是标识列等等信息
+                ConnectionString = ConnectionString,
+                DbType = DbType,
+                IsAutoCloseConnection = true,
+                InitKeyType = InitKeyType.Attribute,//mark
                 ConfigureExternalServices = new ConfigureExternalServices()
                 {
-                    //DataInfoCacheService = new HttpRuntimeCache() //创建二级缓存对象，RedisCache是继承ICacheService自已实现的一个类
+                    //DataInfoCacheService = new HttpRuntimeCache()
                 },
                 MoreSettings = new ConnMoreSettings()
                 {
-                    //IsWithNoLockQuery = true, //为true表示查询的时候默认会加上.With(SqlWith.NoLock)，可以用With(SqlWith.Null)让全局的失效
-                    IsAutoRemoveDataCache = true //为true表示可以自动删除二级缓存
+                    //IsWithNoLockQuery = true,
+                    IsAutoRemoveDataCache = true
                 }
             });
-
-            //调式代码 用来打印SQL
-            _db.Aop.OnLogExecuting = (sql, pars) =>
-            {
-                Console.WriteLine(sql + "\r\n" +
-                _db.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
-                Console.WriteLine();
-            };
         }
-
-        #region 根据数据库表生产Model层
-
-        /// <summary>
-        /// 功能描述:根据数据库表生产Model层
-        /// </summary>
-        /// <param name="strPath">实体类存放路径</param>
-        /// <param name="strNameSpace">命名空间</param>
-        /// <param name="lstTableNames">生产指定的表</param>
-        /// <param name="strInterface">实现接口</param>
-        /// <param name="blnSerializable">是否序列化</param>
-        public void Create_Model_ClassFileByDBTalbe(
-          string strPath,
-          string strNameSpace,
-          string[] lstTableNames,
-          string strInterface,
-          bool blnSerializable = false)
-        {
-            var IDbFirst = _db.DbFirst;
-            if (lstTableNames != null && lstTableNames.Length > 0)
-            {
-                IDbFirst = IDbFirst.Where(lstTableNames);
-            }
-            IDbFirst.IsCreateDefaultValue().IsCreateAttribute()
-
-                .SettingClassTemplate(p => p = @"
-{using}
-
-namespace " + strNameSpace + @"
-{
-    {ClassDescription}{SugarTable}" + (blnSerializable ? "[Serializable]" : "") + @"
-    public class {ClassName}" + (string.IsNullOrEmpty(strInterface) ? "" : (" : " + strInterface)) + @"
-    {
-        public {ClassName}()
-        {
-        }
-        {PropertyName}
-    }
-}
-                    ")
-
-                .SettingPropertyTemplate(p => p = @"
-        {SugarColumn}
-        public {PropertyType} {PropertyName} { get; set; }
-
-            ")
-
-                 //.SettingPropertyDescriptionTemplate(p => p = "          private {PropertyType} _{PropertyName};\r\n" + p)
-                 //.SettingConstructorTemplate(p => p = "              this._{PropertyName} ={DefaultValue};")
-
-                 .CreateClassFile(strPath, strNameSpace);
-        }
-
-        #endregion 根据数据库表生产Model层
-
-        #region 根据数据库表生产IRepository层
-
-        /// <summary>
-        /// 功能描述:根据数据库表生产IRepository层
-        /// </summary>
-        /// <param name="strPath">实体类存放路径</param>
-        /// <param name="strNameSpace">命名空间</param>
-        /// <param name="lstTableNames">生产指定的表</param>
-        /// <param name="strInterface">实现接口</param>
-        public void Create_IRepository_ClassFileByDBTalbe(
-          string strPath,
-          string strNameSpace,
-          string[] lstTableNames,
-          string strInterface)
-        {
-            var IDbFirst = _db.DbFirst;
-            if (lstTableNames != null && lstTableNames.Length > 0)
-            {
-                IDbFirst = IDbFirst.Where(lstTableNames);
-            }
-            IDbFirst.IsCreateDefaultValue().IsCreateAttribute()
-
-                .SettingClassTemplate(p => p = @"
-using Xu.IRepository.Base;
-using Xu.Model.Models;
-
-namespace " + strNameSpace + @"
-{
-	/// <summary>
-	/// I{ClassName}Repository
-	/// </summary>
-    public interface I{ClassName}Repository : IBaseRepository<{ClassName}>" + (string.IsNullOrEmpty(strInterface) ? "" : (" , " + strInterface)) + @"
-    {
-    }
-}
-                    ")
-
-                 .CreateClassFile(strPath, strNameSpace);
-        }
-
-        #endregion 根据数据库表生产IRepository层
-
-        #region 根据数据库表生产IServices层
-
-        /// <summary>
-        /// 功能描述:根据数据库表生产IServices层
-        /// </summary>
-        /// <param name="strPath">实体类存放路径</param>
-        /// <param name="strNameSpace">命名空间</param>
-        /// <param name="lstTableNames">生产指定的表</param>
-        /// <param name="strInterface">实现接口</param>
-        public void Create_IServices_ClassFileByDBTalbe(
-          string strPath,
-          string strNameSpace,
-          string[] lstTableNames,
-          string strInterface)
-        {
-            var IDbFirst = _db.DbFirst;
-            if (lstTableNames != null && lstTableNames.Length > 0)
-            {
-                IDbFirst = IDbFirst.Where(lstTableNames);
-            }
-            IDbFirst.IsCreateDefaultValue().IsCreateAttribute()
-
-                .SettingClassTemplate(p => p = @"
-using Xu.IServices.BASE;
-using Xu.Model.Models;
-
-namespace " + strNameSpace + @"
-{
-	/// <summary>
-	/// I{ClassName}Services
-	/// </summary>
-    public interface I{ClassName}Services :IBaseServices<{ClassName}>" + (string.IsNullOrEmpty(strInterface) ? "" : (" , " + strInterface)) + @"
-	{
-    }
-}
-                    ")
-
-                 .CreateClassFile(strPath, strNameSpace);
-        }
-
-        #endregion 根据数据库表生产IServices层
-
-        #region 根据数据库表生产 Repository 层
-
-        /// <summary>
-        /// 功能描述:根据数据库表生产 Repository 层
-        /// </summary>
-        /// <param name="strPath">实体类存放路径</param>
-        /// <param name="strNameSpace">命名空间</param>
-        /// <param name="lstTableNames">生产指定的表</param>
-        /// <param name="strInterface">实现接口</param>
-        public void Create_Repository_ClassFileByDBTalbe(
-          string strPath,
-          string strNameSpace,
-          string[] lstTableNames,
-          string strInterface)
-        {
-            var IDbFirst = _db.DbFirst;
-            if (lstTableNames != null && lstTableNames.Length > 0)
-            {
-                IDbFirst = IDbFirst.Where(lstTableNames);
-            }
-            IDbFirst.IsCreateDefaultValue().IsCreateAttribute()
-
-                .SettingClassTemplate(p => p = @"
-using Xu.IRepository;
-using Xu.IRepository.UnitOfWork;
-using Xu.Model.Models;
-using Xu.Repository;
-
-namespace " + strNameSpace + @"
-{
-	/// <summary>
-	/// {ClassName}Repository
-	/// </summary>
-    public class {ClassName}Repository : BaseRepository<{ClassName}>, I{ClassName}Repository" + (string.IsNullOrEmpty(strInterface) ? "" : (" , " + strInterface)) + @"
-    {
-        public {ClassName}Repository(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
-    }
-}
-                    ")
-
-                 .CreateClassFile(strPath, strNameSpace);
-        }
-
-        #endregion 根据数据库表生产 Repository 层
-
-        #region 根据数据库表生产 Services 层
-
-        /// <summary>
-        /// 功能描述:根据数据库表生产 Services 层
-        /// </summary>
-        /// <param name="strPath">实体类存放路径</param>
-        /// <param name="strNameSpace">命名空间</param>
-        /// <param name="lstTableNames">生产指定的表</param>
-        /// <param name="strInterface">实现接口</param>
-        public void Create_Services_ClassFileByDBTalbe(
-          string strPath,
-          string strNameSpace,
-          string[] lstTableNames,
-          string strInterface)
-        {
-            var IDbFirst = _db.DbFirst;
-            if (lstTableNames != null && lstTableNames.Length > 0)
-            {
-                IDbFirst = IDbFirst.Where(lstTableNames);
-            }
-            IDbFirst.IsCreateDefaultValue().IsCreateAttribute()
-
-                .SettingClassTemplate(p => p = @"
-using Xu.IRepository;
-using Xu.IServices;
-using Xu.Model.Models;
-using Xu.Services.BASE;
-
-namespace " + strNameSpace + @"
-{
-    public partial class {ClassName}Services : BaseServices<{ClassName}>, I{ClassName}Services" + (string.IsNullOrEmpty(strInterface) ? "" : (" , " + strInterface)) + @"
-    {
-        I{ClassName}Repository _dal;
-        public {ClassName}Services(I{ClassName}Repository dal)
-        {
-            this._dal = dal;
-            base.BaseDal = dal;
-        }
-    }
-}
-                    ")
-
-                 .CreateClassFile(strPath, strNameSpace);
-        }
-
-        #endregion 根据数据库表生产 Services 层
 
         #region 实例方法
 
@@ -323,7 +89,7 @@ namespace " + strNameSpace + @"
         /// <returns>返回值</returns>
         public SimpleClient<T> GetEntityDB<T>() where T : class, new()
         {
-            return new SimpleClient<T>(_db);
+            return new SimpleClient<T>(Db);
         }
 
         /// <summary>
@@ -353,7 +119,7 @@ namespace " + strNameSpace + @"
                 lstTypes = new Type[lstEntitys.Length];
                 for (int i = 0; i < lstEntitys.Length; i++)
                 {
-                    _ = lstEntitys[i];
+                    T t = lstEntitys[i];
                     lstTypes[i] = typeof(T);
                 }
             }
@@ -369,13 +135,11 @@ namespace " + strNameSpace + @"
         {
             if (blnBackupTable)
             {
-                //生成表，并且修改类会备份 例如表A，备份表名为 A+时间
-                _db.CodeFirst.BackupTable().InitTables(lstEntitys);
+                Db.CodeFirst.BackupTable().InitTables(lstEntitys); //change entity backupTable
             }
             else
             {
-                //生成表不会备份表
-                _db.CodeFirst.InitTables(lstEntitys);
+                Db.CodeFirst.InitTables(lstEntitys);
             }
         }
 
@@ -399,8 +163,8 @@ namespace " + strNameSpace + @"
         /// <param name="enmDbType">数据库类型</param>
         public static void Init(string strConnectionString, DbType enmDbType = SqlSugar.DbType.SqlServer)
         {
-            _connectionString = strConnectionString;
-            _dbType = enmDbType;
+            ConnectionString = strConnectionString;
+            DbType = enmDbType;
         }
 
         /// <summary>
@@ -413,8 +177,8 @@ namespace " + strNameSpace + @"
         {
             ConnectionConfig config = new ConnectionConfig()
             {
-                ConnectionString = _connectionString,
-                DbType = _dbType,
+                ConnectionString = ConnectionString,
+                DbType = DbType,
                 IsAutoCloseConnection = blnIsAutoCloseConnection,
                 ConfigureExternalServices = new ConfigureExternalServices()
                 {

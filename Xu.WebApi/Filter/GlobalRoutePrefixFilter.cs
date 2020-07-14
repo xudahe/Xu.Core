@@ -29,7 +29,8 @@ namespace Xu.WebApi
                     foreach (var selectorModel in matchedSelectors)
                     {
                         // 在 当前路由上 再 添加一个 路由前缀
-                        selectorModel.AttributeRouteModel = AttributeRouteModel.CombineAttributeRouteModel(_centralPrefix, selectorModel.AttributeRouteModel);
+                        selectorModel.AttributeRouteModel = AttributeRouteModel.CombineAttributeRouteModel(_centralPrefix,
+                            selectorModel.AttributeRouteModel);
                     }
                 }
 

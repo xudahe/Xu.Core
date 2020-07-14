@@ -1,0 +1,40 @@
+{
+  "RECORDS": [
+    {
+      "Id": "3",
+      "LoginName": "admin",
+      "LoginPwd": "123456",
+      "RealName": "张三",
+      "DeptName": "总经办",
+      "Remark": "",
+      "LastErrTime": "",
+      "ErrorCount": "",
+      "Sex": "1",
+      "Birth": "",
+      "Address": "",
+      "Enabled": "0",
+      "RoleIds": "",
+      "CreateTime": "",
+      "ModifyTime": "",
+      "DeleteTime": ""
+    },
+    {
+      "Id": "4",
+      "LoginName": "swadmin",
+      "LoginPwd": "123456",
+      "RealName": "李思思",
+      "DeptName": "市场部",
+      "Remark": "",
+      "LastErrTime": "",
+      "ErrorCount": "",
+      "Sex": "0",
+      "Birth": "",
+      "Address": "",
+      "Enabled": "0",
+      "RoleIds": "",
+      "CreateTime": "",
+      "ModifyTime": "",
+      "DeleteTime": ""
+    }
+  ]
+}

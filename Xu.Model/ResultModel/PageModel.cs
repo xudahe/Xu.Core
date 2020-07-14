@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Xu.Model
+namespace Xu.Model.ResultModel
 {
     /// <summary>
     /// 通用分页信息类

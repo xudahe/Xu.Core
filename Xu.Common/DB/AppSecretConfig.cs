@@ -36,7 +36,7 @@ namespace Xu.Common
                 catch (System.Exception) { }
             }
 
-            return conn[^1];
+            return "";
         }
     }
 }

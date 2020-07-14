@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Quartz" Version="3.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Xu.Common\Xu.Common.csproj" />
+    <ProjectReference Include="..\Xu.IServices\Xu.IServices.csproj" />
   </ItemGroup>
 
 </Project>

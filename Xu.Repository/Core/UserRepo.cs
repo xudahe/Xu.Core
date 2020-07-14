@@ -1,5 +1,4 @@
 ﻿using Xu.IRepository;
-using Xu.Model;
 using Xu.Model.Models;
 
 namespace Xu.Repository

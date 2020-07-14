@@ -44,8 +44,7 @@ namespace Xu.Common
                     if (string.IsNullOrEmpty(s.Trim()))
                         continue;
 
-                    int i;
-                    if (!int.TryParse(s.Trim(), out i))
+                    if (!int.TryParse(s.Trim(), out int i))
                         continue;
 
                     if (!list.Contains(i))
@@ -223,8 +222,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            int v;
-            if (int.TryParse(t.Trim(), out v))
+            if (int.TryParse(t.Trim(), out int v))
                 return v;
             return null;
         }
@@ -251,12 +249,11 @@ namespace Xu.Common
         public static int ToInt32OrDefault(this string t)
         {
             if (string.IsNullOrEmpty(t))
-                return default(int);
+                return default;
 
-            int v;
-            if (int.TryParse(t.Trim(), out v))
+            if (int.TryParse(t.Trim(), out int v))
                 return v;
-            return default(int);
+            return default;
         }
 
         /// <summary>
@@ -270,8 +267,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            int v;
-            if (int.TryParse(t.Trim(), out v))
+            if (int.TryParse(t.Trim(), out int v))
                 return v;
             return defaultValue;
         }
@@ -286,8 +282,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            long v;
-            if (long.TryParse(t.Trim(), out v))
+            if (long.TryParse(t.Trim(), out long v))
                 return v;
             return null;
         }
@@ -314,12 +309,11 @@ namespace Xu.Common
         public static long ToInt64OrDefault(this string t)
         {
             if (string.IsNullOrEmpty(t))
-                return default(long);
+                return default;
 
-            long v;
-            if (long.TryParse(t.Trim(), out v))
+            if (long.TryParse(t.Trim(), out long v))
                 return v;
-            return default(long);
+            return default;
         }
 
         /// <summary>
@@ -333,8 +327,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            long v;
-            if (long.TryParse(t.Trim(), out v))
+            if (long.TryParse(t.Trim(), out long v))
                 return v;
             return defaultValue;
         }
@@ -349,8 +342,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            decimal v;
-            if (decimal.TryParse(t.Trim(), out v))
+            if (decimal.TryParse(t.Trim(), out decimal v))
                 return v;
             return null;
         }
@@ -377,12 +369,11 @@ namespace Xu.Common
         public static decimal ToDecimalOrDefault(this string t)
         {
             if (string.IsNullOrEmpty(t))
-                return default(decimal);
+                return default;
 
-            decimal v;
-            if (decimal.TryParse(t.Trim(), out v))
+            if (decimal.TryParse(t.Trim(), out decimal v))
                 return v;
-            return default(decimal);
+            return default;
         }
 
         /// <summary>
@@ -396,8 +387,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            decimal v;
-            if (decimal.TryParse(t.Trim(), out v))
+            if (decimal.TryParse(t.Trim(), out decimal v))
                 return v;
             return defaultValue;
         }
@@ -412,8 +402,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            double v;
-            if (double.TryParse(t.Trim(), out v))
+            if (double.TryParse(t.Trim(), out double v))
                 return v;
             return null;
         }
@@ -458,8 +447,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            double v;
-            if (double.TryParse(t.Trim(), out v))
+            if (double.TryParse(t.Trim(), out double v))
                 return v;
             return defaultValue;
         }
@@ -474,8 +462,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            float v;
-            if (float.TryParse(t.Trim(), out v))
+            if (float.TryParse(t.Trim(), out float v))
                 return v;
             return null;
         }
@@ -502,12 +489,11 @@ namespace Xu.Common
         public static float ToFloatOrDefault(this string t)
         {
             if (string.IsNullOrEmpty(t))
-                return default(float);
+                return default;
 
-            float v;
-            if (float.TryParse(t.Trim(), out v))
+            if (float.TryParse(t.Trim(), out float v))
                 return v;
-            return default(float);
+            return default;
         }
 
         /// <summary>
@@ -521,8 +507,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            float v;
-            if (float.TryParse(t.Trim(), out v))
+            if (float.TryParse(t.Trim(), out float v))
                 return v;
             return defaultValue;
         }
@@ -537,8 +522,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            DateTime v;
-            if (DateTime.TryParse(t.Trim(), out v))
+            if (DateTime.TryParse(t.Trim(), out DateTime v))
                 return v;
             return null;
         }
@@ -565,12 +549,11 @@ namespace Xu.Common
         public static DateTime ToDateTimeOrDefault(this string t)
         {
             if (string.IsNullOrEmpty(t))
-                return default(DateTime);
+                return default;
 
-            DateTime v;
-            if (DateTime.TryParse(t.Trim(), out v))
+            if (DateTime.TryParse(t.Trim(), out DateTime v))
                 return v;
-            return default(DateTime);
+            return default;
         }
 
         /// <summary>
@@ -584,8 +567,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            DateTime v;
-            if (DateTime.TryParse(t.Trim(), out v))
+            if (DateTime.TryParse(t.Trim(), out DateTime v))
                 return v;
             return defaultValue;
         }
@@ -602,8 +584,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return null;
 
-            bool v;
-            if (bool.TryParse(t.Trim(), out v))
+            if (bool.TryParse(t.Trim(), out bool v))
                 return v;
             return null;
         }
@@ -630,12 +611,11 @@ namespace Xu.Common
         public static bool ToBoolOrDefault(this string t)
         {
             if (string.IsNullOrEmpty(t))
-                return default(bool);
+                return default;
 
-            bool v;
-            if (bool.TryParse(t.Trim(), out v))
+            if (bool.TryParse(t.Trim(), out bool v))
                 return v;
-            return default(bool);
+            return default;
         }
 
         /// <summary>
@@ -649,8 +629,7 @@ namespace Xu.Common
             if (string.IsNullOrEmpty(t))
                 return defaultValue;
 
-            bool v;
-            if (bool.TryParse(t.Trim(), out v))
+            if (bool.TryParse(t.Trim(), out bool v))
                 return v;
             return defaultValue;
         }
@@ -813,7 +792,7 @@ namespace Xu.Common
         /// <param name="t"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public static T ToEnumOrDefaultByText<T>(this string t, T defaultValue = default(T)) where T : struct
+        public static T ToEnumOrDefaultByText<T>(this string t, T defaultValue = default) where T : struct
         {
             T? e = t.ToEnumByText<T>();
 
@@ -866,7 +845,7 @@ namespace Xu.Common
             for (int i = 0; i < str.Length; i++)
             {
                 if (Convert.ToInt32(str[i]) > 255)
-                    byteLength = byteLength + 2;
+                    byteLength += 2;
                 else
                     byteLength++;
             }
@@ -892,7 +871,7 @@ namespace Xu.Common
             for (int i = 0; i < str.Length; i++)
             {
                 if (Convert.ToInt32(str[i]) > 255)
-                    byteLength = byteLength + 2;
+                    byteLength += 2;
                 else
                     byteLength++;
 

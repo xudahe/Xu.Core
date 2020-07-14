@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Xu.Model
+namespace Xu.Model.ResultModel
 {
     /// <summary>
     /// 表格数据，支持分页

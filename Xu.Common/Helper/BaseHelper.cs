@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -8,17 +7,6 @@ namespace Xu.Common.Helper
 {
     public class BaseHelper
     {
-        public BaseHelper()
-        {
-            ///默认密码
-            key = "0123456789";
-        }
-
-        private string key; //默认密钥
-
-        private byte[] sKey;
-        private byte[] sIV;
-
         #region Base64加密
 
         /// <summary>

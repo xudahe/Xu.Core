@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Extensions;
 using Xu.IRepository;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
+using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
 {
@@ -34,16 +35,35 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部用户并分页
+        /// 获取全部用户
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="key"></param>
+        /// <param name="key">用户名/姓名（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(int page = 1, int pageSize = 50, string key = "")
+        public async Task<object> Get(string key = "")
         {
-            var data = await _userSvc.QueryPage(a => a.DeleteTime == null && ((a.LoginName != null && a.LoginName.Contains(key)) || (a.RealName != null && a.RealName.Contains(key))), page, pageSize, " Id desc ");
+            var data = await _userSvc.Query(a => (a.LoginName != null && a.LoginName.Contains(key)) || (a.RealName != null && a.RealName.Contains(key)), " Id desc ");
+
+            return new MessageModel<List<User>>()
+            {
+                Message = "获取成功",
+                Success = true,
+                Response = data
+            };
+        }
+
+        /// <summary>
+        /// 获取全部用户并分页
+        /// </summary>
+        /// <param name="page">页码</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="key">用户名/姓名（可空）</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string key = "")
+        {
+            var data = await _userSvc.QueryPage(a => (a.LoginName != null && a.LoginName.Contains(key)) || (a.RealName != null && a.RealName.Contains(key)), page, pageSize, " Id desc ");
 
             return new MessageModel<PageModel<User>>()
             {
@@ -54,9 +74,9 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 根据用户Ids集合获取用户
+        /// 根据用户Ids集合获取用户数据
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">非空</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetByIds(string ids)
@@ -69,7 +89,8 @@ namespace Xu.WebApi.Controllers
                 data.Response = userList;
                 data.Success = true;
                 data.Message = "获取成功";
-            }
+            } else
+                data.Message = "用户Ids不能为空";
 
             return data;
         }
@@ -157,7 +178,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除用户
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> Delete(int id)
@@ -181,10 +202,10 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用用户
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="falg"></param>
+        /// <param name="id">非空</param>
+        /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpDelete]
         public async Task<object> Disable(int id, bool falg)
         {
             var user = await _userSvc.QueryById(id);

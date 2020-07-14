@@ -44,18 +44,17 @@ namespace Xu.Common
         /// <param name="url">完整的url</param>
         /// <param name="body">post body,可以匿名或者反序列化</param>
         /// <returns></returns>
+        [Obsolete]
         public static T PostApi<T>(string url, object body = null)
         {
             var client = new RestClient($"{url}");
-            IRestRequest queest = new RestRequest();
-            queest.Method = Method.POST;
+            IRestRequest queest = new RestRequest
+            {
+                Method = Method.POST
+            };
             queest.AddHeader("Accept", "application/json");
-#pragma warning disable CS0618 // '“IRestRequest.RequestFormat”已过时:“Use AddJsonBody or AddXmlBody to tell RestSharp how to serialize the request body”
             queest.RequestFormat = DataFormat.Json;
-#pragma warning restore CS0618 // '“IRestRequest.RequestFormat”已过时:“Use AddJsonBody or AddXmlBody to tell RestSharp how to serialize the request body”
-#pragma warning disable CS0618 // '“IRestRequest.AddBody(object)”已过时:“Use AddJsonBody or AddXmlBody instead”
             queest.AddBody(body); // 可以使用 JsonSerializer
-#pragma warning restore CS0618 // '“IRestRequest.AddBody(object)”已过时:“Use AddJsonBody or AddXmlBody instead”
             var result = client.Execute(queest);
             if (result.StatusCode != HttpStatusCode.OK)
             {

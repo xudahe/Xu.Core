@@ -208,7 +208,7 @@ namespace Xu.Common
             return aopLogs;
         }
 
-        public static RequestApiWeekView RequestApiinfoByWeek()
+        public static RequestApiWeekView AccessApiByWeek()
         {
             List<RequestInfo> Logs = new List<RequestInfo>();
             List<ApiWeek> apiWeeks = new List<ApiWeek>();
@@ -228,9 +228,9 @@ namespace Xu.Common
                             group n by new { n.Week, n.Url } into g
                             select new ApiWeek
                             {
-                                week = g.Key.Week,
-                                url = g.Key.Url,
-                                count = g.Count(),
+                                Week = g.Key.Week,
+                                Url = g.Key.Url,
+                                Count = g.Count(),
                             }).ToList();
 
                 //apiWeeks = apiWeeks.OrderByDescending(d => d.count).Take(8).ToList();
@@ -242,24 +242,24 @@ namespace Xu.Common
             StringBuilder jsonBuilder = new StringBuilder();
             jsonBuilder.Append("[");
 
-            var weeks = apiWeeks.GroupBy(x => new { x.week }).Select(s => s.First()).ToList();
+            var weeks = apiWeeks.GroupBy(x => new { x.Week }).Select(s => s.First()).ToList();
             foreach (var week in weeks)
             {
-                var apiweeksCurrentWeek = apiWeeks.Where(d => d.week == week.week).OrderByDescending(d => d.count).Take(8).ToList();
+                var apiweeksCurrentWeek = apiWeeks.Where(d => d.Week == week.Week).OrderByDescending(d => d.Count).Take(8).ToList();
                 jsonBuilder.Append("{");
 
                 jsonBuilder.Append("\"");
                 jsonBuilder.Append("日期");
                 jsonBuilder.Append("\":\"");
-                jsonBuilder.Append(week.week);
+                jsonBuilder.Append(week.Week);
                 jsonBuilder.Append("\",");
 
                 foreach (var item in apiweeksCurrentWeek)
                 {
                     jsonBuilder.Append("\"");
-                    jsonBuilder.Append(item.url);
+                    jsonBuilder.Append(item.Url);
                     jsonBuilder.Append("\":\"");
-                    jsonBuilder.Append(item.count);
+                    jsonBuilder.Append(item.Count);
                     jsonBuilder.Append("\",");
                 }
                 jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
@@ -269,12 +269,12 @@ namespace Xu.Common
             jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
             jsonBuilder.Append("]");
 
-            columns.AddRange(apiWeeks.OrderByDescending(d => d.count).Take(8).Select(d => d.url).ToList());
+            columns.AddRange(apiWeeks.OrderByDescending(d => d.Count).Take(8).Select(d => d.Url).ToList());
 
             return new RequestApiWeekView()
             {
-                columns = columns,
-                rows = jsonBuilder.ToString(),
+                Columns = columns,
+                Rows = jsonBuilder.ToString(),
             };
         }
 
@@ -290,11 +290,11 @@ namespace Xu.Common
                             group n by new { n.Date } into g
                             select new ApiDate
                             {
-                                date = g.Key.Date,
-                                count = g.Count(),
+                                Date = g.Key.Date,
+                                Count = g.Count(),
                             }).ToList();
 
-                apiDates = apiDates.OrderByDescending(d => d.date).Take(7).ToList();
+                apiDates = apiDates.OrderByDescending(d => d.Date).Take(7).ToList();
             }
             catch (Exception)
             {
@@ -302,8 +302,8 @@ namespace Xu.Common
 
             return new AccessApiDateView()
             {
-                columns = new string[] { "date", "count" },
-                rows = apiDates.OrderBy(d => d.date).ToList(),
+                Columns = new string[] { "date", "count" },
+                Rows = apiDates.OrderBy(d => d.Date).ToList(),
             };
         }
 
@@ -320,11 +320,11 @@ namespace Xu.Common
                             group n by new { hour = n.Datetime.ToDateTimeReq().Hour } into g
                             select new ApiDate
                             {
-                                date = g.Key.hour.ToString("00"),
-                                count = g.Count(),
+                                Date = g.Key.hour.ToString("00"),
+                                Count = g.Count(),
                             }).ToList();
 
-                apiDates = apiDates.OrderBy(d => d.date).Take(24).ToList();
+                apiDates = apiDates.OrderBy(d => d.Date).Take(24).ToList();
             }
             catch (Exception)
             {
@@ -332,8 +332,8 @@ namespace Xu.Common
 
             return new AccessApiDateView()
             {
-                columns = new string[] { "date", "count" },
-                rows = apiDates,
+                Columns = new string[] { "date", "count" },
+                Rows = apiDates,
             };
         }
     }

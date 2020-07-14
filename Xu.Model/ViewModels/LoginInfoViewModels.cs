@@ -1,4 +1,4 @@
-﻿namespace Xu.Model
+﻿namespace Xu.Model.ViewModels
 {
     public class LoginInfoViewModels
     {

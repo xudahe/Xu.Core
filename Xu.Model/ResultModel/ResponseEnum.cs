@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Xu.Model
+namespace Xu.Model.ResultModel
 {
     public enum ResponseEnum
     {

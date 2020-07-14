@@ -1,10 +1,15 @@
-﻿namespace Xu.Model
+﻿namespace Xu.Model.ResultModel
 {
     /// <summary>
     /// 通用返回信息类
     /// </summary>
     public class MessageModel<T>
     {
+        /// <summary>
+        /// 状态码
+        /// </summary>
+        public int Status { get; set; } = 200;
+
         /// <summary>
         /// 操作是否成功
         /// </summary>

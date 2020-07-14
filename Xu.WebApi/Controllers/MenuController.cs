@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
+using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
 {
@@ -27,16 +27,35 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部菜单并分页
+        /// 获取全部菜单
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="menuName"></param>
+        /// <param name="menuName">菜单名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(int page = 1, int pageSize = 50, string menuName = "")
+        public async Task<object> Get(string menuName = "")
         {
-            var data = await _menuSvc.QueryPage(a => a.DeleteTime == null && ((a.MenuName != null && a.MenuName.Contains(menuName))), page, pageSize, " Id desc ");
+            var data = await _menuSvc.Query(a =>(a.MenuName != null && a.MenuName.Contains(menuName)), " Id desc ");
+
+            return new MessageModel<List<Menu>>()
+            {
+                Message = "获取成功",
+                Success = true,
+                Response = data
+            };
+        }
+
+        /// <summary>
+        /// 获取全部菜单并分页
+        /// </summary>
+        /// <param name="page">页码</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="menuName">菜单名称（可空）</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string menuName = "")
+        {
+            var data = await _menuSvc.QueryPage(a => (a.MenuName != null && a.MenuName.Contains(menuName)), page, pageSize, " Id desc ");
 
             return new MessageModel<PageModel<Menu>>()
             {
@@ -47,12 +66,11 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 根据菜单Ids集合获取菜单
+        /// 根据菜单Ids集合获取菜单数据
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">可空</param>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         public async Task<object> GetByIds(string ids)
         {
             var menuList = await _menuSvc.Query(s => s.Enabled == false);
@@ -142,7 +160,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除菜单
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> Delete(int id)
@@ -166,10 +184,10 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用菜单
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="falg"></param>
+        /// <param name="id">非空</param>
+        /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpDelete]
         public async Task<object> Disable(int id, bool falg)
         {
             var menu = await _menuSvc.QueryById(id);

@@ -140,7 +140,7 @@ namespace Xu.Common
         /// <returns></returns>
         public static string ReadFile(string Path)
         {
-            string s = "";
+            string s;
             if (!System.IO.File.Exists(Path))
                 s = "不存在相应的目录";
             else

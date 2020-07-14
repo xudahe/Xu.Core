@@ -149,6 +149,81 @@
             是否禁用
             </summary>
         </member>
+        <member name="T:Xu.Model.Models.TasksQz">
+            <summary>
+            任务计划表
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.Name">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.JobGroup">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.Cron">
+            <summary>
+            任务运行时间表达式
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.AssemblyName">
+            <summary>
+            任务所在DLL对应的程序集名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.ClassName">
+            <summary>
+            任务所在类
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.Remark">
+            <summary>
+            任务描述
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.RunTimes">
+            <summary>
+            执行次数
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.BeginTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.TriggerType">
+            <summary>
+            触发器类型（0、simple 1、cron）
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.IntervalSecond">
+            <summary>
+            执行间隔时间, 秒为单位
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.IsStart">
+            <summary>
+            是否启动
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.JobParams">
+            <summary>
+            执行传参
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.User">
             <summary>
             用户信息表
@@ -214,137 +289,255 @@
             角色ids
             </summary>
         </member>
-        <member name="T:Xu.Model.MessageModel`1">
+        <member name="T:Xu.Model.ResultModel.MessageModel`1">
             <summary>
             通用返回信息类
             </summary>
         </member>
-        <member name="P:Xu.Model.MessageModel`1.Success">
+        <member name="P:Xu.Model.ResultModel.MessageModel`1.Status">
+            <summary>
+            状态码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ResultModel.MessageModel`1.Success">
             <summary>
             操作是否成功
             </summary>
         </member>
-        <member name="P:Xu.Model.MessageModel`1.Message">
+        <member name="P:Xu.Model.ResultModel.MessageModel`1.Message">
             <summary>
             返回信息
             </summary>
         </member>
-        <member name="P:Xu.Model.MessageModel`1.Response">
+        <member name="P:Xu.Model.ResultModel.MessageModel`1.Response">
             <summary>
             返回数据集合
             </summary>
         </member>
-        <member name="T:Xu.Model.PageModel`1">
+        <member name="T:Xu.Model.ResultModel.PageModel`1">
             <summary>
             通用分页信息类
             </summary>
         </member>
-        <member name="P:Xu.Model.PageModel`1.Page">
+        <member name="P:Xu.Model.ResultModel.PageModel`1.Page">
             <summary>
             当前页标
             </summary>
         </member>
-        <member name="P:Xu.Model.PageModel`1.PageCount">
+        <member name="P:Xu.Model.ResultModel.PageModel`1.PageCount">
             <summary>
             总页数
             </summary>
         </member>
-        <member name="P:Xu.Model.PageModel`1.DataCount">
+        <member name="P:Xu.Model.ResultModel.PageModel`1.DataCount">
             <summary>
             数据总数
             </summary>
         </member>
-        <member name="P:Xu.Model.PageModel`1.PageSize">
+        <member name="P:Xu.Model.ResultModel.PageModel`1.PageSize">
             <summary>
             每页大小
             </summary>
         </member>
-        <member name="P:Xu.Model.PageModel`1.Data">
+        <member name="P:Xu.Model.ResultModel.PageModel`1.Data">
             <summary>
             返回数据
             </summary>
         </member>
-        <member name="F:Xu.Model.ResponseEnum.NoPermissions">
+        <member name="F:Xu.Model.ResultModel.ResponseEnum.NoPermissions">
             <summary>
             无权限
             </summary>
         </member>
-        <member name="F:Xu.Model.ResponseEnum.NoFound">
+        <member name="F:Xu.Model.ResultModel.ResponseEnum.NoFound">
             <summary>
             找不到指定资源
             </summary>
         </member>
-        <member name="F:Xu.Model.ResponseEnum.ServerError">
+        <member name="F:Xu.Model.ResultModel.ResponseEnum.ServerError">
             <summary>
             找不到指定资源
             </summary>
         </member>
-        <member name="T:Xu.Model.TableModel`1">
+        <member name="T:Xu.Model.ResultModel.TableModel`1">
             <summary>
             表格数据，支持分页
             </summary>
         </member>
-        <member name="P:Xu.Model.TableModel`1.Code">
+        <member name="P:Xu.Model.ResultModel.TableModel`1.Code">
             <summary>
             返回编码
             </summary>
         </member>
-        <member name="P:Xu.Model.TableModel`1.Message">
+        <member name="P:Xu.Model.ResultModel.TableModel`1.Message">
             <summary>
             返回信息
             </summary>
         </member>
-        <member name="P:Xu.Model.TableModel`1.Count">
+        <member name="P:Xu.Model.ResultModel.TableModel`1.Count">
             <summary>
             记录总数
             </summary>
         </member>
-        <member name="P:Xu.Model.TableModel`1.Data">
+        <member name="P:Xu.Model.ResultModel.TableModel`1.Data">
             <summary>
             返回数据集
             </summary>
         </member>
-        <member name="M:Xu.Model.DBSeed.SeedAsync(Xu.Model.MyContext)">
+        <member name="M:Xu.Model.DBSeed.SeedAsync(Xu.Model.MyContext,System.String)">
             <summary>
             异步添加种子数据
             </summary>
             <param name="myContext"></param>
+            <param name="WebRootPath"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateModels(Xu.Model.MyContext)">
+        <member name="M:Xu.Model.FrameSeed.CreateControllers(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+            <summary>
+            生成Controller层
+            </summary>
+            <param name="sqlSugarClient">sqlsugar实例</param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
+            <param name="isMuti"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.CreateModels(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
             <summary>
             生成Model层
             </summary>
-            <param name="myContext"></param>
+            <param name="sqlSugarClient">sqlsugar实例</param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
+            <param name="isMuti"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateIRepositorys(Xu.Model.MyContext)">
+        <member name="M:Xu.Model.FrameSeed.CreateIRepositorys(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
             <summary>
             生成IRepository层
             </summary>
-            <param name="myContext"></param>
+            <param name="sqlSugarClient">sqlsugar实例</param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="isMuti"></param>
+            <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateIServices(Xu.Model.MyContext)">
+        <member name="M:Xu.Model.FrameSeed.CreateIServices(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
             <summary>
             生成 IService 层
             </summary>
-            <param name="myContext"></param>
+            <param name="sqlSugarClient">sqlsugar实例</param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="isMuti"></param>
+            <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateRepository(Xu.Model.MyContext)">
+        <member name="M:Xu.Model.FrameSeed.CreateRepository(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
             <summary>
             生成 Repository 层
             </summary>
-            <param name="myContext"></param>
+            <param name="sqlSugarClient">sqlsugar实例</param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="isMuti"></param>
+            <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateServices(Xu.Model.MyContext)">
+        <member name="M:Xu.Model.FrameSeed.CreateServices(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
             <summary>
-            生成 Repository 层
+            生成 Service 层
             </summary>
-            <param name="myContext"></param>
+            <param name="sqlSugarClient">sqlsugar实例</param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="isMuti"></param>
+            <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.Create_Controller_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean,System.Boolean)">
+            <summary>
+            功能描述:根据数据库表生产Controller层
+            </summary>
+            <param name="sqlSugarClient"></param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="strPath">实体类存放路径</param>
+            <param name="strNameSpace">命名空间</param>
+            <param name="lstTableNames">生产指定的表</param>
+            <param name="strInterface">实现接口</param>
+            <param name="isMuti"></param>
+            <param name="blnSerializable">是否序列化</param>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.Create_Model_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean,System.Boolean)">
+            <summary>
+            功能描述:根据数据库表生产Model层
+            </summary>
+            <param name="sqlSugarClient"></param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="strPath">实体类存放路径</param>
+            <param name="strNameSpace">命名空间</param>
+            <param name="lstTableNames">生产指定的表</param>
+            <param name="strInterface">实现接口</param>
+            <param name="isMuti"></param>
+            <param name="blnSerializable">是否序列化</param>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.Create_IRepository_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+            <summary>
+            功能描述:根据数据库表生产IRepository层
+            </summary>
+            <param name="sqlSugarClient"></param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="strPath">实体类存放路径</param>
+            <param name="strNameSpace">命名空间</param>
+            <param name="lstTableNames">生产指定的表</param>
+            <param name="strInterface">实现接口</param>
+            <param name="isMuti"></param>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.Create_IServices_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+            <summary>
+            功能描述:根据数据库表生产IServices层
+            </summary>
+            <param name="sqlSugarClient"></param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="strPath">实体类存放路径</param>
+            <param name="strNameSpace">命名空间</param>
+            <param name="lstTableNames">生产指定的表</param>
+            <param name="strInterface">实现接口</param>
+            <param name="isMuti"></param>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.Create_Repository_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+            <summary>
+            功能描述:根据数据库表生产 Repository 层
+            </summary>
+            <param name="sqlSugarClient"></param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="strPath">实体类存放路径</param>
+            <param name="strNameSpace">命名空间</param>
+            <param name="lstTableNames">生产指定的表</param>
+            <param name="strInterface">实现接口</param>
+            <param name="isMuti"></param>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.Create_Services_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+            <summary>
+            功能描述:根据数据库表生产 Services 层
+            </summary>
+            <param name="sqlSugarClient"></param>
+            <param name="ConnId">数据库链接ID</param>
+            <param name="strPath">实体类存放路径</param>
+            <param name="strNameSpace">命名空间</param>
+            <param name="lstTableNames">生产指定的表</param>
+            <param name="strInterface">实现接口</param>
+            <param name="isMuti"></param>
+        </member>
+        <member name="M:Xu.Model.FrameSeed.CreateFilesByClassStringList(System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.String)">
+            <summary>
+            根据模板内容批量生成文件
+            </summary>
+            <param name="ls">类文件字符串list</param>
+            <param name="strPath">生成路径</param>
+            <param name="fileNameTp">文件名格式模板</param>
+        </member>
+        <member name="M:Xu.Model.MyContext.GetMainConnectionDb">
+            <summary>
+            连接字符串
+            </summary>
         </member>
         <member name="P:Xu.Model.MyContext.ConnectionString">
             <summary>
@@ -370,52 +563,6 @@
             <summary>
             功能描述:构造函数
             </summary>
-        </member>
-        <member name="M:Xu.Model.MyContext.Create_Model_ClassFileByDBTalbe(System.String,System.String,System.String[],System.String,System.Boolean)">
-            <summary>
-            功能描述:根据数据库表生产Model层
-            </summary>
-            <param name="strPath">实体类存放路径</param>
-            <param name="strNameSpace">命名空间</param>
-            <param name="lstTableNames">生产指定的表</param>
-            <param name="strInterface">实现接口</param>
-            <param name="blnSerializable">是否序列化</param>
-        </member>
-        <member name="M:Xu.Model.MyContext.Create_IRepository_ClassFileByDBTalbe(System.String,System.String,System.String[],System.String)">
-            <summary>
-            功能描述:根据数据库表生产IRepository层
-            </summary>
-            <param name="strPath">实体类存放路径</param>
-            <param name="strNameSpace">命名空间</param>
-            <param name="lstTableNames">生产指定的表</param>
-            <param name="strInterface">实现接口</param>
-        </member>
-        <member name="M:Xu.Model.MyContext.Create_IServices_ClassFileByDBTalbe(System.String,System.String,System.String[],System.String)">
-            <summary>
-            功能描述:根据数据库表生产IServices层
-            </summary>
-            <param name="strPath">实体类存放路径</param>
-            <param name="strNameSpace">命名空间</param>
-            <param name="lstTableNames">生产指定的表</param>
-            <param name="strInterface">实现接口</param>
-        </member>
-        <member name="M:Xu.Model.MyContext.Create_Repository_ClassFileByDBTalbe(System.String,System.String,System.String[],System.String)">
-            <summary>
-            功能描述:根据数据库表生产 Repository 层
-            </summary>
-            <param name="strPath">实体类存放路径</param>
-            <param name="strNameSpace">命名空间</param>
-            <param name="lstTableNames">生产指定的表</param>
-            <param name="strInterface">实现接口</param>
-        </member>
-        <member name="M:Xu.Model.MyContext.Create_Services_ClassFileByDBTalbe(System.String,System.String,System.String[],System.String)">
-            <summary>
-            功能描述:根据数据库表生产 Services 层
-            </summary>
-            <param name="strPath">实体类存放路径</param>
-            <param name="strNameSpace">命名空间</param>
-            <param name="lstTableNames">生产指定的表</param>
-            <param name="strInterface">实现接口</param>
         </member>
         <member name="M:Xu.Model.MyContext.GetEntityDB``1">
             <summary>
@@ -485,6 +632,46 @@
             </summary>
             <param name="config">config</param>
             <returns>返回值</returns>
+        </member>
+        <member name="T:Xu.Model.ViewModels.ServerViewModel">
+            <summary>
+            服务器VM
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.EnvironmentName">
+            <summary>
+            环境变量
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.OSArchitecture">
+            <summary>
+            系统架构
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.ContentRootPath">
+            <summary>
+            ContentRootPath
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.WebRootPath">
+            <summary>
+            WebRootPath
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.FrameworkDescription">
+            <summary>
+            .NET Core版本
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.MemoryFootprint">
+            <summary>
+            内存占用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.WorkingTime">
+            <summary>
+            启动时间
+            </summary>
         </member>
     </members>
 </doc>

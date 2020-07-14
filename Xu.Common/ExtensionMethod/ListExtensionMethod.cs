@@ -70,8 +70,7 @@ namespace Xu.Common
 
             foreach (string str in list)
             {
-                int i;
-                if (int.TryParse(str, out i))
+                if (int.TryParse(str, out int i))
                     list_int.Add(i);
             }
 

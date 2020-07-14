@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Xu.Common;
+using Xu.Extensions;
 using Xu.IServices;
 
 namespace Xu.WebApi.Controllers
@@ -111,7 +111,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 请求刷新Token（以旧换新）
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="token">token</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> RefreshToken(string token = "")
@@ -154,29 +154,6 @@ namespace Xu.WebApi.Controllers
                 success = false,
                 message = "认证失败"
             });
-        }
-
-        /// <summary>
-        /// 获取JWT的方法4：给 JSONP 测试
-        /// </summary>
-        /// <param name="callBack"></param>
-        /// <param name="id"></param>
-        /// <param name="sub"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public void Getjsonp(string callBack, long id = 1, string sub = "Permission")
-        {
-            TokenModelJwt tokenModel = new TokenModelJwt
-            {
-                Id = id,
-                Role = sub
-            };
-
-            string jwtStr = JwtHelper.IssueJwt(tokenModel);
-
-            string response = string.Format("\"value\":\"{0}\"", jwtStr);
-            string call = callBack + "({" + response + "})";
-            Response.WriteAsync(call);
         }
     }
 }

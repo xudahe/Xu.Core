@@ -27,7 +27,7 @@ namespace Xu.Common
         {
             if (value == null)
             {
-                return default(T);
+                return default;
             }
             var jsonString = Encoding.UTF8.GetString(value);
             return JsonConvert.DeserializeObject<T>(jsonString);

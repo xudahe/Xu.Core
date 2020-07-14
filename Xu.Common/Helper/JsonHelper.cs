@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace Xu.Common
 {
@@ -16,9 +18,8 @@ namespace Xu.Common
             string result = String.Empty;
             try
             {
-                System.Runtime.Serialization.Json.DataContractJsonSerializer serializer =
-                new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(T));
-                using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+                using (MemoryStream ms = new MemoryStream())
                 {
                     serializer.WriteObject(ms, obj);
                     result = System.Text.Encoding.UTF8.GetString(ms.ToArray());
@@ -42,11 +43,11 @@ namespace Xu.Common
             System.Text.StringBuilder st = new System.Text.StringBuilder();
             try
             {
-                System.Runtime.Serialization.Json.DataContractJsonSerializer s = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(T));
+                DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(T));
 
                 foreach (T city in vals)
                 {
-                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                    using (MemoryStream ms = new MemoryStream())
                     {
                         s.WriteObject(ms, city);
                         st.Append(System.Text.Encoding.UTF8.GetString(ms.ToArray()));
@@ -70,37 +71,11 @@ namespace Xu.Common
         public static T ParseFormByJson<T>(string jsonStr)
         {
             _ = Activator.CreateInstance<T>();
-            using (System.IO.MemoryStream ms =
-            new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(jsonStr)))
+            using (MemoryStream ms = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(jsonStr)))
             {
-                System.Runtime.Serialization.Json.DataContractJsonSerializer serializer =
-                new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(T));
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
                 return (T)serializer.ReadObject(ms);
             }
-        }
-
-        public string JSON1<SendData>(List<SendData> vals)
-        {
-            System.Text.StringBuilder st = new System.Text.StringBuilder();
-            try
-            {
-                System.Runtime.Serialization.Json.DataContractJsonSerializer s = new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(SendData));
-
-                foreach (SendData city in vals)
-                {
-                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
-                    {
-                        s.WriteObject(ms, city);
-                        st.Append(System.Text.Encoding.UTF8.GetString(ms.ToArray()));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            return st.ToString();
         }
     }
 }

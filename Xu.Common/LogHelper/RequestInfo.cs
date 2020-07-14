@@ -4,27 +4,27 @@ namespace Xu.Common
 {
     public class ApiWeek
     {
-        public string week { get; set; }
-        public string url { get; set; }
-        public int count { get; set; }
+        public string Week { get; set; }
+        public string Url { get; set; }
+        public int Count { get; set; }
     }
 
     public class ApiDate
     {
-        public string date { get; set; }
-        public int count { get; set; }
+        public string Date { get; set; }
+        public int Count { get; set; }
     }
 
     public class RequestApiWeekView
     {
-        public List<string> columns { get; set; }
-        public string rows { get; set; }
+        public List<string> Columns { get; set; }
+        public string Rows { get; set; }
     }
 
     public class AccessApiDateView
     {
-        public string[] columns { get; set; }
-        public List<ApiDate> rows { get; set; }
+        public string[] Columns { get; set; }
+        public List<ApiDate> Rows { get; set; }
     }
 
     public class RequestInfo

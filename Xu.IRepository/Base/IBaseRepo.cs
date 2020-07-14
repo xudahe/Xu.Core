@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Xu.Model;
+using Xu.Model.ResultModel;
 
 namespace Xu.IRepository
 {

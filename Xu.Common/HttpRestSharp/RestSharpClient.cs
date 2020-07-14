@@ -99,12 +99,11 @@ namespace Xu.Common
         /// });
         /// </remarks>
         /// <returns></returns>
+        [Obsolete]
         public RestRequestAsyncHandle ExecuteAsync(IRestRequest request, Action<IRestResponse> callback)
         {
             request.DateFormat = string.IsNullOrEmpty(request.DateFormat) ? DefaultDateParameterFormat : request.DateFormat;
-#pragma warning disable CS0618 // '“RestClientExtensions.ExecuteAsync(IRestClient, IRestRequest, Action<IRestResponse>)”已过时:“Use ExecuteAsync that returns Task”
             return client.ExecuteAsync(request, callback);
-#pragma warning restore CS0618 // '“RestClientExtensions.ExecuteAsync(IRestClient, IRestRequest, Action<IRestResponse>)”已过时:“Use ExecuteAsync that returns Task”
         }
 
         /// <summary>
@@ -126,12 +125,11 @@ namespace Xu.Common
         /// });
         /// </remarks>
         /// <returns></returns>
+        [Obsolete]
         public RestRequestAsyncHandle ExecuteAsync<T>(IRestRequest request, Action<IRestResponse<T>> callback) where T : new()
         {
             request.DateFormat = string.IsNullOrEmpty(request.DateFormat) ? DefaultDateParameterFormat : request.DateFormat;
-#pragma warning disable CS0618 // '“RestClientExtensions.ExecuteAsync<T>(IRestClient, IRestRequest, Action<IRestResponse<T>>)”已过时:“Use ExecuteAsync that returns Task”
             return client.ExecuteAsync<T>(request, callback);
-#pragma warning restore CS0618 // '“RestClientExtensions.ExecuteAsync<T>(IRestClient, IRestRequest, Action<IRestResponse<T>>)”已过时:“Use ExecuteAsync that returns Task”
         }
     }
 }

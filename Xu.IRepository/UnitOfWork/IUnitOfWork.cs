@@ -7,7 +7,7 @@ namespace Xu.IRepository
         /// <summary>
         /// 创建SqlSugarClient 实列
         /// </summary>
-        ISqlSugarClient GetDbClient();
+        SqlSugarClient GetDbClient();
 
         /// <summary>
         /// 开始事务

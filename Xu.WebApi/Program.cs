@@ -1,93 +1,51 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 using System.IO;
-using System.Reflection;
-using System.Xml;
-using Xu.Common;
-using Xu.Model;
 
 namespace Xu.WebApi
 {
     public class Program
     {
+        /// <summary>
+        /// Main方法负责初始化Web主机，调用Startup和执行应用程序
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            //配置文件
-            XmlDocument log4netConfig = new XmlDocument();
-            log4netConfig.Load(File.OpenRead("Log4net.config"));
+            //初始化默认主机Builder
+            Host.CreateDefaultBuilder(args)
+             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+             .ConfigureWebHostDefaults(webBuilder =>
+             {
+                 webBuilder
+                 .ConfigureKestrel(serverOptions =>
+                 {
+                     serverOptions.AllowSynchronousIO = true; //启用同步 IO
+                 })
+                 .UseStartup<Startup>() //调用Startup.cs类下的Configure 和 ConfigureServices
+                 .UseUrls("http://*:1081", "http://*:1082")
+                 .ConfigureLogging((hostingContext, builder) =>
+                 {
+                     //过滤掉系统默认的一些日志
+                     builder.AddFilter("System", LogLevel.Error);
+                     builder.AddFilter("Microsoft", LogLevel.Error);
+                     builder.AddFilter("Xu.Extensions.ApiResponseHandler", LogLevel.Error);
 
-            //需要获取日志的仓库名
-            var repo = log4net.LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
-
-            //添加日志启动
-            log4net.Config.XmlConfigurator.Configure(repo, log4netConfig["log4net"]);
-
-            // 生成承载 web 应用程序的 Microsoft.AspNetCore.Hosting.IWebHost。Build是WebHostBuilder最终的目的，将返回一个构造的WebHost，最终生成宿主。
-            var host = CreateHostBuilder(args).Build();
-
-            // 创建可用于解析作用域服务的新 Microsoft.Extensions.DependencyInjection.IServiceScope。
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-
-                try
-                {
-                    // 从 system.IServicec提供程序获取 T 类型的服务。
-                    // 数据库连接字符串是在 Model 层的 Seed 文件夹下的 MyContext.cs 中
-                    var configuration = services.GetRequiredService<IConfiguration>();
-                    if (configuration.GetSection("AppSettings")["SeedDBEnabled"].ToBoolReq() || configuration.GetSection("AppSettings")["SeedDBDataEnabled"].ToBoolReq())
-                    {
-                        var myContext = services.GetRequiredService<MyContext>();
-                        DBSeed.SeedAsync(myContext).Wait();
-                    }
-                }
-                catch (Exception e)
-                {
-                    var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(e, "Error occured seeding the Database.");
-                    throw;
-                }
-            }
-
-            // 运行 web 应用程序并阻止调用线程, 直到主机关闭。
-            // 创建完 WebHost 之后，便调用它的 Run 方法，而 Run 方法会去调用 WebHost 的 StartAsync 方法
-            // 将Initialize方法创建的Application管道传入以供处理消息
-            // 执行HostedServiceExecutor.StartAsync方法
-            // ※※※※ 有异常，查看 Log 文件夹下的异常日志 ※※※※
-            host.Run();
+                     //可配置文件
+                     var path = Path.Combine(Directory.GetCurrentDirectory(), "Log4net.config");
+                     builder.AddLog4Net(path);
+                 });
+             })
+             // 生成承载 web 应用程序的 Microsoft.AspNetCore.Hosting.IWebHost。Build是WebHostBuilder最终的目的，将返回一个构造的WebHost，最终生成宿主。
+             .Build()
+             // 运行 web 应用程序并阻止调用线程, 直到主机关闭。
+             // 创建完 WebHost 之后，便调用它的 Run 方法，而 Run 方法会去调用 WebHost 的 StartAsync 方法
+             // 将Initialize方法创建的Application管道传入以供处理消息
+             // 执行HostedServiceExecutor.StartAsync方法
+             // ※※※※ 有异常，查看 Log 文件夹下的异常日志 ※※※※
+             .Run();
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-
-         Host.CreateDefaultBuilder(args)
-           .UseServiceProviderFactory(new AutofacServiceProviderFactory()) //<--NOTE THIS
-           .ConfigureWebHostDefaults(webBuilder =>
-           {
-               webBuilder
-               .ConfigureKestrel(serverOptions =>
-               {
-                   serverOptions.AllowSynchronousIO = true;//启用同步 IO
-               })
-               .UseStartup<Startup>()
-               .UseUrls("http://*:1081", "http://*:1082")
-               .ConfigureLogging((hostingContext, builder) =>
-               {
-                   builder.ClearProviders();
-                   builder.SetMinimumLevel(LogLevel.Trace);
-                   builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                   builder.AddConsole();
-                   builder.AddDebug();
-
-                   //过滤掉系统默认的一些日志
-                   builder.AddFilter("System",LogLevel.Error);
-                   builder.AddFilter("Microsoft",LogLevel.Error);
-               });
-           });
     }
 }

@@ -1,5 +1,4 @@
-﻿using log4net;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -15,18 +14,11 @@ namespace Xu.WebApi
     /// <summary>
     /// 全局异常错误日志
     /// </summary>
-    /// <remarks>
-    /// 1、Filter过滤器是基于当前Http请求的，也就是接口层面的，颗粒度比较大；
-    /// 2、而AOP是基于服务切面的，是 Service 层的请求，颗粒度比较小；
-    /// </remarks>
     public class GlobalExceptionsFilter : IExceptionFilter
     {
-        //private readonly IHostingEnvironment _env;
         private readonly IWebHostEnvironment _env;
-
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly ILogger<GlobalExceptionsFilter> _loggerHelper;
-        private static readonly ILog log = LogManager.GetLogger(typeof(GlobalExceptionsFilter));
 
         public GlobalExceptionsFilter(IWebHostEnvironment env, ILogger<GlobalExceptionsFilter> loggerHelper, IHubContext<ChatHub> hubContext)
         {
@@ -41,17 +33,21 @@ namespace Xu.WebApi
             {
                 Message = context.Exception.Message//错误信息
             };
+            var errorAudit = "Unable to resolve service for";
+            if (!string.IsNullOrEmpty(json.Message) && json.Message.Contains(errorAudit))
+            {
+                json.Message = json.Message.Replace(errorAudit, $"（若新添加服务，需要重新编译项目）{errorAudit}");
+            }
             if (_env.IsDevelopment())
             {
                 json.DevelopmentMessage = context.Exception.StackTrace;//堆栈信息
             }
             context.Result = new InternalServerErrorObjectResult(json);
 
-            //收录异常
             MiniProfiler.Current.CustomTiming("Errors：", json.Message);
 
             //采用log4net 进行错误日志记录
-            log.Error(json.Message + WriteLog(json.Message, context.Exception));
+            _loggerHelper.LogError(json.Message + WriteLog(json.Message, context.Exception));
 
             _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData()).Wait();
         }

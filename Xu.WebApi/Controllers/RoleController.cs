@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
+using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
 {
@@ -26,17 +26,35 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部角色并分页
+        /// 获取全部角色
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="key"></param>
+        /// <param name="roleName">角色名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<object> Get(int page = 1, int pageSize = 50, string key = "")
+        public async Task<object> Get(string roleName = "")
         {
-            var data = await _roleSvc.QueryPage(a => (a.RoleName != null && a.RoleName.Contains(key) && (a.RoleCode != null && a.RoleCode.Contains(key))), page, pageSize, " Id desc ");
+            var data = await _roleSvc.Query(a => (a.RoleName != null && a.RoleName.Contains(roleName)), " Id desc ");
+
+            return new MessageModel<List<Role>>()
+            {
+                Message = "获取成功",
+                Success = true,
+                Response = data
+            };
+        }
+
+        /// <summary>
+        /// 获取全部角色并分页
+        /// </summary>
+        /// <param name="page">页码</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="roleName">角色名称（可空）</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string roleName = "")
+        {
+            var data = await _roleSvc.QueryPage(a => (a.RoleName != null && a.RoleName.Contains(roleName)), page, pageSize, " Id desc ");
 
             return new MessageModel<PageModel<Role>>()
             {
@@ -47,9 +65,9 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 根据用户Ids集合获取角色
+        /// 根据角色Ids集合获取角色数据
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">非空</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetByIds(string ids)
@@ -62,7 +80,8 @@ namespace Xu.WebApi.Controllers
                 data.Response = roleList;
                 data.Success = true;
                 data.Message = "获取成功";
-            }
+            } else
+                data.Message = "角色Ids不能为空";
 
             return data;
         }
@@ -73,7 +92,6 @@ namespace Xu.WebApi.Controllers
         /// <param name="role"></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         public async Task<object> Post([FromBody] Role role)
         {
             var model = await _roleSvc.SaveRole(role);
@@ -111,7 +129,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除角色
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> Delete(int id)
@@ -135,10 +153,10 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用角色
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="falg"></param>
+        /// <param name="id">非空</param>
+        /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpDelete]
         public async Task<object> Disable(int id, bool falg)
         {
             var role = await _roleSvc.QueryById(id);
