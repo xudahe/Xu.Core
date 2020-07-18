@@ -34,7 +34,7 @@ namespace Xu.Extensions
                     Port = int.Parse(configuration["ConsulSetting:ServicePort"]),//服务端口
                     Check = new AgentServiceCheck()
                     {
-                        DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(7),// 服务启动 7 秒后注册服务
+                        DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(5),// 服务启动 7 秒后注册服务
                         Interval = TimeSpan.FromSeconds(10),//健康检查时间间隔
                         HTTP = $"http://{configuration["ConsulSetting:ServiceIP"]}:{configuration["ConsulSetting:ServicePort"]}{configuration["ConsulSetting:ServiceHealthCheck"]}",//健康检查地址
                         Timeout = TimeSpan.FromSeconds(5)//超时时间

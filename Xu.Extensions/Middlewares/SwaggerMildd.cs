@@ -29,8 +29,6 @@ namespace Xu.Extensions
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{ApiName} {version}");
                 });
 
-                c.SwaggerEndpoint($"https://petstore.swagger.io/v2/swagger.json", $"{ApiName} pet");
-
                 // 将swagger首页，设置成我们自定义的页面，记得这个字符串的写法：{项目名.index.html}
                 if (streamHtml.Invoke() == null)
                 {
@@ -42,8 +40,7 @@ namespace Xu.Extensions
 
                 c.DefaultModelsExpandDepth(-1); // 不显示models
 
-                // 路径配置，设置为空，表示直接在根域名（localhost:8001）访问该文件,注意localhost:8001/swagger是访问不到的，去launchSettings.json把launchUrl去掉，如果你想换一个路径，直接写名字即可，比如直接写c.RoutePrefix = "doc";
-                c.RoutePrefix = "";
+                c.RoutePrefix = "";//路径配置，设置后直接输入IP就可以进入接口文档
             });
         }
     }
