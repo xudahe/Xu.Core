@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Xu.Common.Helper
+namespace Xu.Common
 {
     public class BaseHelper
     {

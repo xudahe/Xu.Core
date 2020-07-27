@@ -48,4 +48,18 @@ namespace Xu.Model
         [SugarColumn(IsNullable = true, IsOnlyIgnoreInsert = true)]
         public DateTime? DeleteTime { get; set; }
     }
+
+    ///////////////////Model数据验证///////////////////
+
+    //[Required] //表示属性必须有值；但用户可输入空格来满足此验证
+    //[StringLenght(100)]//最大长度100
+    //[Range(0, 999)]//取值范围是0-999
+    //[DateType(DataType.Date)]//要求此数据必为日期类型
+    //[CreaitCard]//信用卡
+    //[Phone]//电话号码
+    //[EmailAddress]//邮箱地址
+    //[DataType(DataType.Password)] //密码
+    //[RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
+    //[Url]//必须是url链接
+    //[Compare]//比较数据是否相同
 }

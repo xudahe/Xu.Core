@@ -60,6 +60,8 @@ namespace Xu.WebApi
             services.AddHttpContextSetup();
             services.AddAppConfigSetup();
             services.AddHttpApi();
+            //services.AddHstsSetup(); // 生产环境中使用
+            //services.AddAntiforgerySetup(); //防止CSRF攻击
             if (Permissions.IsUseIds4)
             {
                 services.AddAuthorization_Ids4Setup();
@@ -70,18 +72,26 @@ namespace Xu.WebApi
             }
             services.AddIpPolicyRateLimitSetup(Configuration);
             services.AddSignalR().AddNewtonsoftJsonProtocol();
-            services.AddScoped<UseServiceDIAttribute>();
             services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
                     .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 
-            services.AddControllers(o =>
+            //services.AddRouting(options =>
+            //{
+            //    options.LowercaseUrls = true; //小写url的路由
+            //});
+
+            services.AddControllers(options =>
             {
+                //全局XSS过滤器
+                //options.Filters.Add(typeof(XSSFilterAttribute));
+                //全局给post Action都开启了防止CSRF攻击,配合services.AddAntiforgerySetup()使用
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 // 全局异常过滤
-                o.Filters.Add(typeof(GlobalExceptionsFilter));
+                options.Filters.Add(typeof(GlobalExceptionsFilter));
                 // 全局路由权限公约
                 //o.Conventions.Insert(0, new GlobalRouteAuthorizeConvention());
                 // 全局路由前缀，统一修改路由
-                o.Conventions.Insert(0, new GlobalRoutePrefixFilter(new RouteAttribute(RoutePrefix.Name)));
+                options.Conventions.Insert(0, new GlobalRoutePrefixFilter(new RouteAttribute(RoutePrefix.Name)));
             })
             //全局配置Json序列化处理
             .AddNewtonsoftJson(options =>
@@ -129,7 +139,7 @@ namespace Xu.WebApi
                 app.UseExceptionHandler("/Error");
                 // 在非开发环境中，使用HTTP严格安全传输(or HSTS) 对于保护web安全是非常重要的。
                 // 强制实施 HTTPS 在 ASP.NET Core，配合 app.UseHttpsRedirection
-                //app.UseHsts();
+                //app.UseHsts(); // HSTS 中间件（UseHsts）用于向客户端发送 HTTP 严格传输安全协议（HSTS）标头
             }
 
             // 封装Swagger展示
@@ -139,7 +149,7 @@ namespace Xu.WebApi
 
             // CORS跨域
             app.UseCors("LimitRequests");
-            // 跳转https
+            // 重定向中间件，用于将 HTTP 请求重定向到 HTTPS
             //app.UseHttpsRedirection();
             // 使用静态文件
             app.UseStaticFiles();
@@ -156,7 +166,7 @@ namespace Xu.WebApi
             // 然后是授权中间件
             app.UseAuthorization();
             // 开启异常中间件，要放到最后
-            //app.UseExceptionHandlerMidd();
+            app.UseExceptionHandlerMidd();
             // 性能分析
             app.UseMiniProfiler();
             // 用户访问记录
@@ -175,8 +185,8 @@ namespace Xu.WebApi
             app.UseSeedDataMildd(myContext, Env.WebRootPath);
             // 开启QuartzNetJob调度服务
             app.UseQuartzJobMildd(tasksQzSvc, schedulerCenter);
-            //服务注册
-            app.UseConsulMildd(Configuration, lifetime);
+            // 服务注册
+            //app.UseConsulMildd(Configuration, lifetime);
         }
     }
 }

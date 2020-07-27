@@ -17,7 +17,7 @@ namespace Xu.Extensions
             if (Appsettings.App(new string[] { "Startup", "AppConfigAlert", "Enabled" }).ToBoolReq())
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                Console.OutputEncoding = Encoding.GetEncoding("GB2312");
+                Console.OutputEncoding = Encoding.GetEncoding("GB2312"); //避免乱码
 
                 Console.WriteLine("************ Blog.Core Config Set *****************");
                 // 授权策略方案

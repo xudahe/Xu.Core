@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Common.Utility
+namespace Common
 {
     /// <summary>
     /// RSA加密解密及RSA签名和验证

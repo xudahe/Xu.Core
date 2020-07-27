@@ -2,9 +2,9 @@
 {
     public class LoginInfoViewModels
     {
-        public string uLoginName { get; set; }
+        public string LoginName { get; set; }
 
-        public string uLoginPwd { get; set; }
+        public string LoginPwd { get; set; }
 
         public string VCode { get; set; }
 

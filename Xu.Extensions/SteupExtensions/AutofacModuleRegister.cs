@@ -9,6 +9,9 @@ using Xu.Common;
 
 namespace Xu.Extensions
 {
+    /// <summary>
+    /// Autofac 注入
+    /// </summary>
     public class AutofacModuleRegister : Autofac.Module
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AutofacModuleRegister));

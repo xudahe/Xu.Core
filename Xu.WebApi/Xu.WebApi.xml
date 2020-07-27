@@ -464,6 +464,26 @@
             全局路由前缀公约
             </summary>
         </member>
+        <member name="T:Xu.WebApi.XSSFilterAttribute">
+            <summary>
+            XSS 过滤器
+            </summary>
+            <remarks>在需要进行XSS过滤的控制器或者action上加上对应的[XSSFilt]属性即可</remarks>
+        </member>
+        <member name="M:Xu.WebApi.XSSFilterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            OnActionExecuting
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:Xu.WebApi.XSSFilterAttribute.PostModelFieldFilter(System.Type,System.Object)">
+            <summary>
+            遍历实体的字符串属性
+            </summary>
+            <param name="type">数据类型</param>
+            <param name="obj">对象</param>
+            <returns></returns>
+        </member>
         <member name="M:Xu.WebApi.Program.Main(System.String[])">
             <summary>
             Main方法负责初始化Web主机，调用Startup和执行应用程序
