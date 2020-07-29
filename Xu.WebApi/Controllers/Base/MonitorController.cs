@@ -22,7 +22,7 @@ namespace Blog.Core.Controllers
     /// </summary>
     [Route("api/[Controller]/[action]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "v1")]
+    //[ApiExplorerSettings(GroupName = "v1")]
     [Authorize(Permissions.Name)]
     public class MonitorController : Controller
     {
