@@ -27,7 +27,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部菜单
+        /// 获取全部菜单（列表）
         /// </summary>
         /// <param name="menuName">菜单名称（可空）</param>
         /// <returns></returns>
@@ -66,7 +66,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 根据菜单Ids集合获取菜单数据
+        /// 根据菜单Ids集合获取菜单数据（树状）
         /// </summary>
         /// <param name="ids">可空</param>
         /// <returns></returns>
