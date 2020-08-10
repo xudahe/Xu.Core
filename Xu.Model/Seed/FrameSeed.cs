@@ -574,8 +574,8 @@ namespace " + strNameSpace + @"
 	/// </summary>
     public partial class {ClassName}Svc : BaseSvc<{ClassName}>, I{ClassName}Svc" + (string.IsNullOrEmpty(strInterface) ? "" : (" , " + strInterface)) + @"
     {
-        private readonly I{ClassName}Repo _dal;
-        public {ClassName}Svc(I{ClassName}Repo dal)
+        private readonly IBaseRepo<{ClassName}> _dal;
+        public {ClassName}Svc(IBaseRepo<{ClassName}> dal)
         {
             this._dal = dal;
             base.BaseDal = dal;

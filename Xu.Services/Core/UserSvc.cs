@@ -12,7 +12,7 @@ namespace Xu.Services
     /// </summary>
     public class UserSvc : BaseSvc<User>, IUserSvc
     {
-        public UserSvc(IUserRepo userRepo)
+        public UserSvc(IBaseRepo<User> userRepo)
         {
             base.BaseDal = userRepo;
         }

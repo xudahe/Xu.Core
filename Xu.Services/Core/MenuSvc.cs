@@ -8,7 +8,7 @@ namespace Xu.Services.Core
 {
     public class MenuSvc : BaseSvc<Menu>, IMenuSvc
     {
-        public MenuSvc(IMenuRepo menuRepo)
+        public MenuSvc(IBaseRepo<Menu> menuRepo)
         {
             base.BaseDal = menuRepo;
         }

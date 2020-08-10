@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Xu.Common;
+using Xu.IRepository;
+using Xu.Repository;
 
 namespace Xu.Extensions
 {
@@ -55,6 +57,9 @@ namespace Xu.Extensions
                 builder.RegisterType<LogAOP>(); //Log日志切面
                 cacheType.Add(typeof(LogAOP));
             }
+
+            //注册仓储
+            builder.RegisterGeneric(typeof(BaseRepo<>)).As(typeof(IBaseRepo<>)).InstancePerDependency();
 
             // 获取 Service.dll 程序集服务，并注册
             var assemblysServices = Assembly.LoadFrom(servicesDllFile);

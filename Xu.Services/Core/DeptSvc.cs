@@ -7,9 +7,9 @@ namespace Xu.Services
 {
     public partial class DeptSvc : BaseSvc<Dept>, IDeptSvc
     {
-        private readonly IDeptRepo _dal;
+        IBaseRepo<Dept> _dal;
 
-        public DeptSvc(IDeptRepo dal)
+        public DeptSvc(IBaseRepo<Dept> dal)
         {
             this._dal = dal;
             base.BaseDal = dal;

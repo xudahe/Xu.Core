@@ -222,7 +222,7 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.Get(System.String)">
             <summary>
-            获取全部菜单
+            获取全部菜单（列表）
             </summary>
             <param name="menuName">菜单名称（可空）</param>
             <returns></returns>
@@ -238,7 +238,7 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.GetByIds(System.String)">
             <summary>
-            根据菜单Ids集合获取菜单数据
+            根据菜单Ids集合获取菜单数据（树状）
             </summary>
             <param name="ids">可空</param>
             <returns></returns>

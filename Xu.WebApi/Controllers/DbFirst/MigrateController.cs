@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using Xu.Common;
 using Xu.IRepository;
 using Xu.Model.ResultModel;

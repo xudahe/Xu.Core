@@ -12,7 +12,7 @@ namespace Xu.Services
     /// </summary>
     public class RoleSvc : BaseSvc<Role>, IRoleSvc
     {
-        public RoleSvc(IRoleRepo roleRepo)
+        public RoleSvc(IBaseRepo<Role> roleRepo)
         {
             base.BaseDal = roleRepo;
         }

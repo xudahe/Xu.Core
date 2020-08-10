@@ -6,6 +6,11 @@ namespace Xu.Common
 {
     public class GetNetData
     {
+        /// <summary>
+        /// GET请求
+        /// </summary>
+        /// <param name="serviceAddress"></param>
+        /// <returns></returns>
         public static string Get(string serviceAddress)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceAddress);
@@ -21,6 +26,11 @@ namespace Xu.Common
             return retString;
         }
 
+        /// <summary>
+        /// POST请求
+        /// </summary>
+        /// <param name="serviceAddress"></param>
+        /// <returns></returns>
         public static string Post(string serviceAddress)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceAddress);

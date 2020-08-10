@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Internal;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
@@ -21,17 +22,18 @@ namespace Xu.Extensions
         ///
         /// </summary>
         private readonly RequestDelegate _next;
-
         private readonly IUser _user;
+        private readonly ILogger<RecordAccessLogsMildd> _logger;
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="next"></param>
-        public RecordAccessLogsMildd(RequestDelegate next, IUser user)
+        public RecordAccessLogsMildd(RequestDelegate next, IUser user, ILogger<RecordAccessLogsMildd> logger)
         {
             _next = next;
             _user = user;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -65,10 +67,11 @@ namespace Xu.Extensions
                             await RequestDataLog(context, opTime);
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // 记录异常
                         //ErrorLogData(context.Response, ex);
+                        _logger.LogError(ex.Message + "\r\n" + ex.InnerException);
                     }
                     finally
                     {

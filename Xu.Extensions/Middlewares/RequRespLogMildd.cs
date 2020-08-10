@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -17,14 +18,16 @@ namespace Xu.Extensions
         ///
         /// </summary>
         private readonly RequestDelegate _next;
+        private readonly ILogger<RequRespLogMildd> _logger;
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="next"></param>
-        public RequRespLogMildd(RequestDelegate next)
+        public RequRespLogMildd(RequestDelegate next, ILogger<RequRespLogMildd> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -55,10 +58,11 @@ namespace Xu.Extensions
                             await ms.CopyToAsync(originalBody);
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // 记录异常
                         //ErrorLogData(context.Response, ex);
+                        _logger.LogError(ex.Message + "" + ex.InnerException);
                     }
                     finally
                     {
