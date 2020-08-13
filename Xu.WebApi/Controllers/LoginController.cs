@@ -60,7 +60,7 @@ namespace Xu.WebApi.Controllers
                 });
             }
 
-            //pass = MD5Helper.MD5Encrypt32(pass);
+            //pass = JsEncryptHelper.Decrypt(pass);
 
             var user = (await _userSvc.Query(d => d.Enabled == false && d.LoginName == name && d.LoginPwd == pass)).FirstOrDefault();
             if (user != null)

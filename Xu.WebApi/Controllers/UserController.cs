@@ -129,7 +129,7 @@ namespace Xu.WebApi.Controllers
         [HttpPost]
         public async Task<object> Post([FromBody] User user)
         {
-            user.LoginPwd = MD5Helper.MD5Encrypt32(user.LoginPwd);
+            //user.LoginPwd = MD5Helper.MD5Encrypt32(user.LoginPwd);
             var model = await _userSvc.SaveUser(user);
 
             return new MessageModel<User>()
