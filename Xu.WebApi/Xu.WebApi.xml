@@ -135,10 +135,11 @@
             部门管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.Get(System.String)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.Get(System.String,System.String)">
             <summary>
-            获取全部部门
+            获取部门数据
             </summary>
+            <param name="ids">可空</param>
             <param name="deptName">部门名称（可空）</param>
             <returns></returns>
         </member>
@@ -149,13 +150,6 @@
             <param name="page">页码</param>
             <param name="pageSize">页大小</param>
             <param name="deptName">部门名称（可空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.GetByIds(System.String)">
-            <summary>
-            根据部门Ids集合获取部门数据
-            </summary>
-            <param name="ids">非空</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DeptController.Post(Xu.Model.Models.Dept)">
@@ -220,10 +214,11 @@
             菜单管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Get(System.String)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.Get(System.String,System.String)">
             <summary>
-            获取全部菜单（列表）
+            获取菜单数据（列表）
             </summary>
+            <param name="ids">可空</param>
             <param name="menuName">菜单名称（可空）</param>
             <returns></returns>
         </member>
@@ -277,10 +272,11 @@
             角色管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Get(System.String)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.Get(System.String,System.String)">
             <summary>
-            获取全部角色
+            获取角色数据
             </summary>
+            <param name="ids">可空</param>
             <param name="roleName">角色名称（可空）</param>
             <returns></returns>
         </member>
@@ -291,13 +287,6 @@
             <param name="page">页码</param>
             <param name="pageSize">页大小</param>
             <param name="roleName">角色名称（可空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.GetByIds(System.String)">
-            <summary>
-            根据角色Ids集合获取角色数据
-            </summary>
-            <param name="ids">非空</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.RoleController.Post(Xu.Model.Models.Role)">
@@ -341,10 +330,11 @@
             <param name="unitOfWork"></param>
             <param name="userSvc"></param>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Get(System.String)">
+        <member name="M:Xu.WebApi.Controllers.UserController.Get(System.String,System.String)">
             <summary>
-            获取全部用户
+            获取用户数据
             </summary>
+            <param name="ids">可空</param>
             <param name="key">用户名/姓名（可空）</param>
             <returns></returns>
         </member>
@@ -355,13 +345,6 @@
             <param name="page">页码</param>
             <param name="pageSize">页大小</param>
             <param name="key">用户名/姓名（可空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.GetByIds(System.String)">
-            <summary>
-            根据用户Ids集合获取用户数据
-            </summary>
-            <param name="ids">非空</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.UserController.GetInfoByToken(System.String)">

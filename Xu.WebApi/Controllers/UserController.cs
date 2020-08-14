@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
@@ -35,14 +36,21 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部用户
+        /// 获取用户数据
         /// </summary>
+        /// <param name="ids">可空</param>
         /// <param name="key">用户名/姓名（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string key = "")
+        public async Task<object> Get(string ids, string key = "")
         {
-            var data = await _userSvc.Query(a => (a.LoginName != null && a.LoginName.Contains(key)) || (a.RealName != null && a.RealName.Contains(key)), " Id desc ");
+            var data = await _userSvc.Query();
+
+            if (!string.IsNullOrEmpty(ids))
+                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+
+            if (!string.IsNullOrEmpty(key))
+                data = data.Where(a => a.LoginName.Contains(key) || a.RealName.Contains(key)).ToList();
 
             return new MessageModel<List<User>>()
             {
@@ -71,28 +79,6 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = data
             };
-        }
-
-        /// <summary>
-        /// 根据用户Ids集合获取用户数据
-        /// </summary>
-        /// <param name="ids">非空</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<object> GetByIds(string ids)
-        {
-            var data = new MessageModel<List<User>>();
-            if (!string.IsNullOrEmpty(ids))
-            {
-                var userList = await _userSvc.QueryByIds(ids.Split(","));
-
-                data.Response = userList;
-                data.Success = true;
-                data.Message = "获取成功";
-            } else
-                data.Message = "用户Ids不能为空";
-
-            return data;
         }
 
         /// <summary>

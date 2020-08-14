@@ -27,14 +27,21 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部菜单（列表）
+        /// 获取菜单数据（列表）
         /// </summary>
+        /// <param name="ids">可空</param>
         /// <param name="menuName">菜单名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string menuName = "")
+        public async Task<object> Get(string ids, string menuName = "")
         {
-            var data = await _menuSvc.Query(a =>(a.MenuName != null && a.MenuName.Contains(menuName)), " Id desc ");
+            var data = await _menuSvc.Query();
+
+            if (!string.IsNullOrEmpty(ids))
+                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+
+            if (!string.IsNullOrEmpty(menuName))
+                data = data.Where(a => a.MenuName.Contains(menuName)).ToList();
 
             return new MessageModel<List<Menu>>()
             {

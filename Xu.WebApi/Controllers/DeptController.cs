@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xu.Common;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Xu.WebApi.Controllers
 {
@@ -27,14 +28,21 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部部门
+        /// 获取部门数据
         /// </summary>
+        /// <param name="ids">可空</param>
         /// <param name="deptName">部门名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string deptName = "")
+        public async Task<object> Get(string ids, string deptName = "")
         {
-            var data = await _deptSvc.Query(a => (a.DeptName != null && a.DeptName.Contains(deptName)), " Id desc ");
+            var data = await _deptSvc.Query();
+
+            if (!string.IsNullOrEmpty(ids))
+                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+
+            if (!string.IsNullOrEmpty(deptName))
+                data = data.Where(a => a.DeptName.Contains(deptName)).ToList();
 
             return new MessageModel<List<Dept>>()
             {
@@ -42,7 +50,6 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = data
             };
-
         }
 
         /// <summary>
@@ -64,28 +71,6 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = data
             };
-        }
-
-        /// <summary>
-        /// 根据部门Ids集合获取部门数据
-        /// </summary>
-        /// <param name="ids">非空</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<object> GetByIds(string ids)
-        {
-            var data = new MessageModel<List<Dept>>();
-            if (!string.IsNullOrEmpty(ids))
-            {
-                var roleList = await _deptSvc.QueryByIds(ids.Split(","));
-
-                data.Response = roleList;
-                data.Success = true;
-                data.Message = "获取成功";
-            } else
-                data.Message = "部门Ids不能为空";
-
-            return data;
         }
 
         /// <summary>

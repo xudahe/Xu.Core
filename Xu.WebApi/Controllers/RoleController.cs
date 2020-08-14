@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
@@ -26,14 +27,21 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部角色
+        /// 获取角色数据
         /// </summary>
+        /// <param name="ids">可空</param>
         /// <param name="roleName">角色名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string roleName = "")
+        public async Task<object> Get(string ids, string roleName = "")
         {
-            var data = await _roleSvc.Query(a => (a.RoleName != null && a.RoleName.Contains(roleName)), " Id desc ");
+            var data = await _roleSvc.Query();
+
+            if (!string.IsNullOrEmpty(ids))
+                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+
+            if (!string.IsNullOrEmpty(roleName))
+                data = data.Where(a => a.RoleName.Contains(roleName)).ToList();
 
             return new MessageModel<List<Role>>()
             {
@@ -62,28 +70,6 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = data
             };
-        }
-
-        /// <summary>
-        /// 根据角色Ids集合获取角色数据
-        /// </summary>
-        /// <param name="ids">非空</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<object> GetByIds(string ids)
-        {
-            var data = new MessageModel<List<Role>>();
-            if (!string.IsNullOrEmpty(ids))
-            {
-                var roleList = await _roleSvc.QueryByIds(ids.Split(","));
-
-                data.Response = roleList;
-                data.Success = true;
-                data.Message = "获取成功";
-            } else
-                data.Message = "角色Ids不能为空";
-
-            return data;
         }
 
         /// <summary>
