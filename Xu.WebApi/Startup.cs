@@ -82,6 +82,11 @@ namespace Xu.WebApi
 
             services.AddControllers(options =>
             {
+                if (Appsettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq()) 
+                {
+                    options.Filters.Add(typeof(DataDecryptFilter)); //数据解密过滤器
+                }
+
                 //全局XSS过滤器
                 //options.Filters.Add(typeof(XSSFilterAttribute));
                 //全局给post Action都开启了防止CSRF攻击,配合services.AddAntiforgerySetup()使用

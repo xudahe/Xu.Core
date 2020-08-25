@@ -1,348 +1,401 @@
 ﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Xu.Common;
 
 namespace Common
 {
     /// <summary>
-    /// RSA加密解密及RSA签名和验证
+    /// RSAC 帮助类
     /// </summary>
     public class RSACryption
     {
-        public RSACryption()
-        {
-        }
-
-        #region RSA 加密解密
-
         /// <summary>
-        /// RSA 的密钥产生 产生私钥 和公钥
+        /// 对称加密
         /// </summary>
-        /// <param name="xmlKeys"></param>
-        /// <param name="xmlPublicKey"></param>
-        public void RSAKey(out string xmlKeys, out string xmlPublicKey)
+        public class AESHelper
         {
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            xmlKeys = rsa.ToXmlString(true);
-            xmlPublicKey = rsa.ToXmlString(false);
-        }
-
-        #region RSA的加密函数
-
-        //##############################################################################
-        //RSA 方式加密
-        //说明KEY必须是XML的行式,返回的是字符串
-        //在有一点需要说明！！该加密方式有 长度 限制的！！
-        //##############################################################################
-
-        /// <summary>
-        /// RSA的加密函数  string
-        /// </summary>
-        /// <param name="xmlPublicKey"></param>
-        /// <param name="m_strEncryptString"></param>
-        /// <returns></returns>
-        public string RSAEncrypt(string xmlPublicKey, string m_strEncryptString)
-        {
-            byte[] PlainTextBArray;
-            byte[] CypherTextBArray;
-            string Result;
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(xmlPublicKey);
-            PlainTextBArray = (new UnicodeEncoding()).GetBytes(m_strEncryptString);
-            CypherTextBArray = rsa.Encrypt(PlainTextBArray, false);
-            Result = Convert.ToBase64String(CypherTextBArray);
-            return Result;
-        }
-
-        /// <summary>
-        /// RSA的加密函数 byte[]
-        /// </summary>
-        /// <param name="xmlPublicKey"></param>
-        /// <param name="EncryptString"></param>
-        /// <returns></returns>
-        public string RSAEncrypt(string xmlPublicKey, byte[] EncryptString)
-        {
-            byte[] CypherTextBArray;
-            string Result;
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(xmlPublicKey);
-            CypherTextBArray = rsa.Encrypt(EncryptString, false);
-            Result = Convert.ToBase64String(CypherTextBArray);
-            return Result;
-        }
-
-        #endregion RSA的加密函数
-
-        #region RSA的解密函数
-
-        /// <summary>
-        /// RSA的解密函数  string
-        /// </summary>
-        /// <param name="xmlPrivateKey"></param>
-        /// <param name="m_strDecryptString"></param>
-        /// <returns></returns>
-        public string RSADecrypt(string xmlPrivateKey, string m_strDecryptString)
-        {
-            byte[] PlainTextBArray;
-            byte[] DypherTextBArray;
-            string Result;
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(xmlPrivateKey);
-            PlainTextBArray = Convert.FromBase64String(m_strDecryptString);
-            DypherTextBArray = rsa.Decrypt(PlainTextBArray, false);
-            Result = (new UnicodeEncoding()).GetString(DypherTextBArray);
-            return Result;
-        }
-
-        /// <summary>
-        /// RSA的解密函数  byte
-        /// </summary>
-        /// <param name="xmlPrivateKey"></param>
-        /// <param name="DecryptString"></param>
-        /// <returns></returns>
-        public string RSADecrypt(string xmlPrivateKey, byte[] DecryptString)
-        {
-            byte[] DypherTextBArray;
-            string Result;
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(xmlPrivateKey);
-            DypherTextBArray = rsa.Decrypt(DecryptString, false);
-            Result = (new UnicodeEncoding()).GetString(DypherTextBArray);
-            return Result;
-        }
-
-        #endregion RSA的解密函数
-
-        #endregion RSA 加密解密
-
-        #region RSA数字签名
-
-        #region 获取Hash描述表
-
-        //获取Hash描述表
-        public bool GetHash(string m_strSource, ref byte[] HashData)
-        {
-            //从字符串中取得Hash描述
-            byte[] Buffer;
-            System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5");
-            Buffer = System.Text.Encoding.GetEncoding("GB2312").GetBytes(m_strSource);
-            HashData = MD5.ComputeHash(Buffer);
-
-            return true;
-        }
-
-        //获取Hash描述表
-        public bool GetHash(string m_strSource, ref string strHashData)
-        {
-            //从字符串中取得Hash描述
-            byte[] Buffer;
-            byte[] HashData;
-            System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5");
-            Buffer = System.Text.Encoding.GetEncoding("GB2312").GetBytes(m_strSource);
-            HashData = MD5.ComputeHash(Buffer);
-
-            strHashData = Convert.ToBase64String(HashData);
-            return true;
-        }
-
-        //获取Hash描述表
-        public bool GetHash(System.IO.FileStream objFile, ref byte[] HashData)
-        {
-            //从文件中取得Hash描述
-            System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5");
-            HashData = MD5.ComputeHash(objFile);
-            objFile.Close();
-
-            return true;
-        }
-
-        //获取Hash描述表
-        public bool GetHash(System.IO.FileStream objFile, ref string strHashData)
-        {
-            //从文件中取得Hash描述
-            byte[] HashData;
-            System.Security.Cryptography.HashAlgorithm MD5 = System.Security.Cryptography.HashAlgorithm.Create("MD5");
-            HashData = MD5.ComputeHash(objFile);
-            objFile.Close();
-
-            strHashData = Convert.ToBase64String(HashData);
-
-            return true;
-        }
-
-        #endregion 获取Hash描述表
-
-        #region RSA签名
-
-        //RSA签名
-        public bool SignatureFormatter(string p_strKeyPrivate, byte[] HashbyteSignature, ref byte[] EncryptedSignatureData)
-        {
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPrivate);
-            System.Security.Cryptography.RSAPKCS1SignatureFormatter RSAFormatter = new System.Security.Cryptography.RSAPKCS1SignatureFormatter(RSA);
-            //设置签名的算法为MD5
-            RSAFormatter.SetHashAlgorithm("MD5");
-            //执行签名
-            EncryptedSignatureData = RSAFormatter.CreateSignature(HashbyteSignature);
-
-            return true;
-        }
-
-        //RSA签名
-        public bool SignatureFormatter(string p_strKeyPrivate, byte[] HashbyteSignature, ref string m_strEncryptedSignatureData)
-        {
-            byte[] EncryptedSignatureData;
-
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPrivate);
-            System.Security.Cryptography.RSAPKCS1SignatureFormatter RSAFormatter = new System.Security.Cryptography.RSAPKCS1SignatureFormatter(RSA);
-            //设置签名的算法为MD5
-            RSAFormatter.SetHashAlgorithm("MD5");
-            //执行签名
-            EncryptedSignatureData = RSAFormatter.CreateSignature(HashbyteSignature);
-
-            m_strEncryptedSignatureData = Convert.ToBase64String(EncryptedSignatureData);
-
-            return true;
-        }
-
-        //RSA签名
-        public bool SignatureFormatter(string p_strKeyPrivate, string m_strHashbyteSignature, ref byte[] EncryptedSignatureData)
-        {
-            byte[] HashbyteSignature;
-
-            HashbyteSignature = Convert.FromBase64String(m_strHashbyteSignature);
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPrivate);
-            System.Security.Cryptography.RSAPKCS1SignatureFormatter RSAFormatter = new System.Security.Cryptography.RSAPKCS1SignatureFormatter(RSA);
-            //设置签名的算法为MD5
-            RSAFormatter.SetHashAlgorithm("MD5");
-            //执行签名
-            EncryptedSignatureData = RSAFormatter.CreateSignature(HashbyteSignature);
-
-            return true;
-        }
-
-        //RSA签名
-        public bool SignatureFormatter(string p_strKeyPrivate, string m_strHashbyteSignature, ref string m_strEncryptedSignatureData)
-        {
-            byte[] HashbyteSignature;
-            byte[] EncryptedSignatureData;
-
-            HashbyteSignature = Convert.FromBase64String(m_strHashbyteSignature);
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPrivate);
-            System.Security.Cryptography.RSAPKCS1SignatureFormatter RSAFormatter = new System.Security.Cryptography.RSAPKCS1SignatureFormatter(RSA);
-            //设置签名的算法为MD5
-            RSAFormatter.SetHashAlgorithm("MD5");
-            //执行签名
-            EncryptedSignatureData = RSAFormatter.CreateSignature(HashbyteSignature);
-
-            m_strEncryptedSignatureData = Convert.ToBase64String(EncryptedSignatureData);
-
-            return true;
-        }
-
-        #endregion RSA签名
-
-        #region RSA 签名验证
-
-        public bool SignatureDeformatter(string p_strKeyPublic, byte[] HashbyteDeformatter, byte[] DeformatterData)
-        {
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPublic);
-            System.Security.Cryptography.RSAPKCS1SignatureDeformatter RSADeformatter = new System.Security.Cryptography.RSAPKCS1SignatureDeformatter(RSA);
-            //指定解密的时候HASH算法为MD5
-            RSADeformatter.SetHashAlgorithm("MD5");
-
-            if (RSADeformatter.VerifySignature(HashbyteDeformatter, DeformatterData))
+            /// <summary>
+            /// AES加密
+            /// </summary>
+            /// <param name="str"></param>
+            /// <param name="key"></param>
+            /// <returns></returns>
+            public static string AesEncrypt(string str, string key)
             {
+                string result;
+                try
+                {
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        result = null;
+                    }
+                    else
+                    {
+                        byte[] bytes = Encoding.UTF8.GetBytes(str);
+                        RijndaelManaged rijndaelManaged = new RijndaelManaged
+                        {
+                            Key = Encoding.UTF8.GetBytes(key),
+                            Mode = CipherMode.ECB,
+                            Padding = PaddingMode.PKCS7
+                        };
+                        ICryptoTransform cryptoTransform = rijndaelManaged.CreateEncryptor();
+                        byte[] array = cryptoTransform.TransformFinalBlock(bytes, 0, bytes.Length);
+                        result = Convert.ToBase64String(array, 0, array.Length);
+
+                        return result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = null;
+                    System.Console.WriteLine(ex);
+                }
+                return result;
+            }
+
+            /// <summary>
+            /// AES解密
+            /// </summary>
+            /// <param name="str"></param>
+            /// <param name="key"></param>
+            /// <returns></returns>
+            public static string AesDecrypt(string str, string key)
+            {
+                if (string.IsNullOrEmpty(str))
+                {
+                    return null;
+                }
+                string result;
+                try
+                {
+                    byte[] array = Convert.FromBase64String(str);
+
+                    RijndaelManaged rijndaelManaged = new RijndaelManaged
+                    {
+                        Key = Encoding.UTF8.GetBytes(key),
+                        Mode = CipherMode.ECB,
+                        Padding = PaddingMode.PKCS7
+                    };
+                    ICryptoTransform cryptoTransform = rijndaelManaged.CreateDecryptor();
+                    byte[] bytes = cryptoTransform.TransformFinalBlock(array, 0, array.Length);
+                    result = Encoding.UTF8.GetString(bytes);
+                }
+                catch (Exception ex)
+                {
+                    result = null;
+                    Console.WriteLine(ex);
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 非对称加密
+        /// </summary>
+        public class RSAHelper
+        {
+            private readonly RSA _privateKeyRsaProvider;
+            private readonly RSA _publicKeyRsaProvider;
+            private readonly HashAlgorithmName _hashAlgorithmName;
+            private readonly Encoding _encoding;
+            private readonly string privateKey = Appsettings.App(new string[] { "RSACryption", "privateKey" }).ToString();
+            private readonly string publicKey = Appsettings.App(new string[] { "RSACryption", "publicKey" }).ToString();
+
+            /// <summary>
+            /// 实例化RSAHelper
+            /// </summary>
+            /// <param name="rsaType">加密算法类型 RSA SHA1;RSA2 SHA256 密钥长度至少为2048</param>
+            /// <param name="encoding">编码类型</param>
+            public RSAHelper(RSAType rsaType, Encoding encoding)
+            {
+                _encoding = encoding;
+                if (!string.IsNullOrEmpty(privateKey))
+                {
+                    _privateKeyRsaProvider = CreateRsaProviderFromPrivateKey(privateKey);
+                }
+
+                if (!string.IsNullOrEmpty(publicKey))
+                {
+                    _publicKeyRsaProvider = CreateRsaProviderFromPublicKey(publicKey);
+                }
+
+                _hashAlgorithmName = rsaType == RSAType.RSA ? HashAlgorithmName.SHA1 : HashAlgorithmName.SHA256;
+            }
+
+            #region 使用私钥签名
+
+            /// <summary>
+            /// 使用私钥签名
+            /// </summary>
+            /// <param name="data">原始数据</param>
+            /// <returns></returns>
+            public string Sign(string data)
+            {
+                byte[] dataBytes = _encoding.GetBytes(data);
+
+                var signatureBytes = _privateKeyRsaProvider.SignData(dataBytes, _hashAlgorithmName, RSASignaturePadding.Pkcs1);
+
+                return Convert.ToBase64String(signatureBytes);
+            }
+
+            #endregion
+
+            #region 使用公钥验证签名
+
+            /// <summary>
+            /// 使用公钥验证签名
+            /// </summary>
+            /// <param name="data">原始数据</param>
+            /// <param name="sign">签名</param>
+            /// <returns></returns>
+            public bool Verify(string data, string sign)
+            {
+                byte[] dataBytes = _encoding.GetBytes(data);
+                byte[] signBytes = Convert.FromBase64String(sign);
+
+                var verify = _publicKeyRsaProvider.VerifyData(dataBytes, signBytes, _hashAlgorithmName, RSASignaturePadding.Pkcs1);
+
+                return verify;
+            }
+
+            #endregion
+
+            #region 解密
+
+            public string Decrypt(string cipherText)
+            {
+                if (_privateKeyRsaProvider == null)
+                {
+                    throw new Exception("_privateKeyRsaProvider is null");
+                }
+                return Encoding.UTF8.GetString(_privateKeyRsaProvider.Decrypt(Convert.FromBase64String(cipherText), RSAEncryptionPadding.Pkcs1));
+            }
+
+            #endregion
+
+            #region 加密
+
+            public string Encrypt(string text)
+            {
+                if (_publicKeyRsaProvider == null)
+                {
+                    throw new Exception("_publicKeyRsaProvider is null");
+                }
+                return Convert.ToBase64String(_publicKeyRsaProvider.Encrypt(Encoding.UTF8.GetBytes(text), RSAEncryptionPadding.Pkcs1));
+            }
+
+            #endregion
+
+            #region 使用私钥创建RSA实例
+
+            public RSA CreateRsaProviderFromPrivateKey(string privateKey)
+            {
+                var privateKeyBits = Convert.FromBase64String(privateKey);
+
+                var rsa = RSA.Create();
+                var rsaParameters = new RSAParameters();
+
+                using (BinaryReader binr = new BinaryReader(new MemoryStream(privateKeyBits)))
+                {
+                    byte bt = 0;
+                    ushort twobytes = 0;
+                    twobytes = binr.ReadUInt16();
+                    if (twobytes == 0x8130)
+                        binr.ReadByte();
+                    else if (twobytes == 0x8230)
+                        binr.ReadInt16();
+                    else
+                        throw new Exception("Unexpected value read binr.ReadUInt16()");
+
+                    twobytes = binr.ReadUInt16();
+                    if (twobytes != 0x0102)
+                        throw new Exception("Unexpected version");
+
+                    bt = binr.ReadByte();
+                    if (bt != 0x00)
+                        throw new Exception("Unexpected value read binr.ReadByte()");
+
+                    rsaParameters.Modulus = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.Exponent = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.D = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.P = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.Q = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.DP = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.DQ = binr.ReadBytes(GetIntegerSize(binr));
+                    rsaParameters.InverseQ = binr.ReadBytes(GetIntegerSize(binr));
+                }
+
+                rsa.ImportParameters(rsaParameters);
+                return rsa;
+            }
+
+            #endregion
+
+            #region 使用公钥创建RSA实例
+
+            public RSA CreateRsaProviderFromPublicKey(string publicKeyString)
+            {
+                // encoded OID sequence for  PKCS #1 rsaEncryption szOID_RSA_RSA = "1.2.840.113549.1.1.1"
+                byte[] seqOid = { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
+                byte[] seq = new byte[15];
+
+                var x509Key = Convert.FromBase64String(publicKeyString);
+
+                // ---------  Set up stream to read the asn.1 encoded SubjectPublicKeyInfo blob  ------
+                using (MemoryStream mem = new MemoryStream(x509Key))
+                {
+                    using (BinaryReader binr = new BinaryReader(mem))  //wrap Memory Stream with BinaryReader for easy reading
+                    {
+                        byte bt = 0;
+                        ushort twobytes = 0;
+
+                        twobytes = binr.ReadUInt16();
+                        if (twobytes == 0x8130) //data read as little endian order (actual data order for Sequence is 30 81)
+                            binr.ReadByte();    //advance 1 byte
+                        else if (twobytes == 0x8230)
+                            binr.ReadInt16();   //advance 2 bytes
+                        else
+                            return null;
+
+                        seq = binr.ReadBytes(15);       //read the Sequence OID
+                        if (!CompareBytearrays(seq, seqOid))    //make sure Sequence for OID is correct
+                            return null;
+
+                        twobytes = binr.ReadUInt16();
+                        if (twobytes == 0x8103) //data read as little endian order (actual data order for Bit String is 03 81)
+                            binr.ReadByte();    //advance 1 byte
+                        else if (twobytes == 0x8203)
+                            binr.ReadInt16();   //advance 2 bytes
+                        else
+                            return null;
+
+                        bt = binr.ReadByte();
+                        if (bt != 0x00)     //expect null byte next
+                            return null;
+
+                        twobytes = binr.ReadUInt16();
+                        if (twobytes == 0x8130) //data read as little endian order (actual data order for Sequence is 30 81)
+                            binr.ReadByte();    //advance 1 byte
+                        else if (twobytes == 0x8230)
+                            binr.ReadInt16();   //advance 2 bytes
+                        else
+                            return null;
+
+                        twobytes = binr.ReadUInt16();
+                        byte lowbyte = 0x00;
+                        byte highbyte = 0x00;
+
+                        if (twobytes == 0x8102) //data read as little endian order (actual data order for Integer is 02 81)
+                            lowbyte = binr.ReadByte();  // read next bytes which is bytes in modulus
+                        else if (twobytes == 0x8202)
+                        {
+                            highbyte = binr.ReadByte(); //advance 2 bytes
+                            lowbyte = binr.ReadByte();
+                        }
+                        else
+                            return null;
+                        byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };   //reverse byte order since asn.1 key uses big endian order
+                        int modsize = BitConverter.ToInt32(modint, 0);
+
+                        int firstbyte = binr.PeekChar();
+                        if (firstbyte == 0x00)
+                        {   //if first byte (highest order) of modulus is zero, don't include it
+                            binr.ReadByte();    //skip this null byte
+                            modsize -= 1;   //reduce modulus buffer size by 1
+                        }
+
+                        byte[] modulus = binr.ReadBytes(modsize);   //read the modulus bytes
+
+                        if (binr.ReadByte() != 0x02)            //expect an Integer for the exponent data
+                            return null;
+                        int expbytes = (int)binr.ReadByte();        // should only need one byte for actual exponent data (for all useful values)
+                        byte[] exponent = binr.ReadBytes(expbytes);
+
+                        // ------- create RSACryptoServiceProvider instance and initialize with public key -----
+                        var rsa = RSA.Create();
+                        RSAParameters rsaKeyInfo = new RSAParameters
+                        {
+                            Modulus = modulus,
+                            Exponent = exponent
+                        };
+                        rsa.ImportParameters(rsaKeyInfo);
+
+                        return rsa;
+                    }
+
+                }
+            }
+
+            #endregion
+
+            #region 导入密钥算法
+
+            private int GetIntegerSize(BinaryReader binr)
+            {
+                byte bt = 0;
+                int count = 0;
+                bt = binr.ReadByte();
+                if (bt != 0x02)
+                    return 0;
+                bt = binr.ReadByte();
+
+                if (bt == 0x81)
+                    count = binr.ReadByte();
+                else
+                if (bt == 0x82)
+                {
+                    var highbyte = binr.ReadByte();
+                    var lowbyte = binr.ReadByte();
+                    byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
+                    count = BitConverter.ToInt32(modint, 0);
+                }
+                else
+                {
+                    count = bt;
+                }
+
+                while (binr.ReadByte() == 0x00)
+                {
+                    count -= 1;
+                }
+                binr.BaseStream.Seek(-1, SeekOrigin.Current);
+                return count;
+            }
+
+            private bool CompareBytearrays(byte[] a, byte[] b)
+            {
+                if (a.Length != b.Length)
+                    return false;
+                int i = 0;
+                foreach (byte c in a)
+                {
+                    if (c != b[i])
+                        return false;
+                    i++;
+                }
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            #endregion
+
         }
 
-        public bool SignatureDeformatter(string p_strKeyPublic, string p_strHashbyteDeformatter, byte[] DeformatterData)
+        /// <summary>
+        /// RSA算法类型
+        /// </summary>
+        public enum RSAType
         {
-            byte[] HashbyteDeformatter;
-
-            HashbyteDeformatter = Convert.FromBase64String(p_strHashbyteDeformatter);
-
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPublic);
-            System.Security.Cryptography.RSAPKCS1SignatureDeformatter RSADeformatter = new System.Security.Cryptography.RSAPKCS1SignatureDeformatter(RSA);
-            //指定解密的时候HASH算法为MD5
-            RSADeformatter.SetHashAlgorithm("MD5");
-
-            if (RSADeformatter.VerifySignature(HashbyteDeformatter, DeformatterData))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            /// <summary>
+            /// SHA1
+            /// </summary>
+            RSA = 0,
+            /// <summary>
+            /// RSA2 密钥长度至少为2048
+            /// SHA256
+            /// </summary>
+            RSA2
         }
-
-        public bool SignatureDeformatter(string p_strKeyPublic, byte[] HashbyteDeformatter, string p_strDeformatterData)
-        {
-            byte[] DeformatterData;
-
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPublic);
-            System.Security.Cryptography.RSAPKCS1SignatureDeformatter RSADeformatter = new System.Security.Cryptography.RSAPKCS1SignatureDeformatter(RSA);
-            //指定解密的时候HASH算法为MD5
-            RSADeformatter.SetHashAlgorithm("MD5");
-
-            DeformatterData = Convert.FromBase64String(p_strDeformatterData);
-
-            if (RSADeformatter.VerifySignature(HashbyteDeformatter, DeformatterData))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool SignatureDeformatter(string p_strKeyPublic, string p_strHashbyteDeformatter, string p_strDeformatterData)
-        {
-            byte[] DeformatterData;
-            byte[] HashbyteDeformatter;
-
-            HashbyteDeformatter = Convert.FromBase64String(p_strHashbyteDeformatter);
-            System.Security.Cryptography.RSACryptoServiceProvider RSA = new System.Security.Cryptography.RSACryptoServiceProvider();
-
-            RSA.FromXmlString(p_strKeyPublic);
-            System.Security.Cryptography.RSAPKCS1SignatureDeformatter RSADeformatter = new System.Security.Cryptography.RSAPKCS1SignatureDeformatter(RSA);
-            //指定解密的时候HASH算法为MD5
-            RSADeformatter.SetHashAlgorithm("MD5");
-
-            DeformatterData = Convert.FromBase64String(p_strDeformatterData);
-
-            if (RSADeformatter.VerifySignature(HashbyteDeformatter, DeformatterData))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        #endregion RSA 签名验证
-
-        #endregion RSA数字签名
     }
 }
