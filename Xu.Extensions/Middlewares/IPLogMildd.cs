@@ -45,7 +45,6 @@ namespace Xu.Extensions
                             Ip = GetClientIP(context),
                             Url = request.Path.ToString().TrimEnd('/').ToLower(),
                             Datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            Date = DateTime.Now.ToString("yyyy-MM-dd"),
                             Week = GetWeek(),
                         });
 

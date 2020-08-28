@@ -31,9 +31,10 @@ namespace Xu.Extensions
             //注入HTTPS服务,并设置管道
             services.AddHttpsRedirection(options =>
             {
-                //中间件默认为通过所有重定向发送Status307TemporaryRedirect 
+                //(在生产环境中如果端口不变，可以使用308，开发测试中建议用307)
+                //使用307临时重定向，如果用308，会导致前端链接缓存，后面再改就不好用了（需要手动清理浏览器缓存）
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect; 
-                options.HttpsPort = 5001;
+                options.HttpsPort = 5001; //将 HTTPS 端口设置为5001。
             });
 
         }

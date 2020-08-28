@@ -28,6 +28,18 @@
             <param name="environment"></param>
             <returns></returns>
         </member>
+        <member name="T:Xu.WebApi.Controllers.PublicController">
+            <summary>
+            公用方法
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PublicController.GetRSACryption(System.Int32)">
+            <summary>
+            生成PEM格式的公钥和密钥
+            </summary>
+             <param name="strength">长度</param>
+            <returns>Item1:公钥；Item2:私钥；</returns>
+        </member>
         <member name="T:Xu.WebApi.Controllers.TasksQzController">
             <summary>
             定时任务
@@ -405,6 +417,20 @@
             </summary>
             <param name="actionName"></param>
             <param name="version"></param>
+        </member>
+        <member name="T:Xu.WebApi.DataDecryptFilter">
+            <summary>
+            数据解密过滤器
+            前端只对post请求接口进行加密
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.DataDecryptFilter.ConvertObject(System.Object,System.Type)">
+            <summary>
+            将一个对象转换为指定类型
+            </summary>
+            <param name="obj">待转换的对象</param>
+            <param name="type">目标类型</param>
+            <returns>转换后的对象</returns>
         </member>
         <member name="T:Xu.WebApi.GlobalRouteAuthorizeConvention">
             <summary>

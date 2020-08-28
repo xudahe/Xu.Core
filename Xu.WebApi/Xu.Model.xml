@@ -314,6 +314,26 @@
             返回数据集合
             </summary>
         </member>
+        <member name="P:Xu.Model.ResultModel.MessageModel`2.Status">
+            <summary>
+            状态码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ResultModel.MessageModel`2.Success">
+            <summary>
+            操作是否成功
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ResultModel.MessageModel`2.Message">
+            <summary>
+            返回信息
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ResultModel.MessageModel`2.Response">
+            <summary>
+            返回数据集合
+            </summary>
+        </member>
         <member name="T:Xu.Model.ResultModel.PageModel`1">
             <summary>
             通用分页信息类

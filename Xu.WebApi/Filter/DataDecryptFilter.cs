@@ -9,13 +9,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xu.Common;
-using static Common.RSACryption;
 
 namespace Xu.WebApi
 {
     /// <summary>
     /// 数据解密过滤器
-    /// 前端只对post请求接口进行加密（先用非对称加密方式（RSA）加密对称加密的密钥，然后对称加密（AES）数据包）
+    /// 前端只对post请求接口进行加密
     /// </summary>
     public class DataDecryptFilter : ActionFilterAttribute
     {
@@ -25,15 +24,11 @@ namespace Xu.WebApi
             var method = context.HttpContext.Request.Method;
             if (method == "POST" && !noEncrypt.Contains(context.HttpContext.Request.Path))
             {
-                string aeskey = context.HttpContext.Request.Headers["aeskey"];
-                if (aeskey.Length > 36)//判断aeskey是否已经解密，若未解密则先进行解密操作
-                {
-                    var rsaHelper = new RSAHelper(RSAType.RSA2, Encoding.UTF8);
-                    aeskey = rsaHelper.Decrypt(aeskey);
-                }
-                //解密数据包
-                var data = context.HttpContext.Request.Form.FirstOrDefault().Value;
-                var dataJson = AESHelper.AesDecrypt(data, aeskey);
+                // 1.获取POST数据：context.Request.Form[“txtname”]
+                // 2.获取GET参数：context.Request.QueryString[“txtname1”]
+
+                var data = context.HttpContext.Request.Form.FirstOrDefault().Value; //(暂时有问题,应该获取Body)
+                var dataJson = RSACryption.RSADecrypt(data);
 
                 if (string.IsNullOrWhiteSpace(dataJson))
                 {

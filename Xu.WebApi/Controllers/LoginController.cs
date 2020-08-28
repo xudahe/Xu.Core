@@ -60,7 +60,7 @@ namespace Xu.WebApi.Controllers
                 });
             }
 
-            //pass = JsEncryptHelper.Decrypt(pass);
+            if(RSACryption.IsBase64(pass))  pass = RSACryption.RSADecrypt(pass);
 
             var user = (await _userSvc.Query(d => d.Enabled == false && d.LoginName == name && d.LoginPwd == pass)).FirstOrDefault();
             if (user != null)
