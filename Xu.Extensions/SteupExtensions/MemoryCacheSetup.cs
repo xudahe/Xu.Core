@@ -10,15 +10,18 @@ namespace Xu.Extensions
     /// </summary>
     public static class MemoryCacheSetup
     {
+        /// <summary>
+        /// Memory缓存
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddMemoryCacheSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddScoped<ICaching, MemoryCaching>();
+            services.AddScoped<IMemoryCaching, MemoryCaching>();
             services.AddSingleton<IMemoryCache>(factory =>
             {
-                var cache = new MemoryCache(new MemoryCacheOptions());
-                return cache;
+                return new MemoryCache(new MemoryCacheOptions());
             });
         }
     }

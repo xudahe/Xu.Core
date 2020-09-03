@@ -7,7 +7,7 @@ namespace Xu.Common
     /// <summary>
     /// Rest接口执行者
     /// </summary>
-    public class RestSharpClient : IRestSharp
+    public class RestSharp : IRestSharp
     {
         /// <summary>
         /// 请求客户端
@@ -34,7 +34,7 @@ namespace Xu.Common
         /// </summary>
         /// <param name="baseUrl"></param>
         /// <param name="authenticator"></param>
-        public RestSharpClient(string baseUrl, IAuthenticator authenticator = null)
+        public RestSharp(string baseUrl, IAuthenticator authenticator = null)
         {
             BaseUrl = baseUrl;
             client = new RestClient(BaseUrl);

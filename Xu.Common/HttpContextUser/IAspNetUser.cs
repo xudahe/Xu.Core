@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace Xu.Common
 {
-    public interface IUser
+    public interface IAspNetUser
     {
         string Name { get; }
         int ID { get; }

@@ -5,6 +5,9 @@ using System;
 
 namespace Xu.Tasks
 {
+    /// <summary>
+    /// 任务调度工厂实现，为了调用作业的参数构造函数，Quartz.NET提供了IJobFactory接口
+    /// </summary>
     public class JobFactory : IJobFactory
     {
         /// <summary>
@@ -14,7 +17,7 @@ namespace Xu.Tasks
 
         public JobFactory(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider)); ;
         }
 
         /// <summary>
@@ -25,18 +28,13 @@ namespace Xu.Tasks
         /// <returns></returns>
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-            try
-            {
-                var serviceScope = _serviceProvider.CreateScope();
-                var job = serviceScope.ServiceProvider.GetService(bundle.JobDetail.JobType) as IJob;
-                return job;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+             return _serviceProvider.GetRequiredService(bundle.JobDetail.JobType) as IJob;
         }
 
+        /// <summary>
+        /// 清理销毁
+        /// </summary>
+        /// <param name="job"></param>
         public void ReturnJob(IJob job)
         {
             if (job is IDisposable disposable)

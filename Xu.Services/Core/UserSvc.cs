@@ -12,9 +12,9 @@ namespace Xu.Services
     /// </summary>
     public class UserSvc : BaseSvc<User>, IUserSvc
     {
-        public UserSvc(IBaseRepo<User> userRepo)
+        public UserSvc(IBaseRepo<User> dalRepo)
         {
-            base.BaseDal = userRepo;
+            base.BaseDal = dalRepo;
         }
 
         // 定义一个锁，防止多线程

@@ -5,7 +5,7 @@ using Xu.Model.ResultModel;
 namespace Xu.Tasks
 {
     /// <summary>
-    /// 服务调度接口
+    /// 任务调度接口
     /// </summary>
     public interface ISchedulerCenter
     {
@@ -40,6 +40,6 @@ namespace Xu.Tasks
         /// </summary>
         /// <param name="tasksQz"></param>
         /// <returns></returns>
-        Task<MessageModel<string>> ResumeJob(TasksQz tasksQz);
+        Task<MessageModel<string>> ResumeScheduleJobAsync(TasksQz tasksQz);
     }
 }

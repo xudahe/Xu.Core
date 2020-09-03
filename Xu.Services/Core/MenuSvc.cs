@@ -8,9 +8,9 @@ namespace Xu.Services.Core
 {
     public class MenuSvc : BaseSvc<Menu>, IMenuSvc
     {
-        public MenuSvc(IBaseRepo<Menu> menuRepo)
+        public MenuSvc(IBaseRepo<Menu> dalRepo)
         {
-            base.BaseDal = menuRepo;
+            base.BaseDal = dalRepo;
         }
 
         public async Task<Menu> SaveMenu(Menu menu)

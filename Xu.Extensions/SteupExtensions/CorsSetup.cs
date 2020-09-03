@@ -9,6 +9,10 @@ namespace Xu.Extensions
     /// </summary>
     public static class CorsSetup
     {
+        /// <summary>
+        /// Cors 跨域资源共享
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddCorsSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));

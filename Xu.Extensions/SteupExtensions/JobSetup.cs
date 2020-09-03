@@ -18,8 +18,8 @@ namespace Xu.Extensions
             //services.AddHostedService<Job2TimedService>();
 
             services.AddSingleton<IJobFactory, JobFactory>();
-            services.AddTransient<Job_Blogs_Quartz>();//Job使用瞬时依赖注入
-            services.AddSingleton<ISchedulerCenter, SchedulerCenterServer>();
+            services.AddTransient<JobQuartz>(); //这里使用瞬时依赖注入
+            services.AddSingleton<ISchedulerCenter, SchedulerCenter>();
         }
     }
 }

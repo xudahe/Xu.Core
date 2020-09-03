@@ -11,6 +11,11 @@ namespace Xu.Extensions
     /// </summary>
     public static class IpPolicyRateLimitSetup
     {
+        /// <summary>
+        ///  IPLimit限流
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="Configuration"></param>
         public static void AddIpPolicyRateLimitSetup(this IServiceCollection services, IConfiguration Configuration)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));

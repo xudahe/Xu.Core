@@ -8,6 +8,10 @@ namespace Xu.Extensions
     /// </summary>
     public static class MiniProfilerSetup
     {
+        /// <summary>
+        /// MiniProfiler 接口执行时间分析
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddMiniProfilerSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));

@@ -19,7 +19,7 @@ namespace Xu.Common
         /// <returns></returns>
         public static T GetApi<T>(string baseUrl, string url, string pragm = "")
         {
-            var client = new RestSharpClient(baseUrl);
+            var client = new RestSharp(baseUrl);
 
             var request = client.Execute(string.IsNullOrEmpty(pragm)
                 ? new RestRequest(url, Method.GET)

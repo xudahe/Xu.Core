@@ -20,6 +20,10 @@ namespace Xu.Extensions
     /// </summary>
     public static class AuthorizationSetup
     {
+        /// <summary>
+        /// JWT权限
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddAuthorizationSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));

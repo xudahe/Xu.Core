@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
+using Xu.Model.Enum;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Tasks;
@@ -37,9 +38,9 @@ namespace Xu.WebApi.Controllers
         [HttpGet]
         public async Task<object> Get(string key = "")
         {
-            Expression<Func<TasksQz, bool>> whereExpression = a => a.Enabled != true && (a.Name != null && a.Name.Contains(key));
+            Expression<Func<TasksQz, bool>> whereExpression = a => a.Enabled != true && (a.JobName != null && a.JobName.Contains(key));
 
-            var data = await _tasksQzSvc.Query(whereExpression, " Id desc ");
+            var data = await _tasksQzSvc.Query();
 
             return new MessageModel<List<TasksQz>>()
             {
@@ -57,9 +58,10 @@ namespace Xu.WebApi.Controllers
         /// <param name="key">任务名称</param>
         /// <returns></returns>
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<object> GetByPage(int page = 1, int pageSize = 50, string key = "")
         {
-            Expression<Func<TasksQz, bool>> whereExpression = a => a.Enabled != true && (a.Name != null && a.Name.Contains(key));
+            Expression<Func<TasksQz, bool>> whereExpression = a => a.Enabled != true && (a.JobName != null && a.JobName.Contains(key));
 
             var data = await _tasksQzSvc.QueryPage(whereExpression, page, pageSize, " Id desc ");
 
@@ -81,7 +83,8 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            var id = (await _tasksQzSvc.Add(tasksQz));
+            tasksQz.JobStatus = JobStatus.初始化;
+            var id = await _tasksQzSvc.Add(tasksQz);
             data.Success = id > 0;
             if (data.Success)
             {
@@ -130,7 +133,7 @@ namespace Xu.WebApi.Controllers
                 var ResuleModel = await _schedulerCenter.AddScheduleJobAsync(model);
                 if (ResuleModel.Success)
                 {
-                    model.IsStart = true;
+                    model.JobStatus = JobStatus.运行中;
                     data.Success = await _tasksQzSvc.Update(model);
                 }
                 if (data.Success)
@@ -158,7 +161,7 @@ namespace Xu.WebApi.Controllers
                 var ResuleModel = await _schedulerCenter.StopScheduleJobAsync(model);
                 if (ResuleModel.Success)
                 {
-                    model.IsStart = false;
+                    model.JobStatus = JobStatus.已停止;
                     data.Success = await _tasksQzSvc.Update(model);
                 }
                 if (data.Success)
@@ -183,10 +186,10 @@ namespace Xu.WebApi.Controllers
             var model = await _tasksQzSvc.QueryById(jobId);
             if (model != null)
             {
-                var ResuleModel = await _schedulerCenter.ResumeJob(model);
+                var ResuleModel = await _schedulerCenter.ResumeScheduleJobAsync(model);
                 if (ResuleModel.Success)
                 {
-                    model.IsStart = true;
+                    model.JobStatus = JobStatus.运行中;
                     data.Success = await _tasksQzSvc.Update(model);
                 }
                 if (data.Success)

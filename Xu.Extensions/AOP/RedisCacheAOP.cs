@@ -12,9 +12,9 @@ namespace Xu.Extensions
     public class RedisCacheAOP : CacheAOPbase
     {
         //通过注入的方式，把缓存操作接口通过构造函数注入
-        private readonly IRedisCacheManager _cache;
+        private readonly IRedisCache _cache;
 
-        public RedisCacheAOP(IRedisCacheManager cache)
+        public RedisCacheAOP(IRedisCache cache)
         {
             _cache = cache;
         }
@@ -37,7 +37,7 @@ namespace Xu.Extensions
                 //获取自定义缓存键
                 var cacheKey = CustomCacheKey(invocation);
                 //注意是 string 类型，方法GetValue
-                var cacheValue = _cache.GetValue(cacheKey);
+                var cacheValue = _cache.GetValue(cacheKey).Result;
                 if (cacheValue != null)
                 {
                     //将当前获取到的缓存值，赋值给当前执行方法
@@ -76,7 +76,7 @@ namespace Xu.Extensions
                     }
                     if (response == null) response = string.Empty;
 
-                    _cache.Set(cacheKey, response, TimeSpan.FromMinutes(qCachingAttribute.AbsoluteExpiration));
+                    _cache.Set(cacheKey, response, TimeSpan.FromMinutes(qCachingAttribute.AbsoluteExpiration)).Wait();
                 }
             }
             else

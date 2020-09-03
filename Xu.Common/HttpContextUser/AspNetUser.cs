@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace Xu.Common
 {
-    public class AspNetUser : IUser
+    public class AspNetUser : IAspNetUser
     {
         private readonly IHttpContextAccessor _accessor;
 

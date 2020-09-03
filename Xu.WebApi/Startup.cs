@@ -42,14 +42,11 @@ namespace Xu.WebApi
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-            // 以下code可能与文章中不一样,对代码做了封装,具体查看右侧 Extensions 文件夹.
-            services.AddSingleton<IRedisCacheManager, RedisCacheManager>(); //将Redis服务注入到容器中，并在Controller中调用
             services.AddSingleton(new Appsettings(Configuration));
             services.AddSingleton(new LogLock(Env.ContentRootPath)); //接口请求日志
-
-            Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
-
+           
             services.AddMemoryCacheSetup();
+            services.AddRedisCacheSetup();
             services.AddSqlsugarSetup();
             services.AddDbSetup();
             services.AddAutoMapperSetup();
@@ -62,6 +59,8 @@ namespace Xu.WebApi
             services.AddHttpApi();
             //services.AddHstsSetup(); // 生产环境中使用
             //services.AddAntiforgerySetup(); //防止CSRF攻击
+
+            Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
             if (Permissions.IsUseIds4)
             {
                 services.AddAuthorization_Ids4Setup();

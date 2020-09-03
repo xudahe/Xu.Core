@@ -7,12 +7,9 @@ namespace Xu.Services
 {
     public partial class DeptSvc : BaseSvc<Dept>, IDeptSvc
     {
-        IBaseRepo<Dept> _dal;
-
-        public DeptSvc(IBaseRepo<Dept> dal)
+        public DeptSvc(IBaseRepo<Dept> dalRepo)
         {
-            this._dal = dal;
-            base.BaseDal = dal;
+            base.BaseDal = dalRepo;
         }
     }
 }

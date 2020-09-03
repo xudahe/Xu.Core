@@ -52,7 +52,6 @@ namespace Xu.Common
             if (e == null)
                 return null;
 
-            //return e.GetType().InvokeMember(e.ToString(), BindingFlags.GetField, null, null, null).ToString();
             return e.GetType().GetField(e.ToString()).GetRawConstantValue();
         }
 

@@ -6,7 +6,7 @@ namespace Xu.Common
     /// <summary>
     /// 实例化缓存接口ICaching
     /// </summary>
-    public class MemoryCaching : ICaching
+    public class MemoryCaching : IMemoryCaching
     {
         //引用Microsoft.Extensions.Caching.Memory;这个和.net 还是不一样，没有了Httpruntime了
         private readonly IMemoryCache _cache;

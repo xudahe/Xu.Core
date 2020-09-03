@@ -18,18 +18,15 @@ namespace Xu.Extensions
     /// </summary>
     public class RecordAccessLogsMildd
     {
-        /// <summary>
-        ///
-        /// </summary>
         private readonly RequestDelegate _next;
-        private readonly IUser _user;
+        private readonly IAspNetUser _user;
         private readonly ILogger<RecordAccessLogsMildd> _logger;
 
         /// <summary>
-        ///
+        /// 构造函数
         /// </summary>
         /// <param name="next"></param>
-        public RecordAccessLogsMildd(RequestDelegate next, IUser user, ILogger<RecordAccessLogsMildd> logger)
+        public RecordAccessLogsMildd(RequestDelegate next, IAspNetUser user, ILogger<RecordAccessLogsMildd> logger)
         {
             _next = next;
             _user = user;

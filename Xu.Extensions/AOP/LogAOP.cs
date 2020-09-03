@@ -67,7 +67,6 @@ namespace Xu.Extensions
                         invocation.ReturnValue = InternalAsyncHelper.CallAwaitTaskWithPostActionAndFinallyAndGetResult(
                          invocation.Method.ReturnType.GenericTypeArguments[0],
                          invocation.ReturnValue,
-                          //async () => await SuccessAction(invocation, dataIntercept),/*成功时执行*/
                           async (o) => await SuccessAction(invocation, dataIntercept, o),/*成功时执行*/
                          ex =>
                          {

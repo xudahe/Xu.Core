@@ -14,14 +14,12 @@ namespace Xu.Extensions
     /// </summary>
     public class RequRespLogMildd
     {
-        /// <summary>
-        ///
-        /// </summary>
+
         private readonly RequestDelegate _next;
         private readonly ILogger<RequRespLogMildd> _logger;
 
         /// <summary>
-        ///
+        ///构造函数
         /// </summary>
         /// <param name="next"></param>
         public RequRespLogMildd(RequestDelegate next, ILogger<RequRespLogMildd> logger)

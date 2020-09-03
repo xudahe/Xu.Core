@@ -29,6 +29,11 @@
             删除时间（不为空代表该条数据已删除），逻辑上的删除，非物理删除
             </summary>
         </member>
+        <member name="T:Xu.Model.Enum.JobStatus">
+            <summary>
+            Job运行状态
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Dept">
             <summary>
             部门管理
@@ -151,10 +156,10 @@
         </member>
         <member name="T:Xu.Model.Models.TasksQz">
             <summary>
-            任务计划表
+            定时任务计划列表
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.TasksQz.Name">
+        <member name="P:Xu.Model.Models.TasksQz.JobName">
             <summary>
             任务名称
             </summary>
@@ -164,19 +169,14 @@
             任务分组
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.TasksQz.Cron">
-            <summary>
-            任务运行时间表达式
-            </summary>
-        </member>
         <member name="P:Xu.Model.Models.TasksQz.AssemblyName">
             <summary>
-            任务所在DLL对应的程序集名称
+            任务所在DLL对应的程序集名称，默认值："Xu.Tasks"
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.ClassName">
             <summary>
-            任务所在类
+            任务所在类，默认值："JobQuartz"
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.Remark">
@@ -184,12 +184,7 @@
             任务描述
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.TasksQz.RunTimes">
-            <summary>
-            执行次数
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.TasksQz.BeginTime">
+        <member name="P:Xu.Model.Models.TasksQz.StartTime">
             <summary>
             开始时间
             </summary>
@@ -199,9 +194,25 @@
             结束时间
             </summary>
         </member>
+        <member name="P:Xu.Model.Models.TasksQz.RunTimes">
+            <summary>
+            重复执行次数,默认为0
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.PerformTime">
+            <summary>
+            最后执行时间
+            </summary>
+        </member>
         <member name="P:Xu.Model.Models.TasksQz.TriggerType">
             <summary>
-            触发器类型（0、simple 1、cron）
+            触发器类型（simple 或 cron）
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.Cron">
+            <summary>
+            间隔（Cron）-- 任务运行时间表达式
+            <a href="http://cron.qqe2.com/" target="_blank">cron在线生成</a>
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.IntervalSecond">
@@ -209,9 +220,9 @@
             执行间隔时间, 秒为单位
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.TasksQz.IsStart">
+        <member name="P:Xu.Model.Models.TasksQz.JobStatus">
             <summary>
-            是否启动
+            运行状态
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.JobParams">

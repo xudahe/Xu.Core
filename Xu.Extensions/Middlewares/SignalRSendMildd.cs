@@ -11,15 +11,12 @@ namespace Xu.Extensions
     /// </summary>
     public class SignalRSendMildd
     {
-        /// <summary>
-        ///
-        /// </summary>
         private readonly RequestDelegate _next;
 
         private readonly IHubContext<ChatHub> _hubContext;
 
         /// <summary>
-        ///
+        ///构造函数
         /// </summary>
         /// <param name="next"></param>
         /// <param name="hubContext"></param>

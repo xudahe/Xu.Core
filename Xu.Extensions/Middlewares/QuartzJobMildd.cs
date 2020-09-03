@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using System;
 using Xu.Common;
 using Xu.IServices;
+using Xu.Model.Enum;
 using Xu.Tasks;
 
 namespace Xu.Extensions
@@ -22,22 +23,22 @@ namespace Xu.Extensions
             {
                 if (Appsettings.App("Middleware", "QuartzNetJob", "Enabled").ToBoolReq())
                 {
-                    //var allQzServices = tasksQzSvc.Query().Result;
-                    //foreach (var item in allQzServices)
-                    //{
-                    //    if (item.IsStart)
-                    //    {
-                    //        var ResuleModel = schedulerCenter.AddScheduleJobAsync(item).Result;
-                    //        if (ResuleModel.Success)
-                    //        {
-                    //            Console.WriteLine($"QuartzNetJob{item.Name}启动成功！");
-                    //        }
-                    //        else
-                    //        {
-                    //            Console.WriteLine($"QuartzNetJob{item.Name}启动失败！错误信息：{ResuleModel.Message}");
-                    //        }
-                    //    }
-                    //}
+                    var allQzServices = tasksQzSvc.Query().Result;
+                    foreach (var item in allQzServices)
+                    {
+                        if (item.JobStatus != JobStatus.运行中)
+                        {
+                            var ResuleModel = schedulerCenter.AddScheduleJobAsync(item).Result;
+                            if (ResuleModel.Success)
+                            {
+                                Console.WriteLine($"QuartzNetJob{item.JobName}启动成功！");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"QuartzNetJob{item.JobName}启动失败！错误信息：{ResuleModel.Message}");
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception e)

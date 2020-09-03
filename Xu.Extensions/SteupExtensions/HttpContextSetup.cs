@@ -15,7 +15,7 @@ namespace Xu.Extensions
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUser, AspNetUser>();
+            services.AddScoped<IAspNetUser, AspNetUser>();
         }
     }
 }

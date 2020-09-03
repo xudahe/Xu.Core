@@ -12,9 +12,9 @@ namespace Xu.Services
     /// </summary>
     public class RoleSvc : BaseSvc<Role>, IRoleSvc
     {
-        public RoleSvc(IBaseRepo<Role> roleRepo)
+        public RoleSvc(IBaseRepo<Role> dalRepo)
         {
-            base.BaseDal = roleRepo;
+            base.BaseDal = dalRepo;
         }
 
         public async Task<Role> SaveRole(Role role)
