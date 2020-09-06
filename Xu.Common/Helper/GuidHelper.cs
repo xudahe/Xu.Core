@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace Xu.Common
 {
@@ -10,7 +7,7 @@ namespace Xu.Common
     /// </summary>
     public class GUIDHelper
     {
-        public static string GetGuid(string format = "") 
+        public static string GetGuid(string format = "")
         {
             if (string.IsNullOrWhiteSpace(format))
                 return Guid.NewGuid().ToString();

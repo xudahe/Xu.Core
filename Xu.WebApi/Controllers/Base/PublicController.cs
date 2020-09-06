@@ -13,7 +13,6 @@ namespace Xu.WebApi.Controllers
     {
         public PublicController()
         {
-       
         }
 
         /// <summary>
@@ -24,13 +23,12 @@ namespace Xu.WebApi.Controllers
         [HttpGet]
         public object GetRSACryption(int strength = 1024)
         {
-            return new MessageModel<string,string>()
+            return new MessageModel<string, string>()
             {
                 Message = "生成成功",
                 Success = true,
                 Response = RSACryption.CreateKeyPair(strength)
             };
         }
-
     }
 }

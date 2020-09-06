@@ -34,6 +34,16 @@
             Job运行状态
             </summary>
         </member>
+        <member name="T:Xu.Model.Enum.TodoLevel">
+            <summary>
+            待办紧急程度
+            </summary>
+        </member>
+        <member name="T:Xu.Model.Enum.TodoType">
+            <summary>
+            待办类型
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Dept">
             <summary>
             部门管理
@@ -235,6 +245,91 @@
             是否禁用
             </summary>
         </member>
+        <member name="T:Xu.Model.Models.Todo">
+            <summary>
+            待办事项
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.SendActorType">
+            <summary>
+            发送人类型
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.SendActorId">
+            <summary>
+            发送人Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.Level">
+            <summary>
+            紧急程度
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.Type">
+            <summary>
+            待办类型
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.RelatedDomain">
+            <summary>
+            待办所属功能模块对应的实体
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.RelatedDomainId">
+            <summary>
+            待办所属功能模块对应的实体Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.ActionType">
+            <summary>
+            处理环节
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.AdditionalData">
+            <summary>
+            附加数据
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.ReceiveTime">
+            <summary>
+            接收时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.ReceiveActorType">
+            <summary>
+            接收人类型
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.ReceiveActorId">
+            <summary>
+            接收人Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.ActionTime">
+            <summary>
+            处理时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.ReminderNumber">
+            <summary>
+            催办次数
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.StandardDate">
+            <summary>
+            标杆工期（剩余待处理时间）
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Todo.IsAction">
+            <summary>
+            是否已处理
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.User">
             <summary>
             用户信息表
@@ -298,6 +393,41 @@
         <member name="P:Xu.Model.Models.User.RoleIds">
             <summary>
             角色ids
+            </summary>
+        </member>
+        <member name="P:Xu.Model.DesInsRelaConUnitService.DpsInfoList">
+            <summary>
+            成员集合
+            </summary>
+        </member>
+        <member name="P:Xu.Model.DesInsRelaConUnitService.DpsInfoXml">
+            <summary>
+            成员集合
+            </summary>
+        </member>
+        <member name="T:Xu.Model.DspInfoItem">
+            <summary>
+            临时实体
+            </summary>
+        </member>
+        <member name="P:Xu.Model.DspInfoItem.UserRole">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:Xu.Model.DspInfoItem.UserId">
+            <summary>
+            项目组成员
+            </summary>
+        </member>
+        <member name="P:Xu.Model.DspInfoItem.Department">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="P:Xu.Model.DspInfoItem.PhoneNumber">
+            <summary>
+            联系方式
             </summary>
         </member>
         <member name="T:Xu.Model.ResultModel.MessageModel`1">

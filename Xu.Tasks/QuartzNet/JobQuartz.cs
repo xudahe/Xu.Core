@@ -1,9 +1,9 @@
-﻿using Xu.Common;
-using Xu.IServices;
-using Quartz;
+﻿using Quartz;
 using System;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Xu.Common;
+using Xu.IServices;
 
 /// <summary>
 /// 这里要注意下，命名空间和程序集是一样的，不然反射不到
@@ -18,7 +18,6 @@ namespace Xu.Tasks
         {
             _tasksQzSvc = tasksQzSvc;
         }
-
 
         public async Task Execute(IJobExecutionContext context)
         {
@@ -65,7 +64,7 @@ namespace Xu.Tasks
             {
                 _ = new JobExecutionException(ex)
                 {
-                    RefireImmediately = true //true  是立即重新执行任务 
+                    RefireImmediately = true //true  是立即重新执行任务
                 };
 
                 jobHistory += $"，【执行失败】，异常日志：{ex.Message}";
@@ -75,5 +74,4 @@ namespace Xu.Tasks
             return jobHistory;
         }
     }
-
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace Xu.Common
 {
@@ -27,7 +24,6 @@ namespace Xu.Common
             if (_windows)
                 return path.Replace("/", "\\");
             return path.Replace("\\", "/");
-
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Xu.Common
 {
     public class BaseDBConfig
     {
-        /* 
+        /*
          * 目前是多库操作，默认加载的是appsettings.json设置为true的第一个db连接。
          */
         public static (List<MutiDBOperate>, List<MutiDBOperate>) MutiConnectionString => MutiInitConn();

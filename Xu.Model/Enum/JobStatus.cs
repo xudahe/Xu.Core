@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using Xu.Common;
 
 namespace Xu.Model.Enum
 {
@@ -8,11 +7,13 @@ namespace Xu.Model.Enum
     /// </summary>
     public enum JobStatus
     {
-        [Description("初始化")]
+        [EnumText("初始化")]
         初始化 = 0,
-        [Description("运行中")]
+
+        [EnumText("运行中")]
         运行中 = 1,
-        [Description("已停止")]
-        已停止 = 3,
+
+        [EnumText("已停止")]
+        已停止 = 2,
     }
 }

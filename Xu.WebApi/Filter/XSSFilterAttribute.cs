@@ -33,9 +33,9 @@ namespace Xu.WebApi
                         PostModelFieldFilter(p.ParameterType, context.ActionArguments[p.Name]);
                     }
                 }
-
             }
         }
+
         /// <summary>
         /// 遍历实体的字符串属性
         /// </summary>
@@ -61,7 +61,6 @@ namespace Xu.WebApi
                             item.SetValue(obj, PostModelFieldFilter(item.PropertyType, item.GetValue(obj)));
                         }
                     }
-
                 }
             }
             return obj;

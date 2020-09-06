@@ -34,7 +34,6 @@ namespace Xu.Common
             privatePemWriter.WriteObject(keys.Private);
             privatePemWriter.Writer.Flush();
 
-
             TextWriter publicTextWriter = new StringWriter();
             PemWriter publicPemWriter = new PemWriter(publicTextWriter);
             publicPemWriter.WriteObject(keys.Public);
@@ -83,7 +82,7 @@ namespace Xu.Common
         {
             if (string.IsNullOrEmpty(privateKey))
                 privateKey = PrivateKey;
-      
+
             byte[] DataToDecrypt = Convert.FromBase64String(context);
             try
             {
@@ -278,7 +277,6 @@ namespace Xu.Common
                     };
                     return rsaKeyInfo;
                 }
-
             }
         }
 
@@ -295,7 +293,8 @@ namespace Xu.Common
             }
             return true;
         }
-        #endregion
+
+        #endregion 解析
 
         /// <summary>
         /// 判断一个字符串是否被Base64加密
@@ -304,8 +303,8 @@ namespace Xu.Common
         /// <returns></returns>
         public static bool IsBase64(string str)
         {
-             string base64Pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
-             return Regex.IsMatch(str, base64Pattern);
+            string base64Pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
+            return Regex.IsMatch(str, base64Pattern);
         }
     }
 }

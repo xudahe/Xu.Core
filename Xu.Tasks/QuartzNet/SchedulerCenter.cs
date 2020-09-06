@@ -20,7 +20,7 @@ namespace Xu.Tasks
         private readonly IJobFactory _iocjobFactory;
         private readonly ITasksQzSvc _tasksQzSvc;
 
-        public SchedulerCenter(ITasksQzSvc tasksQzSvc,IJobFactory jobFactory)
+        public SchedulerCenter(ITasksQzSvc tasksQzSvc, IJobFactory jobFactory)
         {
             _tasksQzSvc = tasksQzSvc;
             _iocjobFactory = jobFactory;
@@ -64,7 +64,7 @@ namespace Xu.Tasks
             var result = new MessageModel<string>();
             try
             {
-               _scheduler.Result.JobFactory =_iocjobFactory;
+                _scheduler.Result.JobFactory = _iocjobFactory;
                 if (!_scheduler.Result.IsStarted)
                 {
                     await _scheduler.Result.Start();
@@ -139,7 +139,7 @@ namespace Xu.Tasks
                         return result;
                     }
 
-                    #region 通过反射获取程序集类型和类   
+                    #region 通过反射获取程序集类型和类
 
                     Assembly assembly = Assembly.Load(new AssemblyName(tasksQz.AssemblyName));
                     Type jobType = assembly.GetType(tasksQz.AssemblyName + "." + tasksQz.ClassName);
@@ -178,7 +178,7 @@ namespace Xu.Tasks
                     }
                     //将触发器和任务器绑定到调度器中
                     await _scheduler.Result.ScheduleJob(job, trigger);
-  
+
                     result.Success = true;
                     result.Message = $"启动任务:【{tasksQz.JobName}】成功";
                     return result;
@@ -277,12 +277,12 @@ namespace Xu.Tasks
                 .WithIdentity(tasksQz.Id.ToString(), tasksQz.JobGroup)
                 .StartAt(starRunTime) //开始时间
                 .EndAt(endRunTime) //结束时间
-                .WithSimpleSchedule(x =>x
+                .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(tasksQz.IntervalSecond)  //执行时间间隔，单位秒
                     .WithRepeatCount(tasksQz.RunTimes) //执行次数、默认从0开始
                 )
                 .ForJob(tasksQz.Id.ToString(), tasksQz.JobGroup) //作业名称
-                .Build(); 
+                .Build();
 
                 return trigger;
             }

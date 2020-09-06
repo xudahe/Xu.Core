@@ -28,7 +28,7 @@ namespace Xu.Tasks
         /// <returns></returns>
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-             return _serviceProvider.GetRequiredService(bundle.JobDetail.JobType) as IJob;
+            return _serviceProvider.GetRequiredService(bundle.JobDetail.JobType) as IJob;
         }
 
         /// <summary>

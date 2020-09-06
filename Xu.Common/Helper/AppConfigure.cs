@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Xu.Common
 {
@@ -35,5 +32,4 @@ namespace Xu.Common
             return builder.Build();
         }
     }
-
 }

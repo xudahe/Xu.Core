@@ -26,7 +26,7 @@
         public T Response { get; set; }
     }
 
-    public class MessageModel<T1,T2>
+    public class MessageModel<T1, T2>
     {
         /// <summary>
         /// 状态码
@@ -46,6 +46,6 @@
         /// <summary>
         /// 返回数据集合
         /// </summary>
-        public (T1,T2) Response { get; set; }
+        public (T1, T2) Response { get; set; }
     }
 }

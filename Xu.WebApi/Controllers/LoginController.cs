@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -60,7 +59,7 @@ namespace Xu.WebApi.Controllers
                 });
             }
 
-            if(RSACryption.IsBase64(pass))  pass = RSACryption.RSADecrypt(pass);
+            if (RSACryption.IsBase64(pass)) pass = RSACryption.RSADecrypt(pass);
 
             var user = (await _userSvc.Query(d => d.Enabled == false && d.LoginName == name && d.LoginPwd == pass)).FirstOrDefault();
             if (user != null)

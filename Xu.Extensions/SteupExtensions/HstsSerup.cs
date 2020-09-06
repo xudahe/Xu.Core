@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Xu.Extensions
 {
@@ -33,10 +31,9 @@ namespace Xu.Extensions
             {
                 //(在生产环境中如果端口不变，可以使用308，开发测试中建议用307)
                 //使用307临时重定向，如果用308，会导致前端链接缓存，后面再改就不好用了（需要手动清理浏览器缓存）
-                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect; 
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
                 options.HttpsPort = 5001; //将 HTTPS 端口设置为5001。
             });
-
         }
     }
 }

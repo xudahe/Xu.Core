@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Xu.Common
+﻿namespace Xu.Common
 {
     /// <summary>
     /// 可空Int64运算

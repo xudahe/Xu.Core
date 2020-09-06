@@ -14,7 +14,6 @@ namespace Xu.Extensions
     /// </summary>
     public class RequRespLogMildd
     {
-
         private readonly RequestDelegate _next;
         private readonly ILogger<RequRespLogMildd> _logger;
 

@@ -44,7 +44,7 @@ namespace Xu.WebApi
         {
             services.AddSingleton(new Appsettings(Configuration));
             services.AddSingleton(new LogLock(Env.ContentRootPath)); //接口请求日志
-           
+
             services.AddMemoryCacheSetup();
             services.AddRedisCacheSetup();
             services.AddSqlsugarSetup();
@@ -81,7 +81,7 @@ namespace Xu.WebApi
 
             services.AddControllers(options =>
             {
-                if (Appsettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq()) 
+                if (Appsettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq())
                 {
                     options.Filters.Add(typeof(DataDecryptFilter)); //数据解密过滤器
                 }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xu.Common;
 
 namespace Xu.Extensions
@@ -32,7 +30,6 @@ namespace Xu.Extensions
 
                 return ConnectionMultiplexer.Connect(configuration);
             });
-
         }
     }
 }
