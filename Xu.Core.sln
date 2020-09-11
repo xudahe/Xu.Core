@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.Services", "Xu.Services\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.Extensions", "Xu.Extensions\Xu.Extensions.csproj", "{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xu.WebMvc", "Xu.WebMvc\Xu.WebMvc.csproj", "{B78F9F45-3EF6-4B50-A6C4-8868630A3EBC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,10 +63,6 @@ Global
 		{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B78F9F45-3EF6-4B50-A6C4-8868630A3EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B78F9F45-3EF6-4B50-A6C4-8868630A3EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B78F9F45-3EF6-4B50-A6C4-8868630A3EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B78F9F45-3EF6-4B50-A6C4-8868630A3EBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

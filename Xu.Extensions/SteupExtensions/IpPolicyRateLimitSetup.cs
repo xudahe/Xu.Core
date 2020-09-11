@@ -22,9 +22,11 @@ namespace Xu.Extensions
 
             // needed to store rate limit counters and ip rules
             services.AddMemoryCache();
-            //load general configuration from appsettings.json
+
+            //从appsettings.json获取相应配置
             services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
-            // inject counter and rules stores
+
+            //注入计数器和规则存储
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
 
@@ -32,9 +34,7 @@ namespace Xu.Extensions
             //services.AddSingleton<IIpPolicyStore, DistributedCacheIpPolicyStore>();
             //services.AddSingleton<IRateLimitCounterStore, DistributedCacheRateLimitCounterStore>();
 
-            // the clientId/clientIp resolvers use it.
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            // configuration (resolvers, counter key builders)
+            //配置（计数器密钥生成器）
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
         }
     }
