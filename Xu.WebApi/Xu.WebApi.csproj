@@ -24,9 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Xu.Extensions\Xu.Extensions.csproj" />
-    <ProjectReference Include="..\Xu.IServices\Xu.IServices.csproj" />
-    <ProjectReference Include="..\Xu.Services\Xu.Services.csproj" />
-    <ProjectReference Include="..\Xu.Tasks\Xu.Tasks.csproj" />
   </ItemGroup>
 
   <ItemGroup>

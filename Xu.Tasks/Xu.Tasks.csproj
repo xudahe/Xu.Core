@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xu.Common\Xu.Common.csproj" />
     <ProjectReference Include="..\Xu.IServices\Xu.IServices.csproj" />
   </ItemGroup>
 

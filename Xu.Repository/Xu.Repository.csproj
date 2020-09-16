@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xu.Common\Xu.Common.csproj" />
     <ProjectReference Include="..\Xu.IRepository\Xu.IRepository.csproj" />
-    <ProjectReference Include="..\Xu.Model\Xu.Model.csproj" />
   </ItemGroup>
 
 </Project>
