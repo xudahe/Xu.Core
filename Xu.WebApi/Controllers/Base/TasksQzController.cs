@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xu.Common;
@@ -18,29 +18,36 @@ namespace Xu.WebApi.Controllers
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(Permissions.Name)]
+    //[Authorize(Permissions.Name)]
     public class TasksQzController : ControllerBase
     {
         private readonly ITasksQzSvc _tasksQzSvc;
+        private readonly ITasksLogSvc _tasksLogSvc;
         private readonly ISchedulerCenter _schedulerCenter;
 
-        public TasksQzController(ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter)
+        public TasksQzController(ITasksQzSvc tasksQzSvc, ITasksLogSvc tasksLogSvc, ISchedulerCenter schedulerCenter)
         {
             _tasksQzSvc = tasksQzSvc;
+            _tasksLogSvc = tasksLogSvc;
             _schedulerCenter = schedulerCenter;
         }
 
         /// <summary>
         /// 获取全部定时任务
         /// </summary>
-        /// <param name="key">任务名称</param>
+        /// <param name="ids">可空</param>
+        /// <param name="jobName">任务名称(可空)</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string key = "")
+        public async Task<object> Get(string ids, string jobName = "")
         {
-            Expression<Func<TasksQz, bool>> whereExpression = a => a.Enabled != true && (a.JobName != null && a.JobName.Contains(key));
-
             var data = await _tasksQzSvc.Query();
+
+            if (!string.IsNullOrEmpty(ids))
+                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+
+            if (!string.IsNullOrEmpty(jobName))
+                data = data.Where(a => a.JobName != null && a.JobName.Contains(jobName)).ToList();
 
             return new MessageModel<List<TasksQz>>()
             {
@@ -55,13 +62,13 @@ namespace Xu.WebApi.Controllers
         /// </summary>
         /// <param name="page">页码</param>
         /// <param name="pageSize">页大小</param>
-        /// <param name="key">任务名称</param>
+        /// <param name="jobName">任务名称</param>
         /// <returns></returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string key = "")
+        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string jobName = "")
         {
-            Expression<Func<TasksQz, bool>> whereExpression = a => a.Enabled != true && (a.JobName != null && a.JobName.Contains(key));
+            Expression<Func<TasksQz, bool>> whereExpression = a => (a.JobName != null && a.JobName.Contains(jobName));
 
             var data = await _tasksQzSvc.QueryPage(whereExpression, page, pageSize, " Id desc ");
 
@@ -83,8 +90,11 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            tasksQz.JobStatus = JobStatus.初始化;
+            tasksQz.AssemblyName = "Xu.Tasks";
+            tasksQz.ClassName = "JobQuartz";
+            tasksQz.JobStatus = JobStatus.未启动;
             var id = await _tasksQzSvc.Add(tasksQz);
+
             data.Success = id > 0;
             if (data.Success)
             {
@@ -106,6 +116,8 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (tasksQz != null && tasksQz.Id > 0)
             {
+                tasksQz.AssemblyName = "Xu.Tasks";
+                tasksQz.ClassName = "JobQuartz";
                 data.Success = await _tasksQzSvc.Update(tasksQz);
                 if (data.Success)
                 {
@@ -120,26 +132,31 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 启动计划任务
         /// </summary>
-        /// <param name="jobId">任务Id（非空）</param>
+        /// <param name="id">任务Id（非空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> StartJob(int jobId)
+        public async Task<object> StartJob(int id)
         {
             var data = new MessageModel<string>();
 
-            var model = await _tasksQzSvc.QueryById(jobId);
+            var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                var ResuleModel = await _schedulerCenter.AddScheduleJobAsync(model);
-                if (ResuleModel.Success)
+                var resuleModel = await _schedulerCenter.AddScheduleJobAsync(model);
+                if (resuleModel.Success)
                 {
                     model.JobStatus = JobStatus.运行中;
                     data.Success = await _tasksQzSvc.Update(model);
+
+                    if (data.Success)
+                    {
+                        data.Message = "启动成功";
+                        data.Response = id.ToString();
+                    }
                 }
-                if (data.Success)
+                else
                 {
-                    data.Message = "启动成功";
-                    data.Response = jobId.ToString();
+                    return resuleModel;
                 }
             }
             return data;
@@ -148,26 +165,31 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 停止一个计划任务
         /// </summary>
-        /// <param name="jobId">任务Id（非空）</param>
+        /// <param name="id">任务Id（非空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> StopJob(int jobId)
+        public async Task<object> StopJob(int id)
         {
             var data = new MessageModel<string>();
 
-            var model = await _tasksQzSvc.QueryById(jobId);
+            var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                var ResuleModel = await _schedulerCenter.StopScheduleJobAsync(model);
-                if (ResuleModel.Success)
+                var resuleModel = await _schedulerCenter.StopScheduleJobAsync(model);
+                if (resuleModel.Success)
                 {
                     model.JobStatus = JobStatus.已停止;
                     data.Success = await _tasksQzSvc.Update(model);
+
+                    if (data.Success)
+                    {
+                        data.Message = "停止成功";
+                        data.Response = id.ToString();
+                    }
                 }
-                if (data.Success)
+                else
                 {
-                    data.Message = "暂停成功";
-                    data.Response = jobId.ToString();
+                    return resuleModel;
                 }
             }
             return data;
@@ -176,29 +198,78 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 重启一个计划任务
         /// </summary>
-        /// <param name="jobId">任务Id（非空）</param>
+        /// <param name="id">任务Id（非空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> ReCovery(int jobId)
+        public async Task<object> ReCovery(int id)
         {
             var data = new MessageModel<string>();
 
-            var model = await _tasksQzSvc.QueryById(jobId);
+            var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                var ResuleModel = await _schedulerCenter.ResumeScheduleJobAsync(model);
-                if (ResuleModel.Success)
+                var resuleModel = await _schedulerCenter.ResumeScheduleJobAsync(model);
+                if (resuleModel.Success)
                 {
                     model.JobStatus = JobStatus.运行中;
                     data.Success = await _tasksQzSvc.Update(model);
+
+                    if (data.Success)
+                    {
+                        data.Message = "重启成功";
+                        data.Response = id.ToString();
+                    }
                 }
-                if (data.Success)
+                else
                 {
-                    data.Message = "重启成功";
-                    data.Response = jobId.ToString();
+                    return resuleModel;
                 }
             }
             return data;
+        }
+
+        /// <summary>
+        /// 删除一个计划任务
+        /// </summary>
+        /// <param name="id">非空</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<object> Delete(int id)
+        {
+            var data = new MessageModel<string>();
+            if (id > 0)
+            {
+                var tasks = await _tasksQzSvc.QueryById(id);
+                tasks.DeleteTime = DateTime.Now;
+                data.Success = await _tasksQzSvc.Update(tasks);
+                if (data.Success)
+                {
+                    data.Message = "删除成功";
+                    data.Response = tasks?.Id.ToString();
+                }
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// 根据任务Id获取日志
+        /// </summary>
+        /// <param name="id">任务Id（非空）</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<object> TasksLog(int id)
+        {
+            Expression<Func<TasksLog, bool>> whereExpression = a => a.PerformJobId == id;
+
+            var data = await _tasksLogSvc.Query(whereExpression);
+
+            return new MessageModel<List<TasksLog>>()
+            {
+                Message = "获取成功",
+                Success = true,
+                Response = data
+            };
         }
     }
 }

@@ -15,7 +15,7 @@ using Xu.Extensions;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
 
-namespace Blog.Core.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
     /// 监控管理
@@ -23,8 +23,8 @@ namespace Blog.Core.Controllers
     [Route("api/[Controller]/[action]")]
     [ApiController]
     //[ApiExplorerSettings(GroupName = "v1")]
-    [Authorize(Permissions.Name)]
-    public class MonitorController : Controller
+    //[Authorize(Permissions.Name)]
+    public class MonitorController : ControllerBase
     {
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly IWebHostEnvironment _env;
@@ -63,7 +63,6 @@ namespace Blog.Core.Controllers
         /// SignalR send data
         /// </summary>
         /// <returns></returns>
-        // GET: api/Logs
         [HttpGet]
         public object Get()
         {
@@ -77,55 +76,49 @@ namespace Blog.Core.Controllers
             };
         }
 
+        /// <summary>
+        /// Ip 请求日志
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public object GetAccessApiByWeek()
+        public object GetIpLogByDate()
         {
-            return new MessageModel<RequestApiWeekView>()
+            return new MessageModel<List<LogInfo>>()
             {
                 Message = "获取成功",
                 Success = true,
-                Response = LogLock.AccessApiByWeek()
-            };
-        }
-
-        [HttpGet]
-        public object GetAccessApiByDate()
-        {
-            return new MessageModel<AccessApiDateView>()
-            {
-                Message = "获取成功",
-                Success = true,
-                Response = LogLock.AccessApiByDate()
-            };
-        }
-
-        [HttpGet]
-        public object GetAccessApiByHour()
-        {
-            return new MessageModel<AccessApiDateView>()
-            {
-                Message = "获取成功",
-                Success = true,
-                Response = LogLock.AccessApiByHour()
+                Response = LogLock.GetIpLogByDate()
             };
         }
 
         /// <summary>
-        /// 记录访问日志
+        /// 获取前N条所有日志
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public object GetLogInfo(int num = 200)
+        {
+            return new MessageModel<List<LogInfo>>()
+            {
+                Message = "获取成功",
+                Success = true,
+                Response = LogLock.GetLogData(num)
+            };
+        }
+
+        /// <summary>
+        /// Api请求访问日志
         /// </summary>
         /// <param name="environment"></param>
         /// <returns></returns>
         [HttpGet]
         public object GetAccessLogs([FromServices] IWebHostEnvironment environment)
         {
-            var Logs = JsonConvert.DeserializeObject<List<UserAccessModel>>("[" + LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log", "RecordAccessLogs.log"), Encoding.UTF8) + "]");
-
-            Logs = Logs.Where(d => d.BeginTime.ToDateTime() >= DateTime.Today).OrderByDescending(d => d.BeginTime).Take(50).ToList();
             return new MessageModel<List<UserAccessModel>>()
             {
                 Message = "获取成功",
                 Success = true,
-                Response = Logs
+                Response = LogLock.GetAccessLogByDate()
             };
         }
     }

@@ -17,7 +17,7 @@ namespace Xu.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize(Permissions.Name)]
-    public class MenuController
+    public class MenuController : ControllerBase
     {
         private readonly IMenuSvc _menuSvc;
 
@@ -41,7 +41,7 @@ namespace Xu.WebApi.Controllers
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(menuName))
-                data = data.Where(a => a.MenuName.Contains(menuName)).ToList();
+                data = data.Where(a => a.MenuName != null && a.MenuName.Contains(menuName)).ToList();
 
             return new MessageModel<List<Menu>>()
             {

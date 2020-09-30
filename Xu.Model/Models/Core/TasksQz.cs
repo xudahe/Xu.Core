@@ -22,15 +22,15 @@ namespace Xu.Model.Models
         /// <summary>
         /// 任务所在DLL对应的程序集名称，默认值："Xu.Tasks"
         /// </summary>
-        public string AssemblyName { get; set; }
+        public string AssemblyName { get; set; } = "Xu.Tasks";
 
         /// <summary>
         /// 任务所在类，默认值："JobQuartz"
         /// </summary>
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = "JobQuartz";
 
         /// <summary>
-        /// 任务描述
+        /// 备注
         /// </summary>
         [SugarColumn(IsNullable = true)]
         public string Remark { get; set; }
@@ -87,11 +87,5 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true)]
         public string JobParams { get; set; }
-
-        /// <summary>
-        /// 是否禁用
-        /// </summary>
-        [SugarColumn(IsNullable = true)]
-        public bool? Enabled { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace Xu.Extensions
                     var allQzServices = tasksQzSvc.Query().Result;
                     foreach (var item in allQzServices)
                     {
-                        if (item.JobStatus != JobStatus.运行中)
+                        if (item.JobStatus == JobStatus.运行中)
                         {
                             var ResuleModel = schedulerCenter.AddScheduleJobAsync(item).Result;
                             if (ResuleModel.Success)

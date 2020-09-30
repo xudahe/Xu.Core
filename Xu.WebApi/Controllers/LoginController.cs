@@ -19,7 +19,7 @@ namespace Xu.WebApi.Controllers
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [Authorize(Permissions.Name)]
-    public class LoginController : Controller
+    public class LoginController : ControllerBase
     {
         private readonly IUserSvc _userSvc;
         private readonly IRoleSvc _roleSvc;

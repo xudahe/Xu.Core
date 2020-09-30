@@ -45,7 +45,7 @@ namespace Xu.Extensions
                             Ip = GetClientIP(context),
                             Url = request.Path.ToString().TrimEnd('/').ToLower(),
                             Datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            Week = GetWeek(),
+                            Week = DateHelper.GetWeek(),
                         });
 
                         if (!string.IsNullOrEmpty(requestInfo))
@@ -75,22 +75,6 @@ namespace Xu.Extensions
             {
                 await _next(context);
             }
-        }
-
-        private string GetWeek()
-        {
-            string week = DateTime.Now.DayOfWeek switch
-            {
-                DayOfWeek.Monday => "周一",
-                DayOfWeek.Tuesday => "周二",
-                DayOfWeek.Wednesday => "周三",
-                DayOfWeek.Thursday => "周四",
-                DayOfWeek.Friday => "周五",
-                DayOfWeek.Saturday => "周六",
-                DayOfWeek.Sunday => "周日",
-                _ => "N/A",
-            };
-            return week;
         }
 
         public static string GetClientIP(HttpContext context)

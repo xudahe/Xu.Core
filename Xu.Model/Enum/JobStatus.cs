@@ -7,13 +7,13 @@ namespace Xu.Model.Enum
     /// </summary>
     public enum JobStatus
     {
-        [EnumText("初始化")]
-        初始化 = 0,
+        [EnumText("未启动")]
+        未启动 = 1,
 
         [EnumText("运行中")]
-        运行中 = 1,
+        运行中 = 2,
 
         [EnumText("已停止")]
-        已停止 = 2,
+        已停止 = 3,
     }
 }

@@ -5,7 +5,7 @@ using Xu.Model.ResultModel;
 namespace Xu.WebApi.Controllers
 {
     /// <summary>
-    /// 公用方法
+    /// 公共方法
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]

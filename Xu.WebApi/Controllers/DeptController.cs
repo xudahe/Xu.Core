@@ -41,7 +41,7 @@ namespace Xu.WebApi.Controllers
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(deptName))
-                data = data.Where(a => a.DeptName.Contains(deptName)).ToList();
+                data = data.Where(a => a.DeptName != null && a.DeptName.Contains(deptName)).ToList();
 
             return new MessageModel<List<Dept>>()
             {

@@ -46,7 +46,6 @@ namespace Xu.Common
                 Console.WriteLine($"回调函数输出【键:{keyInfo},值:{valueInfo},被清除的原因:{reason}】");
             });
             _cache.Set(cacheKey, cacheValue, cacheEntityOps);
-
         }
 
         public bool Remove(string cacheKey)
@@ -72,6 +71,5 @@ namespace Xu.Common
 
             return _cache.TryGetValue(cacheKey, out object cache);
         }
-
     }
 }

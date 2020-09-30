@@ -27,25 +27,25 @@ namespace Xu.Model
         /// <summary>
         /// Id，领域对象标识
         /// </summary>
-        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键Id")]
         public int Id { get; set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
-        [SugarColumn(IsNullable = true, IsOnlyIgnoreUpdate = true)]
+        [SugarColumn(IsNullable = true, IsOnlyIgnoreUpdate = true, ColumnDescription = "创建时间")]
         public DateTime CreateTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 修改时间
         /// </summary>
-        [SugarColumn(IsNullable = true, IsOnlyIgnoreInsert = true)]
+        [SugarColumn(IsNullable = true, IsOnlyIgnoreInsert = true, ColumnDescription = "修改时间")]
         public DateTime? ModifyTime { get; set; }
 
         /// <summary>
         /// 删除时间（不为空代表该条数据已删除），逻辑上的删除，非物理删除
         /// </summary>
-        [SugarColumn(IsNullable = true, IsOnlyIgnoreInsert = true)]
+        [SugarColumn(IsNullable = true, IsOnlyIgnoreInsert = true, ColumnDescription = "删除时间")]
         public DateTime? DeleteTime { get; set; }
     }
 

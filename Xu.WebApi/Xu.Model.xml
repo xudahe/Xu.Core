@@ -34,6 +34,11 @@
             Job运行状态
             </summary>
         </member>
+        <member name="T:Xu.Model.Enum.PerformStrategy">
+            <summary>
+            执行策略
+            </summary>
+        </member>
         <member name="T:Xu.Model.Enum.TodoLevel">
             <summary>
             待办紧急程度
@@ -164,6 +169,36 @@
             是否禁用
             </summary>
         </member>
+        <member name="T:Xu.Model.Models.TasksLog">
+            <summary>
+            定时任务执行日志表
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksLog.PerformJobId">
+            <summary>
+            执行任务Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksLog.JobName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksLog.JobGroup">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksLog.PerformTime">
+            <summary>
+            执行时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksLog.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.TasksQz">
             <summary>
             定时任务计划列表
@@ -191,7 +226,7 @@
         </member>
         <member name="P:Xu.Model.Models.TasksQz.Remark">
             <summary>
-            任务描述
+            备注
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.StartTime">
@@ -238,11 +273,6 @@
         <member name="P:Xu.Model.Models.TasksQz.JobParams">
             <summary>
             执行传参
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.TasksQz.Enabled">
-            <summary>
-            是否禁用
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Todo">

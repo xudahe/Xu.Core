@@ -79,6 +79,7 @@ namespace Xu.WebApi
             //    options.LowercaseUrls = true; //小写url的路由
             //});
 
+            //启用控制器
             services.AddControllers(options =>
             {
                 if (Appsettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq())

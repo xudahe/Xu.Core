@@ -17,7 +17,7 @@ namespace Xu.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize(Permissions.Name)]
-    public class RoleController
+    public class RoleController : ControllerBase
     {
         private readonly IRoleSvc _roleSvc;
 
@@ -41,7 +41,7 @@ namespace Xu.WebApi.Controllers
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(roleName))
-                data = data.Where(a => a.RoleName.Contains(roleName)).ToList();
+                data = data.Where(a => a.RoleName != null && a.RoleName.Contains(roleName)).ToList();
 
             return new MessageModel<List<Role>>()
             {

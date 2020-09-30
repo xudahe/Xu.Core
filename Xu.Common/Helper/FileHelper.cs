@@ -145,7 +145,7 @@ namespace Xu.Common
                 s = "不存在相应的目录";
             else
             {
-                StreamReader f2 = new StreamReader(Path, System.Text.Encoding.GetEncoding("gb2312"));
+                StreamReader f2 = new StreamReader(Path, Encoding.GetEncoding("gb2312"));
                 s = f2.ReadToEnd();
                 f2.Close();
                 f2.Dispose();

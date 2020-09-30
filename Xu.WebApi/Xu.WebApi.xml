@@ -4,33 +4,45 @@
         <name>Xu.WebApi</name>
     </assembly>
     <members>
-        <member name="T:Blog.Core.Controllers.MonitorController">
+        <member name="T:Xu.WebApi.Controllers.MonitorController">
             <summary>
             监控管理
             </summary>
         </member>
-        <member name="M:Blog.Core.Controllers.MonitorController.Server">
+        <member name="M:Xu.WebApi.Controllers.MonitorController.Server">
             <summary>
             服务器配置信息
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Blog.Core.Controllers.MonitorController.Get">
+        <member name="M:Xu.WebApi.Controllers.MonitorController.Get">
             <summary>
             SignalR send data
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Blog.Core.Controllers.MonitorController.GetAccessLogs(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetIpLogByDate">
             <summary>
-            记录访问日志
+            Ip 请求日志
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetLogInfo(System.Int32)">
+            <summary>
+            获取前N条所有日志
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetAccessLogs(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Api请求访问日志
             </summary>
             <param name="environment"></param>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.PublicController">
             <summary>
-            公用方法
+            公共方法
             </summary>
         </member>
         <member name="M:Xu.WebApi.Controllers.PublicController.GetRSACryption(System.Int32)">
@@ -40,16 +52,46 @@
              <param name="strength">长度</param>
             <returns>Item1:公钥；Item2:私钥；</returns>
         </member>
+        <member name="T:Xu.WebApi.Controllers.QRCodeController">
+            <summary>
+            二维码
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.QRCodeController.GetPTQRCode(System.String,System.Int32)">
+             <summary>
+            生成二维码（路径）
+             </summary>
+             <param name="plainText">存储内容</param>
+             <param name="pixel">像素大小</param>
+             <returns>返回二维码路径</returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.QRCodeController.GetBTQRCode(System.String,System.Int32)">
+             <summary>
+            生成二维码（byte数组）
+             </summary>
+             <param name="plainText">存储内容</param>
+             <param name="pixel">像素大小</param>
+             <returns>返回二维码路径</returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.QRCodeController.GetBSQRCode(System.String,System.Int32)">
+             <summary>
+            生成二维码（Base64）
+             </summary>
+             <param name="plainText">存储内容</param>
+             <param name="pixel">像素大小</param>
+             <returns>返回二维码路径</returns>
+        </member>
         <member name="T:Xu.WebApi.Controllers.TasksQzController">
             <summary>
             定时任务
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.Get(System.String)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.Get(System.String,System.String)">
             <summary>
             获取全部定时任务
             </summary>
-            <param name="key">任务名称</param>
+            <param name="ids">可空</param>
+            <param name="jobName">任务名称(可空)</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.GetByPage(System.Int32,System.Int32,System.String)">
@@ -58,7 +100,7 @@
             </summary>
             <param name="page">页码</param>
             <param name="pageSize">页大小</param>
-            <param name="key">任务名称</param>
+            <param name="jobName">任务名称</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.Post(Xu.Model.Models.TasksQz)">
@@ -79,21 +121,35 @@
             <summary>
             启动计划任务
             </summary>
-            <param name="jobId">任务Id（非空）</param>
+            <param name="id">任务Id（非空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.StopJob(System.Int32)">
             <summary>
             停止一个计划任务
             </summary>
-            <param name="jobId">任务Id（非空）</param>
+            <param name="id">任务Id（非空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.ReCovery(System.Int32)">
             <summary>
             重启一个计划任务
             </summary>
-            <param name="jobId">任务Id（非空）</param>
+            <param name="id">任务Id（非空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.Delete(System.Int32)">
+            <summary>
+            删除一个计划任务
+            </summary>
+            <param name="id">非空</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.TasksLog(System.Int32)">
+            <summary>
+            根据任务Id获取日志
+            </summary>
+            <param name="id">任务Id（非空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">

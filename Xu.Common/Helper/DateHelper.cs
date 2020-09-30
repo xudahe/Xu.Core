@@ -125,5 +125,25 @@ namespace Xu.Common
                 list.Add(i);
             return list.ToArray();
         }
+
+        /// <summary>
+        /// //获取当前周几
+        /// </summary>
+        /// <returns></returns>
+        public static string GetWeek()
+        {
+            string week = DateTime.Now.DayOfWeek switch
+            {
+                DayOfWeek.Monday => "周一",
+                DayOfWeek.Tuesday => "周二",
+                DayOfWeek.Wednesday => "周三",
+                DayOfWeek.Thursday => "周四",
+                DayOfWeek.Friday => "周五",
+                DayOfWeek.Saturday => "周六",
+                DayOfWeek.Sunday => "周日",
+                _ => "N/A",
+            };
+            return week;
+        }
     }
 }
