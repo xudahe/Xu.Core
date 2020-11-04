@@ -8,7 +8,7 @@ namespace Xu.Model.Enum
     public enum TodoType
     {
         [EnumText("待办")]
-        待办 = 0,
+        待办 = 1,
 
         [EnumText("待阅")]
         待阅 = 2,

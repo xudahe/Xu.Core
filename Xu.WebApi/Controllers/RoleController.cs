@@ -33,7 +33,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="roleName">角色名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string ids, string roleName = "")
+        public async Task<object> GetRole(string ids, string roleName = "")
         {
             var data = await _roleSvc.Query();
 
@@ -60,7 +60,7 @@ namespace Xu.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string roleName = "")
+        public async Task<object> GetRoleByPage(int page = 1, int pageSize = 50, string roleName = "")
         {
             var data = await _roleSvc.QueryPage(a => (a.RoleName != null && a.RoleName.Contains(roleName)), page, pageSize, " Id desc ");
 
@@ -78,7 +78,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="role"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> Post([FromBody] Role role)
+        public async Task<object> PostRole([FromBody] Role role)
         {
             var model = await _roleSvc.SaveRole(role);
 
@@ -96,7 +96,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="role"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> Put([FromBody] Role role)
+        public async Task<object> PutRole([FromBody] Role role)
         {
             var data = new MessageModel<string>();
             if (role != null && role.Id > 0)
@@ -118,7 +118,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Delete(int id)
+        public async Task<object> DeleteRole(int id)
         {
             var data = new MessageModel<string>();
             if (id > 0)
@@ -143,7 +143,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Disable(int id, bool falg)
+        public async Task<object> DisableRole(int id, bool falg)
         {
             var role = await _roleSvc.QueryById(id);
             role.Enabled = falg;

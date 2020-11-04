@@ -42,7 +42,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="key">用户名/姓名（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string ids, string key = "")
+        public async Task<object> GetUser(string ids, string key = "")
         {
             var data = await _userSvc.Query();
 
@@ -69,7 +69,7 @@ namespace Xu.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string key = "")
+        public async Task<object> GetUserByPage(int page = 1, int pageSize = 50, string key = "")
         {
             var data = await _userSvc.QueryPage(a => (a.LoginName != null && a.LoginName.Contains(key)) || (a.RealName != null && a.RealName.Contains(key)), page, pageSize, " Id desc ");
 
@@ -87,7 +87,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="token">令牌</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetInfoByToken(string token)
+        public async Task<object> GetUserByToken(string token)
         {
             var data = new MessageModel<User>();
             if (!string.IsNullOrEmpty(token))
@@ -113,7 +113,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> Post([FromBody] User user)
+        public async Task<object> PostUser([FromBody] User user)
         {
             //user.LoginPwd = MD5Helper.MD5Encrypt32(user.LoginPwd);
             var model = await _userSvc.SaveUser(user);
@@ -132,7 +132,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> Put([FromBody] User user)
+        public async Task<object> PutUser([FromBody] User user)
         {
             // 这里使用事务处理
             var data = new MessageModel<string>();
@@ -167,7 +167,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Delete(int id)
+        public async Task<object> DeleteUser(int id)
         {
             var data = new MessageModel<string>();
             if (id > 0)
@@ -192,7 +192,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Disable(int id, bool falg)
+        public async Task<object> DisableUser(int id, bool falg)
         {
             var user = await _userSvc.QueryById(id);
             user.Enabled = falg;

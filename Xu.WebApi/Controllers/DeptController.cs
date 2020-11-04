@@ -33,7 +33,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="deptName">部门名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string ids, string deptName = "")
+        public async Task<object> GetDept(string ids, string deptName = "")
         {
             var data = await _deptSvc.Query();
 
@@ -60,7 +60,7 @@ namespace Xu.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string deptName = "")
+        public async Task<object> GetDeptByPage(int page = 1, int pageSize = 50, string deptName = "")
         {
             var data = await _deptSvc.QueryPage(a => (a.DeptName != null && a.DeptName.Contains(deptName)), page, pageSize, " Id desc ");
 
@@ -78,7 +78,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> Post([FromBody] Dept request)
+        public async Task<object> PostDept([FromBody] Dept request)
         {
             var data = new MessageModel<string>();
 
@@ -100,7 +100,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="dept"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> Put([FromBody] Dept dept)
+        public async Task<object> PutDept([FromBody] Dept dept)
         {
             var data = new MessageModel<string>();
             if (dept != null && dept.Id > 0)
@@ -122,7 +122,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Delete(int id)
+        public async Task<object> DeleteDept(int id)
         {
             var data = new MessageModel<string>();
             if (id > 0)
@@ -147,7 +147,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Disable(int id, bool falg)
+        public async Task<object> DisableDept(int id, bool falg)
         {
             var dept = await _deptSvc.QueryById(id);
             dept.Enabled = falg;

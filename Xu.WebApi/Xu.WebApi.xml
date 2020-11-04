@@ -86,7 +86,7 @@
             定时任务
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.Get(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksQz(System.String,System.String)">
             <summary>
             获取全部定时任务
             </summary>
@@ -94,7 +94,7 @@
             <param name="jobName">任务名称(可空)</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.GetByPage(System.Int32,System.Int32,System.String)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksQzByPage(System.Int32,System.Int32,System.String)">
             <summary>
             获取全部定时任务并分页
             </summary>
@@ -103,14 +103,14 @@
             <param name="jobName">任务名称</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.Post(Xu.Model.Models.TasksQz)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.PostTasksQz(Xu.Model.Models.TasksQz)">
             <summary>
             添加计划任务
             </summary>
             <param name="tasksQz"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.Put(Xu.Model.Models.TasksQz)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.PutTasksQz(Xu.Model.Models.TasksQz)">
             <summary>
             更新计划任务
             </summary>
@@ -138,18 +138,19 @@
             <param name="id">任务Id（非空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.Delete(System.Int32)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.DeleteTasksQz(System.Int32)">
             <summary>
             删除一个计划任务
             </summary>
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.TasksLog(System.Int32)">
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksLog(System.Int32,System.Int32)">
             <summary>
             根据任务Id获取日志
             </summary>
             <param name="id">任务Id（非空）</param>
+            <param name="numTop">前N条</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
@@ -203,7 +204,7 @@
             部门管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.Get(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.GetDept(System.String,System.String)">
             <summary>
             获取部门数据
             </summary>
@@ -211,7 +212,7 @@
             <param name="deptName">部门名称（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.GetByPage(System.Int32,System.Int32,System.String)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.GetDeptByPage(System.Int32,System.Int32,System.String)">
             <summary>
             获取全部部门并分页
             </summary>
@@ -220,28 +221,28 @@
             <param name="deptName">部门名称（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.Post(Xu.Model.Models.Dept)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.PostDept(Xu.Model.Models.Dept)">
             <summary>
             添加部门
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.Put(Xu.Model.Models.Dept)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.PutDept(Xu.Model.Models.Dept)">
             <summary>
             更新部门
             </summary>
             <param name="dept"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.Delete(System.Int32)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.DeleteDept(System.Int32)">
             <summary>
             删除部门
             </summary>
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DeptController.Disable(System.Int32,System.Boolean)">
+        <member name="M:Xu.WebApi.Controllers.DeptController.DisableDept(System.Int32,System.Boolean)">
             <summary>
             禁用部门
             </summary>
@@ -282,7 +283,7 @@
             菜单管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Get(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetMenu(System.String,System.String)">
             <summary>
             获取菜单数据（列表）
             </summary>
@@ -290,7 +291,7 @@
             <param name="menuName">菜单名称（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.GetByPage(System.Int32,System.Int32,System.String)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetMenuByPage(System.Int32,System.Int32,System.String)">
             <summary>
             获取全部菜单并分页
             </summary>
@@ -299,35 +300,35 @@
             <param name="menuName">菜单名称（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.GetByIds(System.String)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetMenuByIds(System.String)">
             <summary>
             根据菜单Ids集合获取菜单数据（树状）
             </summary>
             <param name="ids">可空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Post(Xu.Model.Models.Menu)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.PostMenu(Xu.Model.Models.Menu)">
             <summary>
             添加菜单
             </summary>
             <param name="menu"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Put(Xu.Model.Models.Menu)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.PutMenu(Xu.Model.Models.Menu)">
             <summary>
             更新菜单
             </summary>
             <param name="menu"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Delete(System.Int32)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.DeleteMenu(System.Int32)">
             <summary>
             删除菜单
             </summary>
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.Disable(System.Int32,System.Boolean)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.DisableMenu(System.Int32,System.Boolean)">
             <summary>
             禁用菜单
             </summary>
@@ -340,7 +341,7 @@
             角色管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Get(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.GetRole(System.String,System.String)">
             <summary>
             获取角色数据
             </summary>
@@ -348,7 +349,7 @@
             <param name="roleName">角色名称（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.GetByPage(System.Int32,System.Int32,System.String)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.GetRoleByPage(System.Int32,System.Int32,System.String)">
             <summary>
             获取全部角色并分页
             </summary>
@@ -357,28 +358,28 @@
             <param name="roleName">角色名称（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Post(Xu.Model.Models.Role)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.PostRole(Xu.Model.Models.Role)">
             <summary>
             添加角色
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Put(Xu.Model.Models.Role)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.PutRole(Xu.Model.Models.Role)">
             <summary>
             更新角色
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Delete(System.Int32)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.DeleteRole(System.Int32)">
             <summary>
             删除角色
             </summary>
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.Disable(System.Int32,System.Boolean)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.DisableRole(System.Int32,System.Boolean)">
             <summary>
             禁用角色
             </summary>
@@ -398,7 +399,7 @@
             <param name="unitOfWork"></param>
             <param name="userSvc"></param>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Get(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.UserController.GetUser(System.String,System.String)">
             <summary>
             获取用户数据
             </summary>
@@ -406,7 +407,7 @@
             <param name="key">用户名/姓名（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.GetByPage(System.Int32,System.Int32,System.String)">
+        <member name="M:Xu.WebApi.Controllers.UserController.GetUserByPage(System.Int32,System.Int32,System.String)">
             <summary>
             获取全部用户并分页
             </summary>
@@ -415,35 +416,35 @@
             <param name="key">用户名/姓名（可空）</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.GetInfoByToken(System.String)">
+        <member name="M:Xu.WebApi.Controllers.UserController.GetUserByToken(System.String)">
             <summary>
             根据token获取用户详情
             </summary>
             <param name="token">令牌</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Post(Xu.Model.Models.User)">
+        <member name="M:Xu.WebApi.Controllers.UserController.PostUser(Xu.Model.Models.User)">
             <summary>
             添加用户
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Put(Xu.Model.Models.User)">
+        <member name="M:Xu.WebApi.Controllers.UserController.PutUser(Xu.Model.Models.User)">
             <summary>
             更新用户
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Delete(System.Int32)">
+        <member name="M:Xu.WebApi.Controllers.UserController.DeleteUser(System.Int32)">
             <summary>
             删除用户
             </summary>
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.Disable(System.Int32,System.Boolean)">
+        <member name="M:Xu.WebApi.Controllers.UserController.DisableUser(System.Int32,System.Boolean)">
             <summary>
             禁用用户
             </summary>

@@ -39,7 +39,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="jobName">任务名称(可空)</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string ids, string jobName = "")
+        public async Task<object> GetTasksQz(string ids, string jobName = "")
         {
             var data = await _tasksQzSvc.Query();
 
@@ -66,7 +66,7 @@ namespace Xu.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string jobName = "")
+        public async Task<object> GetTasksQzByPage(int page = 1, int pageSize = 50, string jobName = "")
         {
             Expression<Func<TasksQz, bool>> whereExpression = a => (a.JobName != null && a.JobName.Contains(jobName));
 
@@ -86,7 +86,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="tasksQz"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> Post([FromBody] TasksQz tasksQz)
+        public async Task<object> PostTasksQz([FromBody] TasksQz tasksQz)
         {
             var data = new MessageModel<string>();
 
@@ -111,7 +111,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="tasksQz"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> Put([FromBody] TasksQz tasksQz)
+        public async Task<object> PutTasksQz([FromBody] TasksQz tasksQz)
         {
             var data = new MessageModel<string>();
             if (tasksQz != null && tasksQz.Id > 0)
@@ -234,7 +234,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Delete(int id)
+        public async Task<object> DeleteTasksQz(int id)
         {
             var data = new MessageModel<string>();
             if (id > 0)
@@ -256,13 +256,14 @@ namespace Xu.WebApi.Controllers
         /// 根据任务Id获取日志
         /// </summary>
         /// <param name="id">任务Id（非空）</param>
+        /// <param name="numTop">前N条</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> TasksLog(int id)
+        public async Task<object> GetTasksLog(int id, int numTop = 200)
         {
             Expression<Func<TasksLog, bool>> whereExpression = a => a.PerformJobId == id;
 
-            var data = await _tasksLogSvc.Query(whereExpression);
+            var data = await _tasksLogSvc.Query(whereExpression, numTop, " PerformTime desc ");
 
             return new MessageModel<List<TasksLog>>()
             {

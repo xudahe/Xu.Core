@@ -1,5 +1,6 @@
 ﻿using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Triggers;
 using Quartz.Spi;
 using System;
 using System.Collections.Specialized;
@@ -176,6 +177,9 @@ namespace Xu.Tasks
                     {
                         trigger = CreateSimpleTrigger(tasksQz);
                     }
+
+                   ((CronTriggerImpl)trigger).MisfireInstruction = MisfireInstruction.CronTrigger.DoNothing;
+
                     //将触发器和任务器绑定到调度器中
                     await _scheduler.Result.ScheduleJob(job, trigger);
 

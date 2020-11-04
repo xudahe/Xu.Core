@@ -33,7 +33,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="menuName">菜单名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> Get(string ids, string menuName = "")
+        public async Task<object> GetMenu(string ids, string menuName = "")
         {
             var data = await _menuSvc.Query();
 
@@ -60,7 +60,7 @@ namespace Xu.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<object> GetByPage(int page = 1, int pageSize = 50, string menuName = "")
+        public async Task<object> GetMenuByPage(int page = 1, int pageSize = 50, string menuName = "")
         {
             var data = await _menuSvc.QueryPage(a => (a.MenuName != null && a.MenuName.Contains(menuName)), page, pageSize, " Id desc ");
 
@@ -78,7 +78,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="ids">可空</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetByIds(string ids)
+        public async Task<object> GetMenuByIds(string ids)
         {
             var menuList = await _menuSvc.Query(s => s.Enabled == false);
 
@@ -130,7 +130,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="menu"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> Post([FromBody] Menu menu)
+        public async Task<object> PostMenu([FromBody] Menu menu)
         {
             var model = await _menuSvc.SaveMenu(menu);
 
@@ -148,7 +148,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="menu"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> Put([FromBody] Menu menu)
+        public async Task<object> PutMenu([FromBody] Menu menu)
         {
             var data = new MessageModel<string>();
             if (menu != null && menu.Id > 0)
@@ -170,7 +170,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="id">非空</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Delete(int id)
+        public async Task<object> DeleteMenu(int id)
         {
             var data = new MessageModel<string>();
             if (id > 0)
@@ -195,7 +195,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<object> Disable(int id, bool falg)
+        public async Task<object> DisableMenu(int id, bool falg)
         {
             var menu = await _menuSvc.QueryById(id);
             menu.Enabled = falg;

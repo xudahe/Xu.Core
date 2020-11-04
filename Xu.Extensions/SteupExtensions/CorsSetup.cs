@@ -24,11 +24,11 @@ namespace Xu.Extensions
                     // 支持多个域名端口，注意端口号后不要带/斜杆：比如localhost:8000/，是错的
                     // 注意，http://127.0.0.1:1818 和 http://localhost:1818 是不一样的，尽量写两个
                     policy
-                    .WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(',')) //允许部分站点跨域请求
+                    //.WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(',')) //允许部分站点跨域请求
+                    .SetIsOriginAllowed(origin => true) //允许任何域
                     .AllowAnyHeader()  //允许任何头
-                    //.AllowAnyOrigin() //允许任何域
-                    //.AllowCredentials(), // 允许Cookie信息
-                    .AllowAnyMethod(); //允许任何方式
+                    .AllowAnyMethod() //允许任何方式
+                    .AllowCredentials(); // 允许Cookie信息
                 });
             });
         }
