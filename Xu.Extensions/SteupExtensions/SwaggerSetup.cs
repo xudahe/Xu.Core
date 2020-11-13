@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -38,7 +37,7 @@ namespace Xu.Extensions
                         Version = version,
                         Title = $"{ApiName} 接口文档——{RuntimeInformation.FrameworkDescription}",
                         //Description = $"{ApiName} HTTP API " + version,
-                        //Contact = new OpenApiContact { Name = ApiName, Email = "Blog.Core@xxx.com", Url = new Uri("https://www.jianshu.com/u/94102b59cc2a") },
+                        //Contact = new OpenApiContact { Name = ApiName, Email = "webApi@xxx.com", Url = new Uri("https://www.jianshu.com/u/94102b59cc2a") },
                         //License = new OpenApiLicense { Name = ApiName + " 官方文档", Url = new Uri("http://apk.neters.club/.doc/") }
                     });
                     c.OrderActionsBy(o => o.RelativePath);
@@ -68,38 +67,14 @@ namespace Xu.Extensions
                 // 在header中添加token，传递到后台
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
 
-                // ids4和jwt切换
-                if (Permissions.IsUseIds4)
+                // Jwt Bearer 认证，必须是 oauth2
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
-                    //接入identityserver4
-                    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                    {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows
-                        {
-                            Implicit = new OpenApiOAuthFlow
-                            {
-                                AuthorizationUrl = new Uri($"{Appsettings.App(new string[] { "Startup", "IdentityServer4", "AuthorizationUrl" })}/connect/authorize"),
-                                Scopes = new Dictionary<string, string> {
-                                {
-                                    "blog.core.api","ApiResource id"
-                                }
-                            }
-                            }
-                        }
-                    });
-                }
-                else
-                {
-                    // Jwt Bearer 认证，必须是 oauth2
-                    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                    {
-                        Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）\"",
-                        Name = "Authorization",//jwt默认的参数名称
-                        In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
-                        Type = SecuritySchemeType.ApiKey
-                    });
-                }
+                    Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）\"",
+                    Name = "Authorization",//jwt默认的参数名称
+                    In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
+                    Type = SecuritySchemeType.ApiKey
+                });
             });
         }
     }

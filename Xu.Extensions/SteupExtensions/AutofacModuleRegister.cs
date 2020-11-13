@@ -102,7 +102,7 @@ namespace Xu.Extensions
             //builder.RegisterType<AopService>().As<IAopService>()
             //   .AsImplementedInterfaces()
             //   .EnableInterfaceInterceptors()
-            //   .InterceptedBy(typeof(BlogCacheAOP));
+            //   .InterceptedBy(typeof(CacheAOP));
 
             #endregion 单独注册一个含有接口的类，启用interface代理拦截
         }

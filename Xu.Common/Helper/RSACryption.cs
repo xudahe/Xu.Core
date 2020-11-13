@@ -94,10 +94,9 @@ namespace Xu.Common
                 string str = ByteConverter.GetString(bytes);
                 return str;
             }
-            catch (CryptographicException e)
+            catch (CryptographicException)
             {
                 return null;
-                throw e;
             }
         }
 
@@ -153,22 +152,19 @@ namespace Xu.Common
         /// <returns></returns>
         private static int GetIntegerSize(BinaryReader binr)
         {
-            byte bt = 0;
-            byte lowbyte = 0x00;
-            byte highbyte = 0x00;
-            int count = 0;
-            bt = binr.ReadByte();
+            byte bt = binr.ReadByte();
             if (bt != 0x02)
                 return 0;
             bt = binr.ReadByte();
 
+            int count;
             if (bt == 0x81)
                 count = binr.ReadByte();
             else
                 if (bt == 0x82)
             {
-                highbyte = binr.ReadByte();
-                lowbyte = binr.ReadByte();
+                byte highbyte = binr.ReadByte();
+                byte lowbyte = binr.ReadByte();
                 byte[] modint = { lowbyte, highbyte, 0x00, 0x00 };
                 count = BitConverter.ToInt32(modint, 0);
             }
@@ -195,12 +191,10 @@ namespace Xu.Common
             byte[] SeqOID = { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
             byte[] x509key;
             byte[] seq = new byte[15];
-            int x509size;
-
             var tmp = publicKey.Replace("-----BEGIN PUBLIC KEY-----", "").Replace("-----END PUBLIC KEY-----", "").Replace("\r\n", "");
 
             x509key = Convert.FromBase64String(tmp);
-            x509size = x509key.Length;
+            _ = x509key.Length;
 
             using (var mem = new MemoryStream(x509key))
             {
@@ -242,9 +236,9 @@ namespace Xu.Common
                         return new RSAParameters();
 
                     twobytes = binr.ReadUInt16();
-                    byte lowbyte = 0x00;
                     byte highbyte = 0x00;
 
+                    byte lowbyte;
                     if (twobytes == 0x8102)
                         lowbyte = binr.ReadByte();
                     else if (twobytes == 0x8202)

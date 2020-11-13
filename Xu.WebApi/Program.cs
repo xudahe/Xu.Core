@@ -23,6 +23,7 @@ namespace Xu.WebApi
                  .ConfigureKestrel(serverOptions =>
                  {
                      serverOptions.AllowSynchronousIO = true; //启用同步 IO
+                     serverOptions.Limits.MaxRequestBodySize = int.MaxValue;//限制请求长度
                  })
                  .UseStartup<Startup>() //调用Startup.cs类下的Configure 和 ConfigureServices
                  .UseUrls("http://*:1081", "http://*:1082")

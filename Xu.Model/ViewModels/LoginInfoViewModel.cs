@@ -1,6 +1,6 @@
-﻿namespace Xu.Model.ViewModels
+﻿namespace Xu.Model.ViewModel
 {
-    public class LoginInfoViewModels
+    public class LoginInfoViewModel
     {
         public string LoginName { get; set; }
 

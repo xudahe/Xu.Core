@@ -4,6 +4,26 @@
         <name>Xu.WebApi</name>
     </assembly>
     <members>
+        <member name="T:Blog.Core.Controllers.ImageController">
+            <summary>
+            图片管理
+            </summary>
+        </member>
+        <member name="M:Blog.Core.Controllers.ImageController.DownloadPicture(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            下载图片（支持中文字符）
+            </summary>
+            <param name="environment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.ImageController.InsertPicture(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            上传图片,多文件，可以使用 postman 测试，
+            如果是单文件，可以 参数写 IFormFile file1
+            </summary>
+            <param name="environment"></param>
+            <returns></returns>
+        </member>
         <member name="T:Xu.WebApi.Controllers.MonitorController">
             <summary>
             监控管理
@@ -42,7 +62,7 @@
         </member>
         <member name="T:Xu.WebApi.Controllers.PublicController">
             <summary>
-            公共方法
+            公共接口
             </summary>
         </member>
         <member name="M:Xu.WebApi.Controllers.PublicController.GetRSACryption(System.Int32)">
@@ -51,6 +71,12 @@
             </summary>
              <param name="strength">长度</param>
             <returns>Item1:公钥；Item2:私钥；</returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PublicController.WebApiClientGetAsync">
+            <summary>
+            测试http请求 WebApiClient
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.QRCodeController">
             <summary>
@@ -145,14 +171,6 @@
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksLog(System.Int32,System.Int32)">
-            <summary>
-            根据任务Id获取日志
-            </summary>
-            <param name="id">任务Id（非空）</param>
-            <param name="numTop">前N条</param>
-            <returns></returns>
-        </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             构造函数
@@ -179,24 +197,6 @@
             </summary>
             <param name="ConnID">数据库链接名称</param>
             <param name="tableNames">需要生成的表名</param>
-            <returns></returns>
-        </member>
-        <member name="T:Xu.WebApi.Controllers.MigrateController">
-            <summary>
-            数据迁移
-            </summary>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.MigrateController.GetRMPMaps(System.String)">
-            <summary>
-            获取权限部分Map数据
-            生成到tsb文件
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.MigrateController.SaveDataToDb">
-            <summary>
-            保存数据到数据库
-            </summary>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.DeptController">

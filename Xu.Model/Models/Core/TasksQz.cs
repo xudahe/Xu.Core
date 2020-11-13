@@ -36,6 +36,12 @@ namespace Xu.Model.Models
         public string Remark { get; set; }
 
         /// <summary>
+        /// 执行日志
+        /// </summary>
+        [SugarColumn(IsNullable = true)]
+        public string TasksLog { get; set; }
+
+        /// <summary>
         /// 开始时间
         /// </summary>
         [SugarColumn(IsNullable = true)]

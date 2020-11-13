@@ -17,7 +17,7 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            //HSTS 中间件（UseHsts）用于向客户端发送 HTTP 严格传输安全协议（HSTS）标头
+            //HSTS 中间件（UseHsts）用于向客户端发送 HTTP 严格传输安全协议（  HSTS）标头
             services.AddHsts(options =>
             {
                 options.Preload = true;

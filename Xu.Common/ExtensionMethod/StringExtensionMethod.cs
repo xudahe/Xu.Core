@@ -142,7 +142,7 @@ namespace Xu.Common
 
                 if (byteLength > splitByteLength)
                 {
-                    list.Add(str.Substring(startIndex, i - startIndex));
+                    list.Add(str[startIndex..i]);
                     byteLength = charByteLength;
                     startIndex = i;
                 }

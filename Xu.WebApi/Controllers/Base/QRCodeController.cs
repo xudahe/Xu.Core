@@ -1,6 +1,6 @@
-﻿using Xu.Common;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Xu.Common;
 using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers

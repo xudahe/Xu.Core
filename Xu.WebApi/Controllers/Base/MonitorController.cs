@@ -1,19 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using Xu.Common;
-using Xu.Extensions;
 using Xu.Model.ResultModel;
-using Xu.Model.ViewModels;
+using Xu.Model.ViewModel;
 
 namespace Xu.WebApi.Controllers
 {

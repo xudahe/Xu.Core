@@ -9,7 +9,7 @@ using Xu.IRepository;
 namespace Xu.Extensions
 {
     /// <summary>
-    /// 事务拦截器BlogTranAOP 继承IInterceptor接口
+    /// 事务拦截器TranAOP 继承IInterceptor接口
     /// </summary>
     public class TranAOP : IInterceptor
     {

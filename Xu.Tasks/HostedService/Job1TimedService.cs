@@ -9,12 +9,10 @@ namespace Xu.Tasks
     public class Job1TimedService : IHostedService, IDisposable
     {
         private Timer _timer;
-        //private readonly IBlogArticleServices _blogArticleServices;
 
         // 这里可以注入
         public Job1TimedService()
         {
-            //_blogArticleServices = blogArticleServices;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -31,7 +29,6 @@ namespace Xu.Tasks
         {
             try
             {
-                //var model = await _blogArticleServices.GetBlogDetails(1);
                 //Console.WriteLine($"Job 1 启动成功，获取id=1的博客title为:{model?.btitle}");
             }
             catch (Exception ex)

@@ -12,7 +12,7 @@ using Xu.Common;
 namespace Xu.Extensions
 {
     /// <summary>
-    /// 拦截器BlogLogAOP 继承IInterceptor接口
+    /// 拦截器LogAOP 继承IInterceptor接口
     /// </summary>
     public class LogAOP : IInterceptor
     {

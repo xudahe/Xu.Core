@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
-using Xu.Model.Models;
 
 /// <summary>
 /// 这里要注意下，命名空间和程序集是一样的，不然反射不到
@@ -14,12 +13,10 @@ namespace Xu.Tasks
     public class JobQuartz : IJob
     {
         private readonly ITasksQzSvc _tasksQzSvc;
-        private readonly ITasksLogSvc _tasksLogSvc;
 
-        public JobQuartz(ITasksQzSvc tasksQzSvc, ITasksLogSvc tasksLogSvc)
+        public JobQuartz(ITasksQzSvc tasksQzSvc)
         {
             _tasksQzSvc = tasksQzSvc;
-            _tasksLogSvc = tasksLogSvc;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -38,18 +35,9 @@ namespace Xu.Tasks
                 {
                     model.RunTimes += 1;
                     model.PerformTime = dateTime;
-                    //model.Remark = $"【{DateTime.Now}】执行任务【Id：{context.JobDetail.Key.Name}，任务名称：{model.JobName}，组别：{context.JobDetail.Key.Group}】【执行成功】{separator}"
-                    //             + string.Join(separator, StringHelper.GetTopDataBySeparator(model.Remark, separator, 9));
+                    model.TasksLog = $"【{DateTime.Now}】执行任务【Id：{context.JobDetail.Key.Name}，任务名称：{model.JobName}，组别：{context.JobDetail.Key.Group}】【执行成功】{separator}"
+                                 + string.Join(separator, StringHelper.GetTopDataBySeparator(model.Remark, separator, 9));
                     await _tasksQzSvc.Update(model);
-
-                    await _tasksLogSvc.Add(new TasksLog()
-                    {
-                        PerformTime = dateTime,
-                        PerformJobId = model.Id,
-                        JobName = model.JobName,
-                        JobGroup = context.JobDetail.Key.Group,
-                        Remark = $"【{dateTime}】执行任务【Id：{context.JobDetail.Key.Name}，名称：{model.JobName}，组别：{context.JobDetail.Key.Group}】【执行成功】"
-                    }); ;
                 }
             }
         }

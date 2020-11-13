@@ -377,7 +377,7 @@ namespace Xu.Common
                                     break;
                             }
                         }
-                        catch (KeyNotFoundException ex)
+                        catch (KeyNotFoundException)
                         { }
                     }
                     resultList.Add(result);

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Model.Models;
 
 namespace Xu.Model
 {
@@ -28,7 +31,7 @@ namespace Xu.Model
 
                 SeedDataFolder = Path.Combine(WebRootPath, SeedDataFolder);
 
-                Console.WriteLine("************ Blog.Core DataBase Set *****************");
+                Console.WriteLine("************ WebApi DataBase Set *****************");
                 Console.WriteLine($"Is multi-DataBase: {Appsettings.App(new string[] { "MutiDBEnabled" })}");
                 Console.WriteLine($"Is CQRS: {Appsettings.App(new string[] { "CQRSEnabled" })}");
                 Console.WriteLine();
@@ -94,15 +97,15 @@ namespace Xu.Model
 
                     #region User
 
-                    //if (!await myContext.Db.Queryable<User>().AnyAsync())
-                    //{
-                    //    myContext.GetEntityDB<User>().InsertRange(JsonHelper.ParseFormByJson<List<User>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "User"), Encoding.UTF8)));
-                    //    Console.WriteLine("Table:User created success!");
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("Table:User already exists...");
-                    //}
+                    if (!await myContext.Db.Queryable<User>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<User>().InsertRange(JsonHelper.ParseFormByJson<List<User>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "User"), Encoding.UTF8)));
+                        Console.WriteLine("Table:User created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:User already exists...");
+                    }
 
                     #endregion User
 

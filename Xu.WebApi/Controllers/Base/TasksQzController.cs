@@ -22,13 +22,11 @@ namespace Xu.WebApi.Controllers
     public class TasksQzController : ControllerBase
     {
         private readonly ITasksQzSvc _tasksQzSvc;
-        private readonly ITasksLogSvc _tasksLogSvc;
         private readonly ISchedulerCenter _schedulerCenter;
 
-        public TasksQzController(ITasksQzSvc tasksQzSvc, ITasksLogSvc tasksLogSvc, ISchedulerCenter schedulerCenter)
+        public TasksQzController(ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter)
         {
             _tasksQzSvc = tasksQzSvc;
-            _tasksLogSvc = tasksLogSvc;
             _schedulerCenter = schedulerCenter;
         }
 
@@ -250,27 +248,6 @@ namespace Xu.WebApi.Controllers
             }
 
             return data;
-        }
-
-        /// <summary>
-        /// 根据任务Id获取日志
-        /// </summary>
-        /// <param name="id">任务Id（非空）</param>
-        /// <param name="numTop">前N条</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<object> GetTasksLog(int id, int numTop = 200)
-        {
-            Expression<Func<TasksLog, bool>> whereExpression = a => a.PerformJobId == id;
-
-            var data = await _tasksLogSvc.Query(whereExpression, numTop, " PerformTime desc ");
-
-            return new MessageModel<List<TasksLog>>()
-            {
-                Message = "获取成功",
-                Success = true,
-                Response = data
-            };
         }
     }
 }

@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using WebApiClient.Extensions.DependencyInjection;
+using Xu.IServices.WebApiClients;
 
 namespace Xu.Extensions
 {
@@ -9,23 +11,18 @@ namespace Xu.Extensions
     public static class WebApiClientSetup
     {
         /// <summary>
-        /// 注册WebApiClient接口
+        /// 注册WebApiClient 第三方接口
         /// </summary>
         /// <param name="services"></param>
         public static void AddHttpApi(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            //services.AddHttpApi<IBlogApi>().ConfigureHttpApiConfig(c =>
-            //{
-            //    c.HttpHost = new Uri("http://apk.neters.club/");
-            //    c.FormatOptions.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
-            //});
-            //services.AddHttpApi<IDoubanApi>().ConfigureHttpApiConfig(c =>
-            //{
-            //    c.HttpHost = new Uri("http://api.xiaomafeixiang.com/");
-            //    c.FormatOptions.DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
-            //});
+            services.AddHttpApi<IDoubanApi>().ConfigureHttpApiConfig(c =>
+            {
+                c.HttpHost = new Uri("http://api.xiaomafeixiang.com/");
+                c.FormatOptions.DateTimeFormat = WebApiClient.DateTimeFormats.ISO8601_WithMillisecond;
+            });
         }
     }
 }

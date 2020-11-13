@@ -35,7 +35,6 @@ namespace Xu.Repository
         /// <returns>数据实体</returns>
         public async Task<T> QueryById(object objId)
         {
-            //return await Task.Run(() => _db.Queryable<T>().InSingle(objId));
             return await _db.Queryable<T>().In(objId).SingleAsync();
         }
 
@@ -47,7 +46,6 @@ namespace Xu.Repository
         /// <returns>数据实体</returns>
         public async Task<T> QueryById(object objId, bool blnUseCache = false)
         {
-            //return await Task.Run(() => _db.Queryable<T>().WithCacheIF(blnUseCache).InSingle(objId));
             return await _db.Queryable<T>().WithCacheIF(blnUseCache).In(objId).SingleAsync();
         }
 
@@ -58,7 +56,6 @@ namespace Xu.Repository
         /// <returns>数据实体列表</returns>
         public async Task<List<T>> QueryByIds(object[] lstIds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().In(lstIds).ToList());
             return await _db.Queryable<T>().In(lstIds).ToListAsync();
         }
 
@@ -69,10 +66,6 @@ namespace Xu.Repository
         /// <returns>返回实体Id</returns>
         public async Task<int> Add(T entity)
         {
-            //var i = await Task.Run(() => _db.Insertable(entity).ExecuteReturnBigIdentity());
-            ////返回的i是long类型,这里你可以根据你的业务需要进行处理
-            //return (int)i;
-
             var insert = _db.Insertable(entity);
             return await insert.ExecuteReturnIdentityAsync();
         }
@@ -113,22 +106,17 @@ namespace Xu.Repository
         /// <returns></returns>
         public async Task<bool> Update(T entity)
         {
-            ////这种方式会以主键为条件
-            //var i = await Task.Run(() => _db.Updateable(entity).ExecuteCommand());
-            //return i > 0;
             //这种方式会以主键为条件
             return await _db.Updateable(entity).ExecuteCommandHasChangeAsync();
         }
 
         public async Task<bool> Update(T entity, string strWhere)
         {
-            //return await Task.Run(() => _db.Updateable(entity).Where(strWhere).ExecuteCommand() > 0);
             return await _db.Updateable(entity).Where(strWhere).ExecuteCommandHasChangeAsync();
         }
 
         public async Task<bool> Update(string strSql, SugarParameter[] parameters = null)
         {
-            //return await Task.Run(() => _db.Ado.ExecuteCommand(strSql, parameters) > 0);
             return await _db.Ado.ExecuteCommandAsync(strSql, parameters) > 0;
         }
 
@@ -139,21 +127,6 @@ namespace Xu.Repository
 
         public async Task<bool> Update(T entity, List<string> lstColumns = null, List<string> lstIgnoreColumns = null, string strWhere = "")
         {
-            //IUpdateable<T> up = await Task.Run(() => _db.Updateable(entity));
-            //if (lstIgnoreColumns != null && lstIgnoreColumns.Count > 0)
-            //{
-            //    up = await Task.Run(() => up.IgnoreColumns(it => lstIgnoreColumns.Contains(it)));
-            //}
-            //if (lstColumns != null && lstColumns.Count > 0)
-            //{
-            //    up = await Task.Run(() => up.UpdateColumns(it => lstColumns.Contains(it)));
-            //}
-            //if (!string.IsNullOrEmpty(strWhere))
-            //{
-            //    up = await Task.Run(() => up.Where(strWhere));
-            //}
-            //return await Task.Run(() => up.ExecuteCommand()) > 0;
-
             IUpdateable<T> up = _db.Updateable(entity);
             if (lstIgnoreColumns != null && lstIgnoreColumns.Count > 0)
             {
@@ -177,8 +150,6 @@ namespace Xu.Repository
         /// <returns></returns>
         public async Task<bool> Delete(T entity)
         {
-            //var i = await Task.Run(() => _db.Deleteable(entity).ExecuteCommand());
-            //return i > 0;
             return await _db.Deleteable(entity).ExecuteCommandHasChangeAsync();
         }
 
@@ -189,8 +160,6 @@ namespace Xu.Repository
         /// <returns></returns>
         public async Task<bool> DeleteById(object id)
         {
-            //var i = await Task.Run(() => _db.Deleteable<T>(id).ExecuteCommand());
-            //return i > 0;
             return await _db.Deleteable<T>(id).ExecuteCommandHasChangeAsync();
         }
 
@@ -201,8 +170,6 @@ namespace Xu.Repository
         /// <returns></returns>
         public async Task<bool> DeleteByIds(object[] ids)
         {
-            //var i = await Task.Run(() => _db.Deleteable<T>().In(ids).ExecuteCommand());
-            //return i > 0;
             return await _db.Deleteable<T>().In(ids).ExecuteCommandHasChangeAsync();
         }
 
@@ -222,7 +189,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(string strWhere)
         {
-            //return await Task.Run(() => _db.Queryable<T>().WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).ToList());
             return await _db.Queryable<T>().WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).ToListAsync();
         }
 
@@ -244,7 +210,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(Expression<Func<T, bool>> whereExpression, string strOrderByFileds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(whereExpression != null, whereExpression).ToList());
             return await _db.Queryable<T>().WhereIF(whereExpression != null, whereExpression).OrderByIF(strOrderByFileds != null, strOrderByFileds).ToListAsync();
         }
 
@@ -257,7 +222,6 @@ namespace Xu.Repository
         /// <returns></returns>
         public async Task<List<T>> Query(Expression<Func<T, bool>> whereExpression, Expression<Func<T, object>> orderByExpression, bool isAsc = true)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(orderByExpression != null, orderByExpression, isAsc ? OrderByType.Asc : OrderByType.Desc).WhereIF(whereExpression != null, whereExpression).ToList());
             return await _db.Queryable<T>().OrderByIF(orderByExpression != null, orderByExpression, isAsc ? OrderByType.Asc : OrderByType.Desc).WhereIF(whereExpression != null, whereExpression).ToListAsync();
         }
 
@@ -269,7 +233,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(string strWhere, string strOrderByFileds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).ToList());
             return await _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).ToListAsync();
         }
 
@@ -282,7 +245,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(Expression<Func<T, bool>> whereExpression, int intTop, string strOrderByFileds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(whereExpression != null, whereExpression).Take(intTop).ToList());
             return await _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(whereExpression != null, whereExpression).Take(intTop).ToListAsync();
         }
 
@@ -295,7 +257,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(string strWhere, int intTop, string strOrderByFileds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).Take(intTop).ToList());
             return await _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).Take(intTop).ToListAsync();
         }
 
@@ -310,7 +271,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(Expression<Func<T, bool>> whereExpression, int intPageIndex, int intPageSize, string strOrderByFileds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(whereExpression != null, whereExpression).ToPageList(intPageIndex, intPageSize));
             return await _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(whereExpression != null, whereExpression).ToPageListAsync(intPageIndex, intPageSize);
         }
 
@@ -325,7 +285,6 @@ namespace Xu.Repository
         /// <returns>数据列表</returns>
         public async Task<List<T>> Query(string strWhere, int intPageIndex, int intPageSize, string strOrderByFileds)
         {
-            //return await Task.Run(() => _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).ToPageList(intPageIndex, intPageSize));
             return await _db.Queryable<T>().OrderByIF(!string.IsNullOrEmpty(strOrderByFileds), strOrderByFileds).WhereIF(!string.IsNullOrEmpty(strWhere), strWhere).ToPageListAsync(intPageIndex, intPageSize);
         }
 

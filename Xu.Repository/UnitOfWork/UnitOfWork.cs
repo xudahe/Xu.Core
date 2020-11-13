@@ -5,7 +5,7 @@ using Xu.IRepository;
 /// <summary>
 /// 工作单元，对事务行为做实现
 /// </summary>
-namespace Blog.Core.Repository.UnitOfWork
+namespace Xu.Repository.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -26,16 +26,22 @@ namespace Blog.Core.Repository.UnitOfWork
             return _sqlSugarClient as SqlSugarClient;
         }
 
+        /// <summary>
+        /// 开始事务
+        /// </summary>
         public void BeginTran()
         {
             GetDbClient().BeginTran();
         }
 
+        /// <summary>
+        /// 提交事务
+        /// </summary>
         public void CommitTran()
         {
             try
             {
-                GetDbClient().CommitTran(); //
+                GetDbClient().CommitTran();
             }
             catch (Exception ex)
             {
@@ -44,6 +50,9 @@ namespace Blog.Core.Repository.UnitOfWork
             }
         }
 
+        /// <summary>
+        /// 回滚事务
+        /// </summary>
         public void RollbackTran()
         {
             GetDbClient().RollbackTran();

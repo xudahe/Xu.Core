@@ -143,9 +143,6 @@ namespace Xu.Services
 
         /// <summary>
         /// 查询一个列表
-
-        /// <summary>
-        /// 查询一个列表
         /// </summary>
         /// <param name="whereExpression">条件表达式</param>
         /// <param name="strOrderByFileds">排序字段，如name asc,age desc</param>

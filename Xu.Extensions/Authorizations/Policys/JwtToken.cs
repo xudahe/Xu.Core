@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Xu.Model.ViewModels;
+using Xu.Model.ViewModel;
 
 namespace Xu.Extensions
 {

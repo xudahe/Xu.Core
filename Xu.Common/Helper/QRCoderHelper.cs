@@ -1,10 +1,8 @@
 ﻿using QRCoder;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
 
 namespace Xu.Common
 {
@@ -72,9 +70,11 @@ namespace Xu.Common
 
                 g.Clear(Color.White);
 
-                StringFormat format = new StringFormat();
-                format.Alignment = StringAlignment.Center;
-                format.LineAlignment = StringAlignment.Center;
+                StringFormat format = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
 
                 Rectangle rectangle = new Rectangle(0, 0, 600, 40);
 

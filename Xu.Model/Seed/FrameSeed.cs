@@ -20,7 +20,7 @@ namespace Xu.Model
         {
             try
             {
-                Create_Controller_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Blog.Core.Api.Controllers", "Xu.WebApi.Controllers", tableNames, "", isMuti);
+                Create_Controller_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Xu.WebApi.Controllers", "Xu.WebApi.Controllers", tableNames, "", isMuti);
                 return true;
             }
             catch (Exception)
@@ -41,7 +41,7 @@ namespace Xu.Model
         {
             try
             {
-                Create_Model_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Blog.Core.Model", "Xu.Model.Models", tableNames, "", isMuti);
+                Create_Model_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Xu.Model", "Xu.Model.Models", tableNames, "", isMuti);
                 return true;
             }
             catch (Exception)
@@ -62,7 +62,7 @@ namespace Xu.Model
         {
             try
             {
-                Create_IRepository_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Blog.Core.IRepository", "Xu.IRepository", tableNames, "", isMuti);
+                Create_IRepository_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Xu.IRepository", "Xu.IRepository", tableNames, "", isMuti);
                 return true;
             }
             catch (Exception)
@@ -83,7 +83,7 @@ namespace Xu.Model
         {
             try
             {
-                Create_IServices_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Blog.Core.IServices", "Xu.IServices", tableNames, "", isMuti);
+                Create_IServices_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Xu.IServices", "Xu.IServices", tableNames, "", isMuti);
                 return true;
             }
             catch (Exception)
@@ -104,7 +104,7 @@ namespace Xu.Model
         {
             try
             {
-                Create_Repository_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Blog.Core.Repository", "Xu.Repository", tableNames, "", isMuti);
+                Create_Repository_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Xu.Repository", "Xu.Repository", tableNames, "", isMuti);
                 return true;
             }
             catch (Exception)
@@ -125,7 +125,7 @@ namespace Xu.Model
         {
             try
             {
-                Create_Services_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Blog.Core.Services", "Xu.Services", tableNames, "", isMuti);
+                Create_Services_ClassFileByDBTalbe(sqlSugarClient, ConnId, $@"d:\my-file\Xu.Services", "Xu.Services", tableNames, "", isMuti);
                 return true;
             }
             catch (Exception)

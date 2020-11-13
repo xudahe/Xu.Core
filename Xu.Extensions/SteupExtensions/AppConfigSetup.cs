@@ -19,16 +19,10 @@ namespace Xu.Extensions
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 Console.OutputEncoding = Encoding.GetEncoding("GB2312"); //避免乱码
 
-                Console.WriteLine("************ Blog.Core Config Set *****************");
+                Console.WriteLine("************ WebApi Config Set *****************");
+
                 // 授权策略方案
-                if (Permissions.IsUseIds4)
-                {
-                    ConsoleHelper.WriteSuccessLine($"Current authorization scheme: " + (Permissions.IsUseIds4 ? "Ids4" : "JWT"));
-                }
-                else
-                {
-                    Console.WriteLine($"Current authorization scheme: " + (Permissions.IsUseIds4 ? "Ids4" : "JWT"));
-                }
+                Console.WriteLine($"Current authorization scheme: JWT");
 
                 // Redis缓存AOP
                 if (!Appsettings.App(new string[] { "AppSettings", "RedisCachingAOP", "Enabled" }).ToBoolReq())

@@ -60,15 +60,7 @@ namespace Xu.WebApi
             //services.AddHstsSetup(); // 生产环境中使用
             //services.AddAntiforgerySetup(); //防止CSRF攻击
 
-            Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
-            if (Permissions.IsUseIds4)
-            {
-                services.AddAuthorization_Ids4Setup();
-            }
-            else
-            {
-                services.AddAuthorizationSetup();
-            }
+            services.AddAuthorizationSetup();
             services.AddIpPolicyRateLimitSetup(Configuration);
             services.AddSignalR().AddNewtonsoftJsonProtocol();
             services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
@@ -109,6 +101,15 @@ namespace Xu.WebApi
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 //如果字段为null,该字段会依然返回到json中。比如"name":null
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+            })
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressConsumesConstraintForFormFileParameters = true;
+                options.SuppressInferBindingSourcesForParameters = true;
+                options.SuppressModelStateInvalidFilter = true; //true：禁用自动 400 行为
+                options.SuppressMapClientErrors = true;
+                options.ClientErrorMapping[404].Link =
+                    "https://*/404";
             });
 
             _services = services;
@@ -156,7 +157,7 @@ namespace Xu.WebApi
             app.UseCors("LimitRequests");
             // 重定向中间件，用于将 HTTP 请求重定向到 HTTPS
             //app.UseHttpsRedirection();
-            // 使用静态文件
+            // 默认使用wwwroot静态文件
             app.UseStaticFiles();
             // 使用cookie
             app.UseCookiePolicy();

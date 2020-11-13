@@ -1,18 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Xu.Common;
+using Xu.IServices.WebApiClients;
 using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
 {
     /// <summary>
-    /// 公共方法
+    /// 公共接口
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class PublicController : ControllerBase
     {
-        public PublicController()
+        private readonly IDoubanApi _doubanApi;
+
+        public PublicController(IDoubanApi doubanApi)
         {
+            //测试http请求
+            _doubanApi = doubanApi;
         }
 
         /// <summary>
@@ -29,6 +35,17 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = RSACryption.CreateKeyPair(strength)
             };
+        }
+
+        /// <summary>
+        /// 测试http请求 WebApiClient
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("WebApiClientGetAsync")]
+        public async Task<object> WebApiClientGetAsync()
+        {
+            string isbn = "9787544270878";
+            return await _doubanApi.VideoDetailAsync(isbn);
         }
     }
 }

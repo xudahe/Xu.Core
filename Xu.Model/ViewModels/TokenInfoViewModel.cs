@@ -1,4 +1,4 @@
-﻿namespace Xu.Model.ViewModels
+﻿namespace Xu.Model.ViewModel
 {
     public class TokenInfoViewModel
     {

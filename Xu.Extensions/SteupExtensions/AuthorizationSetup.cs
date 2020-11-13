@@ -85,13 +85,13 @@ namespace Xu.Extensions
             // 令牌验证参数
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,
+                ValidateIssuerSigningKey = true,//是否验证SecurityKey
                 IssuerSigningKey = signingKey,
-                ValidateIssuer = true,
+                ValidateIssuer = true,//是否验证Issuer
                 ValidIssuer = Issuer,//发行人
-                ValidateAudience = true,
+                ValidateAudience = true,//是否验证Audience
                 ValidAudience = Audience,//订阅人
-                ValidateLifetime = true,
+                ValidateLifetime = true,//是否验证失效时间
                 ClockSkew = TimeSpan.FromSeconds(30),
                 RequireExpirationTime = true,
             };
