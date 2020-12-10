@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +30,12 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 获取菜单数据（列表）
         /// </summary>
-        /// <param name="ids">可空</param>
+        /// <param name="ids">菜单ids（可空）</param>
         /// <param name="menuName">菜单名称（可空）</param>
+        /// <param name="parentId">父级菜单Id（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetMenu(string ids, string menuName = "")
+        public async Task<object> GetMenu(string ids = "", string menuName = "", string parentId = "")
         {
             var data = await _menuSvc.Query();
 
@@ -41,7 +43,10 @@ namespace Xu.WebApi.Controllers
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(menuName))
-                data = data.Where(a => a.MenuName != null && a.MenuName.Contains(menuName)).ToList();
+                data = data.Where(a => a.MenuName.Contains(menuName)).ToList();
+
+            if (!string.IsNullOrEmpty(parentId))
+                data = data.Where(a => a.ParentId == parentId.ToInt32Req()).ToList();
 
             return new MessageModel<List<Menu>>()
             {
@@ -82,38 +87,21 @@ namespace Xu.WebApi.Controllers
         {
             var menuList = await _menuSvc.Query(s => s.Enabled == false);
 
-            var menuList1 = new List<Menu>();
-            if (string.IsNullOrEmpty(ids))
+            if (!string.IsNullOrEmpty(ids))
             {
-                menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
-
-                for (int i = 0; i < menuList1.Count(); i++)
-                {
-                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
-
-                    for (int j = 0; j < menuList2.Count(); j++)
-                    {
-                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
-                    }
-                    menuList1[i].Children = menuList2;
-                }
+                menuList = menuList.Where(s => ids.SplitInt(",").Contains(s.Id)).ToList();
             }
-            else
+
+            var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
+            for (int i = 0; i < menuList1.Count(); i++)
             {
-                var menuList3 = menuList.Where(s => ids.SplitInt(",").Contains(s.Id)).ToList();
-                var menuList2 = menuList.Where(s => menuList3.Select(d => d.ParentId).Contains(s.Id)).ToList();
-                menuList1 = menuList.Where(s => menuList2.Select(d => d.ParentId).Contains(s.Id)).ToList();
+                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
 
-                for (int i = 0; i < menuList1.Count(); i++)
+                for (int j = 0; j < menuList2.Count(); j++)
                 {
-                    var menuList_2 = menuList2.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
-
-                    for (int j = 0; j < menuList_2.Count(); j++)
-                    {
-                        menuList_2[j].Children = menuList3.Where(s => s.ParentId == menuList_2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
-                    }
-                    menuList1[i].Children = menuList_2;
+                    menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
                 }
+                menuList1[i].Children = menuList2;
             }
 
             return new MessageModel<object>()
@@ -132,14 +120,20 @@ namespace Xu.WebApi.Controllers
         [HttpPost]
         public async Task<object> PostMenu([FromBody] Menu menu)
         {
-            var model = await _menuSvc.SaveMenu(menu);
+            var data = new MessageModel<Menu>() { Message = "添加成功", Success = true };
 
-            return new MessageModel<Menu>()
+            var dataList = await _menuSvc.Query(a => a.MenuName == menu.MenuName);
+            if (dataList.Count > 0)
             {
-                Message = "添加成功",
-                Success = true,
-                Response = model
-            };
+                data.Message = "该菜单已存在";
+                data.Success = false;
+            }
+            else
+            {
+                data.Response = await _menuSvc.SaveMenu(menu);
+            }
+
+            return data;
         }
 
         /// <summary>
@@ -153,6 +147,7 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (menu != null && menu.Id > 0)
             {
+                menu.ModifyTime = DateTime.Now;
                 data.Success = await _menuSvc.Update(menu);
                 if (data.Success)
                 {

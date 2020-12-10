@@ -29,10 +29,10 @@ namespace Xu.Services
             }
 
             User model = new User();
-            var userList = await base.Query(a => a.LoginName == user.LoginName);
-            if (userList.Count > 0)
+            var dataList = await base.Query(a => a.LoginName == user.LoginName);
+            if (dataList.Count > 0)
             {
-                model = userList.FirstOrDefault();
+                model = dataList.FirstOrDefault();
             }
             else
             {

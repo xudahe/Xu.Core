@@ -90,12 +90,12 @@ namespace Xu.Common
         /// <param name="Strings">文件内容</param>
         public static void WriteFile(string Path, string Strings)
         {
-            if (!System.IO.File.Exists(Path))
+            if (!File.Exists(Path))
             {
-                System.IO.FileStream f = System.IO.File.Create(Path);
+                FileStream f = File.Create(Path);
                 f.Close();
             }
-            System.IO.StreamWriter f2 = new System.IO.StreamWriter(Path, false, System.Text.Encoding.GetEncoding("gb2312"));
+            StreamWriter f2 = new StreamWriter(Path, false, Encoding.GetEncoding("gb2312"));
             f2.Write(Strings);
             f2.Close();
             f2.Dispose();
@@ -109,12 +109,12 @@ namespace Xu.Common
         /// <param name="encode">编码格式</param>
         public static void WriteFile(string Path, string Strings, Encoding encode)
         {
-            if (!System.IO.File.Exists(Path))
+            if (!File.Exists(Path))
             {
-                System.IO.FileStream f = System.IO.File.Create(Path);
+                FileStream f = File.Create(Path);
                 f.Close();
             }
-            System.IO.StreamWriter f2 = new System.IO.StreamWriter(Path, false, encode);
+            StreamWriter f2 = new StreamWriter(Path, false, encode);
             f2.Write(Strings);
             f2.Close();
             f2.Dispose();
@@ -141,7 +141,7 @@ namespace Xu.Common
         public static string ReadFile(string Path)
         {
             string s;
-            if (!System.IO.File.Exists(Path))
+            if (!File.Exists(Path))
                 s = "不存在相应的目录";
             else
             {
@@ -163,7 +163,7 @@ namespace Xu.Common
         public static string ReadFile(string Path, Encoding encode)
         {
             string s;
-            if (!System.IO.File.Exists(Path))
+            if (!File.Exists(Path))
                 s = "不存在相应的目录";
             else
             {

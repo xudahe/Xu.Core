@@ -8,4 +8,8 @@
     <ProjectReference Include="..\Xu.Model\Xu.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WebApiClients\" />
+  </ItemGroup>
+
 </Project>

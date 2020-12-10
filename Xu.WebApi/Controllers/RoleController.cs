@@ -33,7 +33,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="roleName">角色名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetRole(string ids, string roleName = "")
+        public async Task<object> GetRole(string ids = "", string roleName = "")
         {
             var data = await _roleSvc.Query();
 
@@ -41,7 +41,7 @@ namespace Xu.WebApi.Controllers
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(roleName))
-                data = data.Where(a => a.RoleName != null && a.RoleName.Contains(roleName)).ToList();
+                data = data.Where(a => a.RoleName.Contains(roleName)).ToList();
 
             return new MessageModel<List<Role>>()
             {
@@ -80,14 +80,20 @@ namespace Xu.WebApi.Controllers
         [HttpPost]
         public async Task<object> PostRole([FromBody] Role role)
         {
-            var model = await _roleSvc.SaveRole(role);
+            var data = new MessageModel<Role>() { Message = "添加成功", Success = true };
 
-            return new MessageModel<Role>()
+            var dataList = await _roleSvc.Query(a => a.RoleName == role.RoleName);
+            if (dataList.Count > 0)
             {
-                Message = "添加成功",
-                Success = true,
-                Response = model
-            };
+                data.Message = "该角色已存在";
+                data.Success = false;
+            }
+            else
+            {
+                data.Response = await _roleSvc.SaveRole(role);
+            }
+
+            return data;
         }
 
         /// <summary>
@@ -101,6 +107,7 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (role != null && role.Id > 0)
             {
+                role.ModifyTime = DateTime.Now;
                 data.Success = await _roleSvc.Update(role);
                 if (data.Success)
                 {

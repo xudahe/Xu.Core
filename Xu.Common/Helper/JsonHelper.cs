@@ -29,6 +29,7 @@ namespace Xu.Common
                     st.Append(Encoding.UTF8.GetString(ms.ToArray()));
                 }
 
+                //分隔符
                 int index = vals.IndexOf(city);
                 if (vals.Count - 1 != index)
                 {

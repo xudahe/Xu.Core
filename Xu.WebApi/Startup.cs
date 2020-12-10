@@ -63,6 +63,7 @@ namespace Xu.WebApi
             services.AddAuthorizationSetup();
             services.AddIpPolicyRateLimitSetup(Configuration);
             services.AddSignalR().AddNewtonsoftJsonProtocol();
+            //配置可以同步请求读取流数据
             services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
                     .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 
@@ -101,16 +102,16 @@ namespace Xu.WebApi
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
                 //如果字段为null,该字段会依然返回到json中。比如"name":null
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-            })
-            .ConfigureApiBehaviorOptions(options =>
-            {
-                options.SuppressConsumesConstraintForFormFileParameters = true;
-                options.SuppressInferBindingSourcesForParameters = true;
-                options.SuppressModelStateInvalidFilter = true; //true：禁用自动 400 行为
-                options.SuppressMapClientErrors = true;
-                options.ClientErrorMapping[404].Link =
-                    "https://*/404";
             });
+            //.ConfigureApiBehaviorOptions(options =>
+            //{
+            //    options.SuppressConsumesConstraintForFormFileParameters = true;
+            //    options.SuppressInferBindingSourcesForParameters = true;
+            //    options.SuppressModelStateInvalidFilter = true; //true：禁用自动 400 行为
+            //    options.SuppressMapClientErrors = true;
+            //    options.ClientErrorMapping[404].Link =
+            //        "https://*/404";
+            //});
 
             _services = services;
         }

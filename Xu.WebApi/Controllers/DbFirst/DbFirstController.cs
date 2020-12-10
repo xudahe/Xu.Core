@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SqlSugar;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Xu.Common;
+using Xu.IServices;
 using Xu.Model;
 using Xu.Model.ResultModel;
 
@@ -12,19 +14,21 @@ namespace Xu.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(Permissions.Name)]
     public class DbFirstController : ControllerBase
     {
         private readonly SqlSugarClient _sqlSugarClient;
         private readonly IWebHostEnvironment Env;
 
+        private readonly ITableData _tableData;
+
         /// <summary>
         /// 构造函数
         /// </summary>
-        public DbFirstController(ISqlSugarClient sqlSugarClient, IWebHostEnvironment env)
+        public DbFirstController(ISqlSugarClient sqlSugarClient, IWebHostEnvironment env, ITableData tableData)
         {
             _sqlSugarClient = sqlSugarClient as SqlSugarClient;
             Env = env;
+            _tableData = tableData;
         }
 
         /// <summary>
@@ -127,6 +131,22 @@ namespace Xu.WebApi.Controllers
             }
 
             return data;
+        }
+
+        /// <summary>
+        /// 数据库基础表数据导出到json文件
+        /// </summary>
+        /// <param name="tableName">指定表名称</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<object> GetDataFilesAsync(string tableName = "")
+        {
+            return new MessageModel<string>()
+            {
+                Success = true,
+                Message = "数据导出成功",
+                Response = await _tableData.ExportTable(tableName, Path.Combine(Env.WebRootPath, "dataJson"))
+            };
         }
     }
 }

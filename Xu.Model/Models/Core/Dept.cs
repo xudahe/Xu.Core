@@ -10,24 +10,26 @@ namespace Xu.Model.Models
         /// <summary>
         /// 部门编码
         /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "部门编码")]
         public string DeptCode { get; set; }
 
         /// <summary>
         /// 部门名称
         /// </summary>
+        [SugarColumn(ColumnDescription = "部门名称")]
         public string DeptName { get; set; }
 
         /// <summary>
         /// 部门负责人
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "部门负责人")]
         public string DeptManager { get; set; }
 
         /// <summary>
         /// 上级部门
         /// </summary>
-        [SugarColumn(IsNullable = true)]
-        public string ParentDept { get; set; }
+        [SugarColumn(IsNullable = true, ColumnDescription = "上级部门Id")]
+        public int? ParentDeptId { get; set; }
 
         /// <summary>
         /// 是否禁用
@@ -37,7 +39,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
         public string Remark { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using WebApiClient.Extensions.DependencyInjection;
-using Xu.IServices.WebApiClients;
 
 namespace Xu.Extensions
 {
@@ -18,11 +17,11 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddHttpApi<IDoubanApi>().ConfigureHttpApiConfig(c =>
-            {
-                c.HttpHost = new Uri("http://api.xiaomafeixiang.com/");
-                c.FormatOptions.DateTimeFormat = WebApiClient.DateTimeFormats.ISO8601_WithMillisecond;
-            });
+            //services.AddHttpApi<IDoubanApi>().ConfigureHttpApiConfig(c =>
+            //{
+            //    c.HttpHost = new Uri("http://api.xiaomafeixiang.com/");
+            //    c.FormatOptions.DateTimeFormat = WebApiClient.DateTimeFormats.ISO8601_WithMillisecond;
+            //});
         }
     }
 }

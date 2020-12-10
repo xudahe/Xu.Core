@@ -88,9 +88,6 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            tasksQz.AssemblyName = "Xu.Tasks";
-            tasksQz.ClassName = "JobQuartz";
-            tasksQz.JobStatus = JobStatus.未启动;
             var id = await _tasksQzSvc.Add(tasksQz);
 
             data.Success = id > 0;
@@ -114,8 +111,7 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (tasksQz != null && tasksQz.Id > 0)
             {
-                tasksQz.AssemblyName = "Xu.Tasks";
-                tasksQz.ClassName = "JobQuartz";
+                tasksQz.ModifyTime = DateTime.Now;
                 data.Success = await _tasksQzSvc.Update(tasksQz);
                 if (data.Success)
                 {

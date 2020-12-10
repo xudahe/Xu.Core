@@ -72,12 +72,6 @@
              <param name="strength">长度</param>
             <returns>Item1:公钥；Item2:私钥；</returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.PublicController.WebApiClientGetAsync">
-            <summary>
-            测试http请求 WebApiClient
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Xu.WebApi.Controllers.QRCodeController">
             <summary>
             二维码
@@ -171,7 +165,7 @@
             <param name="id">非空</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Xu.IServices.ITableData)">
             <summary>
             构造函数
             </summary>
@@ -197,6 +191,13 @@
             </summary>
             <param name="ConnID">数据库链接名称</param>
             <param name="tableNames">需要生成的表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.DbFirstController.GetDataFilesAsync(System.String)">
+            <summary>
+            数据库基础表数据导出到json文件
+            </summary>
+            <param name="tableName">指定表名称</param>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.DeptController">
@@ -225,7 +226,7 @@
             <summary>
             添加部门
             </summary>
-            <param name="request"></param>
+            <param name="dept"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DeptController.PutDept(Xu.Model.Models.Dept)">
@@ -283,12 +284,13 @@
             菜单管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MenuController.GetMenu(System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetMenu(System.String,System.String,System.String)">
             <summary>
             获取菜单数据（列表）
             </summary>
-            <param name="ids">可空</param>
+            <param name="ids">菜单ids（可空）</param>
             <param name="menuName">菜单名称（可空）</param>
+            <param name="parentId">父级菜单Id（可空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.GetMenuByPage(System.Int32,System.Int32,System.String)">

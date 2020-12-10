@@ -1,5 +1,6 @@
 ﻿using SqlSugar;
 using System;
+using Xu.Common;
 
 namespace Xu.Model
 {
@@ -23,12 +24,19 @@ namespace Xu.Model
         // DecimalDigits //dicimal精度
         // OracleSequenceName //Oracle序列名
         // IsOnlyIgnoreInsert //是否仅对添加忽略
+        // IsOnlyIgnoreUpdate //是否仅对修改忽略
 
         /// <summary>
-        /// Id，领域对象标识
+        /// 主键Id，领域对象标识
         /// </summary>
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键Id")]
         public int Id { get; set; }
+
+        /// <summary>
+        /// Guid
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "Guid")]
+        public string Guid { get; set; } = GUIDHelper.Guid32();
 
         /// <summary>
         /// 创建时间

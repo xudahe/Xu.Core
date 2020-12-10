@@ -33,7 +33,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="deptName">部门名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetDept(string ids, string deptName = "")
+        public async Task<object> GetDept(string ids = "", string deptName = "")
         {
             var data = await _deptSvc.Query();
 
@@ -41,7 +41,7 @@ namespace Xu.WebApi.Controllers
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(deptName))
-                data = data.Where(a => a.DeptName != null && a.DeptName.Contains(deptName)).ToList();
+                data = data.Where(a => a.DeptName.Contains(deptName)).ToList();
 
             return new MessageModel<List<Dept>>()
             {
@@ -75,20 +75,22 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 添加部门
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="dept"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> PostDept([FromBody] Dept request)
+        public async Task<object> PostDept([FromBody] Dept dept)
         {
-            var data = new MessageModel<string>();
+            var data = new MessageModel<Dept>() { Message = "添加成功", Success = true };
 
-            var id = await _deptSvc.Add(request);
-            data.Success = id > 0;
-
-            if (data.Success)
+            var dataList = await _deptSvc.Query(a => a.DeptName == dept.DeptName);
+            if (dataList.Count > 0)
             {
-                data.Response = id.ToString();
-                data.Message = "添加成功";
+                data.Message = "该部门名称已存在";
+                data.Success = false;
+            }
+            else
+            {
+                data.Response = await _deptSvc.SaveDept(dept);
             }
 
             return data;
@@ -105,6 +107,7 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (dept != null && dept.Id > 0)
             {
+                dept.ModifyTime = DateTime.Now;
                 data.Success = await _deptSvc.Update(dept);
                 if (data.Success)
                 {

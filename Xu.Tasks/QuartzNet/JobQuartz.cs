@@ -36,7 +36,7 @@ namespace Xu.Tasks
                     model.RunTimes += 1;
                     model.PerformTime = dateTime;
                     model.TasksLog = $"【{DateTime.Now}】执行任务【Id：{context.JobDetail.Key.Name}，任务名称：{model.JobName}，组别：{context.JobDetail.Key.Group}】【执行成功】{separator}"
-                                 + string.Join(separator, StringHelper.GetTopDataBySeparator(model.Remark, separator, 9));
+                                 + string.Join(separator, StringHelper.GetTopDataBySeparator(model.TasksLog, separator, 9));
                     await _tasksQzSvc.Update(model);
                 }
             }

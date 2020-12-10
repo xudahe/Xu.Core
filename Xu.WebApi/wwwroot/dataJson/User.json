@@ -1,0 +1,40 @@
+﻿[
+  {
+    "CreateTime": "\/Date(1594690114000+0800)\/",
+    "DeleteTime": null,
+    "Id": 1,
+    "Guid": "7f13badd-5a4e-f871-5d9c-bf343a203022",
+    "ModifyTime": null,
+    "Address": null,
+    "Birth": "\/Date(1594690102000+0800)\/",
+    "DeptName": "1",
+    "Enabled": false,
+    "ErrorCount": null,
+    "LastErrTime": null,
+    "LoginName": "admin",
+    "LoginPwd": "111111",
+    "RealName": "张三",
+    "Remark": "666",
+    "RoleIds": "1",
+    "Sex": 1
+  },
+  {
+    "CreateTime": "\/Date(1605756656000+0800)\/",
+    "DeleteTime": null,
+    "Id": 2,
+    "Guid": "22a41562-f8ba-dbc5-549e-292e5fb8b1f5",
+    "ModifyTime": null,
+    "Address": null,
+    "Birth": "\/Date(1605686400000+0800)\/",
+    "DeptName": "1",
+    "Enabled": false,
+    "ErrorCount": null,
+    "LastErrTime": null,
+    "LoginName": "测试账号",
+    "LoginPwd": "123456",
+    "RealName": "李四",
+    "Remark": "",
+    "RoleIds": null,
+    "Sex": 1
+  }
+]

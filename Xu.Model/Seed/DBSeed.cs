@@ -12,7 +12,7 @@ namespace Xu.Model
 {
     public class DBSeed
     {
-        private static string SeedDataFolder = "DataJson/{0}.tsv";
+        private static string SeedDataFolder = "dataJson/{0}.json";
 
         /// <summary>
         /// 异步添加种子数据
@@ -108,6 +108,62 @@ namespace Xu.Model
                     }
 
                     #endregion User
+
+                    #region Dept
+
+                    if (!await myContext.Db.Queryable<Dept>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<Dept>().InsertRange(JsonHelper.ParseFormByJson<List<Dept>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "Dept"), Encoding.UTF8)));
+                        Console.WriteLine("Table:Dept created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:Dept already exists...");
+                    }
+
+                    #endregion Dept
+
+                    #region Role
+
+                    if (!await myContext.Db.Queryable<Role>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<Role>().InsertRange(JsonHelper.ParseFormByJson<List<Role>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "Role"), Encoding.UTF8)));
+                        Console.WriteLine("Table:Role created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:Role already exists...");
+                    }
+
+                    #endregion Role
+
+                    #region Menu
+
+                    if (!await myContext.Db.Queryable<Menu>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<Menu>().InsertRange(JsonHelper.ParseFormByJson<List<Menu>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "Menu"), Encoding.UTF8)));
+                        Console.WriteLine("Table:Menu created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:Menu already exists...");
+                    }
+
+                    #endregion Menu
+
+                    #region TasksQz
+
+                    if (!await myContext.Db.Queryable<TasksQz>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<TasksQz>().InsertRange(JsonHelper.ParseFormByJson<List<TasksQz>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "TasksQz"), Encoding.UTF8)));
+                        Console.WriteLine("Table:TasksQz created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:TasksQz already exists...");
+                    }
+
+                    #endregion TasksQz
 
                     ConsoleHelper.WriteSuccessLine($"Done seeding database!");
                 }

@@ -22,30 +22,31 @@ namespace Xu.Model.Models
         /// <summary>
         /// 真实姓名
         /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "真实姓名")]
         public string RealName { get; set; }
 
         /// <summary>
-        /// 所屬部门
+        /// 所属部门
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "所属部门")]
         public string DeptName { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
         /// <summary>
         /// 最后登录时间
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "最后登录时间")]
         public DateTime? LastErrTime { get; set; }
 
         /// <summary>
-        /// 错误次数
+        /// 登录错误次数
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "登录错误次数")]
         public int? ErrorCount { get; set; }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 角色ids
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联角色Id")]
         public string RoleIds { get; set; }
     }
 }

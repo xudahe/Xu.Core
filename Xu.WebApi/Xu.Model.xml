@@ -11,7 +11,12 @@
         </member>
         <member name="P:Xu.Model.ModelBase.Id">
             <summary>
-            Id，领域对象标识
+            主键Id，领域对象标识
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ModelBase.Guid">
+            <summary>
+            Guid
             </summary>
         </member>
         <member name="P:Xu.Model.ModelBase.CreateTime">
@@ -32,11 +37,6 @@
         <member name="T:Xu.Model.Enum.JobStatus">
             <summary>
             Job运行状态
-            </summary>
-        </member>
-        <member name="T:Xu.Model.Enum.PerformStrategy">
-            <summary>
-            执行策略
             </summary>
         </member>
         <member name="T:Xu.Model.Enum.TodoLevel">
@@ -69,7 +69,7 @@
             部门负责人
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.Dept.ParentDept">
+        <member name="P:Xu.Model.Models.Dept.ParentDeptId">
             <summary>
             上级部门
             </summary>
@@ -139,6 +139,11 @@
             备注
             </summary>
         </member>
+        <member name="P:Xu.Model.Models.Menu.Children">
+            <summary>
+            临时菜单
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Role">
             <summary>
             角色表
@@ -156,7 +161,7 @@
         </member>
         <member name="P:Xu.Model.Models.Role.MenuIds">
             <summary>
-            菜单Ids(三级菜单)
+            关联菜单Ids
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.Remark">
@@ -357,7 +362,7 @@
         </member>
         <member name="P:Xu.Model.Models.User.DeptName">
             <summary>
-            所屬部门
+            所属部门
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.Remark">
@@ -372,7 +377,7 @@
         </member>
         <member name="P:Xu.Model.Models.User.ErrorCount">
             <summary>
-            错误次数
+            登录错误次数
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.Sex">
@@ -798,106 +803,6 @@
             </summary>
             <param name="config">config</param>
             <returns>返回值</returns>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.isbn">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.title">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.origintitle">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.subtitle">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.image">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.author">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.translator">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.publisher">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.pubdate">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.tags">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.kaiben">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.zhizhang">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.binding">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.taozhuang">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.series">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.pages">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.Data.price">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.DoubanViewModel.status">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.DoubanViewModel.data">
-             <summary>
-            
-             </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.DoubanViewModel.msg">
-            <summary>
-            获取图书数据成功
-            </summary>
         </member>
         <member name="T:Xu.Model.ViewModel.ServerViewModel">
             <summary>

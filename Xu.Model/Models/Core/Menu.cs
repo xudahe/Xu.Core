@@ -11,46 +11,50 @@ namespace Xu.Model.Models
         /// <summary>
         /// 系统名称(大屏/应用)
         /// </summary>
+        [SugarColumn(ColumnDescription = "系统名称")]
         public string SystemName { get; set; }
 
         /// <summary>
         /// 菜单类名
         /// </summary>
+        [SugarColumn(ColumnDescription = "菜单类名")]
         public string ClassName { get; set; }
 
         /// <summary>
         /// 菜单名称
         /// </summary>
+        [SugarColumn(ColumnDescription = "菜单名称")]
         public string MenuName { get; set; }
 
         /// <summary>
         /// 菜单图标
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(Length = 200, ColumnDescription = "菜单图标")]
         public string Icon { get; set; }
 
         /// <summary>
         /// 菜单路由
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, Length = 200, ColumnDescription = "菜单路由")]
         public string RouterUrl { get; set; }
 
         /// <summary>
         /// 父级菜单Id
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDescription = "父级菜单Id")]
         public int? ParentId { get; set; }
 
         /// <summary>
         /// 加载方式
         /// </summary>
+        [SugarColumn(ColumnDescription = "加载方式")]
         public string LoadWay { get; set; }
 
         /// <summary>
         /// 加载序号
         /// </summary>
-        [SugarColumn(IsNullable = true)]
-        public string Index { get; set; }
+        [SugarColumn(IsNullable = true, ColumnDescription = "加载序号")]
+        public int Index { get; set; }
 
         /// <summary>
         /// 是否禁用
@@ -60,9 +64,12 @@ namespace Xu.Model.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
+        /// <summary>
+        /// 临时菜单
+        /// </summary>
         [SugarColumn(IsIgnore = true)]
         public List<Menu> Children { get; set; }
     }

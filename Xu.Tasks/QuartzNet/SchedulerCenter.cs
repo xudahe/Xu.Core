@@ -282,7 +282,7 @@ namespace Xu.Tasks
                 .StartAt(starRunTime) //开始时间
                 .EndAt(endRunTime) //结束时间
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(tasksQz.IntervalSecond)  //执行时间间隔，单位秒
+                    .WithIntervalInSeconds(tasksQz.IntervalSecond.Value)  //执行时间间隔，单位秒
                     .WithRepeatCount(tasksQz.RunTimes) //执行次数、默认从0开始
                 )
                 .ForJob(tasksQz.Id.ToString(), tasksQz.JobGroup) //作业名称
@@ -297,7 +297,7 @@ namespace Xu.Tasks
                 .StartAt(starRunTime)
                 .EndAt(endRunTime)
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(tasksQz.IntervalSecond) //执行时间间隔，单位秒
+                    .WithIntervalInSeconds(tasksQz.IntervalSecond.Value) //执行时间间隔，单位秒
                     .RepeatForever()  //无限循环
                 )
                 .ForJob(tasksQz.Id.ToString(), tasksQz.JobGroup)

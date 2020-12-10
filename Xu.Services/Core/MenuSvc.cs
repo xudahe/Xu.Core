@@ -16,10 +16,10 @@ namespace Xu.Services.Core
         public async Task<Menu> SaveMenu(Menu menu)
         {
             Menu model = new Menu();
-            var menuList = await base.Query(a => a.ClassName == menu.ClassName);
-            if (menuList.Count > 0)
+            var dataList = await base.Query(a => a.ClassName == menu.ClassName);
+            if (dataList.Count > 0)
             {
-                model = menuList.FirstOrDefault();
+                model = dataList.FirstOrDefault();
             }
             else
             {

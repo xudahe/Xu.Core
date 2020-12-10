@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Xu.Common;
-using Xu.IServices.WebApiClients;
 using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
@@ -13,14 +12,6 @@ namespace Xu.WebApi.Controllers
     [ApiController]
     public class PublicController : ControllerBase
     {
-        private readonly IDoubanApi _doubanApi;
-
-        public PublicController(IDoubanApi doubanApi)
-        {
-            //测试http请求
-            _doubanApi = doubanApi;
-        }
-
         /// <summary>
         /// 生成PEM格式的公钥和密钥
         /// </summary>
@@ -35,17 +26,6 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = RSACryption.CreateKeyPair(strength)
             };
-        }
-
-        /// <summary>
-        /// 测试http请求 WebApiClient
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("WebApiClientGetAsync")]
-        public async Task<object> WebApiClientGetAsync()
-        {
-            string isbn = "9787544270878";
-            return await _doubanApi.VideoDetailAsync(isbn);
         }
     }
 }

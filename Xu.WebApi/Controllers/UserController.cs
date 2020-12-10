@@ -42,7 +42,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="key">用户名/姓名（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetUser(string ids, string key = "")
+        public async Task<object> GetUser(string ids = "", string key = "")
         {
             var data = await _userSvc.Query();
 
@@ -115,15 +115,21 @@ namespace Xu.WebApi.Controllers
         [HttpPost]
         public async Task<object> PostUser([FromBody] User user)
         {
-            //user.LoginPwd = MD5Helper.MD5Encrypt32(user.LoginPwd);
-            var model = await _userSvc.SaveUser(user);
+            var data = new MessageModel<User>() { Message = "添加成功", Success = true };
 
-            return new MessageModel<User>()
+            //user.LoginPwd = MD5Helper.MD5Encrypt32(user.LoginPwd);
+            var dataList = await _userSvc.Query(a => a.LoginName == user.LoginName);
+            if (dataList.Count > 0)
             {
-                Message = "添加成功",
-                Success = true,
-                Response = model
-            };
+                data.Message = "该用户名称已存在";
+                data.Success = false;
+            }
+            else
+            {
+                data.Response = await _userSvc.SaveUser(user);
+            }
+
+            return data;
         }
 
         /// <summary>
@@ -142,6 +148,7 @@ namespace Xu.WebApi.Controllers
 
                 if (user != null && user.Id > 0)
                 {
+                    user.ModifyTime = DateTime.Now;
                     data.Success = await _userSvc.Update(user);
 
                     _unitOfWork.CommitTran();
