@@ -37,6 +37,11 @@ namespace Xu.WebApi.Controllers
         {
             var data = await _deptSvc.Query();
 
+            for (int i = 0; i < data.Count; i++)
+            {
+                data[i].ParentName = data[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == data[i].ParentId).DeptName) : "";
+            }
+
             if (!string.IsNullOrEmpty(ids))
                 data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 

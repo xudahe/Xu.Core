@@ -49,6 +49,26 @@
             待办类型
             </summary>
         </member>
+        <member name="P:Xu.Model.InfoMenu.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoMenu.MenuName">
+            <summary>
+            菜单名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoRole.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoRole.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Dept">
             <summary>
             部门管理
@@ -69,7 +89,7 @@
             部门负责人
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.Dept.ParentDeptId">
+        <member name="P:Xu.Model.Models.Dept.ParentId">
             <summary>
             上级部门
             </summary>
@@ -82,6 +102,11 @@
         <member name="P:Xu.Model.Models.Dept.Remark">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Dept.ParentName">
+            <summary>
+            上级部门名称
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Menu">
@@ -141,7 +166,12 @@
         </member>
         <member name="P:Xu.Model.Models.Menu.Children">
             <summary>
-            临时菜单
+            子级菜单
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Menu.ParentName">
+            <summary>
+            父级菜单名称
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Role">
@@ -159,11 +189,6 @@
             角色名称
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.Role.MenuIds">
-            <summary>
-            关联菜单Ids
-            </summary>
-        </member>
         <member name="P:Xu.Model.Models.Role.Remark">
             <summary>
             备注
@@ -172,6 +197,21 @@
         <member name="P:Xu.Model.Models.Role.Enabled">
             <summary>
             是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Role.MenuIds">
+            <summary>
+            关联菜单Ids
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Role.MenuInfoList">
+            <summary>
+            关联菜单List
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Role.MenuInfoXml">
+            <summary>
+            关联菜单Xml
             </summary>
         </member>
         <member name="T:Xu.Model.Models.TasksQz">
@@ -360,7 +400,7 @@
             真实姓名
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.User.DeptName">
+        <member name="P:Xu.Model.Models.User.DeptId">
             <summary>
             所属部门
             </summary>
@@ -403,6 +443,16 @@
         <member name="P:Xu.Model.Models.User.RoleIds">
             <summary>
             角色ids
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.User.RoleInfoList">
+            <summary>
+            关联角色List
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.User.RoleInfoXml">
+            <summary>
+            关联角色Xml
             </summary>
         </member>
         <member name="P:Xu.Model.DesInsRelaConUnitService.DpsInfoList">

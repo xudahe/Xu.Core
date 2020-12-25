@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
+using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 
@@ -19,11 +22,15 @@ namespace Xu.WebApi.Controllers
     [Authorize(Permissions.Name)]
     public class RoleController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IRoleSvc _roleSvc;
+        private readonly IMenuSvc _menuSvc;
 
-        public RoleController(IRoleSvc roleSvc)
+        public RoleController(IMapper mapper, IRoleSvc roleSvc, IMenuSvc menuSvc)
         {
+            _mapper = mapper;
             _roleSvc = roleSvc;
+            _menuSvc = menuSvc;
         }
 
         /// <summary>
@@ -105,6 +112,13 @@ namespace Xu.WebApi.Controllers
         public async Task<object> PutRole([FromBody] Role role)
         {
             var data = new MessageModel<string>();
+
+            if (!string.IsNullOrEmpty(role.MenuIds))
+            {
+                var list = await _menuSvc.QueryByIds(role.MenuIds.Split(','));
+                role.MenuInfoList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(list);
+            }
+
             if (role != null && role.Id > 0)
             {
                 role.ModifyTime = DateTime.Now;

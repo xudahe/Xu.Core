@@ -244,7 +244,7 @@ namespace Xu.Tasks
                 JobKey jobKey = new JobKey(tasksQz.Id.ToString(), tasksQz.JobGroup);
                 if (!await _scheduler.Result.CheckExists(jobKey))
                 {
-                    result.Message = $"未找到要重新的任务:【{tasksQz.JobName}】,请先选择添加计划！";
+                    result.Message = $"未找到要恢复的任务:【{tasksQz.JobName}】,请先选择添加计划！";
                 }
                 else
                 {

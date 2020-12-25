@@ -67,10 +67,20 @@ namespace Xu.Model.Models
         [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
+        #region 临时类
+
         /// <summary>
-        /// 临时菜单
+        /// 子级菜单
         /// </summary>
         [SugarColumn(IsIgnore = true)]
         public List<Menu> Children { get; set; }
+
+        /// <summary>
+        /// 父级菜单名称
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public string ParentName { get; set; }
+
+        #endregion 临时类
     }
 }

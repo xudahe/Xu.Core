@@ -29,7 +29,7 @@ namespace Xu.Model.Models
         /// 上级部门
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "上级部门Id")]
-        public int? ParentDeptId { get; set; }
+        public int? ParentId { get; set; }
 
         /// <summary>
         /// 是否禁用
@@ -41,5 +41,15 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
         public string Remark { get; set; }
+
+        #region 临时类
+
+        /// <summary>
+        /// 上级部门名称
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public string ParentName { get; set; }
+
+        #endregion 临时类
     }
 }

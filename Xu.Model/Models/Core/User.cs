@@ -1,5 +1,8 @@
 ﻿using SqlSugar;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Xu.Model.Models
 {
@@ -29,7 +32,7 @@ namespace Xu.Model.Models
         /// 所属部门
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "所属部门")]
-        public string DeptName { get; set; }
+        public int? DeptId { get; set; }
 
         /// <summary>
         /// 备注
@@ -77,5 +80,91 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联角色Id")]
         public string RoleIds { get; set; }
+
+        #region 绑定角色
+
+        private string _roleInfoItem;
+
+        [SugarColumn(IsIgnore = true)]
+        private IList<InfoRole> _roleInfoList { get; set; }
+
+        /// <summary>
+        /// 关联角色List
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public IList<InfoRole> RoleInfoList
+        {
+            get { return _roleInfoList; }
+            set
+            {
+                _roleInfoList = value;
+                if (_roleInfoList != null && _roleInfoList.Count > 0)
+                    _roleInfoItem = ToItemInfoXml();
+                else
+                    _roleInfoItem = null;
+            }
+        }
+
+        /// <summary>
+        /// 关联角色Xml
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联角色")]
+        public string RoleInfoXml
+        {
+            get { return _roleInfoItem; }
+            set
+            {
+                _roleInfoItem = value;
+                if (!string.IsNullOrEmpty(_roleInfoItem))
+                    _roleInfoList = FromItemInfoXml();
+            }
+        }
+
+        public string ToItemInfoXml()
+        {
+            XElement xElement = new XElement("Role");
+            xElement.SetAttributeValue("Version", "1");
+
+            if (_roleInfoList.Count > 0)
+            {
+                foreach (var item in _roleInfoList)
+                {
+                    XElement xItem = new XElement("InfoItem");
+                    xItem.SetAttributeValue("Guid", item.Guid);
+                    xItem.SetAttributeValue("RoleName", item.RoleName);
+                    xElement.Add(xItem);
+                }
+                return xElement.ToString();
+            }
+            return null;
+        }
+
+        public IList<InfoRole> FromItemInfoXml()
+        {
+            IList<InfoRole> list = new List<InfoRole>();
+            XElement x = XElement.Parse(_roleInfoItem);
+            if (x.Name != "Role")
+                return list;
+            XAttribute ver = x.Attribute("Version");
+            if (ver == null || ver.Value != "1")
+                return list;
+            IList<XElement> xitems = x.Descendants("InfoItem").ToList();
+            if (xitems.Count > 0)
+            {
+                foreach (var xElement in xitems)
+                {
+                    InfoRole item = new InfoRole
+                    {
+                        Guid = xElement.Attribute("Guid").Value,
+                        RoleName = xElement.Attribute("RoleName").Value,
+                    };
+                    list.Add(item);
+                }
+                return list;
+            }
+            return null;
+        }
+
+        #endregion 绑定角色
     }
 }

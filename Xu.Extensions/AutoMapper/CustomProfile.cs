@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Xu.Model;
+using Xu.Model.Models;
 
 namespace Xu.Extensions
 {
@@ -13,8 +15,11 @@ namespace Xu.Extensions
         /// </summary>
         public CustomProfile()
         {
-            //CreateMap<XuArticle, XuViewModels>(); //第一个参数是原对象，第二个是目的对象
-            //CreateMap<XuViewModels, XuArticle>();
+            CreateMap<Menu, InfoMenu>(); //第一个参数是原对象，第二个是目的对象
+            CreateMap<InfoMenu, Menu>();
+
+            CreateMap<Role, InfoRole>();
+            CreateMap<InfoRole, Role>();
 
             //在使用当中，就这一句话完全搞定所有转换：XuViewModels models = IMapper.Map<XuViewModels>(XuArticle);
         }

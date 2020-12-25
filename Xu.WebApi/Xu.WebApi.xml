@@ -394,13 +394,6 @@
             用户管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.UserController.#ctor(Xu.IRepository.IUnitOfWork,Xu.IServices.IUserSvc)">
-            <summary>
-            构造函数
-            </summary>
-            <param name="unitOfWork"></param>
-            <param name="userSvc"></param>
-        </member>
         <member name="M:Xu.WebApi.Controllers.UserController.GetUser(System.String,System.String)">
             <summary>
             获取用户数据

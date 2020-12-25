@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using Xu.Common;
 using Xu.Extensions;
 using Xu.IRepository;
 using Xu.IServices;
+using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 
@@ -22,17 +24,16 @@ namespace Xu.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IRoleSvc _roleSvc;
         private readonly IUserSvc _userSvc;
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="unitOfWork"></param>
-        /// <param name="userSvc"></param>
-        public UserController(IUnitOfWork unitOfWork, IUserSvc userSvc)
+        public UserController(IUnitOfWork unitOfWork, IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
             _userSvc = userSvc;
+            _roleSvc = roleSvc;
         }
 
         /// <summary>
@@ -145,6 +146,12 @@ namespace Xu.WebApi.Controllers
             try
             {
                 _unitOfWork.BeginTran();
+
+                if (!string.IsNullOrEmpty(user.RoleIds))
+                {
+                    var list = await _roleSvc.QueryByIds(user.RoleIds.Split(','));
+                    user.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(list);
+                }
 
                 if (user != null && user.Id > 0)
                 {
