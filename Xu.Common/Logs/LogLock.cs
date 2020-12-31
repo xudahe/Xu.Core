@@ -264,8 +264,9 @@ namespace Xu.Common
                 reqLogs = Logs.Select(d => new LogInfo
                 {
                     Datetime = d.Datetime.ToDateTimeReq(),
-                    Content = $"IP:{d.Ip}<br>{d.Url}",
-                    LogColor = "ReqRes",
+                    Content = $"IP:{d.ClientIP}<br>{d.Url}",
+                    ClientIP = d.ClientIP,
+                    LogColor = "Req",
                 }).ToList();
             }
             catch (Exception) { }

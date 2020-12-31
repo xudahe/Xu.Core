@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IRepository;
@@ -20,7 +21,13 @@ namespace Xu.Services
         // 定义一个锁，防止多线程
         private static readonly object locker = new object();
 
-        public async Task<User> SaveUser(User user)
+        [Caching(AbsoluteExpiration = 30)]
+        public async Task<string> GetUserNameById(int id)
+        {
+            return ((await base.QueryById(id))?.LoginName);
+        }
+
+        public async Task<List<User>> GetDataByids(string ids, List<User> list = null)
         {
             // 当第一个线程执行的时候，会对locker对象 "加锁"，
             // 当其他线程执行的时候，会等待 locker 执行完解锁
@@ -28,25 +35,18 @@ namespace Xu.Services
             {
             }
 
-            User model = new User();
-            var dataList = await base.Query(a => a.LoginName == user.LoginName);
-            if (dataList.Count > 0)
+            list = list ?? await base.Query();
+
+            if (!string.IsNullOrEmpty(ids))
             {
-                model = dataList.FirstOrDefault();
-            }
-            else
-            {
-                var id = await base.Add(user);
-                model = await base.QueryById(id);
+                var idList = ids.Split(',');
+                if (GUIDHelper.IsGuidByReg(idList[0]))
+                    return list.Where(s => idList.Contains(s.Guid)).ToList();
+                else
+                    return list.Where(s => idList.ToInt32List().Contains(s.Id)).ToList();
             }
 
-            return model;
-        }
-
-        [Caching(AbsoluteExpiration = 30)]
-        public async Task<string> GetUserNameById(int id)
-        {
-            return ((await base.QueryById(id))?.LoginName);
+            return list;
         }
     }
 }

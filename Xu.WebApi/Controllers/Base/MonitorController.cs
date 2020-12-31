@@ -103,10 +103,9 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// Api请求访问日志
         /// </summary>
-        /// <param name="environment"></param>
         /// <returns></returns>
         [HttpGet]
-        public object GetAccessLogs([FromServices] IWebHostEnvironment environment)
+        public object GetAccessLogs()
         {
             return new MessageModel<List<UserAccessModel>>()
             {

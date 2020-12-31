@@ -36,16 +36,13 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 获取角色数据
         /// </summary>
-        /// <param name="ids">可空</param>
+        /// <param name="ids">角色id或guid集合（可空）</param>
         /// <param name="roleName">角色名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetRole(string ids = "", string roleName = "")
         {
-            var data = await _roleSvc.Query();
-
-            if (!string.IsNullOrEmpty(ids))
-                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+            var data = await _roleSvc.GetDataByids(ids);
 
             if (!string.IsNullOrEmpty(roleName))
                 data = data.Where(a => a.RoleName.Contains(roleName)).ToList();
@@ -97,7 +94,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                data.Response = await _roleSvc.SaveRole(role);
+                role.Id = await _roleSvc.Add(role);
+                data.Response = role;
             }
 
             return data;
@@ -113,11 +111,8 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            if (!string.IsNullOrEmpty(role.MenuIds))
-            {
-                var list = await _menuSvc.QueryByIds(role.MenuIds.Split(','));
-                role.MenuInfoList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(list);
-            }
+            var menuList = await _menuSvc.GetDataByids(role.MenuIds);
+            role.MenuInfoList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuList);
 
             if (role != null && role.Id > 0)
             {
@@ -136,7 +131,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除角色
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">角色id（非空）</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> DeleteRole(int id)
@@ -160,7 +155,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用角色
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">角色id（非空）</param>
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]

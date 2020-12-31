@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xu.Common;
 using Xu.IRepository;
 using Xu.IServices;
 using Xu.Model.Models;
@@ -13,21 +15,20 @@ namespace Xu.Services
             base.BaseDal = dalRepo;
         }
 
-        public async Task<Dept> SaveDept(Dept dept)
+        public async Task<List<Dept>> GetDataByids(string ids, List<Dept> list = null)
         {
-            Dept model = new Dept();
-            var dataList = await base.Query(a => a.DeptName == dept.DeptName);
-            if (dataList.Count > 0)
+            list = list ?? await base.Query();
+
+            if (!string.IsNullOrEmpty(ids))
             {
-                model = dataList.FirstOrDefault();
-            }
-            else
-            {
-                var id = await base.Add(dept);
-                model = await base.QueryById(id);
+                var idList = ids.Split(',');
+                if (GUIDHelper.IsGuidByReg(idList[0]))
+                    return list.Where(s => idList.Contains(s.Guid)).ToList();
+                else
+                    return list.Where(s => idList.ToInt32List().Contains(s.Id)).ToList();
             }
 
-            return model;
+            return list;
         }
     }
 }

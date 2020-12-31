@@ -42,8 +42,8 @@ namespace Xu.Extensions
                         var request = context.Request;
                         var requestInfo = JsonConvert.SerializeObject(new RequestInfo()
                         {
-                            Ip = GetClientIP(context),
-                            Url = request.Path.ToString().TrimEnd('/').ToLower(),
+                            ClientIP = GetClientIP(context)?.Replace("::ffff:", ""),
+                            Url = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + context.Request.Path,
                             Datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                             Week = DateHelper.GetWeek(),
                         });
@@ -77,14 +77,33 @@ namespace Xu.Extensions
             }
         }
 
+        /// <summary>
+        /// 获取客户端ip
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static string GetClientIP(HttpContext context)
         {
-            var ip = context.Request.Headers["X-Forwarded-For"].ToString();
-            if (string.IsNullOrEmpty(ip))
+            //该方法可以正常获取到IP地址
+            string remoteIpAddress = context.Connection.RemoteIpAddress.ToString();
+            //如果有使用Nginx做反向代理的话，使用上面的方式获取到的IP会是127.0.0.1，无法获取到真实的IP地址，则应该使用下面的方式
+            if (context.Request.Headers.ContainsKey("X-Real-IP"))
             {
-                ip = context.Connection.RemoteIpAddress.ToString();
+                string realIP = context.Request.Headers["X-Real-IP"].ToString();
+                if (realIP != remoteIpAddress)
+                {
+                    remoteIpAddress = realIP;
+                }
             }
-            return ip;
+            if (context.Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                string forwarded = context.Request.Headers["X-Forwarded-For"].ToString();
+                if (forwarded != remoteIpAddress)
+                {
+                    remoteIpAddress = forwarded;
+                }
+            }
+            return remoteIpAddress;
         }
     }
 }

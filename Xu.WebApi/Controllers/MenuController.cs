@@ -30,22 +30,19 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 获取菜单数据（列表）
         /// </summary>
-        /// <param name="ids">菜单ids（可空）</param>
+        /// <param name="ids">菜单id或guid集合（可空）</param>
         /// <param name="menuName">菜单名称（可空）</param>
         /// <param name="parentId">父级菜单Id（可空）</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetMenu(string ids = "", string menuName = "", string parentId = "")
         {
-            var data = await _menuSvc.Query();
+            var data = await _menuSvc.GetDataByids(ids);
 
             for (int i = 0; i < data.Count; i++)
             {
-                data[i].ParentName = data[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == data[i].ParentId).MenuName) : "";
+                data[i].ParentName = data[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == data[i].ParentId)?.MenuName) : "";
             }
-
-            if (!string.IsNullOrEmpty(ids))
-                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
 
             if (!string.IsNullOrEmpty(menuName))
                 data = data.Where(a => a.MenuName.Contains(menuName)).ToList();
@@ -85,21 +82,18 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 根据菜单Ids集合获取菜单数据（树状）
         /// </summary>
-        /// <param name="ids">可空</param>
+        /// <param name="ids">菜单id或guid集合（可空）</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetMenuByIds(string ids)
         {
-            var menuList = await _menuSvc.Query(s => s.Enabled == false);
+            var data = await _menuSvc.Query();
+
+            var menuList = await _menuSvc.GetDataByids(ids, data);
 
             for (int i = 0; i < menuList.Count; i++)
             {
-                menuList[i].ParentName = menuList[i].ParentId.HasValue ? (menuList.FirstOrDefault(s => s.Id == menuList[i].ParentId).MenuName) : "";
-            }
-
-            if (!string.IsNullOrEmpty(ids))
-            {
-                menuList = menuList.Where(s => ids.SplitInt(",").Contains(s.Id)).ToList();
+                menuList[i].ParentName = menuList[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == menuList[i].ParentId).MenuName) : "";
             }
 
             var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
@@ -140,7 +134,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                data.Response = await _menuSvc.SaveMenu(menu);
+                menu.Id = await _menuSvc.Add(menu);
+                data.Response = menu;
             }
 
             return data;
@@ -172,7 +167,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除菜单
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">菜单id（非空）</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> DeleteMenu(int id)
@@ -196,7 +191,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用菜单
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">菜单id（非空）</param>
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]

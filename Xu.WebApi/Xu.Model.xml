@@ -201,7 +201,7 @@
         </member>
         <member name="P:Xu.Model.Models.Role.MenuIds">
             <summary>
-            关联菜单Ids
+            关联菜单的id或guid集合，不能同时包含两者
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.MenuInfoList">
@@ -442,7 +442,7 @@
         </member>
         <member name="P:Xu.Model.Models.User.RoleIds">
             <summary>
-            角色ids
+            关联角色的id或guid集合，不能同时包含两者
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.RoleInfoList">

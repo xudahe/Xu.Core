@@ -29,30 +29,29 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 获取部门数据
         /// </summary>
-        /// <param name="ids">可空</param>
+        /// <param name="ids">部门id或guid集合（可空）</param>
         /// <param name="deptName">部门名称（可空）</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetDept(string ids = "", string deptName = "")
         {
             var data = await _deptSvc.Query();
+            var deptList = await _deptSvc.GetDataByids(ids, data);
 
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < deptList.Count; i++)
             {
-                data[i].ParentName = data[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == data[i].ParentId).DeptName) : "";
+                deptList[i].ParentName = deptList[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == deptList[i].ParentId)?.DeptName) : "";
             }
 
-            if (!string.IsNullOrEmpty(ids))
-                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
-
             if (!string.IsNullOrEmpty(deptName))
-                data = data.Where(a => a.DeptName.Contains(deptName)).ToList();
+
+                deptList = deptList.Where(a => a.DeptName.Contains(deptName)).ToList();
 
             return new MessageModel<List<Dept>>()
             {
                 Message = "获取成功",
                 Success = true,
-                Response = data
+                Response = deptList
             };
         }
 
@@ -95,7 +94,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                data.Response = await _deptSvc.SaveDept(dept);
+                dept.Id = await _deptSvc.Add(dept);
+                data.Response = dept;
             }
 
             return data;
@@ -127,7 +127,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除部门
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">部门id（非空）</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> DeleteDept(int id)
@@ -151,7 +151,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用部门
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">部门id（非空）</param>
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]

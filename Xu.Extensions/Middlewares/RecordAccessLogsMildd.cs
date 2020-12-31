@@ -100,8 +100,9 @@ namespace Xu.Extensions
             var requestInfo = JsonConvert.SerializeObject(new UserAccessModel()
             {
                 User = _user.Name,
-                IP = IPLogMildd.GetClientIP(context),
-                API = request.Path.ToString().TrimEnd('/').ToLower(),
+                ClientIP = IPLogMildd.GetClientIP(context)?.Replace("::ffff:", ""),
+                ServiceIP = context.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + context.Connection.LocalPort,
+                Url = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + context.Request.Path,
                 BeginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 OPTime = opTime,
                 RequestMethod = request.Method,

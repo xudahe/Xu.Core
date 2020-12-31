@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
+using Xu.Model.Models;
 
 namespace Xu.WebApi.Controllers
 {
@@ -64,7 +65,8 @@ namespace Xu.WebApi.Controllers
             var user = (await _userSvc.Query(d => d.Enabled == false && d.LoginName == name && d.LoginPwd == pass)).FirstOrDefault();
             if (user != null)
             {
-                var userRoles = await _roleSvc.QueryByIds(user.RoleIds.Split(","));
+                var userRoles = await _roleSvc.GetDataByids(user.RoleIds);
+
                 //如果是基于用户的授权策略，这里要添加用户;如果是基于角色的授权策略，这里要添加角色
                 var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, name),
@@ -133,7 +135,8 @@ namespace Xu.WebApi.Controllers
                 var user = await _userSvc.QueryById(tokenModel.Id);
                 if (user != null)
                 {
-                    var userRoles = await _roleSvc.QueryByIds(user.RoleIds.Split(","));
+                    var userRoles = await _roleSvc.GetDataByids(user.RoleIds);
+
                     //如果是基于用户的授权策略，这里要添加用户;如果是基于角色的授权策略，这里要添加角色
                     var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, user.LoginName),

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IRepository;
@@ -17,27 +18,26 @@ namespace Xu.Services
             base.BaseDal = dalRepo;
         }
 
-        public async Task<Role> SaveRole(Role role)
-        {
-            Role model = new Role();
-            var userList = await base.Query(a => a.RoleName == role.RoleName);
-            if (userList.Count > 0)
-            {
-                model = userList.FirstOrDefault();
-            }
-            else
-            {
-                var id = await base.Add(role);
-                model = await base.QueryById(id);
-            }
-
-            return model;
-        }
-
         [Caching(AbsoluteExpiration = 30)]
         public async Task<string> GetRoleNameById(int id)
         {
             return ((await base.QueryById(id))?.RoleName);
+        }
+
+        public async Task<List<Role>> GetDataByids(string ids, List<Role> list = null)
+        {
+            list = list ?? await base.Query();
+
+            if (!string.IsNullOrEmpty(ids))
+            {
+                var idList = ids.Split(',');
+                if (GUIDHelper.IsGuidByReg(idList[0]))
+                    return list.Where(s => idList.Contains(s.Guid)).ToList();
+                else
+                    return list.Where(s => idList.ToInt32List().Contains(s.Id)).ToList();
+            }
+
+            return list;
         }
     }
 }

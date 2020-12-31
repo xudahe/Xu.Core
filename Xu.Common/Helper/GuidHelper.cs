@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Xu.Common
 {
@@ -28,6 +29,17 @@ namespace Xu.Common
             // "B"--括在大括号中、由连字符分隔的 32 位数字：{d9762660-8461-4c44-b714-8ffad6e1b79c}
             // "P"--括在圆括号中、由连字符分隔的 32 位数字：(694ce704-0a7d-41d5-a25a-4eaedf7db50d)
             // "X"--括在大括号的 4 个十六进制值，其中第 4 个值是 8 个十六进制值的子集（也括在大括号中）：{0x75198f26,0xac4e,0x42c8,{0x96,0x88,0xcc,0x91,0xe0,0xa6,0x9b,0x21}
+        }
+
+        /// <summary>
+        /// 根据正则表达式判断guid
+        /// </summary>
+        /// <param name="strSrc"></param>
+        /// <returns></returns>
+        public static bool IsGuidByReg(string strSrc)
+        {
+            Regex reg = new Regex("^[A-Fa-f0-9]{8}(-[A-Fa-f0-9]{4}){3}-[A-Fa-f0-9]{12}$", RegexOptions.Compiled);
+            return reg.IsMatch(strSrc);
         }
     }
 }

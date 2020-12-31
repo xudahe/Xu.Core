@@ -39,16 +39,13 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 获取用户数据
         /// </summary>
-        /// <param name="ids">可空</param>
+        /// <param name="ids">用户id或guid集合（可空）</param>
         /// <param name="key">用户名/姓名（可空）</param>
         /// <returns></returns>
         [HttpGet]
         public async Task<object> GetUser(string ids = "", string key = "")
         {
-            var data = await _userSvc.Query();
-
-            if (!string.IsNullOrEmpty(ids))
-                data = data.Where(a => ids.SplitInt(",").Contains(a.Id)).ToList();
+            var data = await _userSvc.GetDataByids(ids);
 
             if (!string.IsNullOrEmpty(key))
                 data = data.Where(a => a.LoginName.Contains(key) || a.RealName.Contains(key)).ToList();
@@ -127,7 +124,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                data.Response = await _userSvc.SaveUser(user);
+                user.Id = await _userSvc.Add(user);
+                data.Response = user;
             }
 
             return data;
@@ -147,11 +145,8 @@ namespace Xu.WebApi.Controllers
             {
                 _unitOfWork.BeginTran();
 
-                if (!string.IsNullOrEmpty(user.RoleIds))
-                {
-                    var list = await _roleSvc.QueryByIds(user.RoleIds.Split(','));
-                    user.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(list);
-                }
+                var roleList = await _roleSvc.GetDataByids(user.RoleIds);
+                user.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
 
                 if (user != null && user.Id > 0)
                 {
@@ -178,7 +173,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 删除用户
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">用户id（非空）</param>
         /// <returns></returns>
         [HttpDelete]
         public async Task<object> DeleteUser(int id)
@@ -202,7 +197,7 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 禁用用户
         /// </summary>
-        /// <param name="id">非空</param>
+        /// <param name="id">用户id（非空）</param>
         /// <param name="falg">true(禁用),false(启用)</param>
         /// <returns></returns>
         [HttpDelete]

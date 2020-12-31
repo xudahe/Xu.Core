@@ -36,7 +36,7 @@ namespace Xu.Model.Models
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// 关联菜单Ids
+        /// 关联菜单的id或guid集合，不能同时包含两者
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联菜单Id")]
         public string MenuIds { get; set; }
