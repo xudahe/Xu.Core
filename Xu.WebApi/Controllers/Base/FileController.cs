@@ -14,7 +14,7 @@ namespace Blog.Core.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class ImageController : Controller
+    public class FileController : Controller
     {
         /// <summary>
         /// 下载图片（支持中文字符）
@@ -22,10 +22,10 @@ namespace Blog.Core.Controllers
         /// <param name="environment"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/api/Images/download")]
+        [Route("/api/File/imgDownload")]
         public FileStreamResult DownloadPicture([FromServices]IWebHostEnvironment environment)
         {
-            string foldername = "";
+            string foldername = "images";
             string filepath = Path.Combine(environment.WebRootPath, foldername, "20201112145833764.jpeg");
             var stream = System.IO.File.OpenRead(filepath);
             string fileExt = ".jpg";  // 这里可以写一个获取文件扩展名的方法，获取扩展名
@@ -44,7 +44,7 @@ namespace Blog.Core.Controllers
         /// <param name="environment"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("/api/Images/Upload")]
+        [Route("/api/File/imgUpload")]
         public async Task<MessageModel<string>> InsertPicture([FromServices]IWebHostEnvironment environment)
         {
             var data = new MessageModel<string>();
@@ -76,7 +76,7 @@ namespace Blog.Core.Controllers
                 if (files.Sum(c => c.Length) <= 1024 * 1024 * 4)
                 {
                     var file = files.FirstOrDefault();
-                    string strpath = Path.Combine(foldername, DateTime.Now.ToString("MMddHHmmss") + file.FileName);
+                    string strpath = Path.Combine(foldername, file.FileName);
                     path = Path.Combine(environment.WebRootPath, strpath);
 
                     using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
@@ -94,7 +94,7 @@ namespace Blog.Core.Controllers
                 }
                 else
                 {
-                    data.Message = "图片过大";
+                    data.Message = "图片过大,超过4M";
                     return data;
                 }
             }
