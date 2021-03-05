@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -18,18 +19,37 @@ namespace Xu.Extensions
 
             services.AddCors(c =>
             {
-                c.AddPolicy("LimitRequests", policy =>
+                if (!Appsettings.App(new string[] { "Startup", "Cors", "EnableAllIPs" }).ToBoolReq())
                 {
-                    // 支持多个域名端口，注意端口号后不要带/斜杆：比如localhost:8000/，是错的
-                    // 注意，http://127.0.0.1:1818 和 http://localhost:1818 是不一样的，尽量写两个
-                    policy
-                    //.WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(',')) //允许部分站点跨域请求
-                    .SetPreflightMaxAge(TimeSpan.FromSeconds(2520)) //添加预检请求过期时间
-                    .SetIsOriginAllowed(origin => true) //允许任何域
-                    .AllowAnyHeader()  //允许任何头
-                    .AllowAnyMethod() //允许任何方式
-                    .AllowCredentials(); // 允许Cookie信息
-                });
+                    c.AddPolicy(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }),
+                        policy =>
+                        {
+                            policy
+                            .WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(','))
+                            .AllowAnyHeader()//Ensures that the policy allows any header.
+                            .AllowAnyMethod();
+                        });
+                }
+                else
+                {
+                    //允许任意跨域请求
+                    c.AddPolicy(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }),
+                        policy =>
+                        {
+                            policy
+                            .SetIsOriginAllowed((host) => true)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                        });
+                }
+
+                //.WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(',')) //允许部分站点跨域请求
+                //.SetPreflightMaxAge(TimeSpan.FromSeconds(2520)) //添加预检请求过期时间
+                //.SetIsOriginAllowed(origin => true) //允许任何域
+                //.AllowAnyHeader()  //允许任何头
+                //.AllowAnyMethod() //允许任何方式
+                //.AllowCredentials(); // 允许Cookie信息
             });
         }
     }

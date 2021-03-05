@@ -12,6 +12,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Consul" Version="1.6.1.1" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="InitQ" Version="1.0.0.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0-preview.6.20305.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.1.0" />

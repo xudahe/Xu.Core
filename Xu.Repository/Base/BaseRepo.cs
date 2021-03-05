@@ -1,8 +1,10 @@
 ﻿using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Xu.Common;
 using Xu.IRepository;
 using Xu.Model.ResultModel;
 
@@ -10,7 +12,31 @@ namespace Xu.Repository
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : class, new()
     {
-        private readonly ISqlSugarClient _db;
+        private SqlSugarClient _dbBase;
+
+        private ISqlSugarClient _db
+        {
+            get
+            {
+                /* 如果要开启多库支持，
+                 * 1、在appsettings.json 中开启MutiDBEnabled节点为true，必填
+                 * 2、设置一个主连接的数据库ID，节点MainDB，对应的连接字符串的Enabled也必须true，必填
+                 */
+                if (Appsettings.App(new string[] { "MutiDBEnabled" }).ObjToBool())
+                {
+                    if (typeof(T).GetTypeInfo().GetCustomAttributes(typeof(SugarTable), true).FirstOrDefault((x => x.GetType() == typeof(SugarTable))) is SugarTable sugarTable && !string.IsNullOrEmpty(sugarTable.TableDescription))
+                    {
+                        _dbBase.ChangeDatabase(sugarTable.TableDescription.ToLower());
+                    }
+                    else
+                    {
+                        _dbBase.ChangeDatabase(MainDb.CurrentDbConnId.ToLower());
+                    }
+                }
+
+                return _dbBase;
+            }
+        }
 
         internal ISqlSugarClient Db
         {
@@ -25,7 +51,7 @@ namespace Xu.Repository
         /// <param name="unitOfWork"></param>
         public BaseRepo(IUnitOfWork unitOfWork)
         {
-            _db = unitOfWork.GetDbClient();
+            _dbBase = unitOfWork.GetDbClient();
         }
 
         /// <summary>
@@ -68,6 +94,10 @@ namespace Xu.Repository
         {
             var insert = _db.Insertable(entity);
             return await insert.ExecuteReturnIdentityAsync();
+            //return await insert.ExecuteCommandAsync();
+
+            //这里你可以返回TEntity，这样的话就可以获取id值，无论主键是什么类型
+            //var return3 = await insert.ExecuteReturnEntityAsync();
         }
 
         /// <summary>

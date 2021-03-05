@@ -1,42 +1,31 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Extensions;
 
 namespace Xu.Extensions
 {
     /// <summary>
-    /// JWT权限 启动服务
+    /// 系统 授权服务 配置
     /// </summary>
     public static class AuthorizationSetup
     {
-        /// <summary>
-        /// JWT权限
-        /// </summary>
-        /// <param name="services"></param>
         public static void AddAuthorizationSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            #region 1、基于角色的API授权
+            // 以下四种常见的授权方式。
 
-            // 1【授权】、这个很简单，其他什么都不用做， 只需要在API层的controller上边，增加特性即可，注意，只能是角色的:
+            // 1、这个很简单，其他什么都不用做， 只需要在API层的controller上边，增加特性即可
             // [Authorize(Roles = "Admin,System")]
 
-            #endregion 1、基于角色的API授权
-
-            #region 2、基于策略的授权（简单版）
-
-            // 1【授权】、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
+            // 2、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
             // 然后这么写 [Authorize(Policy = "Admin")]
             services.AddAuthorization(options =>
             {
@@ -45,8 +34,6 @@ namespace Xu.Extensions
                 options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));
                 options.AddPolicy("A_S_O", policy => policy.RequireRole("Admin", "System", "Others"));
             });
-
-            #endregion 2、基于策略的授权（简单版）
 
             #region 参数
 
@@ -75,72 +62,29 @@ namespace Xu.Extensions
 
             #endregion 参数
 
-            // 3、复杂的策略授权
+            // 3、自定义复杂的策略授权
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(Permissions.Name,
                          policy => policy.Requirements.Add(permissionRequirement));
             });
 
-            // 令牌验证参数
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,//是否验证SecurityKey
-                IssuerSigningKey = signingKey,
-                ValidateIssuer = true,//是否验证Issuer
-                ValidIssuer = Issuer,//发行人
-                ValidateAudience = true,//是否验证Audience
-                ValidAudience = Audience,//订阅人
-                ValidateLifetime = true,//是否验证失效时间
-                ClockSkew = TimeSpan.FromSeconds(30),
-                RequireExpirationTime = true,
-            };
+            // 4、基于Scope策略授权
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Scope_BlogModule_Policy", builder =>
+            //    {
+            //        // 客户端Scope中包含blog.core.api.BlogModule才能访问
+            //        // 同时引用nuget包：IdentityServer4.AccessTokenValidation
+            //        builder.RequireScope("blog.core.api.BlogModule");
+            //    });
 
-            //2.1【认证】、core自带官方JWT认证
-            // 开启Bearer认证
-            services.AddAuthentication(o =>
-            {
-                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = nameof(ApiResponseHandler);
-                o.DefaultForbidScheme = nameof(ApiResponseHandler);
-            })
-             // 添加JwtBearer服务
-             .AddJwtBearer(o =>
-             {
-                 o.TokenValidationParameters = tokenValidationParameters;
-                 o.Events = new JwtBearerEvents
-                 {
-                     OnChallenge = context =>
-                     {
-                         context.Response.Headers.Add("Token-Error", context.ErrorDescription);
-                         return Task.CompletedTask;
-                     },
-                     OnAuthenticationFailed = context =>
-                     {
-                         var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                         var jwtToken = (new JwtSecurityTokenHandler()).ReadJwtToken(token);
+            //    // 其他 Scope 策略
+            //    // ...
+            //});
 
-                         if (jwtToken.Issuer != Issuer)
-                         {
-                             context.Response.Headers.Add("Token-Error-Iss", "issuer is wrong!");
-                         }
-
-                         if (jwtToken.Audiences.FirstOrDefault() != Audience)
-                         {
-                             context.Response.Headers.Add("Token-Error-Aud", "Audience is wrong!");
-                         }
-
-                         // 如果过期，则把<是否过期>添加到，返回头信息中
-                         if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                         {
-                             context.Response.Headers.Add("Token-Expired", "true");
-                         }
-                         return Task.CompletedTask;
-                     }
-                 };
-             })
-             .AddScheme<AuthenticationSchemeOptions, ApiResponseHandler>(nameof(ApiResponseHandler), o => { });
-
+            // 这里冗余写了一次,因为很多人看不到
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             // 注入权限处理器
             services.AddScoped<IAuthorizationHandler, PermissionHandler>();
             services.AddSingleton(permissionRequirement);

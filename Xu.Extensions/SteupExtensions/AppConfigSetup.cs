@@ -21,8 +21,17 @@ namespace Xu.Extensions
 
                 Console.WriteLine("************ WebApi Config Set *****************");
 
+                ConsoleHelper.WriteSuccessLine("Current environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+
                 // 授权策略方案
-                Console.WriteLine($"Current authorization scheme: JWT");
+                if (Permissions.IsUseIds4)
+                {
+                    ConsoleHelper.WriteSuccessLine($"Current authorization scheme: " + (Permissions.IsUseIds4 ? "Ids4" : "JWT"));
+                }
+                else
+                {
+                    Console.WriteLine($"Current authorization scheme: " + (Permissions.IsUseIds4 ? "Ids4" : "JWT"));
+                }
 
                 // Redis缓存AOP
                 if (!Appsettings.App(new string[] { "AppSettings", "RedisCachingAOP", "Enabled" }).ToBoolReq())
@@ -92,6 +101,46 @@ namespace Xu.Extensions
                 else
                 {
                     ConsoleHelper.WriteSuccessLine($"IpRateLimiting: True");
+                }
+
+                // 性能分析
+                if (!Appsettings.App("Startup", "MiniProfiler", "Enabled").ToBoolReq())
+                {
+                    Console.WriteLine($"MiniProfiler: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"MiniProfiler: True");
+                }
+
+                // CORS跨域
+                if (!Appsettings.App("Startup", "Cors", "EnableAllIPs").ToBoolReq())
+                {
+                    Console.WriteLine($"EnableAllIPs For CORS: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"EnableAllIPs For CORS: True");
+                }
+
+                // redis消息队列
+                if (!Appsettings.App("Startup", "RedisMq", "Enabled").ToBoolReq())
+                {
+                    Console.WriteLine($"Redis MQ: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"Redis MQ: True");
+                }
+
+                // Consul 注册服务
+                if (!Appsettings.App("Middleware", "Consul", "Enabled").ToBoolReq())
+                {
+                    Console.WriteLine($"Consul service: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"Consul service: True");
                 }
 
                 // 多库

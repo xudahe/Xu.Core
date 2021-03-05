@@ -57,10 +57,22 @@ namespace Xu.WebApi
             services.AddHttpContextSetup();
             services.AddAppConfigSetup();
             services.AddHttpApi();
+            services.AddRedisInitMqSetup();
             //services.AddHstsSetup(); // 生产环境中使用
             //services.AddAntiforgerySetup(); //防止CSRF攻击
 
+            Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
+            // 授权+认证 (jwt or ids4)
             services.AddAuthorizationSetup();
+            if (Permissions.IsUseIds4)
+            {
+                services.AddAuthentication_Ids4Setup();
+            }
+            else
+            {
+                services.AddAuthentication_JWTSetup();
+            }
+
             services.AddIpPolicyRateLimitSetup(Configuration);
             services.AddSignalR().AddNewtonsoftJsonProtocol();
             //配置可以同步请求读取流数据
@@ -155,7 +167,7 @@ namespace Xu.WebApi
             // ↓↓↓↓↓↓ 注意下边这些中间件的顺序，很重要 ↓↓↓↓↓↓
 
             // CORS跨域
-            app.UseCors("LimitRequests");
+            app.UseCors(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }));
             // 重定向中间件，用于将 HTTP 请求重定向到 HTTPS
             //app.UseHttpsRedirection();
             // 默认使用wwwroot静态文件
