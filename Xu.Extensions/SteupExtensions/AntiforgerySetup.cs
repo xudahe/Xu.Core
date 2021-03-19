@@ -21,9 +21,9 @@ namespace Xu.Extensions
             services.AddAntiforgery(options =>
             {
                 //使用cookiebuilder属性设置cookie属性。
-                options.FormFieldName = "AntiforgeryKey";
-                options.HeaderName = "X-CSRF-TOKEN";
-                options.SuppressXFrameOptionsHeader = false;
+                options.FormFieldName = "AntiforgeryKey"; //防伪系统用于呈现防伪令牌在视图中的隐藏的窗体字段的名称。
+                options.HeaderName = "X-CSRF-TOKEN";  //防伪系统使用的标头的名称。 如果null，系统会认为只有窗体数据。
+                options.SuppressXFrameOptionsHeader = false; //指定是否禁止显示生成X - Frame - Options标头。 默认情况下，值为"SAMEORIGIN"生成标头。 默认为 false。
             });
         }
     }

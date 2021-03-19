@@ -14,7 +14,7 @@ namespace Xu.Extensions
 
         public static ILoggerFactory AddLog4Net(this ILoggerFactory factory)
         {
-            if (Appsettings.App("Middleware", "RecordAllLogs", "Enabled").ObjToBool())
+            if (Appsettings.App("Middleware", "RecordAllLogs", "Enabled").ToBoolReq())
             {
                 factory.AddProvider(new Microsoft.Extensions.Logging.Log4NetProvider("Log4net.config"));
             }

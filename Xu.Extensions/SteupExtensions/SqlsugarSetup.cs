@@ -40,7 +40,7 @@ namespace Xu.Extensions
                 {
                     listConfig.Add(new ConnectionConfig()
                     {
-                        ConfigId = m.ConnId.ObjToString().ToLower(),
+                        ConfigId = m.ConnId.ToString().ToLower(),
                         ConnectionString = m.Connection, //必填, 数据库连接字符串
                         DbType = (DbType)m.DbType, //必填, 数据库类型
                         IsAutoCloseConnection = true, //是否关闭数据库连接, 设置为true无需使用using或者Close操作
@@ -49,7 +49,7 @@ namespace Xu.Extensions
                         {
                             OnLogExecuting = (sql, p) =>
                             {
-                                if (Appsettings.App(new string[] { "AppSettings", "SqlAOP", "Enabled" }).ObjToBool())
+                                if (Appsettings.App(new string[] { "AppSettings", "SqlAOP", "Enabled" }).ToBoolReq())
                                 {
                                     Parallel.For(0, 1, e =>
                                     {

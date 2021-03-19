@@ -40,7 +40,7 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>() { Success = true, Message = "" };
             data.Response += @"file path is:D:\my-file\}";
-            var isMuti = Appsettings.App(new string[] { "MutiDBEnabled" }).ObjToBool();
+            var isMuti = Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq();
             if (Env.IsDevelopment())
             {
                 data.Response += $"Controller层生成：{FrameSeed.CreateControllers(_sqlSugarClient)} || ";
@@ -81,7 +81,7 @@ namespace Xu.WebApi.Controllers
             //ConnID = ConnID ?? MainDb.CurrentDbConnId.ToLower();
             ConnID ??= MainDb.CurrentDbConnId.ToLower();
 
-            var isMuti = Appsettings.App(new string[] { "MutiDBEnabled" }).ObjToBool();
+            var isMuti = Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq();
             var data = new MessageModel<string>() { Success = true, Message = "" };
             if (Env.IsDevelopment())
             {
@@ -110,7 +110,7 @@ namespace Xu.WebApi.Controllers
         {
             ConnID ??= MainDb.CurrentDbConnId.ToLower();
 
-            var isMuti = Appsettings.App(new string[] { "MutiDBEnabled" }).ObjToBool();
+            var isMuti = Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq();
             var data = new MessageModel<string>() { Success = true, Message = "" };
             if (Env.IsDevelopment())
             {
