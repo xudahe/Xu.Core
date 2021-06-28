@@ -1,14 +1,19 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using System.Text;
 using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
@@ -42,6 +47,8 @@ namespace Xu.WebApi
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddSingleton(new Appsettings(Configuration));
             services.AddSingleton(new LogLock(Env.ContentRootPath)); //接口请求日志
 
@@ -61,7 +68,14 @@ namespace Xu.WebApi
             //services.AddHstsSetup(); // 生产环境中使用
             //services.AddAntiforgerySetup(); //防止CSRF攻击
 
+            services.AddRabbitMQSetup();
+            services.AddEventBusSetup();
+
             Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
+
+            // 确保从ids4认证中心返回的ClaimType不被更改，不使用Map映射
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             // 授权+认证 (jwt or ids4)
             services.AddAuthorizationSetup();
             if (Permissions.IsUseIds4)
@@ -125,13 +139,19 @@ namespace Xu.WebApi
             //        "https://*/404";
             //});
 
+            services.Replace(ServiceDescriptor.Transient<IControllerActivator, ServiceBasedControllerActivator>());
+
             _services = services;
+
+            //支持编码大全 例如:支持 System.Text.Encoding.GetEncoding("GB2312")  System.Text.Encoding.GetEncoding("GB18030") 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         // 注意在Program.CreateHostBuilder，添加Autofac服务工厂
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new AutofacModuleRegister());
+            builder.RegisterModule<AutofacPropertityModuleReg>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -141,6 +161,8 @@ namespace Xu.WebApi
             app.UseIpLimitMildd();
             // 记录请求与返回数据
             app.UseReuestResponseLog();
+            // 用户访问记录(必须放到外层，不然如果遇到异常，会报错，因为不能返回流)
+            app.UseRecordAccessLogsMildd();
             // signalr
             app.UseSignalRSendMildd();
             // 记录ip请求
@@ -180,16 +202,17 @@ namespace Xu.WebApi
             app.UseRouting();
             // 这种自定义授权中间件，可以尝试，但不推荐
             // app.UseJwtTokenAuth();
+            
             // 先开启认证--验证当前请求的用户，并设置HttpContext.User，当OAuth callbacks时，会中止执行下一个中间件。
             app.UseAuthentication();
             // 然后是授权中间件
             app.UseAuthorization();
+            // 开启性能分析
+            app.UseMiniProfiler();
             // 开启异常中间件，要放到最后
             app.UseExceptionHandlerMidd();
-            // 性能分析
-            app.UseMiniProfiler();
-            // 用户访问记录
-            app.UseRecordAccessLogsMildd();
+           
+
 
             app.UseEndpoints(endpoints =>
             {
@@ -205,7 +228,9 @@ namespace Xu.WebApi
             // 开启QuartzNetJob调度服务
             app.UseQuartzJobMildd(tasksQzSvc, schedulerCenter);
             // 服务注册
-            //app.UseConsulMildd(Configuration, lifetime);
+            app.UseConsulMildd(Configuration, lifetime);
+            // 事件总线，订阅服务
+            app.ConfigureEventBus();
         }
     }
 }

@@ -82,9 +82,9 @@ namespace Xu.Common
 
                 return qrImage;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {

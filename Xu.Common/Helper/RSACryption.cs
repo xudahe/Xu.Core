@@ -66,9 +66,9 @@ namespace Xu.Common
                 string str = Convert.ToBase64String(bytes);
                 return str;
             }
-            catch (CryptographicException e)
+            catch (CryptographicException)
             {
-                throw e;
+                throw;
             }
         }
 

@@ -446,6 +446,26 @@
             <param name="falg">true(禁用),false(启用)</param>
             <returns></returns>
         </member>
+        <member name="T:Xu.WebApi.Controllers.ValueController">
+            <summary>
+            用户管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.EventBusTry(Xu.EventBus.IEventBus,System.Int32)">
+            <summary>
+            测试RabbitMQ事件总线
+            </summary>
+            <param name="_eventBus"></param>
+            <param name="blogId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.GetHtmlMiniProfiler">
+            <summary>
+            获取MiniProfiler的html代码片段
+            </summary>
+            <remarks>将生成的内容拷贝出来粘贴在Swagger的index.html顶部</remarks>
+            <returns></returns>
+        </member>
         <member name="T:Xu.WebApi.CustomRouteAttribute">
             <summary>
             自定义路由 /api/{version}/[controler]/[action]

@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.Services", "Xu.Services\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.Extensions", "Xu.Extensions\Xu.Extensions.csproj", "{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xu.EventBus", "Xu.EventBus\Xu.EventBus.csproj", "{7A261678-93B3-438E-9E83-DFC92534416A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAD52E76-C0D8-4693-A3F4-CCA95D637CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A261678-93B3-438E-9E83-DFC92534416A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A261678-93B3-438E-9E83-DFC92534416A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A261678-93B3-438E-9E83-DFC92534416A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A261678-93B3-438E-9E83-DFC92534416A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

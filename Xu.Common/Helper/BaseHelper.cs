@@ -65,9 +65,9 @@ namespace Xu.Common
                 }
                 return outmessage.ToString();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -138,9 +138,9 @@ namespace Xu.Common
                 byte[] outbyte = (byte[])outMessage.ToArray(Type.GetType("System.Byte"));
                 return Encoding.Default.GetString(outbyte);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

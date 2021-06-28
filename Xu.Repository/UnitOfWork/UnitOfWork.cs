@@ -43,10 +43,10 @@ namespace Xu.Repository.UnitOfWork
             {
                 GetDbClient().CommitTran();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 GetDbClient().RollbackTran();
-                throw ex;
+                throw;
             }
         }
 
