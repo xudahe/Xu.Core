@@ -77,6 +77,11 @@ namespace Xu.Extensions
             }
         }
 
+        /// <summary>
+        /// 存储请求数据
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private async Task RequestDataLog(HttpContext context)
         {
             var request = context.Request;
@@ -86,15 +91,21 @@ namespace Xu.Extensions
 
             if (!string.IsNullOrEmpty(content))
             {
-                Parallel.For(0, 1, e =>
-                {
-                    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Request Data:", content });
-                });
+                //Parallel.For(0, 1, e =>
+                //{
+                //    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Request Data:", content });
+                //});
+                SerilogServer.WriteLog("RequestLog", new string[] { "Request Data:", content });
 
                 request.Body.Position = 0;
             }
         }
 
+        /// <summary>
+        /// 存储响应数据
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="ms"></param>
         private void ResponseDataLog(HttpResponse response, MemoryStream ms)
         {
             ms.Position = 0;
@@ -106,10 +117,11 @@ namespace Xu.Extensions
 
             if (!string.IsNullOrEmpty(ResponseBody))
             {
-                Parallel.For(0, 1, e =>
-                {
-                    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Response Data:", ResponseBody });
-                });
+                //Parallel.For(0, 1, e =>
+                //{
+                //    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Response Data:", ResponseBody });
+                //});
+                SerilogServer.WriteLog("ResponseLog", new string[] { "Response Data:", ResponseBody });
             }
         }
     }

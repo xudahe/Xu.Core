@@ -43,7 +43,7 @@ namespace Xu.Common
         }
 
         /// <summary>
-        /// 取某个枚举值。
+        /// 取某个枚举的值
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>

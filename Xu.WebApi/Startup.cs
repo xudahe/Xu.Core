@@ -51,6 +51,7 @@ namespace Xu.WebApi
 
             services.AddSingleton(new Appsettings(Configuration));
             services.AddSingleton(new LogLock(Env.ContentRootPath)); //接口请求日志
+            services.AddSingleton(new SerilogServer(Env.ContentRootPath)); //接口请求日志
 
             services.AddMemoryCacheSetup();
             services.AddRedisCacheSetup();
@@ -143,7 +144,7 @@ namespace Xu.WebApi
 
             _services = services;
 
-            //支持编码大全 例如:支持 System.Text.Encoding.GetEncoding("GB2312")  System.Text.Encoding.GetEncoding("GB18030") 
+            //支持编码大全 例如:支持 System.Text.Encoding.GetEncoding("GB2312")  System.Text.Encoding.GetEncoding("GB18030")
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
@@ -202,7 +203,7 @@ namespace Xu.WebApi
             app.UseRouting();
             // 这种自定义授权中间件，可以尝试，但不推荐
             // app.UseJwtTokenAuth();
-            
+
             // 先开启认证--验证当前请求的用户，并设置HttpContext.User，当OAuth callbacks时，会中止执行下一个中间件。
             app.UseAuthentication();
             // 然后是授权中间件
@@ -211,8 +212,6 @@ namespace Xu.WebApi
             app.UseMiniProfiler();
             // 开启异常中间件，要放到最后
             app.UseExceptionHandlerMidd();
-           
-
 
             app.UseEndpoints(endpoints =>
             {

@@ -145,5 +145,16 @@ namespace Xu.Common
             };
             return week;
         }
+
+        /// <summary>
+        /// 获取当前时间的时间戳
+        /// </summary>
+        /// <param name="thisValue"></param>
+        /// <returns></returns>
+        public static string DateToTimeStamp(this DateTime thisValue)
+        {
+            TimeSpan ts = thisValue - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -12,15 +13,8 @@ namespace Xu.Extensions
     /// </summary>
     public class IPLogMildd
     {
-        /// <summary>
-        ///
-        /// </summary>
         private readonly RequestDelegate _next;
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="next"></param>
         public IPLogMildd(RequestDelegate next)
         {
             _next = next;
@@ -51,10 +45,11 @@ namespace Xu.Extensions
                         if (!string.IsNullOrEmpty(requestInfo))
                         {
                             // 自定义log输出
-                            Parallel.For(0, 1, e =>
-                            {
-                                LogLock.OutSql2Log("RequestIpInfoLog", new string[] { requestInfo + "," }, false);
-                            });
+                            //Parallel.For(0, 1, e =>
+                            //{
+                            //    LogLock.OutSql2Log("RequestIpInfoLog", new string[] { requestInfo + "," }, false);
+                            //});
+                            SerilogServer.WriteLog("RequestIpInfoLog", new string[] { requestInfo + ", " }, false);
 
                             // 这里读取过body  Position是读取过几次  而此操作优于控制器先行 控制器只会读取Position为零次的
                             request.Body.Position = 0;

@@ -117,6 +117,7 @@ namespace Xu.WebApi.Controllers
         /// <param name="token">token</param>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<object> RefreshToken(string token = "")
         {
             string jwtStr = string.Empty;
@@ -126,7 +127,7 @@ namespace Xu.WebApi.Controllers
                 return new JsonResult(new
                 {
                     success = false,
-                    message = "token无效，请重新登录！"
+                    message = "传入的token参数不能为空！"
                 });
             }
             var tokenModel = JwtHelper.SerializeJwt(token);
