@@ -24,6 +24,18 @@
         /// 返回数据集合
         /// </summary>
         public T Response { get; set; }
+
+        /// <summary>
+        /// 返回消息
+        /// </summary>
+        /// <param name="success">失败/成功</param>
+        /// <param name="msg">消息</param>
+        /// <param name="response">数据</param>
+        /// <returns></returns>
+        public static MessageModel<T> Msg(bool success, string msg, T response = default)
+        {
+            return new MessageModel<T>() { Message = msg, Response = response, Success = success };
+        }
     }
 
     public class MessageModel<T1, T2>

@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
 using Xu.Model.Enum;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
+using Xu.Model.ViewModel;
 using Xu.Tasks;
 
 namespace Xu.WebApi.Controllers
@@ -31,7 +34,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部定时任务
+        /// 获取全部任务
         /// </summary>
         /// <param name="ids">可空</param>
         /// <param name="jobName">任务名称(可空)</param>
@@ -56,7 +59,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 获取全部定时任务并分页
+        /// 获取全部任务并分页
         /// </summary>
         /// <param name="page">页码</param>
         /// <param name="pageSize">页大小</param>
@@ -157,7 +160,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 停止一个计划任务
+        /// 停止计划任务
         /// </summary>
         /// <param name="id">任务Id（非空）</param>
         /// <returns></returns>
@@ -190,7 +193,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 重启一个计划任务
+        /// 重启计划任务
         /// </summary>
         /// <param name="id">任务Id（非空）</param>
         /// <returns></returns>
@@ -223,7 +226,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 删除一个计划任务
+        /// 删除计划任务
         /// </summary>
         /// <param name="id">非空</param>
         /// <returns></returns>
@@ -244,6 +247,24 @@ namespace Xu.WebApi.Controllers
             }
 
             return data;
+        }
+
+        /// <summary>
+        /// 获取任务命名空间
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public MessageModel<List<QuartzReflectionViewModel>> GetTaskNameSpace()
+        {
+            var baseType = typeof(IJob);
+            var path = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
+            var referencedAssemblies = System.IO.Directory.GetFiles(path, "Xu.Tasks.dll").Select(Assembly.LoadFrom).ToArray();
+            var types = referencedAssemblies
+                .SelectMany(a => a.DefinedTypes)
+                .Select(type => type.AsType())
+                .Where(x => x != baseType && baseType.IsAssignableFrom(x)).ToArray();
+            var implementTypes = types.Where(x => x.IsClass).Select(item => new QuartzReflectionViewModel { nameSpace = item.Namespace, nameClass = item.Name, remark = "" }).ToList();
+            return MessageModel<List<QuartzReflectionViewModel>>.Msg(true, "获取成功", implementTypes);
         }
     }
 }

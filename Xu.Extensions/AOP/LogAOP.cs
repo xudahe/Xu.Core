@@ -96,7 +96,8 @@ namespace Xu.Extensions
                     dataIntercept += ($"【执行完成结果】：{invocation.ReturnValue}");
                     Parallel.For(0, 1, e =>
                     {
-                        LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
+                        //LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
+                        SerilogServer.WriteLog("AOPLog", new string[] { dataIntercept });
                     });
                 }
             }
@@ -129,7 +130,8 @@ namespace Xu.Extensions
             {
                 Parallel.For(0, 1, e =>
                 {
-                    LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
+                    // LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
+                    SerilogServer.WriteLog("AOPLog", new string[] { dataIntercept });
                 });
             });
         }
@@ -146,7 +148,8 @@ namespace Xu.Extensions
                 // 异常日志里有详细的堆栈信息
                 Parallel.For(0, 1, e =>
                 {
-                    LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
+                    // LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
+                    SerilogServer.WriteLog("AOPLog", new string[] { dataIntercept });
                 });
             }
         }

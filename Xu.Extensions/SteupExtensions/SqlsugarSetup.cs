@@ -40,7 +40,7 @@ namespace Xu.Extensions
                 {
                     listConfig.Add(new ConnectionConfig()
                     {
-                        ConfigId = m.ConnId.ToString().ToLower(),
+                        ConfigId = m.ConnId.ToString().ToLower(), //设置库的唯一标识
                         ConnectionString = m.Connection, //必填, 数据库连接字符串
                         DbType = (DbType)m.DbType, //必填, 数据库类型
                         IsAutoCloseConnection = true, //是否关闭数据库连接, 设置为true无需使用using或者Close操作
@@ -54,7 +54,8 @@ namespace Xu.Extensions
                                     Parallel.For(0, 1, e =>
                                     {
                                         MiniProfiler.Current.CustomTiming("SQL：", GetParas(p) + "【SQL语句】：" + sql);
-                                        LogLock.OutSql2Log("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql });
+                                        // LogLock.OutSql2Log("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql });
+                                        SerilogServer.WriteLog("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql});
                                     });
                                 }
                             }
@@ -78,7 +79,7 @@ namespace Xu.Extensions
                      {
                          return new SqlFilterResult() { Sql = " DeleteTime IS NULL" };
                      },
-                     IsJoinQuery = false
+                     IsJoinQuery = false  //单表查询生效
                  });
 
                 return db;

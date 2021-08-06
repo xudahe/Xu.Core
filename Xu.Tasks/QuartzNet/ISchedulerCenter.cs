@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
+using Xu.Model.ViewModel;
 
 namespace Xu.Tasks
 {
@@ -41,5 +43,33 @@ namespace Xu.Tasks
         /// <param name="tasksQz"></param>
         /// <returns></returns>
         Task<MessageModel<string>> ResumeScheduleJobAsync(TasksQz tasksQz);
+
+        /// <summary>
+        /// 检测任务是否存在
+        /// </summary>
+        /// <param name="tasksQz"></param>
+        /// <returns></returns>
+        Task<bool> IsExistScheduleJobAsync(TasksQz tasksQz);
+
+        /// <summary>
+        /// 获取任务触发器状态
+        /// </summary>
+        /// <param name="tasksQz"></param>
+        /// <returns></returns>
+        Task<List<TaskInfoDto>> GetTaskStaus(TasksQz tasksQz);
+
+        /// <summary>
+        /// 获取触发器标识
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        string GetTriggerState(string key);
+
+        /// <summary>
+        /// 立即执行 一个任务
+        /// </summary>
+        /// <param name="tasksQz"></param>
+        /// <returns></returns>
+        Task<MessageModel<string>> ExecuteJobAsync(TasksQz tasksQz);
     }
 }

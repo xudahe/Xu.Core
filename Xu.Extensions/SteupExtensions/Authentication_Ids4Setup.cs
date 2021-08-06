@@ -1,8 +1,8 @@
-﻿using Xu.Common;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Xu.Common;
 
 namespace Xu.Extensions
 {

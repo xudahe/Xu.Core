@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using Quartz.Spi;
 using System;
+using System.Linq;
+using System.Reflection;
 using Xu.Tasks;
 
 namespace Xu.Extensions
@@ -18,8 +21,23 @@ namespace Xu.Extensions
             //services.AddHostedService<Job2TimedService>();
 
             services.AddSingleton<IJobFactory, JobFactory>();
-            services.AddTransient<JobQuartz>(); //这里使用瞬时依赖注入
             services.AddSingleton<ISchedulerCenter, SchedulerCenter>();
+
+            //services.AddTransient<JobQuartz>(); //这里使用瞬时依赖注入，或者使用下方的程序集注入
+
+            //通过程序集注入任务
+            var baseType = typeof(IJob);
+            var path = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
+            var referencedAssemblies = System.IO.Directory.GetFiles(path, "Xu.Tasks.dll").Select(Assembly.LoadFrom).ToArray();
+            var types = referencedAssemblies
+                .SelectMany(a => a.DefinedTypes)
+                .Select(type => type.AsType())
+                .Where(x => x != baseType && baseType.IsAssignableFrom(x)).ToArray();
+            var implementTypes = types.Where(x => x.IsClass).ToArray();
+            foreach (var implementType in implementTypes)
+            {
+                services.AddTransient(implementType);
+            }
         }
     }
 }

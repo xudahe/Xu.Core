@@ -87,7 +87,7 @@ namespace Xu.Extensions
             var request = context.Request;
             var sr = new StreamReader(request.Body);
 
-            var content = $" QueryData:{request.Path + request.QueryString}\r\n BodyData:{await sr.ReadToEndAsync()}";
+            var content = $" QueryData：{request.Path + request.QueryString}\r\n BodyData：{await sr.ReadToEndAsync()}";
 
             if (!string.IsNullOrEmpty(content))
             {
@@ -95,7 +95,7 @@ namespace Xu.Extensions
                 //{
                 //    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Request Data:", content });
                 //});
-                SerilogServer.WriteLog("RequestLog", new string[] { "Request Data:", content });
+                SerilogServer.WriteLog("RequestLog", new string[] { "Request Data：", content });
 
                 request.Body.Position = 0;
             }
@@ -121,7 +121,7 @@ namespace Xu.Extensions
                 //{
                 //    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Response Data:", ResponseBody });
                 //});
-                SerilogServer.WriteLog("ResponseLog", new string[] { "Response Data:", ResponseBody });
+                SerilogServer.WriteLog("ResponseLog", new string[] { "Response Data：", ResponseBody });
             }
         }
     }

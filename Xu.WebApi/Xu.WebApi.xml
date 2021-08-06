@@ -107,7 +107,7 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksQz(System.String,System.String)">
             <summary>
-            获取全部定时任务
+            获取全部任务
             </summary>
             <param name="ids">可空</param>
             <param name="jobName">任务名称(可空)</param>
@@ -115,7 +115,7 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksQzByPage(System.Int32,System.Int32,System.String)">
             <summary>
-            获取全部定时任务并分页
+            获取全部任务并分页
             </summary>
             <param name="page">页码</param>
             <param name="pageSize">页大小</param>
@@ -145,23 +145,29 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.StopJob(System.Int32)">
             <summary>
-            停止一个计划任务
+            停止计划任务
             </summary>
             <param name="id">任务Id（非空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.ReCovery(System.Int32)">
             <summary>
-            重启一个计划任务
+            重启计划任务
             </summary>
             <param name="id">任务Id（非空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.DeleteTasksQz(System.Int32)">
             <summary>
-            删除一个计划任务
+            删除计划任务
             </summary>
             <param name="id">非空</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTaskNameSpace">
+            <summary>
+            获取任务命名空间
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Xu.IServices.ITableData)">

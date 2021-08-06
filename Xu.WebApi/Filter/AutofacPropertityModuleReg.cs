@@ -11,7 +11,6 @@ namespace Xu.WebApi
             builder.RegisterAssemblyTypes(typeof(Program).Assembly)
                 .Where(t => controllerBaseType.IsAssignableFrom(t) && t != controllerBaseType)
                 .PropertiesAutowired();
-
         }
     }
 }

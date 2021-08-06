@@ -20,7 +20,7 @@ namespace Xu.EventBus
     /// </summary>
     public class EventBusRabbitMQ : IEventBus, IDisposable
     {
-        const string BROKER_NAME = "blogcore_event_bus";
+        private const string BROKER_NAME = "blogcore_event_bus";
 
         private readonly IRabbitMQPersistentConnection _persistentConnection;
         private readonly ILogger<EventBusRabbitMQ> _logger;
@@ -42,9 +42,9 @@ namespace Xu.EventBus
         /// <param name="queueName">队列名称</param>
         /// <param name="retryCount">重试次数</param>
         public EventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQ> logger,
-            ILifetimeScope autofac, 
-            IEventBusSubscriptionsManager subsManager, 
-            string queueName = null, 
+            ILifetimeScope autofac,
+            IEventBusSubscriptionsManager subsManager,
+            string queueName = null,
             int retryCount = 5)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
@@ -107,7 +107,6 @@ namespace Xu.EventBus
 
             using (var channel = _persistentConnection.CreateModel())
             {
-
                 _logger.LogTrace("Declaring RabbitMQ exchange to publish event: {EventId}", @event.Id);
 
                 channel.ExchangeDeclare(exchange: BROKER_NAME, type: "direct");
@@ -269,7 +268,7 @@ namespace Xu.EventBus
             }
 
             // Even on exception we take the message off the queue.
-            // in a REAL WORLD app this should be handled with a Dead Letter Exchange (DLX). 
+            // in a REAL WORLD app this should be handled with a Dead Letter Exchange (DLX).
             // For more information see: https://www.rabbitmq.com/dlx.html
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, multiple: false);
         }

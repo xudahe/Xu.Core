@@ -1,21 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Profiling;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.EventBus;
-using Xu.Extensions;
 using Xu.Extensions.EventHandling;
-using Xu.IRepository;
-using Xu.IServices;
-using Xu.Model;
-using Xu.Model.Models;
-using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
 {
@@ -55,11 +44,11 @@ namespace Xu.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public string GetHtmlMiniProfiler() {
+        public string GetHtmlMiniProfiler()
+        {
             var html = MiniProfiler.Current.RenderIncludes(_accessor.HttpContext);
 
             return html.Value;
         }
-
     }
 }

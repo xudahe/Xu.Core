@@ -2,7 +2,6 @@
 using ICSharpCode.SharpZipLib.Zip;
 using System;
 using System.IO;
-using System.Text;
 
 namespace Xu.Common
 {
@@ -121,7 +120,6 @@ namespace Xu.Common
             FileStream ZipFile = null;
             ZipOutputStream ZipStream = null;
             ZipEntry ZipEntry = null;
-            string res;
             try
             {
                 ZipFile = File.OpenRead(FileToZip);
@@ -139,7 +137,6 @@ namespace Xu.Common
             }
             catch
             {
-                res = "错误";
             }
             finally
             {
@@ -204,9 +201,9 @@ namespace Xu.Common
                     fs.Read(buffur, 0, (int)fs.Length);
                     return buffur;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
             }
         }

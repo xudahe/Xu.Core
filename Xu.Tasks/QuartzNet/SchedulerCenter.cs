@@ -3,12 +3,14 @@ using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Quartz.Spi;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xu.IServices;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
+using Xu.Model.ViewModel;
 
 namespace Xu.Tasks
 {
@@ -51,7 +53,9 @@ namespace Xu.Tasks
                     //{ "quartz.dataSource.myDS.provider","MySql"},
                     //{ "quartz.jobStore.useProperties","true"}
                 };
+                //新建一个调度器工厂
                 StdSchedulerFactory factory = new StdSchedulerFactory(collection);
+                //使用工厂生成一个调度器
                 return _scheduler = factory.GetScheduler();
             }
         }
@@ -147,7 +151,7 @@ namespace Xu.Tasks
 
                     //传入反射出来的执行程序集
                     IJobDetail job = new JobDetailImpl(tasksQz.Id.ToString(), tasksQz.JobGroup, jobType);
-                    job.JobDataMap.Add("JobParam", tasksQz.JobParams);
+                    job.JobDataMap.Add("JobParam", tasksQz.JobParams); //设置参数
 
                     #endregion 通过反射获取程序集类型和类
 
@@ -169,16 +173,16 @@ namespace Xu.Tasks
                     #endregion 创建任务
 
                     //创建一个触发器
-                    if (!string.IsNullOrEmpty(tasksQz.Cron) && CronExpression.IsValidExpression(tasksQz.Cron) && !string.IsNullOrEmpty(tasksQz.TriggerType))
+                    if (tasksQz.Cron != null && CronExpression.IsValidExpression(tasksQz.Cron) && tasksQz.TriggerType == "cron")
                     {
                         trigger = CreateCronTrigger(tasksQz);
+
+                        ((CronTriggerImpl)trigger).MisfireInstruction = MisfireInstruction.CronTrigger.DoNothing;
                     }
                     else
                     {
                         trigger = CreateSimpleTrigger(tasksQz);
                     }
-
-                   ((CronTriggerImpl)trigger).MisfireInstruction = MisfireInstruction.CronTrigger.DoNothing;
 
                     //将触发器和任务器绑定到调度器中
                     await _scheduler.Result.ScheduleJob(job, trigger);
@@ -260,6 +264,174 @@ namespace Xu.Tasks
 
             return result;
         }
+
+        /// <summary>
+        /// 立即执行 一个任务
+        /// </summary>
+        /// <param name="tasksQz"></param>
+        /// <returns></returns>
+        public async Task<MessageModel<string>> ExecuteJobAsync(TasksQz tasksQz)
+        {
+            var result = new MessageModel<string>();
+            try
+            {
+                JobKey jobKey = new JobKey(tasksQz.Id.ToString(), tasksQz.JobGroup);
+
+                //判断任务是否存在，存在则 触发一次，不存在则先添加一个任务，触发以后再 停止任务
+                if (!await _scheduler.Result.CheckExists(jobKey))
+                {
+                    //不存在 则 添加一个计划任务
+                    await AddScheduleJobAsync(tasksQz);
+
+                    //触发执行一次
+                    await _scheduler.Result.TriggerJob(jobKey);
+
+                    //停止任务
+                    await StopScheduleJobAsync(tasksQz);
+
+                    result.Success = true;
+                    result.Message = $"立即执行计划任务:【{tasksQz.JobName}】成功";
+                }
+                else
+                {
+                    await _scheduler.Result.TriggerJob(jobKey);
+                    result.Success = true;
+                    result.Message = $"立即执行计划任务:【{tasksQz.JobName}】成功";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = $"立即执行计划任务失败:【{ex.Message}】";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 任务是否存在?
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> IsExistScheduleJobAsync(TasksQz tasksQz)
+        {
+            JobKey jobKey = new JobKey(tasksQz.Id.ToString(), tasksQz.JobGroup);
+            if (await _scheduler.Result.CheckExists(jobKey))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #region 状态状态帮助方法
+
+        /// <summary>
+        /// 获取任务触发器状态
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public async Task<List<TaskInfoDto>> GetTaskStaus(TasksQz tasksQz)
+        {
+            var ls = new List<TaskInfoDto>();
+            var noTask = new List<TaskInfoDto>{ new TaskInfoDto {
+                jobId = tasksQz.Id.ToString(),
+                jobGroup = tasksQz.JobGroup,
+                triggerId = "",
+                triggerGroup = "",
+                triggerStatus = "不存在"
+            } };
+            JobKey jobKey = new JobKey(tasksQz.Id.ToString(), tasksQz.JobGroup);
+            IJobDetail job = await this._scheduler.Result.GetJobDetail(jobKey);
+            if (job == null)
+            {
+                return noTask;
+            }
+            var triggers = await this._scheduler.Result.GetTriggersOfJob(jobKey);
+            if (triggers == null || triggers.Count == 0)
+            {
+                return noTask;
+            }
+            foreach (var trigger in triggers)
+            {
+                var triggerStaus = await this._scheduler.Result.GetTriggerState(trigger.Key);
+                string state = GetTriggerState(triggerStaus.ToString());
+                ls.Add(new TaskInfoDto
+                {
+                    jobId = job.Key.Name,
+                    jobGroup = job.Key.Group,
+                    triggerId = trigger.Key.Name,
+                    triggerGroup = trigger.Key.Group,
+                    triggerStatus = state
+                });
+            }
+            return ls;
+        }
+
+        /// <summary>
+        /// 获取触发器标识
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetTriggerState(string key)
+        {
+            string state = null;
+            if (key != null)
+                key = key.ToUpper();
+            switch (key)
+            {
+                case "1":
+                    state = "暂停";
+                    break;
+
+                case "2":
+                    state = "完成";
+                    break;
+
+                case "3":
+                    state = "出错";
+                    break;
+
+                case "4":
+                    state = "阻塞";
+                    break;
+
+                case "0":
+                    state = "正常";
+                    break;
+
+                case "-1":
+                    state = "不存在";
+                    break;
+
+                case "BLOCKED":
+                    state = "阻塞";
+                    break;
+
+                case "COMPLETE":
+                    state = "完成";
+                    break;
+
+                case "ERROR":
+                    state = "出错";
+                    break;
+
+                case "NONE":
+                    state = "不存在";
+                    break;
+
+                case "NORMAL":
+                    state = "正常";
+                    break;
+
+                case "PAUSED":
+                    state = "暂停";
+                    break;
+            }
+            return state;
+        }
+
+        #endregion 状态状态帮助方法
 
         #region 创建触发器帮助方法
 

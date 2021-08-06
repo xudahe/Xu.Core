@@ -295,6 +295,11 @@
             执行传参
             </summary>
         </member>
+        <member name="P:Xu.Model.Models.TasksQz.Triggers">
+            <summary>
+            任务内存中的状态
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Todo">
             <summary>
             待办事项
@@ -514,6 +519,15 @@
             <summary>
             返回数据集合
             </summary>
+        </member>
+        <member name="M:Xu.Model.ResultModel.MessageModel`1.Msg(System.Boolean,System.String,`0)">
+            <summary>
+            返回消息
+            </summary>
+            <param name="success">失败/成功</param>
+            <param name="msg">消息</param>
+            <param name="response">数据</param>
+            <returns></returns>
         </member>
         <member name="P:Xu.Model.ResultModel.MessageModel`2.Status">
             <summary>
@@ -854,6 +868,26 @@
             <param name="config">config</param>
             <returns>返回值</returns>
         </member>
+        <member name="T:Xu.Model.ViewModel.QuartzReflectionViewModel">
+            <summary>
+            实现IJob的类
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.QuartzReflectionViewModel.nameSpace">
+            <summary>
+            命名空间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.QuartzReflectionViewModel.nameClass">
+            <summary>
+            类名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.QuartzReflectionViewModel.remark">
+            <summary>
+            备注
+            </summary>
+        </member>
         <member name="T:Xu.Model.ViewModel.ServerViewModel">
             <summary>
             服务器VM
@@ -892,6 +926,46 @@
         <member name="P:Xu.Model.ViewModel.ServerViewModel.WorkingTime">
             <summary>
             启动时间
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModel.TaskInfoDto">
+            <summary>
+            调度任务触发器信息实体
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.jobId">
+            <summary>
+            任务ID
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.jobName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.jobGroup">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerId">
+            <summary>
+            触发器ID
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerName">
+            <summary>
+            触发器名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerGroup">
+            <summary>
+            触发器分组
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerStatus">
+            <summary>
+            触发器状态
             </summary>
         </member>
     </members>

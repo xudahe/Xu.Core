@@ -1,9 +1,7 @@
 ﻿using SqlSugar;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Xml.Linq;
-using Xu.Common;
 
 namespace Xu.Model.Models
 {

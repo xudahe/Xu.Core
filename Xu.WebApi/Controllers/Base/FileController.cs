@@ -23,7 +23,7 @@ namespace Blog.Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("/api/File/imgDownload")]
-        public FileStreamResult DownloadPicture([FromServices]IWebHostEnvironment environment)
+        public FileStreamResult DownloadPicture([FromServices] IWebHostEnvironment environment)
         {
             string foldername = "images";
             string filepath = Path.Combine(environment.WebRootPath, foldername, "20201112145833764.jpeg");
@@ -45,7 +45,7 @@ namespace Blog.Core.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/api/File/imgUpload")]
-        public async Task<MessageModel<string>> InsertPicture([FromServices]IWebHostEnvironment environment)
+        public async Task<MessageModel<string>> InsertPicture([FromServices] IWebHostEnvironment environment)
         {
             var data = new MessageModel<string>();
             string path = string.Empty;

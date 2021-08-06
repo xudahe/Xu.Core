@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using WebApiClient.Extensions.DependencyInjection;
 
 namespace Xu.Extensions
 {

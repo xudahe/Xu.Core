@@ -1,5 +1,6 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
@@ -26,6 +27,11 @@ namespace Xu.WebApi
                      serverOptions.Limits.MaxRequestBodySize = int.MaxValue;//限制请求长度
                  })
                  .UseStartup<Startup>() //调用Startup.cs类下的Configure 和 ConfigureServices
+                 .ConfigureAppConfiguration((hostingContext, config) =>
+                 {
+                     //config.Sources.Clear(); //清除已有的所有配置（包括appsettings.json配置）
+                     //config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+                 })
                  .UseUrls("http://*:1081", "http://*:1082")
                  .ConfigureLogging((hostingContext, builder) =>
                  {
@@ -34,9 +40,8 @@ namespace Xu.WebApi
                      builder.AddFilter("Microsoft", LogLevel.Error);
                      builder.AddFilter("Xu.Extensions.ApiResponseHandler", LogLevel.Error);
 
-                     //可配置文件
-                     var path = Path.Combine(Directory.GetCurrentDirectory(), "Log4net.config");
-                     builder.AddLog4Net(path);
+                     //可配置文件，不带参数：表示log4net.config的配置文件就在应用程序根目录下，也可以指定配置文件的路径
+                     builder.AddLog4Net(Path.Combine(Directory.GetCurrentDirectory(), "Log4net.config"));
                  });
              })
              // 生成承载 web 应用程序的 Microsoft.AspNetCore.Hosting.IWebHost。Build是WebHostBuilder最终的目的，将返回一个构造的WebHost，最终生成宿主。

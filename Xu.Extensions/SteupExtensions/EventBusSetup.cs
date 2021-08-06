@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Xu.Common;
-using Xu.EventBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using Xu.Common;
+using Xu.EventBus;
 using Xu.Extensions.EventHandling;
 
 namespace Xu.Extensions
@@ -22,10 +22,8 @@ namespace Xu.Extensions
             {
                 var subscriptionClientName = Appsettings.App(new string[] { "EventBus", "SubscriptionClientName" });
 
-
                 services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
                 services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
-
 
                 services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
                 {
@@ -45,14 +43,13 @@ namespace Xu.Extensions
             }
         }
 
-
         public static void ConfigureEventBus(this IApplicationBuilder App)
         {
             if (Appsettings.App(new string[] { "RabbitMQ", "Enabled" }).ToBoolReq() && Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
             {
                 var eventBus = App.ApplicationServices.GetRequiredService<IEventBus>();
 
-                eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>(); 
+                eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
             }
         }
     }

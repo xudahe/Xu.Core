@@ -1,9 +1,9 @@
-﻿using Xu.Common;
-using Xu.EventBus;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System;
+using Xu.Common;
+using Xu.EventBus;
 
 namespace Xu.Extensions
 {

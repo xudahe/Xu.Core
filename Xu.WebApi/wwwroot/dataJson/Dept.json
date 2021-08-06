@@ -1,1 +1,30 @@
-﻿[{"CreateTime":"\/Date(1596712454000+0800)\/","DeleteTime":null,"Guid":"e211a0c3-92b7-9f6a-9ae3-db722c0b2837","Id":1,"ModifyTime":"\/Date(1609825843000+0800)\/","DeptCode":"SCB","DeptManager":"火狐","DeptName":"市场部","Enabled":false,"ParentId":null,"ParentName":null,"Remark":""},{"CreateTime":"\/Date(1597394720000+0800)\/","DeleteTime":null,"Guid":"6e78faa8-92dc-3b19-f228-2e3af1151e16","Id":2,"ModifyTime":null,"DeptCode":"CWB","DeptManager":"哈哈","DeptName":"财务部","Enabled":false,"ParentId":null,"ParentName":null,"Remark":"d"}]
+﻿[
+  {
+    "CreateTime": "\/Date(1596712454000+0800)\/",
+    "DeleteTime": null,
+    "Guid": "e211a0c3-92b7-9f6a-9ae3-db722c0b2837",
+    "Id": 1,
+    "ModifyTime": "\/Date(1609825843000+0800)\/",
+    "DeptCode": "SCB",
+    "DeptManager": "火狐",
+    "DeptName": "市场部",
+    "Enabled": false,
+    "ParentId": null,
+    "ParentName": null,
+    "Remark": ""
+  },
+  {
+    "CreateTime": "\/Date(1597394720000+0800)\/",
+    "DeleteTime": null,
+    "Guid": "6e78faa8-92dc-3b19-f228-2e3af1151e16",
+    "Id": 2,
+    "ModifyTime": null,
+    "DeptCode": "CWB",
+    "DeptManager": "哈哈",
+    "DeptName": "财务部",
+    "Enabled": false,
+    "ParentId": null,
+    "ParentName": null,
+    "Remark": "d"
+  }
+]

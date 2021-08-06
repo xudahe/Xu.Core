@@ -1,9 +1,9 @@
-﻿using Xu.Common;
-using Xu.EventBus;
-using Xu.IServices;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Xu.Common;
+using Xu.EventBus;
+using Xu.IServices;
 
 namespace Xu.Extensions.EventHandling
 {
@@ -33,6 +33,5 @@ namespace Xu.Extensions.EventHandling
 
             await _userSvc.GetUserNameById(@event.ProductId);
         }
-
     }
 }

@@ -13,8 +13,10 @@ namespace Xu.EventBus
     {
         //定义的事件名称和事件订阅的字典映射（1:N）
         private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
+
         //保存所有的事件处理类型
         private readonly List<Type> _eventTypes;
+
         //定义事件移除后事件
         public event EventHandler<string> OnEventRemoved;
 
@@ -23,8 +25,10 @@ namespace Xu.EventBus
             _handlers = new Dictionary<string, List<SubscriptionInfo>>();
             _eventTypes = new List<Type>();
         }
+
         //构造函数初始化
         public bool IsEmpty => !_handlers.Keys.Any();
+
         public void Clear() => _handlers.Clear();
 
         /// <summary>
@@ -106,7 +110,6 @@ namespace Xu.EventBus
             DoRemoveHandler(eventName, handlerToRemove);
         }
 
-
         private void DoRemoveHandler(string eventName, SubscriptionInfo subsToRemove)
         {
             if (subsToRemove != null)
@@ -122,7 +125,6 @@ namespace Xu.EventBus
                     }
                     RaiseOnEventRemoved(eventName);
                 }
-
             }
         }
 
@@ -131,6 +133,7 @@ namespace Xu.EventBus
             var key = GetEventKey<T>();
             return GetHandlersForEvent(key);
         }
+
         public IEnumerable<SubscriptionInfo> GetHandlersForEvent(string eventName) => _handlers[eventName];
 
         private void RaiseOnEventRemoved(string eventName)
@@ -138,7 +141,6 @@ namespace Xu.EventBus
             var handler = OnEventRemoved;
             handler?.Invoke(this, eventName);
         }
-
 
         private SubscriptionInfo FindDynamicSubscriptionToRemove<TH>(string eventName)
             where TH : IDynamicIntegrationEventHandler
@@ -168,7 +170,6 @@ namespace Xu.EventBus
             }
 
             return _handlers[eventName].SingleOrDefault(s => s.HandlerType == handlerType);
-
         }
 
         public bool HasSubscriptionsForEvent<T>() where T : IntegrationEvent
@@ -176,6 +177,7 @@ namespace Xu.EventBus
             var key = GetEventKey<T>();
             return HasSubscriptionsForEvent(key);
         }
+
         public bool HasSubscriptionsForEvent(string eventName) => _handlers.ContainsKey(eventName);
 
         public Type GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName);
@@ -185,5 +187,4 @@ namespace Xu.EventBus
             return typeof(T).Name;
         }
     }
-
 }

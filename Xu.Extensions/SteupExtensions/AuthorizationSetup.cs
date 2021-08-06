@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using Xu.Common;
-using Xu.Extensions;
 
 namespace Xu.Extensions
 {

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
-using Xu.Model.Models;
 
 namespace Xu.WebApi.Controllers
 {

@@ -1,6 +1,8 @@
 ﻿using SqlSugar;
 using System;
+using System.Collections.Generic;
 using Xu.Model.Enum;
+using Xu.Model.ViewModel;
 
 namespace Xu.Model.Models
 {
@@ -99,5 +101,11 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "执行传参")]
         public string JobParams { get; set; }
+
+        /// <summary>
+        /// 任务内存中的状态
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public List<TaskInfoDto> Triggers { get; set; }
     }
 }

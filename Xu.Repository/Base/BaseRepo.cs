@@ -31,7 +31,7 @@ namespace Xu.Repository
                     }
                     else
                     {
-                        _dbBase.ChangeDatabase(MainDb.CurrentDbConnId.ToLower());
+                        _dbBase.ChangeDatabase(MainDb.CurrentDbConnId.ToLower()); //切换数据库 ConfigId = 0
                     }
                 }
 

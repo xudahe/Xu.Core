@@ -16,8 +16,7 @@ namespace Xu.Extensions
     /// </summary>
     public static class SwaggerSetup
     {
-        private static readonly ILog log =
-        LogManager.GetLogger(typeof(SwaggerSetup));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SwaggerSetup));
 
         public static void AddSwaggerSetup(this IServiceCollection services)
         {

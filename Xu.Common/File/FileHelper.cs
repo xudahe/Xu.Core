@@ -673,9 +673,9 @@ namespace Xu.Common
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -705,9 +705,9 @@ namespace Xu.Common
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -734,9 +734,9 @@ namespace Xu.Common
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1009,9 +1009,9 @@ namespace Xu.Common
                     return Directory.GetFiles(directoryPath, searchPattern, SearchOption.TopDirectoryOnly);
                 }
             }
-            catch (IOException ex)
+            catch (IOException)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1029,9 +1029,9 @@ namespace Xu.Common
             {
                 return Directory.GetDirectories(directoryPath);
             }
-            catch (IOException ex)
+            catch (IOException)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1055,9 +1055,9 @@ namespace Xu.Common
                     return Directory.GetDirectories(directoryPath, searchPattern, SearchOption.TopDirectoryOnly);
                 }
             }
-            catch (IOException ex)
+            catch (IOException)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -1239,9 +1239,9 @@ namespace Xu.Common
                 //返回流
                 return buffer;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -1302,9 +1302,9 @@ namespace Xu.Common
                 //读取流
                 return reader.ReadToEnd();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
             finally
             {

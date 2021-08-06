@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
@@ -20,10 +19,10 @@ namespace Xu.EventBus
         private readonly IConnectionFactory _connectionFactory;
         private readonly ILogger<RabbitMQPersistentConnection> _logger;
         private readonly int _retryCount;
-        IConnection _connection;
-        bool _disposed;
+        private IConnection _connection;
+        private bool _disposed;
 
-        object sync_root = new object();
+        private object sync_root = new object();
 
         public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<RabbitMQPersistentConnection> logger,
             int retryCount = 5)
@@ -109,7 +108,7 @@ namespace Xu.EventBus
 
                 // 连接成功
                 if (IsConnected)
-                { 
+                {
                     // 追加事件处理器，目的是为了异常重试，共3种情况
                     _connection.ConnectionShutdown += OnConnectionShutdown;
                     _connection.CallbackException += OnCallbackException;
@@ -147,7 +146,7 @@ namespace Xu.EventBus
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void OnCallbackException(object sender, CallbackExceptionEventArgs e)
+        private void OnCallbackException(object sender, CallbackExceptionEventArgs e)
         {
             if (_disposed) return;
 
@@ -161,7 +160,7 @@ namespace Xu.EventBus
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="reason"></param>
-        void OnConnectionShutdown(object sender, ShutdownEventArgs reason)
+        private void OnConnectionShutdown(object sender, ShutdownEventArgs reason)
         {
             if (_disposed) return;
 

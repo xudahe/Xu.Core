@@ -1,7 +1,6 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -36,22 +35,20 @@ namespace Xu.WebApi
         public IWebHostEnvironment Env { get; }
 
         /// <summary>
-        /// Ó¦ÓÃ³ÌĞòÔËĞĞÊ±½«·şÎñÌí¼Óµ½ÈİÆ÷ÖĞ
+        /// åº”ç”¨ç¨‹åºè¿è¡Œæ—¶å°†æœåŠ¡æ·»åŠ åˆ°å®¹å™¨ä¸­
         /// </summary>
         /// <param name="services"></param>
         /// <remarks>
-        /// È¨ÖØ£ºAddSingleton¡úAddTransient¡úAddScoped
-        /// AddSingletonµÄÉúÃüÖÜÆÚ£ºÏîÄ¿Æô¶¯-ÏîÄ¿¹Ø±Õ Ïàµ±ÓÚ¾²Ì¬Àà  Ö»»áÓĞÒ»¸ö
-        /// AddScoped   µÄÉúÃüÖÜÆÚ£ºÇëÇó¿ªÊ¼-ÇëÇó½áÊø  ÔÚÕâ´ÎÇëÇóÖĞ»ñÈ¡µÄ¶ÔÏó¶¼ÊÇÍ¬Ò»¸ö
-        /// AddTransientµÄÉúÃüÖÜÆÚ£ºÇëÇó»ñÈ¡-£¨GC»ØÊÕ-Ö÷¶¯ÊÍ·Å£© Ã¿Ò»´Î»ñÈ¡µÄ¶ÔÏó¶¼²»ÊÇÍ¬Ò»¸ö
+        /// æƒé‡ï¼šAddSingletonâ†’AddTransientâ†’AddScoped
+        /// AddSingletonçš„ç”Ÿå‘½å‘¨æœŸï¼šé¡¹ç›®å¯åŠ¨-é¡¹ç›®å…³é—­ ç›¸å½“äºé™æ€ç±»  åªä¼šæœ‰ä¸€ä¸ª
+        /// AddScoped   çš„ç”Ÿå‘½å‘¨æœŸï¼šè¯·æ±‚å¼€å§‹-è¯·æ±‚ç»“æŸ  åœ¨è¿™æ¬¡è¯·æ±‚ä¸­è·å–çš„å¯¹è±¡éƒ½æ˜¯åŒä¸€ä¸ª
+        /// AddTransientçš„ç”Ÿå‘½å‘¨æœŸï¼šè¯·æ±‚è·å–-ï¼ˆGCå›æ”¶-ä¸»åŠ¨é‡Šæ”¾ï¼‰ æ¯ä¸€æ¬¡è·å–çš„å¯¹è±¡éƒ½ä¸æ˜¯åŒä¸€ä¸ª
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.AddSingleton(new Appsettings(Configuration));
-            services.AddSingleton(new LogLock(Env.ContentRootPath)); //½Ó¿ÚÇëÇóÈÕÖ¾
-            services.AddSingleton(new SerilogServer(Env.ContentRootPath)); //½Ó¿ÚÇëÇóÈÕÖ¾
+            services.AddSingleton(new LogLock(Env.ContentRootPath)); //æ¥å£è¯·æ±‚æ—¥å¿—
+            services.AddSingleton(new SerilogServer(Env.ContentRootPath)); //æ¥å£è¯·æ±‚æ—¥å¿—
 
             services.AddMemoryCacheSetup();
             services.AddRedisCacheSetup();
@@ -66,18 +63,18 @@ namespace Xu.WebApi
             services.AddAppConfigSetup();
             services.AddHttpApi();
             services.AddRedisInitMqSetup();
-            //services.AddHstsSetup(); // Éú²ú»·¾³ÖĞÊ¹ÓÃ
-            //services.AddAntiforgerySetup(); //·ÀÖ¹CSRF¹¥»÷
+            //services.AddHstsSetup(); // ç”Ÿäº§ç¯å¢ƒä¸­ä½¿ç”¨
+            //services.AddAntiforgerySetup(); //é˜²æ­¢CSRFæ”»å‡»
 
             services.AddRabbitMQSetup();
             services.AddEventBusSetup();
 
             Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
 
-            // È·±£´Óids4ÈÏÖ¤ÖĞĞÄ·µ»ØµÄClaimType²»±»¸ü¸Ä£¬²»Ê¹ÓÃMapÓ³Éä
+            /// ç¡®ä¿ä»ids4è®¤è¯ä¸­å¿ƒè¿”å›çš„ClaimTypeä¸è¢«æ›´æ”¹ï¼Œä¸ä½¿ç”¨Mapæ˜ å°„
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            // ÊÚÈ¨+ÈÏÖ¤ (jwt or ids4)
+            // æˆæƒ+è®¤è¯ (jwt or ids4)
             services.AddAuthorizationSetup();
             if (Permissions.IsUseIds4)
             {
@@ -90,51 +87,51 @@ namespace Xu.WebApi
 
             services.AddIpPolicyRateLimitSetup(Configuration);
             services.AddSignalR().AddNewtonsoftJsonProtocol();
-            //ÅäÖÃ¿ÉÒÔÍ¬²½ÇëÇó¶ÁÈ¡Á÷Êı¾İ
+            //é…ç½®å¯ä»¥åŒæ­¥è¯·æ±‚è¯»å–æµæ•°æ®
             services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
                     .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 
             //services.AddRouting(options =>
             //{
-            //    options.LowercaseUrls = true; //Ğ¡Ğ´urlµÄÂ·ÓÉ
+            //    options.LowercaseUrls = true; //å°å†™urlçš„è·¯ç”±
             //});
 
-            //ÆôÓÃ¿ØÖÆÆ÷
+            //å¯ç”¨æ§åˆ¶å™¨
             services.AddControllers(options =>
             {
                 if (Appsettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq())
                 {
-                    options.Filters.Add(typeof(DataDecryptFilter)); //Êı¾İ½âÃÜ¹ıÂËÆ÷
+                    options.Filters.Add(typeof(DataDecryptFilter)); //æ•°æ®è§£å¯†è¿‡æ»¤å™¨
                 }
 
-                //È«¾ÖXSS¹ıÂËÆ÷
+                //å…¨å±€XSSè¿‡æ»¤å™¨
                 //options.Filters.Add(typeof(XSSFilterAttribute));
-                //È«¾Ö¸øpost Action¶¼¿ªÆôÁË·ÀÖ¹CSRF¹¥»÷,ÅäºÏservices.AddAntiforgerySetup()Ê¹ÓÃ
+                //å…¨å±€ç»™post Actionéƒ½å¼€å¯äº†é˜²æ­¢CSRFæ”»å‡»,é…åˆservices.AddAntiforgerySetup()ä½¿ç”¨
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                // È«¾ÖÒì³£¹ıÂË
+                // å…¨å±€å¼‚å¸¸è¿‡æ»¤
                 options.Filters.Add(typeof(GlobalExceptionsFilter));
-                // È«¾ÖÂ·ÓÉÈ¨ÏŞ¹«Ô¼
+                // å…¨å±€è·¯ç”±æƒé™å…¬çº¦
                 //o.Conventions.Insert(0, new GlobalRouteAuthorizeConvention());
-                // È«¾ÖÂ·ÓÉÇ°×º£¬Í³Ò»ĞŞ¸ÄÂ·ÓÉ
+                // å…¨å±€è·¯ç”±å‰ç¼€ï¼Œç»Ÿä¸€ä¿®æ”¹è·¯ç”±
                 options.Conventions.Insert(0, new GlobalRoutePrefixFilter(new RouteAttribute(RoutePrefix.Name)));
             })
-            //È«¾ÖÅäÖÃJsonĞòÁĞ»¯´¦Àí
+            //å…¨å±€é…ç½®Jsonåºåˆ—åŒ–å¤„ç†
             .AddNewtonsoftJson(options =>
             {
-                //ºöÂÔÑ­»·ÒıÓÃ£¬Èç¹ûÉèÖÃÎªError£¬ÔòÓöµ½Ñ­»·ÒıÓÃµÄÊ±ºò±¨´í
+                //å¿½ç•¥å¾ªç¯å¼•ç”¨ï¼Œå¦‚æœè®¾ç½®ä¸ºErrorï¼Œåˆ™é‡åˆ°å¾ªç¯å¼•ç”¨çš„æ—¶å€™æŠ¥é”™
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                //jsonÖĞÊôĞÔ¿ªÍ·×ÖÄ¸Ğ¡Ğ´µÄÍÕ·åÃüÃû
+                //jsonä¸­å±æ€§å¼€å¤´å­—æ¯å°å†™çš„é©¼å³°å‘½å
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                //ÈÕÆÚ¸ñÊ½»¯
+                //æ—¥æœŸæ ¼å¼åŒ–
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                //Èç¹û×Ö¶ÎÎªnull,¸Ã×Ö¶Î»áÒÀÈ»·µ»Øµ½jsonÖĞ¡£±ÈÈç"name":null
+                //å¦‚æœå­—æ®µä¸ºnull,è¯¥å­—æ®µä¼šä¾ç„¶è¿”å›åˆ°jsonä¸­ã€‚æ¯”å¦‚"name":null
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
             });
             //.ConfigureApiBehaviorOptions(options =>
             //{
             //    options.SuppressConsumesConstraintForFormFileParameters = true;
             //    options.SuppressInferBindingSourcesForParameters = true;
-            //    options.SuppressModelStateInvalidFilter = true; //true£º½ûÓÃ×Ô¶¯ 400 ĞĞÎª
+            //    options.SuppressModelStateInvalidFilter = true;//trueï¼šç¦ç”¨è‡ªåŠ¨ 400 è¡Œä¸º
             //    options.SuppressMapClientErrors = true;
             //    options.ClientErrorMapping[404].Link =
             //        "https://*/404";
@@ -144,11 +141,11 @@ namespace Xu.WebApi
 
             _services = services;
 
-            //Ö§³Ö±àÂë´óÈ« ÀıÈç:Ö§³Ö System.Text.Encoding.GetEncoding("GB2312")  System.Text.Encoding.GetEncoding("GB18030")
+            //æ”¯æŒç¼–ç å¤§å…¨ ä¾‹å¦‚:æ”¯æŒ System.Text.Encoding.GetEncoding("GB2312")  System.Text.Encoding.GetEncoding("GB18030")
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
-        // ×¢ÒâÔÚProgram.CreateHostBuilder£¬Ìí¼ÓAutofac·şÎñ¹¤³§
+        // æ³¨æ„åœ¨Program.CreateHostBuilderï¼Œæ·»åŠ AutofacæœåŠ¡å·¥å‚
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new AutofacModuleRegister());
@@ -158,59 +155,59 @@ namespace Xu.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MyContext myContext, ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter, IHostApplicationLifetime lifetime)
         {
-            // IpÏŞÁ÷,¾¡Á¿·Å¹ÜµÀÍâ²ã
+            // Ipé™æµ,å°½é‡æ”¾ç®¡é“å¤–å±‚
             app.UseIpLimitMildd();
-            // ¼ÇÂ¼ÇëÇóÓë·µ»ØÊı¾İ
+            // è®°å½•è¯·æ±‚ä¸è¿”å›æ•°æ®
             app.UseReuestResponseLog();
-            // ÓÃ»§·ÃÎÊ¼ÇÂ¼(±ØĞë·Åµ½Íâ²ã£¬²»È»Èç¹ûÓöµ½Òì³££¬»á±¨´í£¬ÒòÎª²»ÄÜ·µ»ØÁ÷)
+            // ç”¨æˆ·è®¿é—®è®°å½•(å¿…é¡»æ”¾åˆ°å¤–å±‚ï¼Œä¸ç„¶å¦‚æœé‡åˆ°å¼‚å¸¸ï¼Œä¼šæŠ¥é”™ï¼Œå› ä¸ºä¸èƒ½è¿”å›æµ)
             app.UseRecordAccessLogsMildd();
             // signalr
             app.UseSignalRSendMildd();
-            // ¼ÇÂ¼ipÇëÇó
+            // è®°å½•ipè¯·æ±‚
             app.UseIPLogMildd();
-            // ²é¿´×¢ÈëµÄËùÓĞ·şÎñ
+            // æŸ¥çœ‹æ³¨å…¥çš„æ‰€æœ‰æœåŠ¡
             app.UseAllServicesMildd(_services);
 
             if (env.IsDevelopment())
             {
-                // ÔÚ¿ª·¢»·¾³ÖĞ£¬Ê¹ÓÃÒì³£Ò³Ãæ£¬ÕâÑù¿ÉÒÔ±©Â¶´íÎó¶ÑÕ»ĞÅÏ¢£¬ËùÒÔ²»Òª·ÅÔÚÉú²ú»·¾³¡£
+                // åœ¨å¼€å‘ç¯å¢ƒä¸­ï¼Œä½¿ç”¨å¼‚å¸¸é¡µé¢ï¼Œè¿™æ ·å¯ä»¥æš´éœ²é”™è¯¯å †æ ˆä¿¡æ¯ï¼Œæ‰€ä»¥ä¸è¦æ”¾åœ¨ç”Ÿäº§ç¯å¢ƒã€‚
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
-                // ÔÚ·Ç¿ª·¢»·¾³ÖĞ£¬Ê¹ÓÃHTTPÑÏ¸ñ°²È«´«Êä(or HSTS) ¶ÔÓÚ±£»¤web°²È«ÊÇ·Ç³£ÖØÒªµÄ¡£
-                // Ç¿ÖÆÊµÊ© HTTPS ÔÚ ASP.NET Core£¬ÅäºÏ app.UseHttpsRedirection
-                //app.UseHsts(); // HSTS ÖĞ¼ä¼ş£¨UseHsts£©ÓÃÓÚÏò¿Í»§¶Ë·¢ËÍ HTTP ÑÏ¸ñ´«Êä°²È«Ğ­Òé£¨HSTS£©±êÍ·
+                // åœ¨éå¼€å‘ç¯å¢ƒä¸­ï¼Œä½¿ç”¨HTTPä¸¥æ ¼å®‰å…¨ä¼ è¾“(or HSTS) å¯¹äºä¿æŠ¤webå®‰å…¨æ˜¯éå¸¸é‡è¦çš„ã€‚
+                // å¼ºåˆ¶å®æ–½ HTTPS åœ¨ ASP.NET Coreï¼Œé…åˆ app.UseHttpsRedirection
+                //app.UseHsts(); // HSTS ä¸­é—´ä»¶ï¼ˆUseHstsï¼‰ç”¨äºå‘å®¢æˆ·ç«¯å‘é€ HTTP ä¸¥æ ¼ä¼ è¾“å®‰å…¨åè®®ï¼ˆHSTSï¼‰æ ‡å¤´
             }
 
-            // ·â×°SwaggerÕ¹Ê¾
+            // å°è£…Swaggerå±•ç¤º
             app.UseSwaggerMildd(() => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("Xu.WebApi.index.html"));
 
-            // ¡ı¡ı¡ı¡ı¡ı¡ı ×¢ÒâÏÂ±ßÕâĞ©ÖĞ¼ä¼şµÄË³Ğò£¬ºÜÖØÒª ¡ı¡ı¡ı¡ı¡ı¡ı
+            // â†“â†“â†“â†“â†“â†“ æ³¨æ„ä¸‹è¾¹è¿™äº›ä¸­é—´ä»¶çš„é¡ºåºï¼Œå¾ˆé‡è¦ â†“â†“â†“â†“â†“â†“
 
-            // CORS¿çÓò
+            // CORSè·¨åŸŸ
             app.UseCors(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }));
-            // ÖØ¶¨ÏòÖĞ¼ä¼ş£¬ÓÃÓÚ½« HTTP ÇëÇóÖØ¶¨Ïòµ½ HTTPS
+            // é‡å®šå‘ä¸­é—´ä»¶ï¼Œç”¨äºå°† HTTP è¯·æ±‚é‡å®šå‘åˆ° HTTPS
             //app.UseHttpsRedirection();
-            // Ä¬ÈÏÊ¹ÓÃwwwroot¾²Ì¬ÎÄ¼ş
+            // é»˜è®¤ä½¿ç”¨wwwrooté™æ€æ–‡ä»¶
             app.UseStaticFiles();
-            // Ê¹ÓÃcookie
+            // ä½¿ç”¨cookie
             app.UseCookiePolicy();
-            // ·µ»Ø´íÎóÂë
+            // è¿”å›é”™è¯¯ç 
             app.UseStatusCodePages();
             // Routing
             app.UseRouting();
-            // ÕâÖÖ×Ô¶¨ÒåÊÚÈ¨ÖĞ¼ä¼ş£¬¿ÉÒÔ³¢ÊÔ£¬µ«²»ÍÆ¼ö
+            // è¿™ç§è‡ªå®šä¹‰æˆæƒä¸­é—´ä»¶ï¼Œå¯ä»¥å°è¯•ï¼Œä½†ä¸æ¨è
             // app.UseJwtTokenAuth();
 
-            // ÏÈ¿ªÆôÈÏÖ¤--ÑéÖ¤µ±Ç°ÇëÇóµÄÓÃ»§£¬²¢ÉèÖÃHttpContext.User£¬µ±OAuth callbacksÊ±£¬»áÖĞÖ¹Ö´ĞĞÏÂÒ»¸öÖĞ¼ä¼ş¡£
+            // å…ˆå¼€å¯è®¤è¯--éªŒè¯å½“å‰è¯·æ±‚çš„ç”¨æˆ·ï¼Œå¹¶è®¾ç½®HttpContext.Userï¼Œå½“OAuth callbacksæ—¶ï¼Œä¼šä¸­æ­¢æ‰§è¡Œä¸‹ä¸€ä¸ªä¸­é—´ä»¶ã€‚
             app.UseAuthentication();
-            // È»ºóÊÇÊÚÈ¨ÖĞ¼ä¼ş
+            // ç„¶åæ˜¯æˆæƒä¸­é—´ä»¶
             app.UseAuthorization();
-            // ¿ªÆôĞÔÄÜ·ÖÎö
+            // å¼€å¯æ€§èƒ½åˆ†æ
             app.UseMiniProfiler();
-            // ¿ªÆôÒì³£ÖĞ¼ä¼ş£¬Òª·Åµ½×îºó
+            // å¼€å¯å¼‚å¸¸ä¸­é—´ä»¶ï¼Œè¦æ”¾åˆ°æœ€å
             app.UseExceptionHandlerMidd();
 
             app.UseEndpoints(endpoints =>
@@ -222,13 +219,13 @@ namespace Xu.WebApi
                 endpoints.MapHub<ChatHub>("/api/chatHub");
             });
 
-            // Éú³ÉÖÖ×ÓÊı¾İ
+            // ç”Ÿæˆç§å­æ•°æ®
             app.UseSeedDataMildd(myContext, Env.WebRootPath);
-            // ¿ªÆôQuartzNetJobµ÷¶È·şÎñ
+            // å¼€å¯QuartzNetJobè°ƒåº¦æœåŠ¡
             app.UseQuartzJobMildd(tasksQzSvc, schedulerCenter);
-            // ·şÎñ×¢²á
+            // æœåŠ¡æ³¨å†Œ
             app.UseConsulMildd(Configuration, lifetime);
-            // ÊÂ¼ş×ÜÏß£¬¶©ÔÄ·şÎñ
+            // äº‹ä»¶æ€»çº¿ï¼Œè®¢é˜…æœåŠ¡
             app.ConfigureEventBus();
         }
     }
