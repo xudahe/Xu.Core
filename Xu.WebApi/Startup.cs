@@ -86,7 +86,11 @@ namespace Xu.WebApi
             }
 
             services.AddIpPolicyRateLimitSetup(Configuration);
-            services.AddSignalR().AddNewtonsoftJsonProtocol();
+            services.AddSignalR(hubOptions => {
+                //注意：建议 服务端clientTimeoutInterval 的值是 客户端keepAliveIntervalInmillisecods 的两倍，从而保证不进服务器端的 OnDisconnectedAsync 回调，即不掉线
+                hubOptions.ClientTimeoutInterval= TimeSpan.FromSeconds(30); //服务器端配置30s没有收到客户端发送的消息，则认为客户端已经掉线
+            }).AddNewtonsoftJsonProtocol();
+
             //配置可以同步请求读取流数据
             services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true)
                     .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);

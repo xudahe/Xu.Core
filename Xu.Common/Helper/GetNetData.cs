@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
 using System.Net;
 using System.Text;
 
@@ -9,7 +11,7 @@ namespace Xu.Common
         /// <summary>
         /// GET请求
         /// </summary>
-        /// <param name="serviceAddress"></param>
+        /// <param name="serviceAddress">接口地址</param>
         /// <returns></returns>
         public static string Get(string serviceAddress)
         {
@@ -29,7 +31,7 @@ namespace Xu.Common
         /// <summary>
         /// POST请求
         /// </summary>
-        /// <param name="serviceAddress"></param>
+        /// <param name="serviceAddress">接口地址</param>
         /// <returns></returns>
         public static string Post(string serviceAddress)
         {

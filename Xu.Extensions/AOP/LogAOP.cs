@@ -105,7 +105,7 @@ namespace Xu.Extensions
             {
                 LogEx(ex, dataIntercept);
             }
-
+            //每次更新日志，推送到客户端——实时短信
             _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData()).Wait();
         }
 

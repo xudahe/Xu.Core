@@ -68,6 +68,7 @@ namespace Xu.Common
             return base.OnDisconnectedAsync(ex);
         }
 
+        //接收来自客户端的消息
         public async Task SendMessage(string user, string message)
         {
             await Clients.All.ReceiveMessage(user, message);
