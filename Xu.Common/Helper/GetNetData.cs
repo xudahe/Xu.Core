@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 

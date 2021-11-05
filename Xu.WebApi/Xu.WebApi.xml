@@ -24,6 +24,193 @@
             <param name="environment"></param>
             <returns></returns>
         </member>
+        <member name="T:Blog.Core.Controllers.WeChatCompanyController">
+            <summary>
+            WeChatCompanyController
+            </summary>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.#ctor(Xu.IServices.IWeChatCompanyServices)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="iWeChatCompanyServices"></param>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.Get(Xu.Model.PaginationModel)">
+            <summary>
+            获取
+            </summary>
+            <param name="pagination">分页条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.Get(System.String)">
+            <summary>
+            获取(id)
+            </summary>
+            <param name="id">主键ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.Post(Xu.Model.Models.WeChatCompany)">
+            <summary>
+            添加
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.Put(Xu.Model.Models.WeChatCompany)">
+            <summary>
+            更新
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.Delete(System.String)">
+            <summary>
+            删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatCompanyController.BatchDelete(System.String)">
+            <summary>
+            批量删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Blog.Core.Controllers.WeChatConfigController">
+            <summary>
+            WeChatConfigController
+            </summary>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.#ctor(Xu.IServices.IWeChatConfigServices)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="iWeChatConfigServices"></param>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.Get(Xu.Model.PaginationModel)">
+            <summary>
+            获取
+            </summary>
+            <param name="pagination">分页条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.Get(System.String)">
+            <summary>
+            获取(id)
+            </summary>
+            <param name="id">主键ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.Post(Xu.Model.Models.WeChatConfig)">
+            <summary>
+            添加
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.Put(Xu.Model.Models.WeChatConfig)">
+            <summary>
+            更新
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.Delete(System.String)">
+            <summary>
+            删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatConfigController.BatchDelete(System.String)">
+            <summary>
+            批量删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Blog.Core.Controllers.WeChatSubController">
+            <summary>
+            WeChatSubController
+            </summary>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.#ctor(Xu.IServices.IWeChatSubServices)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="iWeChatSubServices"></param>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.Get(Xu.Model.PaginationModel)">
+            <summary>
+            获取
+            </summary>
+            <param name="pagination">分页条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.Get(System.String)">
+            <summary>
+            获取(id)
+            </summary>
+            <param name="id">主键ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.Post(Xu.Model.Models.WeChatSub)">
+            <summary>
+            添加
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.Put(Xu.Model.Models.WeChatSub)">
+            <summary>
+            更新
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.Delete(System.String)">
+            <summary>
+            删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Controllers.WeChatSubController.BatchDelete(System.String)">
+            <summary>
+            批量删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Blog.Core.Api.Controllers.NacosController">
+            <summary>
+            服务管理
+            </summary>
+        </member>
+        <member name="F:Blog.Core.Api.Controllers.NacosController.NacosNamingService">
+            <summary>
+            INacosNamingService
+            </summary>
+        </member>
+        <member name="M:Blog.Core.Api.Controllers.NacosController.#ctor(Nacos.V2.INacosNamingService)">
+             <summary>
+            
+             </summary>
+             <param name="nacosNamingService"></param>
+        </member>
+        <member name="M:Blog.Core.Api.Controllers.NacosController.CheckSystemStartFinish">
+            <summary>
+            系统实例是否启动完成
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Api.Controllers.NacosController.GetStatus">
+            <summary>
+            获取Nacos 状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Api.Controllers.NacosController.Register">
+            <summary>
+            服务上线
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blog.Core.Api.Controllers.NacosController.Deregister">
+            <summary>
+            服务下线
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Xu.WebApi.Controllers.MonitorController">
             <summary>
             监控管理
@@ -136,6 +323,13 @@
             <param name="tasksQz"></param>
             <returns></returns>
         </member>
+        <member name="M:Xu.WebApi.Controllers.TasksQzController.DeleteTasksQz(System.Int32)">
+            <summary>
+            删除计划任务
+            </summary>
+            <param name="id">非空</param>
+            <returns></returns>
+        </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.StartJob(System.Int32)">
             <summary>
             启动计划任务
@@ -155,13 +349,6 @@
             重启计划任务
             </summary>
             <param name="id">任务Id（非空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.TasksQzController.DeleteTasksQz(System.Int32)">
-            <summary>
-            删除计划任务
-            </summary>
-            <param name="id">非空</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTaskNameSpace">
@@ -472,6 +659,19 @@
             <remarks>将生成的内容拷贝出来粘贴在Swagger的index.html顶部</remarks>
             <returns></returns>
         </member>
+        <member name="T:Xu.WebApi.AntiSqlInjectFilter">
+            <summary>
+            SQL注入过滤器
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.AntiSqlInjectFilter.PostModelFieldFilter(System.Type,System.Object)">
+            <summary>
+            遍历实体的字符串属性
+            </summary>
+            <param name="type">数据类型</param>
+            <param name="obj">对象</param>
+            <returns></returns>
+        </member>
         <member name="T:Xu.WebApi.CustomRouteAttribute">
             <summary>
             自定义路由 /api/{version}/[controler]/[action]
@@ -587,6 +787,161 @@
             AddScoped   的生命周期：请求开始-请求结束  在这次请求中获取的对象都是同一个
             AddTransient的生命周期：请求获取-（GC回收-主动释放） 每一次获取的对象都不是同一个
             </remarks>
+        </member>
+        <member name="T:Xu.Controllers.WeChatController">
+            <summary>
+            微信公众号管理
+            作者:胡丁文
+            时间:2020-3-29 21:24:12
+            </summary>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.#ctor(Xu.IServices.IWeChatConfigServices,Microsoft.Extensions.Logging.ILogger{Xu.Controllers.WeChatController})">
+            <summary>
+            构造函数
+            </summary>
+            <param name="weChatConfigServices"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetToken(System.String)">
+            <summary>
+            更新Token
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.RefreshToken(System.String)">
+            <summary>
+            刷新Token
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetTemplate(System.String)">
+            <summary>
+            获取模板
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetMenu(System.String)">
+            <summary>
+            获取菜单
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.UpdateMenu(Xu.Model.ViewModels.WeChatApiDto)">
+            <summary>
+            更新菜单
+            </summary>
+            <param name="menu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetSubUsers(System.String)">
+            <summary>
+            获取订阅用户(所有)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.Valid(Xu.Model.ViewModels.WeChatValidDto)">
+            <summary>
+            入口
+            </summary>
+            <param name="validDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetSubUser(System.String,System.String)">
+            <summary>
+            获取订阅用户
+            </summary>
+            <param name="id"></param>
+            <param name="openid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetQRBind(Xu.Model.ViewModels.WeChatUserInfo)">
+            <summary>
+            获取一个绑定员工公众号二维码
+            </summary>
+            <param name="info">消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.PushCardMsg(Xu.Model.ViewModels.WeChatCardMsgDataDto)">
+            <summary>
+            推送卡片消息接口
+            </summary>
+            <param name="msg">卡片消息对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.PushTxtMsg(Xu.Model.ViewModels.WeChatPushTestDto)">
+            <summary>
+            推送文本消息
+            </summary>
+            <param name="msg">消息对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.GetBindUserInfo(Xu.Model.ViewModels.WeChatUserInfo)">
+            <summary>
+            通过绑定用户获取微信用户信息(一般用于初次绑定检测)
+            </summary>
+            <param name="info">信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatController.UnBind(Xu.Model.ViewModels.WeChatUserInfo)">
+            <summary>
+            用户解绑
+            </summary>
+            <param name="info">消息</param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.Controllers.WeChatPushLogController">
+            <summary>
+            WeChatPushLogController
+            </summary>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.#ctor(Xu.IServices.IWeChatPushLogServices)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="iWeChatPushLogServices"></param>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.Get(Xu.Model.PaginationModel)">
+            <summary>
+            获取
+            </summary>
+            <param name="pagination">分页条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.Get(System.String)">
+            <summary>
+            获取(id)
+            </summary>
+            <param name="id">主键ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.Post(Xu.Model.Models.WeChatPushLog)">
+            <summary>
+            添加
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.Put(Xu.Model.Models.WeChatPushLog)">
+            <summary>
+            更新
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.Delete(System.String)">
+            <summary>
+            删除
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.WeChatPushLogController.BatchDelete(System.String)">
+            <summary>
+            批量删除
+            </summary>
+            <returns></returns>
         </member>
     </members>
 </doc>

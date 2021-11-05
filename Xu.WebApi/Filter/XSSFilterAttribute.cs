@@ -16,6 +16,10 @@ namespace Xu.WebApi
         /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            base.OnActionExecuting(context);
+
+            if (context.ActionArguments.Count == 0) { return; }
+
             //获取参数集合
             var ps = context.ActionDescriptor.Parameters;
             //遍历参数集合

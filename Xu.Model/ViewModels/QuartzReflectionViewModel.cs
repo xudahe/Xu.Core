@@ -8,11 +8,13 @@ namespace Xu.Model.ViewModel
         /// <summary>
         /// 命名空间
         /// </summary>
-        public string nameSpace{ get; set; }
+        public string nameSpace { get; set; }
+
         /// <summary>
         /// 类名
         /// </summary>
         public string nameClass { get; set; }
+
         /// <summary>
         /// 备注
         /// </summary>

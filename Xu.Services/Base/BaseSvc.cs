@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Xu.Common;
 using Xu.IRepository;
 using Xu.IServices;
+using Xu.Model;
 using Xu.Model.ResultModel;
 
 namespace Xu.Services
@@ -283,6 +285,12 @@ namespace Xu.Services
             Expression<Func<T1, T2, T3, bool>> whereLambda = null) where T1 : class, new()
         {
             return await BaseDal.QueryMuch(joinExpression, selectExpression, whereLambda);
+        }
+
+        public async Task<PageModel<T>> QueryPage(PaginationModel pagination)
+        {
+            var express = DynamicLinqFactory.CreateLambda<T>(pagination.Conditions);
+            return await QueryPage(express, pagination.IntPageIndex, pagination.IntPageSize, pagination.StrOrderByFileds);
         }
     }
 }

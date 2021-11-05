@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System.IO;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace Xu.Common
 {
@@ -82,6 +84,23 @@ namespace Xu.Common
             XElement x = new XElement(rootElementName);
             x.SetAttributeValue("Version", version);
             return x;
+        }
+
+        /// <summary>
+        /// Xml格式字符转换为T类型的对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        public static T ParseFormByXml<T>(string xml, string rootName = "root")
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T), new XmlRootAttribute(rootName));
+            StringReader reader = new StringReader(xml);
+
+            T res = (T)serializer.Deserialize(reader);
+            reader.Close();
+            reader.Dispose();
+            return res;
         }
     }
 }

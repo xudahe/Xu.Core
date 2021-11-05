@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Xu.Common
+namespace Xu.EnumHelper
 {
     /// <summary>
     /// 枚举String属性

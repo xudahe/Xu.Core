@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
@@ -67,11 +68,14 @@ namespace Xu.WebApi
             //services.AddAntiforgerySetup(); //防止CSRF攻击
 
             services.AddRabbitMQSetup();
+            services.AddKafkaSetup(Configuration);
             services.AddEventBusSetup();
+
+            services.AddNacosSetup(Configuration);
 
             Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
 
-            /// 确保从ids4认证中心返回的ClaimType不被更改，不使用Map映射
+            // 确保从ids4认证中心返回的ClaimType不被更改，不使用Map映射
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             // 授权+认证 (jwt or ids4)
@@ -86,9 +90,10 @@ namespace Xu.WebApi
             }
 
             services.AddIpPolicyRateLimitSetup(Configuration);
-            services.AddSignalR(hubOptions => {
+            services.AddSignalR(hubOptions =>
+            {
                 //注意：建议 服务端clientTimeoutInterval 的值是 客户端keepAliveIntervalInmillisecods 的两倍，从而保证不进服务器端的 OnDisconnectedAsync 回调，即不掉线
-                hubOptions.ClientTimeoutInterval= TimeSpan.FromSeconds(30); //服务器端配置30s没有收到客户端发送的消息，则认为客户端已经掉线
+                hubOptions.ClientTimeoutInterval = TimeSpan.FromSeconds(30); //服务器端配置30s没有收到客户端发送的消息，则认为客户端已经掉线
             }).AddNewtonsoftJsonProtocol();
 
             //配置可以同步请求读取流数据
@@ -110,12 +115,19 @@ namespace Xu.WebApi
 
                 //全局XSS过滤器
                 //options.Filters.Add(typeof(XSSFilterAttribute));
+
                 //全局给post Action都开启了防止CSRF攻击,配合services.AddAntiforgerySetup()使用
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
+                //全局配置防止SQL注入过滤（或者在控制器方法上添加[AntiSqlInjectFilter]）
+                options.Filters.Add(typeof(AntiSqlInjectFilter));
+
                 // 全局异常过滤
                 options.Filters.Add(typeof(GlobalExceptionsFilter));
+
                 // 全局路由权限公约
                 //o.Conventions.Insert(0, new GlobalRouteAuthorizeConvention());
+
                 // 全局路由前缀，统一修改路由
                 options.Conventions.Insert(0, new GlobalRoutePrefixFilter(new RouteAttribute(RoutePrefix.Name)));
             })
@@ -124,10 +136,13 @@ namespace Xu.WebApi
             {
                 //忽略循环引用，如果设置为Error，则遇到循环引用的时候报错
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
                 //json中属性开头字母小写的驼峰命名
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
                 //日期格式化
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+
                 //如果字段为null,该字段会依然返回到json中。比如"name":null
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
             });
@@ -181,7 +196,7 @@ namespace Xu.WebApi
             {
                 app.UseExceptionHandler("/Error");
                 // 在非开发环境中，使用HTTP严格安全传输(or HSTS) 对于保护web安全是非常重要的。
-                // 强制实施 HTTPS 在 ASP.NET Core，配合 app.UseHttpsRedirection
+                // 强制实施 HTTPS 在 ASP.NET Core，需要配合 app.UseHttpsRedirection()与services.AddHstsSetup()
                 //app.UseHsts(); // HSTS 中间件（UseHsts）用于向客户端发送 HTTP 严格传输安全协议（HSTS）标头
             }
 

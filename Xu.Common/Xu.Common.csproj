@@ -23,4 +23,8 @@
     <PackageReference Include="WebApiClient.Extensions.DependencyInjection" Version="2.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Xu.EnumHelper\Xu.EnumHelper.csproj" />
+  </ItemGroup>
+
 </Project>

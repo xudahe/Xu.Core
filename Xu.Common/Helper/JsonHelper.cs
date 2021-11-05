@@ -31,7 +31,7 @@ namespace Xu.Common
                 int index = vals.IndexOf(city);
                 if (vals.Count - 1 != index)
                 {
-                    st.Append(",");
+                    st.Append(',');
                 }
             }
 
@@ -39,7 +39,7 @@ namespace Xu.Common
             if (vals.Count > 0)
             {
                 st.Insert(0, "[");
-                st.Append("]");
+                st.Append(']');
             }
 
             return st.ToString();
@@ -73,6 +73,43 @@ namespace Xu.Common
             using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonStr)))
             {
                 return (T)serializer.ReadObject(ms);
+            }
+        }
+
+        /// <summary>
+        /// 对象序列化json
+        /// </summary>
+        /// <param name="obj">对象</param>
+        /// <param name="isUseTextJson">是否使用textjson</param>
+        /// <returns>返回json字符串</returns>
+        public static string ObjToJson(object obj, bool isUseTextJson = false)
+        {
+            if (isUseTextJson)
+            {
+                return System.Text.Json.JsonSerializer.Serialize(obj);
+            }
+            else
+            {
+                return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
+        }
+
+        /// <summary>
+        /// json反序列化obj
+        /// </summary>
+        /// <typeparam name="T">反序列类型</typeparam>
+        /// <param name="strJson">json</param>
+        /// <param name="isUseTextJson">是否使用textjson</param>
+        /// <returns>返回对象</returns>
+        public static T JsonToObj<T>(string strJson, bool isUseTextJson = false)
+        {
+            if (isUseTextJson)
+            {
+                return System.Text.Json.JsonSerializer.Deserialize<T>(strJson);
+            }
+            else
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(strJson);
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Xu.Model.Enum;
+using Xu.EnumHelper;
 
 namespace Xu.Model.Models
 {
@@ -91,7 +91,7 @@ namespace Xu.Model.Models
         /// </summary>
         public bool IsAction { get { return ActionTime.HasValue; } }
 
-        public string ToXml(IDictionary<string, string> data)
+        public static string ToXml(IDictionary<string, string> data)
         {
             if (data.Keys.Count == 0)
                 return string.Empty;

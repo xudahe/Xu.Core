@@ -121,6 +121,7 @@ namespace Xu.EventBus
 
                     _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event.Id);
 
+                    //发消息
                     channel.BasicPublish(
                         exchange: BROKER_NAME,
                         routingKey: eventName,
@@ -179,6 +180,7 @@ namespace Xu.EventBus
 
                 using (var channel = _persistentConnection.CreateModel())
                 {
+                    //队列和路由绑定
                     channel.QueueBind(queue: _queueName,
                                       exchange: BROKER_NAME,
                                       routingKey: eventName);
@@ -288,9 +290,10 @@ namespace Xu.EventBus
 
             var channel = _persistentConnection.CreateModel();
 
+            //创建交换机(Direct路由)
             channel.ExchangeDeclare(exchange: BROKER_NAME,
                                     type: "direct");
-
+            //创建队列
             channel.QueueDeclare(queue: _queueName,
                                  durable: true,
                                  exclusive: false,

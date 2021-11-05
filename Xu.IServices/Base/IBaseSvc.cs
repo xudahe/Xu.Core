@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Xu.Model;
 using Xu.Model.ResultModel;
 
 namespace Xu.IServices
@@ -196,5 +197,7 @@ namespace Xu.IServices
             Expression<Func<T1, T2, T3, object[]>> joinExpression,
             Expression<Func<T1, T2, T3, TResult>> selectExpression,
             Expression<Func<T1, T2, T3, bool>> whereLambda = null) where T1 : class, new();
+
+        Task<PageModel<T>> QueryPage(PaginationModel pagination);
     }
 }

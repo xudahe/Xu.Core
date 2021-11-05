@@ -13,6 +13,10 @@ namespace Xu.Extensions
     /// </remarks>
     public static class HstsSetup
     {
+        /// <summary>
+        /// 强制使用https，把所有的HTTP请求转换为HTTPS
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddHstsSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
@@ -24,6 +28,7 @@ namespace Xu.Extensions
                 options.IncludeSubDomains = true; //是否包含子域名，默认false
                 options.MaxAge = TimeSpan.FromDays(30);  //有效时长，默认30天
                 options.ExcludedHosts.Add("example.com"); // 添加 example.com 到要排除的主机列表
+                options.ExcludedHosts.Add("www.example.com"); // 添加 www.example.com 到要排除的主机列表
             });
 
             //注入HTTPS服务,并设置管道

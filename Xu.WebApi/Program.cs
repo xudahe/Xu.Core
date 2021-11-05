@@ -1,9 +1,9 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using Xu.Extensions.Apollo;
 
 namespace Xu.WebApi
 {
@@ -31,6 +31,8 @@ namespace Xu.WebApi
                  {
                      //config.Sources.Clear(); //清除已有的所有配置（包括appsettings.json配置）
                      //config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+                     //接入Apollo配置中心
+                     config.AddConfigurationApollo("appsettings.apollo.json");
                  })
                  .UseUrls("http://*:1081", "http://*:1082")
                  .ConfigureLogging((hostingContext, builder) =>

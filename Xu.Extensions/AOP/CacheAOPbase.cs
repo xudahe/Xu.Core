@@ -1,4 +1,5 @@
 ﻿using Castle.DynamicProxy;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,11 +43,11 @@ namespace Xu.Extensions
         /// <returns></returns>
         protected static string GetArgumentValue(object arg)
         {
-            if (arg is DateTime || arg is DateTime?)
+            if (arg is DateTime)
                 return ((DateTime)arg).ToString("yyyyMMddHHmmss");
 
-            if (arg is string || arg is ValueType || arg is Nullable)
-                return arg.ToString();
+            if (!arg.IsNotEmptyOrNull())
+                return arg.ObjToString();
 
             if (arg != null)
             {
@@ -58,8 +59,10 @@ namespace Xu.Extensions
                 }
                 else if (arg.GetType().IsClass)
                 {
-                    return MD5Helper.MD5Encrypt16(Newtonsoft.Json.JsonConvert.SerializeObject(arg));
+                    return MD5Helper.MD5Encrypt16(JsonConvert.SerializeObject(arg));
                 }
+
+                return $"value:{arg}";
             }
             return string.Empty;
         }

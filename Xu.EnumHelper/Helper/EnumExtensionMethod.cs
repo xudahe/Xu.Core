@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Xu.Common
+namespace Xu.EnumHelper
 {
     /// <summary>
     /// Enum扩展方法类
@@ -19,7 +19,7 @@ namespace Xu.Common
                 return string.Empty;
 
             var attributes = (T[])e.GetType().GetField(e.ToString()).GetCustomAttributes(typeof(T), false);
-            if (attributes.Count() > 0)
+            if (attributes.Length > 0)
                 return attributes.First().Value;
 
             return string.Empty;
@@ -36,7 +36,7 @@ namespace Xu.Common
                 return string.Empty;
 
             var attributes = (EnumTextAttribute[])e.GetType().GetField(e.ToString()).GetCustomAttributes(typeof(EnumTextAttribute), false);
-            if (attributes.Count() > 0)
+            if (attributes.Length > 0)
                 return attributes.First().Value;
 
             return e.ToString();
@@ -66,7 +66,7 @@ namespace Xu.Common
                 return string.Empty;
 
             var attributes = (EnumIndexAttribute[])e.GetType().GetField(e.ToString()).GetCustomAttributes(typeof(EnumIndexAttribute), false);
-            if (attributes.Count() > 0)
+            if (attributes.Length > 0)
                 return attributes.First().Value;
 
             return e.GetValue().ToString();
@@ -83,7 +83,7 @@ namespace Xu.Common
                 return false;
 
             var attributes = (EnumDisabledAttribute[])e.GetType().GetField(e.ToString()).GetCustomAttributes(typeof(EnumDisabledAttribute), false);
-            if (attributes.Count() > 0)
+            if (attributes.Length > 0)
                 return attributes.First().Value;
 
             return false;

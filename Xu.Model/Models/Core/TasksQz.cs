@@ -1,7 +1,7 @@
 ﻿using SqlSugar;
 using System;
 using System.Collections.Generic;
-using Xu.Model.Enum;
+using Xu.EnumHelper;
 using Xu.Model.ViewModel;
 
 namespace Xu.Model.Models
@@ -94,13 +94,19 @@ namespace Xu.Model.Models
         /// 运行状态
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "运行状态")]
-        public JobStatus? JobStatus { get; set; } = Enum.JobStatus.未启动;
+        public JobStatus? JobStatus { get; set; } = EnumHelper.JobStatus.未启动;
 
         /// <summary>
         /// 执行传参
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "执行传参")]
         public string JobParams { get; set; }
+
+        /// <summary>
+        /// 是否立即启动
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "是否立即启动")]
+        public bool IsStart { get; set; } = false;
 
         /// <summary>
         /// 任务内存中的状态

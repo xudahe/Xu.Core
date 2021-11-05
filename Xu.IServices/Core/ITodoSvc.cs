@@ -1,4 +1,4 @@
-﻿using Xu.Model.Enum;
+﻿using Xu.EnumHelper;
 using Xu.Model.Models;
 
 namespace Xu.IServices

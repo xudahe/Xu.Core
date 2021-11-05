@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Xu.Common
+namespace Xu.EnumHelper
 {
     /// <summary>
     /// 泛型枚举静态帮助类

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -8,6 +9,11 @@ namespace Xu.IRepository
 {
     public interface IBaseRepo<T> where T : class
     {
+        /// <summary>
+        /// SqlsugarClient实体
+        /// </summary>
+        ISqlSugarClient Db { get; }
+
         /// <summary>
         /// 根据ID查询条一条数据
         /// </summary>

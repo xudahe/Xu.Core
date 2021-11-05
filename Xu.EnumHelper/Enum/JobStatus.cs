@@ -1,6 +1,4 @@
-﻿using Xu.Common;
-
-namespace Xu.Model.Enum
+﻿namespace Xu.EnumHelper
 {
     /// <summary>
     /// Job运行状态

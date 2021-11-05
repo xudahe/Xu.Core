@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xu.Model\Xu.Model.csproj" />
+    <Folder Include="WebApiClients\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WebApiClients\" />
+    <ProjectReference Include="..\Xu.Model\Xu.Model.csproj" />
   </ItemGroup>
 
 </Project>

@@ -55,7 +55,7 @@ namespace Xu.Extensions
                                     {
                                         MiniProfiler.Current.CustomTiming("SQL：", GetParas(p) + "【SQL语句】：" + sql);
                                         // LogLock.OutSql2Log("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql });
-                                        SerilogServer.WriteLog("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql});
+                                        SerilogServer.WriteLog("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql });
                                     });
                                 }
                             }

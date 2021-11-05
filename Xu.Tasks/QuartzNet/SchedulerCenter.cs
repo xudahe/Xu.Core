@@ -236,6 +236,35 @@ namespace Xu.Tasks
         }
 
         /// <summary>
+        /// 删除一个指定的计划任务
+        /// </summary>
+        /// <returns></returns>
+        public async Task<MessageModel<string>> DeleteScheduleJobAsync(TasksQz tasksQz)
+        {
+            var result = new MessageModel<string>();
+            try
+            {
+                JobKey jobKey = new JobKey(tasksQz.Id.ToString(), tasksQz.JobGroup);
+                if (!await _scheduler.Result.CheckExists(jobKey))
+                {
+                    result.Message = $"未找到要删除的任务:【{tasksQz.JobName}】";
+                }
+                else
+                {
+                    await _scheduler.Result.DeleteJob(jobKey);
+                    result.Success = true;
+                    result.Message = $"删除任务:【{tasksQz.JobName}】成功";
+                }
+            }
+            catch (Exception)
+            {
+                result.Message = $"删除任务:【{tasksQz.JobName}】失败";
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// 恢复一个指定的计划任务
         /// </summary>
         /// <param name="tasksQz"></param>
@@ -442,7 +471,7 @@ namespace Xu.Tasks
         /// <param name="starRunTime"></param>
         /// <param name="endRunTime"></param>
         /// <returns></returns>
-        private ITrigger CreateSimpleTrigger(TasksQz tasksQz)
+        private static ITrigger CreateSimpleTrigger(TasksQz tasksQz)
         {
             DateTimeOffset starRunTime = DateBuilder.NextGivenSecondDate(tasksQz.StartTime.HasValue ? tasksQz.StartTime : DateTime.Now, 1);
             DateTimeOffset endRunTime = DateBuilder.NextGivenSecondDate(tasksQz.EndTime.HasValue ? tasksQz.EndTime : DateTime.MaxValue.AddDays(-1), 1);
@@ -485,7 +514,7 @@ namespace Xu.Tasks
         /// </summary>
         /// <param name="m"></param>
         /// <returns></returns>
-        private ITrigger CreateCronTrigger(TasksQz tasksQz)
+        private static ITrigger CreateCronTrigger(TasksQz tasksQz)
         {
             DateTimeOffset starRunTime = DateBuilder.NextGivenSecondDate(tasksQz.StartTime ?? DateTime.Now, 1);
             DateTimeOffset endRunTime = DateBuilder.NextGivenSecondDate(tasksQz.EndTime ?? DateTime.MaxValue.AddDays(-1), 1);

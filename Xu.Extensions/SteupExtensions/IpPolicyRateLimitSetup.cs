@@ -19,7 +19,7 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            // needed to store rate limit counters and ip rules
+            //需要存储速率限制计算器和ip规则
             services.AddMemoryCache();
 
             //从appsettings.json获取相应配置

@@ -24,17 +24,20 @@ namespace Xu.Extensions
 
                        var factory = new ConnectionFactory()
                        {
+                           //RabbitMQ服务
                            HostName = Appsettings.App(new string[] { "RabbitMQ", "Connection" }),
                            DispatchConsumersAsync = true
                        };
 
                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "UserName" })))
                        {
+                           //用户名
                            factory.UserName = Appsettings.App(new string[] { "RabbitMQ", "UserName" });
                        }
 
                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "Password" })))
                        {
+                           //密码
                            factory.Password = Appsettings.App(new string[] { "RabbitMQ", "Password" });
                        }
 

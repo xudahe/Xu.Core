@@ -102,8 +102,7 @@ namespace Xu.EventBus
                 policy.Execute(() =>
                 {
                     // 开始连接RabbitMQ
-                    _connection = _connectionFactory
-                          .CreateConnection();
+                    _connection = _connectionFactory.CreateConnection();
                 });
 
                 // 连接成功

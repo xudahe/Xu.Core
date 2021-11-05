@@ -38,6 +38,13 @@ namespace Xu.Tasks
         Task<MessageModel<string>> StopScheduleJobAsync(TasksQz tasksQz);
 
         /// <summary>
+        /// 删除一个任务
+        /// </summary>
+        /// <param name="tasksQz"></param>
+        /// <returns></returns>
+        Task<MessageModel<string>> DeleteScheduleJobAsync(TasksQz tasksQz);
+
+        /// <summary>
         /// 恢复一个任务
         /// </summary>
         /// <param name="tasksQz"></param>

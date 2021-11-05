@@ -8,19 +8,21 @@
     <PackageReference Include="AspNetCoreRateLimit" Version="3.0.5" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Com.Ctrip.Framework.Apollo" Version="2.4.4" />
+    <PackageReference Include="Com.Ctrip.Framework.Apollo.Configuration" Version="2.4.1.1" />
     <PackageReference Include="Consul" Version="1.6.10.1" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="InitQ" Version="1.0.0.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="5.0.3" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
+    <PackageReference Include="nacos-sdk-csharp" Version="1.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Xu.EventBus\Xu.EventBus.csproj" />
-    <ProjectReference Include="..\Xu.IRepository\Xu.IRepository.csproj" />
     <ProjectReference Include="..\Xu.Repository\Xu.Repository.csproj" />
     <ProjectReference Include="..\Xu.Tasks\Xu.Tasks.csproj" />
   </ItemGroup>

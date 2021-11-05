@@ -7,8 +7,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.EnumHelper;
+using Xu.IRepository;
 using Xu.IServices;
-using Xu.Model.Enum;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModel;
@@ -49,6 +50,14 @@ namespace Xu.WebApi.Controllers
 
             if (!string.IsNullOrEmpty(jobName))
                 data = data.Where(a => a.JobName != null && a.JobName.Contains(jobName)).ToList();
+
+            if (data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    item.Triggers = await _schedulerCenter.GetTaskStaus(item);
+                }
+            }
 
             return new MessageModel<List<TasksQz>>()
             {
@@ -92,12 +101,25 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
 
             var id = await _tasksQzSvc.Add(tasksQz);
-
             data.Success = id > 0;
+            data.Response = id.ToString();
+            data.Message = data.Success ? "添加成功" : "添加失败";
             if (data.Success)
             {
-                data.Response = id.ToString();
-                data.Message = "添加成功";
+                tasksQz.Id = id;
+                if (tasksQz.IsStart)
+                {
+                    var resuleModel = await _schedulerCenter.AddScheduleJobAsync(tasksQz);
+                    data.Success = resuleModel.Success;
+                    if (resuleModel.Success)
+                    {
+                        data.Message = $"{data.Message}=>启动成功=>{resuleModel.Message}";
+                    }
+                    else
+                    {
+                        data.Message = $"{data.Message}=>启动失败=>{resuleModel.Message}";
+                    }
+                }
             }
 
             return data;
@@ -112,14 +134,75 @@ namespace Xu.WebApi.Controllers
         public async Task<object> PutTasksQz([FromBody] TasksQz tasksQz)
         {
             var data = new MessageModel<string>();
-            if (tasksQz != null && tasksQz.Id > 0)
+            if (tasksQz != null)
             {
                 tasksQz.ModifyTime = DateTime.Now;
                 data.Success = await _tasksQzSvc.Update(tasksQz);
+                data.Response = tasksQz?.Id.ToString();
+                data.Message = data.Success ? "更新成功" : "更新失败";
                 if (data.Success)
                 {
-                    data.Message = "更新成功";
-                    data.Response = tasksQz?.Id.ToString();
+                    if (tasksQz.IsStart)
+                    {
+                        var resuleModelStop = await _schedulerCenter.StopScheduleJobAsync(tasksQz);
+                        data.Success = resuleModelStop.Success;
+                        data.Message = $"{data.Message}=>停止:{resuleModelStop.Message}";
+
+                        var resuleModelStar = await _schedulerCenter.AddScheduleJobAsync(tasksQz);
+                        data.Success = resuleModelStar.Success;
+                        data.Message = $"{data.Message}=>启动:{resuleModelStar.Message}";
+                    }
+                    else
+                    {
+                        var resuleModelStop = await _schedulerCenter.StopScheduleJobAsync(tasksQz);
+                        data.Success = resuleModelStop.Success;
+                        data.Message = $"{data.Message}=>停止:{resuleModelStop.Message}";
+                    }
+                }
+            }
+            else
+            {
+                data.Message = "任务不存在";
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// 删除计划任务
+        /// </summary>
+        /// <param name="id">非空</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<object> DeleteTasksQz(int id)
+        {
+            var data = new MessageModel<string>();
+            if (id > 0)
+            {
+                var model = await _tasksQzSvc.QueryById(id);
+                if (model != null)
+                {
+                    model.DeleteTime = DateTime.Now;
+                    model.JobStatus = JobStatus.已停止;
+                    data.Success = await _tasksQzSvc.Update(model);
+                    data.Response = model?.Id.ToString();
+                    data.Message = data.Success ? "更新成功" : "更新失败";
+                    if (data.Success)
+                    {
+                        var resuleModel = await _schedulerCenter.DeleteScheduleJobAsync(model);
+                        data.Success = resuleModel.Success;
+                        if (resuleModel.Success)
+                        {
+                            data.Message = $"{data.Message}=>删除成功=>{resuleModel.Message}";
+                        }
+                        else
+                        {
+                            data.Message = $"{data.Message}=>删除失败=>{resuleModel.Message}";
+                        }
+                    }
+                }
+                else
+                {
+                    data.Message = "任务不存在";
                 }
             }
 
@@ -139,22 +222,27 @@ namespace Xu.WebApi.Controllers
             var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                var resuleModel = await _schedulerCenter.AddScheduleJobAsync(model);
-                if (resuleModel.Success)
+                model.JobStatus = JobStatus.运行中;
+                data.Success = await _tasksQzSvc.Update(model);
+                data.Response = id.ToString();
+                data.Message = data.Success ? "更新成功" : "更新失败";
+                if (data.Success)
                 {
-                    model.JobStatus = JobStatus.运行中;
-                    data.Success = await _tasksQzSvc.Update(model);
-
-                    if (data.Success)
+                    var resuleModel = await _schedulerCenter.AddScheduleJobAsync(model);
+                    data.Success = resuleModel.Success;
+                    if (resuleModel.Success)
                     {
-                        data.Message = "启动成功";
-                        data.Response = id.ToString();
+                        data.Message = $"{data.Message}=>启动成功=>{resuleModel.Message}";
+                    }
+                    else
+                    {
+                        data.Message = $"{data.Message}=>启动失败=>{resuleModel.Message}";
                     }
                 }
-                else
-                {
-                    return resuleModel;
-                }
+            }
+            else
+            {
+                data.Message = "任务不存在";
             }
             return data;
         }
@@ -172,22 +260,27 @@ namespace Xu.WebApi.Controllers
             var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                var resuleModel = await _schedulerCenter.StopScheduleJobAsync(model);
-                if (resuleModel.Success)
+                model.JobStatus = JobStatus.已停止;
+                data.Success = await _tasksQzSvc.Update(model);
+                data.Response = id.ToString();
+                data.Message = data.Success ? "更新成功" : "更新失败";
+                if (data.Success)
                 {
-                    model.JobStatus = JobStatus.已停止;
-                    data.Success = await _tasksQzSvc.Update(model);
-
-                    if (data.Success)
+                    var resuleModel = await _schedulerCenter.StopScheduleJobAsync(model);
+                    data.Success = resuleModel.Success;
+                    if (resuleModel.Success)
                     {
-                        data.Message = "停止成功";
-                        data.Response = id.ToString();
+                        data.Message = $"{data.Message}=>停止成功=>{resuleModel.Message}";
+                    }
+                    else
+                    {
+                        data.Message = $"{data.Message}=>停止失败=>{resuleModel.Message}";
                     }
                 }
-                else
-                {
-                    return resuleModel;
-                }
+            }
+            else
+            {
+                data.Message = "任务不存在";
             }
             return data;
         }
@@ -205,47 +298,28 @@ namespace Xu.WebApi.Controllers
             var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                var resuleModel = await _schedulerCenter.ResumeScheduleJobAsync(model);
-                if (resuleModel.Success)
-                {
-                    model.JobStatus = JobStatus.运行中;
-                    data.Success = await _tasksQzSvc.Update(model);
-
-                    if (data.Success)
-                    {
-                        data.Message = "重启成功";
-                        data.Response = id.ToString();
-                    }
-                }
-                else
-                {
-                    return resuleModel;
-                }
-            }
-            return data;
-        }
-
-        /// <summary>
-        /// 删除计划任务
-        /// </summary>
-        /// <param name="id">非空</param>
-        /// <returns></returns>
-        [HttpDelete]
-        public async Task<object> DeleteTasksQz(int id)
-        {
-            var data = new MessageModel<string>();
-            if (id > 0)
-            {
-                var tasks = await _tasksQzSvc.QueryById(id);
-                tasks.DeleteTime = DateTime.Now;
-                data.Success = await _tasksQzSvc.Update(tasks);
+                model.JobStatus = JobStatus.运行中;
+                data.Success = await _tasksQzSvc.Update(model);
+                data.Response = id.ToString();
+                data.Message = data.Success ? "更新成功" : "更新失败";
                 if (data.Success)
                 {
-                    data.Message = "删除成功";
-                    data.Response = tasks?.Id.ToString();
+                    var resuleModel = await _schedulerCenter.ResumeScheduleJobAsync(model);
+                    data.Success = resuleModel.Success;
+                    if (resuleModel.Success)
+                    {
+                        data.Message = $"{data.Message}=>重启成功=>{resuleModel.Message}";
+                    }
+                    else
+                    {
+                        data.Message = $"{data.Message}=>重启失败=>{resuleModel.Message}";
+                    }
                 }
             }
-
+            else
+            {
+                data.Message = "任务不存在";
+            }
             return data;
         }
 

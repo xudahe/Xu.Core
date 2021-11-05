@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Xu.Common
+namespace Xu.EnumHelper
 {
     /// <summary>
     /// 枚举扩展函数

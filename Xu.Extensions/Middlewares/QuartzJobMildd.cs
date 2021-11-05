@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using System;
 using Xu.Common;
+using Xu.EnumHelper;
 using Xu.IServices;
-using Xu.Model.Enum;
 using Xu.Tasks;
 
 namespace Xu.Extensions

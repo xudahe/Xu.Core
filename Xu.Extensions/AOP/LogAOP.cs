@@ -109,7 +109,7 @@ namespace Xu.Extensions
             _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData()).Wait();
         }
 
-        private async Task SuccessAction(IInvocation invocation, string dataIntercept, object o = null)
+        private static async Task SuccessAction(IInvocation invocation, string dataIntercept, object o = null)
         {
             //invocation.ReturnValue = o;
             //var type = invocation.Method.ReturnType;

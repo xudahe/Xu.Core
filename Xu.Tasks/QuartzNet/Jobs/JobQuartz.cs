@@ -1,6 +1,6 @@
-using Xu.IServices;
 using Quartz;
 using System.Threading.Tasks;
+using Xu.IServices;
 
 /// <summary>
 /// 这里要注意下，命名空间和程序集是一样的，不然反射不到

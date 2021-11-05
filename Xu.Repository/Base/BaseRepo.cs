@@ -23,7 +23,7 @@ namespace Xu.Repository
                  * 1、在appsettings.json 中开启MutiDBEnabled节点为true，必填
                  * 2、设置一个主连接的数据库ID，节点MainDB，对应的连接字符串的Enabled也必须true，必填
                  */
-                if (Appsettings.App(new string[] { "MutiDBEnabled" }).ObjToBool())
+                if (Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
                 {
                     if (typeof(T).GetTypeInfo().GetCustomAttributes(typeof(SugarTable), true).FirstOrDefault((x => x.GetType() == typeof(SugarTable))) is SugarTable sugarTable && !string.IsNullOrEmpty(sugarTable.TableDescription))
                     {
@@ -39,7 +39,7 @@ namespace Xu.Repository
             }
         }
 
-        internal ISqlSugarClient Db
+        public ISqlSugarClient Db
         {
             get { return _db; }
         }

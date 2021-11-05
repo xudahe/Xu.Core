@@ -1,6 +1,4 @@
-﻿using Xu.Common;
-
-namespace Xu.Model.Enum
+﻿namespace Xu.EnumHelper
 {
     /// <summary>
     /// 待办紧急程度

@@ -1,7 +1,7 @@
 ﻿using System;
+using Xu.EnumHelper;
 using Xu.IRepository;
 using Xu.IServices;
-using Xu.Model.Enum;
 using Xu.Model.Models;
 
 namespace Xu.Services

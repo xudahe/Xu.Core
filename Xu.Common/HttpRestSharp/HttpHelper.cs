@@ -2,7 +2,7 @@
 using System;
 using System.Net;
 
-namespace Xu.Common
+namespace Xu.Common.HttpRestSharp
 {
     /// <summary>
     /// 基于 RestSharp 封装HttpHelper
