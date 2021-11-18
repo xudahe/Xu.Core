@@ -93,10 +93,10 @@ namespace Xu.WebApi.Controllers
                 var tokenModel = JwtHelper.SerializeJwt(token);
                 if (tokenModel != null && tokenModel.Id > 0)
                 {
-                    var user = await _userSvc.QueryById(tokenModel.Id);
-                    if (user != null)
+                    var model = await _userSvc.QueryById(tokenModel.Id);
+                    if (model != null)
                     {
-                        data.Response = user;
+                        data.Response = model;
                         data.Success = true;
                         data.Message = "获取成功";
                     }
@@ -108,15 +108,15 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 添加用户
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> PostUser([FromBody] User user)
+        public async Task<object> PostUser([FromBody] User model)
         {
             var data = new MessageModel<User>() { Message = "添加成功", Success = true };
 
-            //user.LoginPwd = MD5Helper.MD5Encrypt32(user.LoginPwd);
-            var dataList = await _userSvc.Query(a => a.LoginName == user.LoginName);
+            //model.LoginPwd = MD5Helper.MD5Encrypt32(model.LoginPwd);
+            var dataList = await _userSvc.Query(a => a.LoginName == model.LoginName);
             if (dataList.Count > 0)
             {
                 data.Message = "该用户名称已存在";
@@ -124,8 +124,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                user.Id = await _userSvc.Add(user);
-                data.Response = user;
+                model.Id = await _userSvc.Add(model);
+                data.Response = model;
             }
 
             return data;
@@ -134,10 +134,10 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 更新用户
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> PutUser([FromBody] User user)
+        public async Task<object> PutUser([FromBody] User model)
         {
             // 这里使用事务处理
             var data = new MessageModel<string>();
@@ -145,20 +145,20 @@ namespace Xu.WebApi.Controllers
             {
                 _unitOfWork.BeginTran();
 
-                var roleList = await _roleSvc.GetDataByids(user.RoleIds);
-                user.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
+                var roleList = await _roleSvc.GetDataByids(model.RoleIds);
+                model.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
 
-                if (user != null && user.Id > 0)
+                if (model != null && model.Id > 0)
                 {
-                    user.ModifyTime = DateTime.Now;
-                    data.Success = await _userSvc.Update(user);
+                    model.ModifyTime = DateTime.Now;
+                    data.Success = await _userSvc.Update(model);
 
                     _unitOfWork.CommitTran();
 
                     if (data.Success)
                     {
                         data.Message = "更新成功";
-                        data.Response = user?.Id.ToString();
+                        data.Response = model?.Id.ToString();
                     }
                 }
             }
@@ -203,18 +203,18 @@ namespace Xu.WebApi.Controllers
         [HttpDelete]
         public async Task<object> DisableUser(int id, bool falg)
         {
-            var user = await _userSvc.QueryById(id);
-            user.Enabled = falg;
+            var model = await _userSvc.QueryById(id);
+            model.Enabled = falg;
 
             var data = new MessageModel<string>()
             {
-                Success = await _userSvc.Update(user)
+                Success = await _userSvc.Update(model)
             };
 
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = user?.Id.ToString();
+                data.Response = model?.Id.ToString();
             }
 
             return data;

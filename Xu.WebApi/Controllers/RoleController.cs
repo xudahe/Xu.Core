@@ -78,14 +78,14 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 添加角色
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> PostRole([FromBody] Role role)
+        public async Task<object> PostRole([FromBody] Role model)
         {
             var data = new MessageModel<Role>() { Message = "添加成功", Success = true };
 
-            var dataList = await _roleSvc.Query(a => a.RoleName == role.RoleName);
+            var dataList = await _roleSvc.Query(a => a.RoleName == model.RoleName);
             if (dataList.Count > 0)
             {
                 data.Message = "该角色已存在";
@@ -93,8 +93,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                role.Id = await _roleSvc.Add(role);
-                data.Response = role;
+                model.Id = await _roleSvc.Add(model);
+                data.Response = model;
             }
 
             return data;
@@ -103,24 +103,24 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 更新角色
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> PutRole([FromBody] Role role)
+        public async Task<object> PutRole([FromBody] Role model)
         {
             var data = new MessageModel<string>();
 
-            var menuList = await _menuSvc.GetDataByids(role.MenuIds);
-            role.MenuInfoList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuList);
+            var menuList = await _menuSvc.GetDataByids(model.MenuIds);
+            model.MenuInfoList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuList);
 
-            if (role != null && role.Id > 0)
+            if (model != null && model.Id > 0)
             {
-                role.ModifyTime = DateTime.Now;
-                data.Success = await _roleSvc.Update(role);
+                model.ModifyTime = DateTime.Now;
+                data.Success = await _roleSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = role?.Id.ToString();
+                    data.Response = model?.Id.ToString();
                 }
             }
 
@@ -138,13 +138,13 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (id > 0)
             {
-                var role = await _roleSvc.QueryById(id);
-                role.DeleteTime = DateTime.Now;
-                data.Success = await _roleSvc.Update(role);
+                var model = await _roleSvc.QueryById(id);
+                model.DeleteTime = DateTime.Now;
+                data.Success = await _roleSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = role?.Id.ToString();
+                    data.Response = model?.Id.ToString();
                 }
             }
 
@@ -160,18 +160,18 @@ namespace Xu.WebApi.Controllers
         [HttpDelete]
         public async Task<object> DisableRole(int id, bool falg)
         {
-            var role = await _roleSvc.QueryById(id);
-            role.Enabled = falg;
+            var model = await _roleSvc.QueryById(id);
+            model.Enabled = falg;
 
             var data = new MessageModel<string>()
             {
-                Success = await _roleSvc.Update(role)
+                Success = await _roleSvc.Update(model)
             };
 
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = role?.Id.ToString();
+                data.Response = model?.Id.ToString();
             }
 
             return data;

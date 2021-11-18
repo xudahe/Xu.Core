@@ -1,4 +1,4 @@
-using Autofac;
+﻿using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -120,7 +120,7 @@ namespace Xu.WebApi
                 //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
                 //全局配置防止SQL注入过滤（或者在控制器方法上添加[AntiSqlInjectFilter]）
-                options.Filters.Add(typeof(AntiSqlInjectFilter));
+                //options.Filters.Add(typeof(AntiSqlInjectFilter));
 
                 // 全局异常过滤
                 options.Filters.Add(typeof(GlobalExceptionsFilter));

@@ -20,18 +20,17 @@ namespace Xu.WebApi
             //遍历参数集合
             foreach (var p in ps)
             {
-                //当参数是string，进行过滤
-                if (p.ParameterType.Equals(typeof(string)))
+                if (context.ActionArguments.ContainsKey(p.Name))
                 {
-                    context.ActionArguments[p.Name] = AntiSqlInject.GetSafetySql(context.ActionArguments[p.Name].ToString());
-                }
-                else if (p.ParameterType.IsClass)//当参数是一个实体
-                {
-                    PostModelFieldFilter(p.ParameterType, context.ActionArguments[p.Name]);
-                }
-                else
-                {
-                    continue;
+                    //当参数是string，进行过滤
+                    if (p.ParameterType.Equals(typeof(string)))
+                    {
+                        context.ActionArguments[p.Name] = AntiSqlInject.GetSafetySql(context.ActionArguments[p.Name].ToString());
+                    }
+                    else if (p.ParameterType.IsClass)//当参数是一个实体
+                    {
+                        PostModelFieldFilter(p.ParameterType, context.ActionArguments[p.Name]);
+                    }
                 }
             }
         }

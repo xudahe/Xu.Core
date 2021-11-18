@@ -24,6 +24,14 @@
             <param name="environment"></param>
             <returns></returns>
         </member>
+        <member name="M:Blog.Core.Controllers.FileController.FileUpload(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            单个文件上传（文件切片上传）
+            </summary>
+            <param name="environment"></param>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
         <member name="T:Blog.Core.Controllers.WeChatCompanyController">
             <summary>
             WeChatCompanyController
@@ -418,14 +426,14 @@
             <summary>
             添加部门
             </summary>
-            <param name="dept"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DeptController.PutDept(Xu.Model.Models.Dept)">
             <summary>
             更新部门
             </summary>
-            <param name="dept"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DeptController.DeleteDept(System.Int32)">
@@ -505,14 +513,14 @@
             <summary>
             添加菜单
             </summary>
-            <param name="menu"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.PutMenu(Xu.Model.Models.Menu)">
             <summary>
             更新菜单
             </summary>
-            <param name="menu"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.DeleteMenu(System.Int32)">
@@ -556,14 +564,14 @@
             <summary>
             添加角色
             </summary>
-            <param name="role"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.RoleController.PutRole(Xu.Model.Models.Role)">
             <summary>
             更新角色
             </summary>
-            <param name="role"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.RoleController.DeleteRole(System.Int32)">
@@ -614,14 +622,14 @@
             <summary>
             添加用户
             </summary>
-            <param name="user"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.UserController.PutUser(Xu.Model.Models.User)">
             <summary>
             更新用户
             </summary>
-            <param name="user"></param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.UserController.DeleteUser(System.Int32)">

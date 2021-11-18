@@ -11,9 +11,9 @@ namespace Xu.Model.Models
     public class Role : ModelBase
     {
         /// <summary>
-        /// 角色编码
+        /// 角色简码
         /// </summary>
-        [SugarColumn(ColumnDescription = "角色编码")]
+        [SugarColumn(ColumnDescription = "角色简码")]
         public string RoleCode { get; set; }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace Xu.Model.Models
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// 关联菜单的id或guid集合，不能同时包含两者
+        /// 角色关联菜单的id或guid集合，不能同时包含两者
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联菜单Id")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "角色关联菜单的id或guid集合")]
         public string MenuIds { get; set; }
 
         #region 绑定菜单

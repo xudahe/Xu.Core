@@ -8,9 +8,9 @@ namespace Xu.Model.Models
     public class Dept : ModelBase
     {
         /// <summary>
-        /// 部门编码
+        /// 部门简码
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "部门编码")]
+        [SugarColumn(IsNullable = true, ColumnDescription = "部门简码")]
         public string DeptCode { get; set; }
 
         /// <summary>
