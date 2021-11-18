@@ -118,14 +118,14 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 添加菜单
         /// </summary>
-        /// <param name="menu"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> PostMenu([FromBody] Menu menu)
+        public async Task<object> PostMenu([FromBody] Menu model)
         {
             var data = new MessageModel<Menu>() { Message = "添加成功", Success = true };
 
-            var dataList = await _menuSvc.Query(a => a.MenuName == menu.MenuName);
+            var dataList = await _menuSvc.Query(a => a.MenuName == model.MenuName);
             if (dataList.Count > 0)
             {
                 data.Message = "该菜单已存在";
@@ -133,8 +133,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                menu.Id = await _menuSvc.Add(menu);
-                data.Response = menu;
+                model.Id = await _menuSvc.Add(model);
+                data.Response = model;
             }
 
             return data;
@@ -143,20 +143,20 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 更新菜单
         /// </summary>
-        /// <param name="menu"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> PutMenu([FromBody] Menu menu)
+        public async Task<object> PutMenu([FromBody] Menu model)
         {
             var data = new MessageModel<string>();
-            if (menu != null && menu.Id > 0)
+            if (model != null && model.Id > 0)
             {
-                menu.ModifyTime = DateTime.Now;
-                data.Success = await _menuSvc.Update(menu);
+                model.ModifyTime = DateTime.Now;
+                data.Success = await _menuSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = menu?.Id.ToString();
+                    data.Response = model?.Id.ToString();
                 }
             }
 
@@ -174,13 +174,13 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (id > 0)
             {
-                var menu = await _menuSvc.QueryById(id);
-                menu.DeleteTime = DateTime.Now;
-                data.Success = await _menuSvc.Update(menu);
+                var model = await _menuSvc.QueryById(id);
+                model.DeleteTime = DateTime.Now;
+                data.Success = await _menuSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = menu?.Id.ToString();
+                    data.Response = model?.Id.ToString();
                 }
             }
 
@@ -196,18 +196,18 @@ namespace Xu.WebApi.Controllers
         [HttpDelete]
         public async Task<object> DisableMenu(int id, bool falg)
         {
-            var menu = await _menuSvc.QueryById(id);
-            menu.Enabled = falg;
+            var model = await _menuSvc.QueryById(id);
+            model.Enabled = falg;
 
             var data = new MessageModel<string>()
             {
-                Success = await _menuSvc.Update(menu)
+                Success = await _menuSvc.Update(model)
             };
 
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = menu?.Id.ToString();
+                data.Response = model?.Id.ToString();
             }
 
             return data;

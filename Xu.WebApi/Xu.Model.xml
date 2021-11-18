@@ -61,7 +61,7 @@
         </member>
         <member name="P:Xu.Model.Models.Dept.DeptCode">
             <summary>
-            部门编码
+            部门简码
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Dept.DeptName">
@@ -166,7 +166,7 @@
         </member>
         <member name="P:Xu.Model.Models.Role.RoleCode">
             <summary>
-            角色编码
+            角色简码
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.RoleName">
@@ -186,7 +186,7 @@
         </member>
         <member name="P:Xu.Model.Models.Role.MenuIds">
             <summary>
-            关联菜单的id或guid集合，不能同时包含两者
+            角色关联菜单的id或guid集合，不能同时包含两者
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.MenuInfoList">
@@ -437,7 +437,7 @@
         </member>
         <member name="P:Xu.Model.Models.User.RoleIds">
             <summary>
-            关联角色的id或guid集合，不能同时包含两者
+            用户关联角色的id或guid集合，不能同时包含两者
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.RoleInfoList">

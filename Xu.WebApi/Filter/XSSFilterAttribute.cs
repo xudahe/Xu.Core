@@ -25,7 +25,7 @@ namespace Xu.WebApi
             //遍历参数集合
             foreach (var p in ps)
             {
-                if (context.ActionArguments[p.Name] != null)
+                if (context.ActionArguments.ContainsKey(p.Name))
                 {
                     //当参数是string
                     if (p.ParameterType.Equals(typeof(string)))

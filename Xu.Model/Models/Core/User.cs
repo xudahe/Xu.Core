@@ -76,9 +76,9 @@ namespace Xu.Model.Models
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// 关联角色的id或guid集合，不能同时包含两者
+        /// 用户关联角色的id或guid集合，不能同时包含两者
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联角色Id")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "用户关联角色的id或guid集合")]
         public string RoleIds { get; set; }
 
         #region 绑定角色

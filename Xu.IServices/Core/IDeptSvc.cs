@@ -10,7 +10,7 @@ namespace Xu.IServices
     public interface IDeptSvc : IBaseSvc<Dept>
     {
         /// <summary>
-        /// 根据部门id或guid集合 过滤数据
+        /// 鏍规嵁閮ㄩ棬id鎴杇uid闆嗗悎 杩囨护鏁版嵁
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="list"></param>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Xu.Model.ResultModel;
 
@@ -104,6 +105,50 @@ namespace Blog.Core.Controllers
                 data.Message = "图片格式错误";
                 return data;
             }
+        }
+
+        /// <summary>
+        /// 文件切片上传
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <param name="file">文件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("/api/File/fileUpload")]
+        public async Task<MessageModel<string>> FileUpload([FromServices] IWebHostEnvironment environment, IFormFile file)
+        {
+            var data = new MessageModel<string>();
+            string fileName = Request.Form["fileName"]; //文件夹名称
+            string chunkName = Request.Form["chunkName"]; //文件名称
+
+            if (file == null) { data.Message = "请选择上传的文件。"; return data; }
+
+            if (string.IsNullOrEmpty(fileName)) { data.Message = "文件夹名称不能为空。"; return data; }
+
+            if (string.IsNullOrEmpty(chunkName)) { data.Message = "文件名称不能为空。"; return data; }
+
+            string folderpath = Path.Combine(environment.WebRootPath, fileName);
+            if (!Directory.Exists(folderpath))
+            {
+                Directory.CreateDirectory(folderpath);
+            }
+
+            string strpath = Path.Combine(fileName, chunkName);
+            string path = Path.Combine(environment.WebRootPath, strpath);
+
+            //写入文件
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            data = new MessageModel<string>()
+            {
+                Response = path,
+                Message = "上传成功",
+                Success = true,
+            };
+            return data;
         }
     }
 }

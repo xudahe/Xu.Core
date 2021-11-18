@@ -79,14 +79,14 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 添加部门
         /// </summary>
-        /// <param name="dept"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<object> PostDept([FromBody] Dept dept)
+        public async Task<object> PostDept([FromBody] Dept model)
         {
             var data = new MessageModel<Dept>() { Message = "添加成功", Success = true };
 
-            var dataList = await _deptSvc.Query(a => a.DeptName == dept.DeptName);
+            var dataList = await _deptSvc.Query(a => a.DeptName == model.DeptName);
             if (dataList.Count > 0)
             {
                 data.Message = "该部门名称已存在";
@@ -94,8 +94,8 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                dept.Id = await _deptSvc.Add(dept);
-                data.Response = dept;
+                model.Id = await _deptSvc.Add(model);
+                data.Response = model;
             }
 
             return data;
@@ -104,20 +104,20 @@ namespace Xu.WebApi.Controllers
         /// <summary>
         /// 更新部门
         /// </summary>
-        /// <param name="dept"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> PutDept([FromBody] Dept dept)
+        public async Task<object> PutDept([FromBody] Dept model)
         {
             var data = new MessageModel<string>();
-            if (dept != null && dept.Id > 0)
+            if (model != null && model.Id > 0)
             {
-                dept.ModifyTime = DateTime.Now;
-                data.Success = await _deptSvc.Update(dept);
+                model.ModifyTime = DateTime.Now;
+                data.Success = await _deptSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = dept?.Id.ToString();
+                    data.Response = model?.Id.ToString();
                 }
             }
 
@@ -135,13 +135,13 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (id > 0)
             {
-                var dept = await _deptSvc.QueryById(id);
-                dept.DeleteTime = DateTime.Now;
-                data.Success = await _deptSvc.Update(dept);
+                var model = await _deptSvc.QueryById(id);
+                model.DeleteTime = DateTime.Now;
+                data.Success = await _deptSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = dept?.Id.ToString();
+                    data.Response = model?.Id.ToString();
                 }
             }
 
@@ -157,18 +157,18 @@ namespace Xu.WebApi.Controllers
         [HttpDelete]
         public async Task<object> DisableDept(int id, bool falg)
         {
-            var dept = await _deptSvc.QueryById(id);
-            dept.Enabled = falg;
+            var model = await _deptSvc.QueryById(id);
+            model.Enabled = falg;
 
             var data = new MessageModel<string>()
             {
-                Success = await _deptSvc.Update(dept)
+                Success = await _deptSvc.Update(model)
             };
 
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = dept?.Id.ToString();
+                data.Response = model?.Id.ToString();
             }
 
             return data;
