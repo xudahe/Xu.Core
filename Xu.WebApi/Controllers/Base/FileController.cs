@@ -108,7 +108,7 @@ namespace Blog.Core.Controllers
         }
 
         /// <summary>
-        /// 文件切片上传
+        /// 文件切片上传(测试)
         /// </summary>
         /// <param name="environment"></param>
         /// <param name="file">文件</param>

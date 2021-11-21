@@ -26,10 +26,10 @@
         </member>
         <member name="M:Blog.Core.Controllers.FileController.FileUpload(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
-            单个文件上传（文件切片上传）
+            文件切片上传(测试)
             </summary>
             <param name="environment"></param>
-            <param name="file"></param>
+            <param name="file">文件</param>
             <returns></returns>
         </member>
         <member name="T:Blog.Core.Controllers.WeChatCompanyController">
@@ -364,6 +364,39 @@
             获取任务命名空间
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.Base.UploaderController">
+            <summary>
+            文件管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.Base.UploaderController.SimpleUploader(System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            分片上传文件前，检查哪些文件已上传
+            </summary>
+            <param name="chunkNumber">当前块的次序，第一个块是 1，注意不是从 0 开始的。</param>
+            <param name="chunkSize">分块大小，根据 totalSize 和这个值你就可以计算出总共的块数。注意最后一块的大小可能会比这个要大</param>
+            <param name="currentChunkSize">当前块的大小，实际大小</param>
+            <param name="totalSize">文件总大小。</param>
+            <param name="identifier">文件的唯一标示。MD5</param>
+            <param name="filename">文件名。</param>
+            <param name="relativePath">文件夹上传的时候文件的相对路径属性。</param>
+            <param name="totalChunks">文件被分成块的总数。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.Base.UploaderController.SimpleUploader">
+            <summary>
+            校验完成后，上传分片文件
+            重载，无参数的同名Upload方法
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.Base.UploaderController.FileMerge(System.String,System.String)">
+            <summary>
+            分片合并
+            </summary>
+            <param name="fileName">文件名</param>
+            <param name="tempPath">临时文件夹（以文件MD5码命名）</param>
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.#ctor(SqlSugar.ISqlSugarClient,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Xu.IServices.ITableData)">
             <summary>
