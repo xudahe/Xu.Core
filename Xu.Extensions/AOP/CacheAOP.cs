@@ -10,9 +10,9 @@ namespace Xu.Extensions
     public class CacheAOP : CacheAOPbase
     {
         //通过注入的方式，把缓存操作接口通过构造函数注入
-        private readonly IMemoryCaching _cache;
+        private readonly ICaching _cache;
 
-        public CacheAOP(IMemoryCaching cache)
+        public CacheAOP(ICaching cache)
         {
             _cache = cache;
         }
@@ -40,7 +40,7 @@ namespace Xu.Extensions
                 //存入缓存
                 if (!string.IsNullOrWhiteSpace(cacheKey))
                 {
-                    _cache.Set(cacheKey, invocation.ReturnValue);
+                    _cache.Set(cacheKey, invocation.ReturnValue, qCachingAttribute.AbsoluteExpiration);
                 }
             }
             else

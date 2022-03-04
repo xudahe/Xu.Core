@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StackExchange.Profiling;
 using System;
 using Xu.Common;
+using Xu.Model.ResultModel;
 
 namespace Xu.WebApi
 {
@@ -29,20 +29,25 @@ namespace Xu.WebApi
 
         public void OnException(ExceptionContext context)
         {
-            var json = new JsonErrorResponse
+            var json = new MessageModel<string>
             {
-                Message = context.Exception.Message//错误信息
+                Message = context.Exception.Message,//错误信息
+                Status = 500//500异常
             };
             var errorAudit = "Unable to resolve service for";
             if (!string.IsNullOrEmpty(json.Message) && json.Message.Contains(errorAudit))
             {
                 json.Message = json.Message.Replace(errorAudit, $"（若新添加服务，需要重新编译项目）{errorAudit}");
             }
-            if (_env.IsDevelopment())
+
+            if (_env.EnvironmentName.ObjToString().Equals("Development"))
             {
-                json.DevelopmentMessage = context.Exception.StackTrace;//堆栈信息
+                json.MessageDev = context.Exception.StackTrace;//堆栈信息
             }
-            context.Result = new InternalServerErrorObjectResult(json);
+            context.Result = new ContentResult
+            {
+                Content = JsonHelper.GetJSON<MessageModel<string>>(json)
+            };
 
             MiniProfiler.Current.CustomTiming("Errors：", json.Message);
 

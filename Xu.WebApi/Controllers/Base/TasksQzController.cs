@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.EnumHelper;
-using Xu.IRepository;
 using Xu.IServices;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
@@ -100,7 +99,7 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            tasksQz.JobStatus = tasksQz.IsStart ? JobStatus.运行中:JobStatus.未启动;
+            tasksQz.JobStatus = tasksQz.IsStart ? JobStatus.运行中 : JobStatus.未启动;
             var id = await _tasksQzSvc.Add(tasksQz);
             data.Success = id > 0;
             data.Response = id.ToString();
@@ -138,7 +137,7 @@ namespace Xu.WebApi.Controllers
             if (tasksQz != null)
             {
                 tasksQz.ModifyTime = DateTime.Now;
-                tasksQz.JobStatus = tasksQz.IsStart ? JobStatus.运行中:JobStatus.已停止;
+                tasksQz.JobStatus = tasksQz.IsStart ? JobStatus.运行中 : JobStatus.已停止;
                 data.Success = await _tasksQzSvc.Update(tasksQz);
                 data.Response = tasksQz?.Id.ToString();
                 data.Message = data.Success ? "更新成功" : "更新失败";

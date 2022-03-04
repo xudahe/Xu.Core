@@ -44,12 +44,12 @@ namespace Xu.Extensions
                         ConnectionString = m.Connection, //必填, 数据库连接字符串
                         DbType = (DbType)m.DbType, //必填, 数据库类型
                         IsAutoCloseConnection = true, //是否关闭数据库连接, 设置为true无需使用using或者Close操作
-                        IsShardSameThread = false, //默认SystemTable, 字段信息读取, 如：该属性是不是主键，标识列等等信息
+                        //IsShardSameThread = false, //默认SystemTable, 字段信息读取, 如：该属性是不是主键，标识列等等信息
                         AopEvents = new AopEvents
                         {
                             OnLogExecuting = (sql, p) =>
                             {
-                                if (Appsettings.App(new string[] { "AppSettings", "SqlAOP", "Enabled" }).ToBoolReq())
+                                if (Appsettings.App(new string[] { "AppSettings", "SqlAOP", "OutToLogFile", "Enabled" }).ToBoolReq())
                                 {
                                     Parallel.For(0, 1, e =>
                                     {
@@ -57,6 +57,10 @@ namespace Xu.Extensions
                                         // LogLock.OutSql2Log("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql });
                                         SerilogServer.WriteLog("SqlLog", new string[] { GetParas(p), "【SQL语句】：" + sql });
                                     });
+                                }
+                                if (Appsettings.App(new string[] { "AppSettings", "SqlAOP", "OutToConsole", "Enabled" }).ToBoolReq())
+                                {
+                                    ConsoleHelper.WriteColorLine(string.Join("\r\n", new string[] { "--------", "【SQL语句】：" + GetWholeSql(p, sql) }), ConsoleColor.DarkCyan);
                                 }
                             }
                         },
@@ -66,7 +70,18 @@ namespace Xu.Extensions
                         },
                         // 从库
                         SlaveConnectionConfigs = listConfig_Slave,
-                        //InitKeyType = InitKeyType.SystemTable
+                        // 自定义特性
+                        ConfigureExternalServices = new ConfigureExternalServices()
+                        {
+                            EntityService = (property, column) =>
+                            {
+                                if (column.IsPrimarykey && property.PropertyType == typeof(int))
+                                {
+                                    column.IsIdentity = true;
+                                }
+                            }
+                        },
+                        InitKeyType = InitKeyType.Attribute
                     }
                    );
                 });
@@ -84,6 +99,16 @@ namespace Xu.Extensions
 
                 return db;
             });
+        }
+
+        private static string GetWholeSql(SugarParameter[] paramArr, string sql)
+        {
+            foreach (var param in paramArr)
+            {
+                sql.Replace(param.ParameterName, param.Value.ObjToString());
+            }
+
+            return sql;
         }
 
         private static string GetParas(SugarParameter[] pars)

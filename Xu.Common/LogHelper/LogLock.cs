@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,10 @@ namespace Xu.Common
 {
     public class LogLock
     {
-        private static readonly ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
+        private static readonly ILog log = LogManager.GetLogger(typeof(LogLock));
+        private static ReaderWriterLockSlim LogWriteLock = new ReaderWriterLockSlim();
+        private static int WritedCount = 0;
+        private static int FailedCount = 0;
         private static string _contentRoot = string.Empty;
 
         public LogLock(string contentPath)
@@ -21,10 +25,23 @@ namespace Xu.Common
         /// <summary>
         /// 日志输出
         /// </summary>
-        /// <param name="filename"></param>
+        /// <param name="prefix"></param>
         /// <param name="dataParas"></param>
         /// <param name="IsHeader"></param>
-        public static void OutSql2Log(string filename, string[] dataParas, bool IsHeader = true)
+        /// <param name="isWrt"></param>
+        public static void OutSql2Log(string prefix, string[] dataParas, bool IsHeader = true, bool isWrt = false)
+        {
+            if (Appsettings.App(new string[] { "AppSettings", "LogToDb", "Enabled" }).ToBoolReq())
+            {
+                OutSql2LogToDB(prefix, dataParas, IsHeader);
+            }
+            else
+            {
+                OutSql2LogToFile(prefix, dataParas, IsHeader, isWrt);
+            }
+        }
+
+        public static void OutSql2LogToFile(string filename, string[] dataParas, bool IsHeader = true, bool isWrt = false)
         {
             try
             {
@@ -51,12 +68,20 @@ namespace Xu.Common
                        string.Join("\r\n", dataParas) + "\r\n"
                        );
                 }
-
-                File.AppendAllText(logFilePath, logContent);
+                if (isWrt)
+                {
+                    File.WriteAllText(logFilePath, logContent);
+                }
+                else
+                {
+                    File.AppendAllText(logFilePath, logContent);
+                }
+                WritedCount++;
             }
             catch (Exception e)
             {
                 Console.Write(e.Message);
+                FailedCount++;
             }
             finally
             {
@@ -66,6 +91,122 @@ namespace Xu.Common
                 //      若请求处理完成后未释放将会触发异常[此模式不下允许以递归方式获取写入锁定]
                 LogWriteLock.ExitWriteLock();
             }
+        }
+
+        public static void OutSql2LogToDB(string prefix, string[] dataParas, bool IsHeader = true)
+        {
+            string logContent = String.Join("\r\n", dataParas);
+            if (IsHeader)
+            {
+                logContent = (
+                   "--------------------------------\r\n" +
+                   DateTime.Now + "|\r\n" +
+                   string.Join("\r\n", dataParas) + "\r\n"
+                   );
+            }
+            switch (prefix)
+            {
+                case "AOPLog":
+                    log.Info(logContent);
+                    break;
+
+                case "AOPLogEx":
+                    log.Error(logContent);
+                    break;
+
+                case "RequestIpInfoLog":
+                    log.Debug(logContent);
+                    break;
+
+                case "RecordAccessLogs":
+                    log.Debug(logContent);
+                    break;
+
+                case "SqlLog":
+                    log.Info(logContent);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 读取文件内容
+        /// </summary>
+        /// <param name="folderPath">文件夹路径</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="encode">编码</param>
+        /// <param name="readType">读取类型(0:精准,1:前缀模糊)</param>
+        /// <returns></returns>
+        public static string ReadLog(string folderPath, string fileName, Encoding encode, ReadType readType = ReadType.Accurate, int takeOnlyTop = -1)
+        {
+            string s = "";
+            try
+            {
+                LogWriteLock.EnterReadLock();
+
+                // 根据文件名读取当前文件内容
+                if (readType == ReadType.Accurate)
+                {
+                    var filePath = Path.Combine(folderPath, fileName);
+                    if (!File.Exists(filePath))
+                    {
+                        s = null;
+                    }
+                    else
+                    {
+                        StreamReader f2 = new StreamReader(filePath, encode);
+                        s = f2.ReadToEnd();
+                        f2.Close();
+                        f2.Dispose();
+                    }
+                }
+
+                // 根据前缀读取所有文件内容
+                if (readType == ReadType.Prefix)
+                {
+                    var allFiles = new DirectoryInfo(folderPath);
+                    var selectFiles = allFiles.GetFiles().Where(fi => fi.Name.ToLower().Contains(fileName.ToLower())).ToList();
+
+                    selectFiles = takeOnlyTop > 0 ? selectFiles.OrderByDescending(d => d.Name).Take(takeOnlyTop).ToList() : selectFiles;
+
+                    foreach (var item in selectFiles)
+                    {
+                        if (File.Exists(item.FullName))
+                        {
+                            StreamReader f2 = new StreamReader(item.FullName, encode);
+                            s += f2.ReadToEnd();
+                            f2.Close();
+                            f2.Dispose();
+                        }
+                    }
+                }
+
+                // 根据前缀读取 最新文件 时间倒叙
+                if (readType == ReadType.PrefixLatest)
+                {
+                    var allFiles = new DirectoryInfo(folderPath);
+                    var selectLastestFile = allFiles.GetFiles().Where(fi => fi.Name.ToLower().Contains(fileName.ToLower())).OrderByDescending(d => d.Name).FirstOrDefault();
+
+                    if (selectLastestFile != null && File.Exists(selectLastestFile.FullName))
+                    {
+                        StreamReader f2 = new StreamReader(selectLastestFile.FullName, encode);
+                        s = f2.ReadToEnd();
+                        f2.Close();
+                        f2.Dispose();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                FailedCount++;
+            }
+            finally
+            {
+                LogWriteLock.ExitReadLock();
+            }
+            return s;
         }
 
         /// <summary>
@@ -320,5 +461,23 @@ namespace Xu.Common
             else
                 return filList.Union(diiList).ToList();
         }
+    }
+
+    public enum ReadType
+    {
+        /// <summary>
+        /// 精确查找一个
+        /// </summary>
+        Accurate,
+
+        /// <summary>
+        /// 指定前缀，模糊查找全部
+        /// </summary>
+        Prefix,
+
+        /// <summary>
+        /// 指定前缀，最新一个文件
+        /// </summary>
+        PrefixLatest
     }
 }

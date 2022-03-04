@@ -62,5 +62,21 @@ namespace Xu.Common
             Configuration.Bind(string.Join(":", sections), list);
             return list;
         }
+
+        /// <summary>
+        /// 根据路径  configuration["App:Name"];
+        /// </summary>
+        /// <param name="sectionsPath"></param>
+        /// <returns></returns>
+        public static string GetValue(string sectionsPath)
+        {
+            try
+            {
+                return Configuration[sectionsPath];
+            }
+            catch (Exception) { }
+
+            return "";
+        }
     }
 }

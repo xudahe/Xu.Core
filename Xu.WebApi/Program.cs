@@ -29,8 +29,8 @@ namespace Xu.WebApi
                  .UseStartup<Startup>() //调用Startup.cs类下的Configure 和 ConfigureServices
                  .ConfigureAppConfiguration((hostingContext, config) =>
                  {
-                     //config.Sources.Clear(); //清除已有的所有配置（包括appsettings.json配置）
-                     //config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+                     config.Sources.Clear(); //清除已有的所有配置（包括appsettings.json配置）
+                     config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
                      //接入Apollo配置中心
                      config.AddConfigurationApollo("appsettings.apollo.json");
                  })
@@ -41,6 +41,9 @@ namespace Xu.WebApi
                      builder.AddFilter("System", LogLevel.Error);
                      builder.AddFilter("Microsoft", LogLevel.Error);
                      builder.AddFilter("Xu.Extensions.ApiResponseHandler", LogLevel.Error);
+
+                     // 统一设置
+                     builder.SetMinimumLevel(LogLevel.Error);
 
                      //可配置文件，不带参数：表示log4net.config的配置文件就在应用程序根目录下，也可以指定配置文件的路径
                      builder.AddLog4Net(Path.Combine(Directory.GetCurrentDirectory(), "Log4net.config"));

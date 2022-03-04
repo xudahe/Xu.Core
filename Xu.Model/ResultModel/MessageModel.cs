@@ -21,6 +21,11 @@
         public string Message { get; set; } = "服务器异常";
 
         /// <summary>
+        /// 开发者信息
+        /// </summary>
+        public string MessageDev { get; set; }
+
+        /// <summary>
         /// 返回数据集合
         /// </summary>
         public T Response { get; set; }

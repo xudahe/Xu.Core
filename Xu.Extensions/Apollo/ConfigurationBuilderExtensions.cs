@@ -1,11 +1,11 @@
 ﻿using Com.Ctrip.Framework.Apollo;
+using Com.Ctrip.Framework.Apollo.Enums;
+using Com.Ctrip.Framework.Apollo.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Com.Ctrip.Framework.Apollo.Enums;
-using Com.Ctrip.Framework.Apollo.Logging;
-using Microsoft.Extensions.Primitives;
 using System.Reflection;
 
 namespace Xu.Extensions.Apollo

@@ -450,6 +450,56 @@
             关联角色Xml
             </summary>
         </member>
+        <member name="T:Xu.Model.Models.OperateLog">
+            <summary>
+            日志记录
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.IsDeleted">
+             <summary>
+            获取或设置是否禁用，逻辑上的删除，非物理删除
+             </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.Area">
+            <summary>
+            区域名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.Controller">
+            <summary>
+            区域控制器名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.Action">
+            <summary>
+            Action名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.IPAddress">
+            <summary>
+            IP地址
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.LogTime">
+            <summary>
+            登录时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.LoginName">
+            <summary>
+            登录名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.OperateLog.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.WeChatCompany">
             <summary>
             
@@ -928,6 +978,11 @@
         <member name="P:Xu.Model.ResultModel.MessageModel`1.Message">
             <summary>
             返回信息
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ResultModel.MessageModel`1.MessageDev">
+            <summary>
+            开发者信息
             </summary>
         </member>
         <member name="P:Xu.Model.ResultModel.MessageModel`1.Response">

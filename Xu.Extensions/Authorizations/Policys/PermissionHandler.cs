@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -46,16 +48,35 @@ namespace Xu.Extensions
             {
                 //var data = await _roleModulePermissionServices.RoleModuleMaps();
                 var list = new List<PermissionItem>();
+                // ids4和jwt切换
+                // ids4
+                if (Permissions.IsUseIds4)
+                {
+                    //list = (from item in data
+                    //        where item.IsDeleted == false
+                    //        orderby item.Id
+                    //        select new PermissionItem
+                    //        {
+                    //            Url = item.Module?.LinkUrl,
+                    //            Role = item.Role?.Id.ObjToString(),
+                    //        }).ToList();
+                }
+                // jwt
+                else
+                {
+                    //var data = await _roleModulePermissionServices.RoleModuleMaps();
 
-                //list = (from item in data
-                //        where item.IsDeleted == false
-                //        orderby item.Id
-                //        select new PermissionItem
-                //        {
-                //            Url = item.Module?.LinkUrl,
-                //            Role = item.Role?.Name.ObjToString(),
-                //        }).ToList();
+                    //list = (from item in data
+                    //        where item.IsDeleted == false
+                    //        orderby item.Id
+                    //        select new PermissionItem
+                    //        {
+                    //            Url = item.Module?.LinkUrl,
+                    //            Role = item.Role?.Name.ObjToString(),
+                    //        }).ToList();
 
+                    requirement.Permissions = list;
+                }
                 requirement.Permissions = list;
             }
 
@@ -88,15 +109,32 @@ namespace Xu.Extensions
                 if (defaultAuthenticate != null)
                 {
                     var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
+
+                    // 是否开启测试环境
+                    var isTestCurrent = Appsettings.App(new string[] { "AppSettings", "UseLoadTest" }).ToBoolReq();
+
                     //result?.Principal不为空即登录成功
-                    if (result?.Principal != null)
+                    if (result?.Principal != null || isTestCurrent)
                     {
-                        httpContext.User = result.Principal;
+                        if (!isTestCurrent) httpContext.User = result.Principal;
 
                         // 获取当前用户的角色信息
-                        var currentUserRoles = (from item in httpContext.User.Claims
+                        var currentUserRoles = new List<string>();
+                        // ids4和jwt切换
+                        // ids4
+                        if (Permissions.IsUseIds4)
+                        {
+                            currentUserRoles = (from item in httpContext.User.Claims
+                                                where item.Type == "role"
+                                                select item.Value).ToList();
+                        }
+                        else
+                        {
+                            // jwt
+                            currentUserRoles = (from item in httpContext.User.Claims
                                                 where item.Type == requirement.ClaimType
                                                 select item.Value).ToList();
+                        }
 
                         var isMatchRole = false;
                         var permisssionRoles = requirement.Permissions.Where(w => currentUserRoles.Contains(w.Role));
@@ -104,11 +142,11 @@ namespace Xu.Extensions
                         {
                             try
                             {
-                                //if (Regex.Match(questUrl, item.Url?.ToString().ToLower())?.Value == questUrl)
-                                //{
-                                isMatchRole = true;
-                                break;
-                                //}
+                                if (Regex.Match(questUrl, item.Url?.ToString().ToLower())?.Value == questUrl)
+                                {
+                                    isMatchRole = true;
+                                    break;
+                                }
                             }
                             catch (Exception)
                             {
@@ -123,8 +161,18 @@ namespace Xu.Extensions
                             return;
                         }
 
-                        var isExp = (httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) != null && DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) >= DateTime.Now;
-
+                        var isExp = false;
+                        // ids4和jwt切换
+                        // ids4
+                        if (Permissions.IsUseIds4)
+                        {
+                            isExp = (httpContext.User.Claims.SingleOrDefault(s => s.Type == "exp")?.Value) != null && DateHelper.StampToDateTime(httpContext.User.Claims.SingleOrDefault(s => s.Type == "exp")?.Value) >= DateTime.Now;
+                        }
+                        else
+                        {
+                            // jwt
+                            isExp = (httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) != null && DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) >= DateTime.Now;
+                        }
                         if (isExp)
                         {
                             context.Succeed(requirement);

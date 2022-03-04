@@ -24,27 +24,29 @@ namespace Xu.Extensions
 
                        var factory = new ConnectionFactory()
                        {
-                           //RabbitMQ服务
                            HostName = Appsettings.App(new string[] { "RabbitMQ", "Connection" }),
                            DispatchConsumersAsync = true
                        };
 
                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "UserName" })))
                        {
-                           //用户名
                            factory.UserName = Appsettings.App(new string[] { "RabbitMQ", "UserName" });
                        }
 
                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "Password" })))
                        {
-                           //密码
                            factory.Password = Appsettings.App(new string[] { "RabbitMQ", "Password" });
+                       }
+
+                       if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "Port" })))
+                       {
+                           factory.Port = Appsettings.App(new string[] { "RabbitMQ", "Port" }).ToInt32Req();
                        }
 
                        var retryCount = 5;
                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" })))
                        {
-                           retryCount = int.Parse(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" }));
+                           retryCount = Appsettings.App(new string[] { "RabbitMQ", "RetryCount" }).ToInt32Req();
                        }
 
                        return new RabbitMQPersistentConnection(factory, logger, retryCount);

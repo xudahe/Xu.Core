@@ -21,9 +21,11 @@ namespace Xu.Common
         /// 记录日常日志
         /// </summary>
         /// <param name="filename"></param>
-        /// <param name="message"></param>
-        /// <param name="info"></param>
-        public static void WriteLog(string filename, string[] dataParas, bool IsHeader = true, string defaultFolder = "")
+        /// <param name="dataParas"></param>
+        /// <param name="IsHeader"></param>
+        /// <param name="defaultFolder"></param>
+        /// <param name="isJudgeJsonFormat"></param>
+        public static void WriteLog(string filename, string[] dataParas, bool IsHeader = true, string defaultFolder = "", bool isJudgeJsonFormat = false)
         {
             var path = Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"));
             if (!Directory.Exists(path))//如果路径不存在
@@ -49,19 +51,34 @@ namespace Xu.Common
 
                 .CreateLogger();
 
-            string logJudge = string.Join("-", dataParas);
-            if (logJudge != null && logJudge.Length > 20)
+            var now = DateTime.Now;
+            string logContent = String.Join("\r\n", dataParas);
+            var isJsonFormat = true;
+            if (isJudgeJsonFormat)
             {
-                string logContent = string.Join("\r\n", dataParas);
+                var judCont = logContent.Substring(0, logContent.LastIndexOf(","));
+                isJsonFormat = JsonHelper.IsJson(judCont);
+            }
+
+            if (isJsonFormat)
+            {
                 if (IsHeader)
                 {
                     logContent = (
                        "--------------------------------\r\n" +
                        DateTime.Now + "|\r\n" +
-                       string.Join("\r\n", dataParas) + "\r\n"
+                       String.Join("\r\n", dataParas) + "\r\n"
                        );
                 }
+                // 展示elk支持输出4种日志级别
                 Log.Information(logContent);
+                //Log.Warning(logContent);
+                //Log.Error(logContent);
+                //Log.Debug(logContent);
+            }
+            else
+            {
+                Console.WriteLine("【JSON格式异常：】" + logContent + now.ObjToString());
             }
             Log.CloseAndFlush();
         }

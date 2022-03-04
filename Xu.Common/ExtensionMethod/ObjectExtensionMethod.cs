@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Xu.Common
+﻿namespace Xu.Common
 {
     public static class ObjectExtensionMethod
     {

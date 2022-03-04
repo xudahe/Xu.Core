@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -71,17 +72,41 @@ namespace Xu.Model
 
                 // 创建数据库
                 Console.WriteLine($"Create Database(The Db Id:{MyContext.ConnId})...");
-                myContext.Db.DbMaintenance.CreateDatabase();
-                ConsoleHelper.WriteSuccessLine($"Database created successfully!");
-
-                // 创建数据库表，遍历指定命名空间下的class，
-                // 注意不要把其他命名空间下的也添加进来。
-                Console.WriteLine("Create Tables...");
-                var modelTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
-                                 where t.IsClass && t.Namespace == "Xu.Model.Models"
-                                 select t;
-                modelTypes.ToList().ForEach(t =>
+                if (MyContext.DbType != SqlSugar.DbType.Oracle)
                 {
+                    myContext.Db.DbMaintenance.CreateDatabase();
+                    ConsoleHelper.WriteSuccessLine($"Database created successfully!");
+                }
+                else
+                {
+                    //Oracle 数据库不支持该操作
+                    ConsoleHelper.WriteSuccessLine($"Oracle 数据库不支持该操作，可手动创建Oracle数据库!");
+                }
+
+                // 创建数据库表，遍历指定命名空间下的class，注意不要把其他命名空间下的也添加进来。
+                Console.WriteLine("Create Tables...");
+
+                //var modelTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
+                //                 where t.IsClass && t.Namespace == "Xu.Model.Models"
+                //                 select t;
+                //modelTypes.ToList().ForEach(t =>
+                //{
+                //    if (!myContext.Db.DbMaintenance.IsAnyTable(t.Name))
+                //    {
+                //        Console.WriteLine(t.Name);
+                //        myContext.Db.CodeFirst.InitTables(t);
+                //    }
+                //});
+                var path = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
+                var referencedAssemblies = System.IO.Directory.GetFiles(path, "Xu.Model.dll").Select(Assembly.LoadFrom).ToArray();
+                var modelTypes = referencedAssemblies
+                    .SelectMany(a => a.DefinedTypes)
+                    .Select(type => type.AsType())
+                    .Where(x => x.IsClass && x.Namespace != null && x.Namespace.Equals("Xu.Model.Models")).ToList();
+                modelTypes.ForEach(t =>
+                {
+                    // 这里只支持添加表，不支持删除
+                    // 如果想要删除，数据库直接右键删除，或者联系SqlSugar作者；
                     if (!myContext.Db.DbMaintenance.IsAnyTable(t.Name))
                     {
                         Console.WriteLine(t.Name);
@@ -93,6 +118,22 @@ namespace Xu.Model
 
                 if (Appsettings.App(new string[] { "AppSettings", "SeedDBDataEnabled" }).ToBoolReq())
                 {
+                    JsonSerializerSettings setting = new JsonSerializerSettings();
+                    JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
+                    {
+                        //日期类型默认格式化处理
+                        setting.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
+                        setting.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+
+                        //空值处理
+                        setting.NullValueHandling = NullValueHandling.Ignore;
+
+                        //高级用法九中的Bool类型转换 设置
+                        //setting.Converters.Add(new BoolConvert("是,否"));
+
+                        return setting;
+                    });
+
                     Console.WriteLine($"Seeding database data (The Db Id:{MyContext.ConnId})...");
 
                     #region User

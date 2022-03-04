@@ -184,7 +184,7 @@ namespace Xu.Model
                 {
                     //DataInfoCacheService = new HttpRuntimeCache()
                 },
-                IsShardSameThread = blnIsShardSameThread
+                //IsShardSameThread = blnIsShardSameThread
             };
             return config;
         }

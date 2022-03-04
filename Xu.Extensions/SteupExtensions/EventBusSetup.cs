@@ -18,34 +18,42 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (Appsettings.App(new string[] { "RabbitMQ", "Enabled" }).ToBoolReq() && Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
+            if (Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
             {
                 var subscriptionClientName = Appsettings.App(new string[] { "EventBus", "SubscriptionClientName" });
 
                 services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
                 services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
 
-                services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+                if (Appsettings.App(new string[] { "RabbitMQ", "Enabled" }).ToBoolReq())
                 {
-                    var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                    var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                    var retryCount = 5;
-                    if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" })))
+                    services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
                     {
-                        retryCount = int.Parse(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" }));
-                    }
+                        var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                        var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                        var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+                        var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-                    return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
-                });
+                        var retryCount = 5;
+                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" })))
+                        {
+                            retryCount = int.Parse(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" }));
+                        }
+
+                        return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
+                    });
+                }
+                if (Appsettings.App(new string[] { "Kafka", "Enabled" }).ToBoolReq())
+                {
+                    services.AddHostedService<KafkaConsumerHostService>();
+                    services.AddSingleton<IEventBus, EventBusKafka>();
+                }
             }
         }
 
         public static void ConfigureEventBus(this IApplicationBuilder App)
         {
-            if (Appsettings.App(new string[] { "RabbitMQ", "Enabled" }).ToBoolReq() && Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
+            if (Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
             {
                 var eventBus = App.ApplicationServices.GetRequiredService<IEventBus>();
 

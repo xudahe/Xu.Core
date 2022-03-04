@@ -61,7 +61,8 @@ namespace Xu.WebApi
             services.AddSwaggerSetup();
             services.AddJobSetup();
             services.AddHttpContextSetup();
-            services.AddAppConfigSetup();
+            // services.AddAppConfigSetup();
+            services.AddAppTableConfigSetup(Env);//表格打印配置
             services.AddHttpApi();
             services.AddRedisInitMqSetup();
             //services.AddHstsSetup(); // 生产环境中使用
@@ -104,6 +105,9 @@ namespace Xu.WebApi
             //{
             //    options.LowercaseUrls = true; //小写url的路由
             //});
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();
 
             //启用控制器
             services.AddControllers(options =>
@@ -200,6 +204,10 @@ namespace Xu.WebApi
                 //app.UseHsts(); // HSTS 中间件（UseHsts）用于向客户端发送 HTTP 严格传输安全协议（HSTS）标头
             }
 
+            // 自定义Swagger权限拦截中间件，放到Swagger中间件之前
+            app.UseSession();
+            app.UseSwaggerAuthorized();
+
             // 封装Swagger展示
             app.UseSwaggerMildd(() => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("Xu.WebApi.index.html"));
 
@@ -209,6 +217,11 @@ namespace Xu.WebApi
             app.UseCors(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }));
             // 重定向中间件，用于将 HTTP 请求重定向到 HTTPS
             //app.UseHttpsRedirection();
+            // 使用静态文件
+            DefaultFilesOptions defaultFilesOptions = new DefaultFilesOptions();
+            defaultFilesOptions.DefaultFileNames.Clear();
+            defaultFilesOptions.DefaultFileNames.Add("index.html");
+            app.UseDefaultFiles(defaultFilesOptions);
             // 默认使用wwwroot静态文件
             app.UseStaticFiles();
             // 使用cookie
@@ -225,7 +238,7 @@ namespace Xu.WebApi
             // 然后是授权中间件
             app.UseAuthorization();
             // 开启性能分析
-            app.UseMiniProfiler();
+            app.UseMiniProfilerMildd();
             // 开启异常中间件，要放到最后
             app.UseExceptionHandlerMidd();
 

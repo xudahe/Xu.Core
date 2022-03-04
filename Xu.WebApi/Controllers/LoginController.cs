@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -159,5 +160,30 @@ namespace Xu.WebApi.Controllers
                 message = "认证失败"
             });
         }
+
+        /// <summary>
+        /// swagger登录
+        /// </summary>
+        /// <param name="loginRequest"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public dynamic SwgLogin([FromBody] SwaggerLoginRequest loginRequest)
+        {
+            // 这里可以查询数据库等各种校验
+            if (loginRequest?.Name == "admin" && loginRequest?.Pwd == "admin")
+            {
+                HttpContext.Session.SetString("swagger-code", "success");
+                return new { result = true };
+            }
+
+            return new { result = false };
+        }
+    }
+
+    public class SwaggerLoginRequest
+    {
+        public string Name { get; set; }
+        public string Pwd { get; set; }
     }
 }

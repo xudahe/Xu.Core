@@ -76,9 +76,7 @@ namespace Xu.Extensions
 
                     #endregion 方案一
 
-                    // 如果方案一不行，试试这个方案
-
-                    #region 方案二
+                    #region 如果方案一不行，试试方案二
 
                     //var type = invocation.Method.ReturnType;
                     //var resultProperty = type.GetProperty("Result");
@@ -89,7 +87,7 @@ namespace Xu.Extensions
                     //    LogLock.OutSql2Log("AOPLog", new string[] { dataIntercept });
                     //});
 
-                    #endregion 方案二
+                    #endregion 如果方案一不行，试试方案二
                 }
                 else
                 {// 同步1

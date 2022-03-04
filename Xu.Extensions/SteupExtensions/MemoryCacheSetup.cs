@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using Xu.Common;
 
@@ -18,10 +19,12 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.AddScoped<IMemoryCaching, MemoryCaching>();
+            services.AddScoped<ICaching, CachingProvider>();
             services.AddSingleton<IMemoryCache>(factory =>
             {
-                return new MemoryCache(new MemoryCacheOptions());
+                var value = factory.GetRequiredService<IOptions<MemoryCacheOptions>>();
+                var cache = new MemoryCache(value);
+                return cache;
             });
         }
     }

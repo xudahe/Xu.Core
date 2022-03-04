@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Xu.Model.ResultModel;
 
@@ -25,7 +21,6 @@ namespace Xu.WebApi.Controllers.Base
         {
             _env = env;
         }
-
 
         /// <summary>
         /// 分片上传文件前，检查哪些文件已上传
@@ -49,8 +44,8 @@ namespace Xu.WebApi.Controllers.Base
             //在所有分片都已经上传后生成的数据库记录
             //bool fileExists = _fileAppService.GetFileIsExistsByMD5(identifier) != null;
             //if (fileExists)//已上传过相同MD5码的文件
-            //{ 
-                //skipUpload  是我自己定义用来提示前端可以跳过已上传的部分
+            //{
+            //skipUpload  是我自己定义用来提示前端可以跳过已上传的部分
             //}
 
             //如果文件暂未完成上传，查询已上传的分片文件
@@ -85,7 +80,7 @@ namespace Xu.WebApi.Controllers.Base
         [HttpPost]
         public async Task<MessageModel<object>> SimpleUploader()
         {
-            var data = new MessageModel<object>() { Success = true};
+            var data = new MessageModel<object>() { Success = true };
 
             //md5码
             string identifier = Request.Form["identifier"];
@@ -107,11 +102,12 @@ namespace Xu.WebApi.Controllers.Base
             // 写入文件
             using (var addFile = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
-               await file.CopyToAsync(addFile); //这里最好用异步
+                await file.CopyToAsync(addFile); //这里最好用异步
             }
 
-            data.Message ="分片上传完成";
-            data.Response = new {
+            data.Message = "分片上传完成";
+            data.Response = new
+            {
                 needMerge = chunkNumber == totalChunks,//全部上传完成后，返回true
                 filePath = path,     //返回分片文件
                 tempPath = filePath, //返回分片文件夹
@@ -127,25 +123,25 @@ namespace Xu.WebApi.Controllers.Base
         [HttpGet]
         public MessageModel<object> FileMerge(string fileName, string tempPath)
         {
-                var data = new MessageModel<object>() { Success = true,Message  = "合并成功"};
+            var data = new MessageModel<object>() { Success = true, Message = "合并成功" };
 
-                string filePath = Path.Combine(_env.WebRootPath, "uploadFiles");
-                 if (!Directory.Exists(filePath))
-                 {
-                     Directory.CreateDirectory(filePath);
-                 }
+            string filePath = Path.Combine(_env.WebRootPath, "uploadFiles");
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
 
             string path = $"{filePath}/{fileName}";//文件完全路径名
 
             // 获取目录下所有的切片文件块,按照文件名(数字)进行排序
             List<string> files = Directory.GetFiles(tempPath).OrderBy(s => s).ToList();
 
-                if (!(files.Count > 0))
-                {
-                    data.Message = string.Format("文件列表为空");
-                    data.Success = false;
-                    return data;
-                }
+            if (!(files.Count > 0))
+            {
+                data.Message = string.Format("文件列表为空");
+                data.Success = false;
+                return data;
+            }
             //确保所有的文件都存在
             foreach (string item in files)
             {
@@ -162,7 +158,7 @@ namespace Xu.WebApi.Controllers.Base
             BinaryWriter addWriter = new BinaryWriter(addFile);
             for (int i = 0; i < files.Count; i++)
             {
-                //获得上传的分片数据流 
+                //获得上传的分片数据流
                 Stream stream = new FileStream(files[i], FileMode.Open);
                 BinaryReader tempReader = new BinaryReader(stream);
                 var streamSize = (int)stream.Length;
@@ -183,12 +179,10 @@ namespace Xu.WebApi.Controllers.Base
 
             //合并完后，删除掉临时的分片文件夹
             DirectoryInfo dir = new DirectoryInfo(tempPath);
-                dir.Delete(true);//删除子目录和文件
+            dir.Delete(true);//删除子目录和文件
 
-                data.Response = path;
-                return data;
-          
+            data.Response = path;
+            return data;
         }
-
     }
 }

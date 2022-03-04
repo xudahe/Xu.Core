@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using Xu.Common;
 using Xu.Model;
 
 namespace Xu.Extensions

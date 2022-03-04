@@ -191,7 +191,6 @@
         </member>
         <member name="M:Blog.Core.Api.Controllers.NacosController.#ctor(Nacos.V2.INacosNamingService)">
              <summary>
-            
              </summary>
              <param name="nacosNamingService"></param>
         </member>
@@ -510,6 +509,13 @@
             请求刷新Token（以旧换新）
             </summary>
             <param name="token">token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.LoginController.SwgLogin(Xu.WebApi.Controllers.SwaggerLoginRequest)">
+            <summary>
+            swagger登录
+            </summary>
+            <param name="loginRequest"></param>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.MenuController">
