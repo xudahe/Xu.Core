@@ -38,6 +38,11 @@ namespace Xu.Extensions
                 }
                 c.IndexStream = streamHtml;
 
+                if (Permissions.IsUseIds4)
+                {
+                    c.OAuthClientId("blogadminjs"); 
+                }
+
                 c.DefaultModelsExpandDepth(-1); // 不显示models
 
                 c.RoutePrefix = "";//路径配置，设置后直接输入IP就可以进入接口文档

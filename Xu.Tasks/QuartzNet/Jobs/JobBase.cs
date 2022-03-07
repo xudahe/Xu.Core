@@ -58,7 +58,7 @@ namespace Xu.Tasks
                         model.TasksLog = $"{jobHistory}{separator}" + string.Join(separator, StringHelper.GetTopDataBySeparator(model.TasksLog, separator, 9));
                         await _tasksQzSvc.Update(model);
 
-                        SerilogServer.WriteLog(model.JobName, new string[] { jobHistory }, false);
+                        SerilogServer.WriteLog("任务调度--" + model.JobName, new string[] { jobHistory }, false);
                     }
                 }
             }

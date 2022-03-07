@@ -5,7 +5,7 @@ using System.Web;
 namespace Xu.Common.Helper
 {
     /// <summary>
-    /// sql关键字过滤方法
+    /// sql关键字过滤方法（防SQL注入检查器）
     /// </summary>
     public class AntiSqlInject
     {

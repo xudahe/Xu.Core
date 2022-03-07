@@ -191,6 +191,7 @@
         </member>
         <member name="M:Blog.Core.Api.Controllers.NacosController.#ctor(Nacos.V2.INacosNamingService)">
              <summary>
+            
              </summary>
              <param name="nacosNamingService"></param>
         </member>
@@ -296,7 +297,7 @@
         </member>
         <member name="T:Xu.WebApi.Controllers.TasksQzController">
             <summary>
-            定时任务
+            任务调度
             </summary>
         </member>
         <member name="M:Xu.WebApi.Controllers.TasksQzController.GetTasksQz(System.String,System.String)">

@@ -17,7 +17,7 @@ using Xu.Tasks;
 namespace Xu.WebApi.Controllers
 {
     /// <summary>
-    /// 定时任务
+    /// 任务调度
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]

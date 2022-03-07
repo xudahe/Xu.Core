@@ -127,7 +127,7 @@ namespace Xu.Common
         }
 
         /// <summary>
-        /// //获取当前周几
+        /// 获取当前周几
         /// </summary>
         /// <returns></returns>
         public static string GetWeek()

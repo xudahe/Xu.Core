@@ -86,17 +86,22 @@ namespace Xu.WebApi.Controllers
 
                 //_requirement.Permissions = list;
 
-                _requirement.Permissions = (from item in userRoles
-                                            orderby item.Id
-                                            select new PermissionItem
-                                            {
-                                                Url = "",
-                                                Role = item?.RoleName
-                                            }).ToList();
+                // ids4和jwt切换
+                // jwt
+                if (!Permissions.IsUseIds4)
+                {
+                    _requirement.Permissions = (from item in userRoles
+                                                orderby item.Id
+                                                select new PermissionItem
+                                                {
+                                                    Url = "",
+                                                    Role = item?.RoleName
+                                                }).ToList();
+                }
 
                 //用户标识
-                var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
-                identity.AddClaims(claims);
+                // var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
+                // identity.AddClaims(claims);
 
                 var token = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
                 return new JsonResult(token);
