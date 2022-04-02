@@ -142,11 +142,11 @@ namespace Xu.Extensions
                         {
                             try
                             {
-                                if (Regex.Match(questUrl, item.Url?.ToString().ToLower())?.Value == questUrl)
-                                {
+                                // if (Regex.Match(questUrl, item.Url?.ToString().ToLower())?.Value == questUrl)
+                                // {
                                     isMatchRole = true;
                                     break;
-                                }
+                                // }
                             }
                             catch (Exception)
                             {
