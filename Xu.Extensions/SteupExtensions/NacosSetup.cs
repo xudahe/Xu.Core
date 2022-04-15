@@ -45,7 +45,6 @@ namespace Xu.Extensions
                 services.AddHostedService<NacosListenConfigurationTask>();//增加配置文件监听事件
             }
 
-            services.AddSingleton<IConfigurationManager>(new ConfigurationManager((ConfigurationRoot)Configuration));
             services.AddSingleton(Configuration);
         }
     }

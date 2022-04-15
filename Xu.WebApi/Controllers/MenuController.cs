@@ -96,11 +96,11 @@ namespace Xu.WebApi.Controllers
             }
 
             var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
-            for (int i = 0; i < menuList1.Count(); i++)
+            for (int i = 0; i < menuList1.Count; i++)
             {
                 var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
 
-                for (int j = 0; j < menuList2.Count(); j++)
+                for (int j = 0; j < menuList2.Count; j++)
                 {
                     menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
                 }

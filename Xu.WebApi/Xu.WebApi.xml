@@ -489,12 +489,14 @@
             登录管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.Extensions.PermissionRequirement)">
+        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(AutoMapper.IMapper,Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.Extensions.PermissionRequirement)">
             <summary>
             构造函数注入
             </summary>
+            <param name="mapper"></param>
             <param name="userSvc"></param>
             <param name="roleSvc"></param>
+            <param name="menuSvc"></param>
             <param name="requirement"></param>
         </member>
         <member name="M:Xu.WebApi.Controllers.LoginController.GetJwtToken(System.String,System.String)">
@@ -517,6 +519,13 @@
             swagger登录
             </summary>
             <param name="loginRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.LoginController.GetLoginByToken(System.String)">
+            <summary>
+            根据token获取登录信息
+            </summary>
+            <param name="token">令牌</param>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.MenuController">

@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Profiling;
+using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Common.HttpPolly;
+using Xu.EnumHelper;
 using Xu.EventBus;
 using Xu.Extensions.EventHandling;
 
@@ -18,9 +21,13 @@ namespace Xu.WebApi.Controllers
     {
         private readonly IHttpContextAccessor _accessor;
 
-        public ValueController(IHttpContextAccessor accessor)
+        private readonly IHttpPollyHelper _httpPollyHelper;
+
+        public ValueController(IHttpContextAccessor accessor, IHttpPollyHelper httpPollyHelper)
         {
             _accessor = accessor;
+            // httpPolly
+            _httpPollyHelper = httpPollyHelper;
         }
 
         /// <summary>
@@ -50,5 +57,25 @@ namespace Xu.WebApi.Controllers
 
             return html.Value;
         }
+
+        #region HttpPolly
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<string> HttpPollyPost()
+        {
+            var response = await _httpPollyHelper.PostAsync(HttpEnum.LocalHost, "/api/ElasticDemo/EsSearchTest", "{\"from\": 0,\"size\": 10,\"word\": \"非那雄安\"}");
+
+            return response;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<string> HttpPollyGet()
+        {
+            return await _httpPollyHelper.GetAsync(HttpEnum.LocalHost, "/api/ElasticDemo/GetDetailInfo?esid=3130&esindex=chinacodex");
+        }
+
+        #endregion HttpPolly
     }
 }

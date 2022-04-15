@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,9 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
+using Xu.Model.Models;
+using Xu.Model.ResultModel;
+using Xu.Model.ViewModels;
 
 namespace Xu.WebApi.Controllers
 {
@@ -22,20 +26,26 @@ namespace Xu.WebApi.Controllers
     [Authorize(Permissions.Name)]
     public class LoginController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IUserSvc _userSvc;
         private readonly IRoleSvc _roleSvc;
+        private readonly IMenuSvc _menuSvc;
         private readonly PermissionRequirement _requirement;
 
         /// <summary>
         /// 构造函数注入
         /// </summary>
+        /// <param name="mapper"></param>
         /// <param name="userSvc"></param>
         /// <param name="roleSvc"></param>
+        /// <param name="menuSvc"></param>
         /// <param name="requirement"></param>
-        public LoginController(IUserSvc userSvc, IRoleSvc roleSvc, PermissionRequirement requirement)
+        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement)
         {
+            _mapper = mapper;
             _userSvc = userSvc;
             _roleSvc = roleSvc;
+            _menuSvc = menuSvc;
             _requirement = requirement;
         }
 
@@ -183,6 +193,82 @@ namespace Xu.WebApi.Controllers
             }
 
             return new { result = false };
+        }
+
+        /// <summary>
+        /// 根据token获取登录信息
+        /// </summary>
+        /// <param name="token">令牌</param>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<object> GetLoginByToken(string token)
+        {
+            var data = new MessageModel<LoginViewModel>();
+            var loginViewModel = new LoginViewModel();
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                var tokenModel = JwtHelper.SerializeJwt(token);
+                if (tokenModel != null && tokenModel.Id > 0)
+                {
+                    var model = await _userSvc.QueryById(tokenModel.Id);
+                    if (model != null)
+                    {
+                        loginViewModel = _mapper.Map<LoginViewModel>(model);
+
+                        if (model.RoleIds != "")
+                        {
+                            var roleList = await _roleSvc.GetDataByids(model.RoleIds);
+                            loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleViewModel>>(roleList);
+
+                            var menuIds = roleList.Select(s => s.MenuIds).ToList().JoinToString(",");
+
+                            var menuData = await _menuSvc.Query();
+                            var menuList = await _menuSvc.GetDataByids(menuIds, menuData);
+
+                            if (menuList.Count > 0)
+                            {
+                                for (int i = 0; i < menuList.Count; i++)
+                                {
+                                    menuList[i].ParentName = menuList[i].ParentId.HasValue ? (menuData.FirstOrDefault(s => s.Id == menuList[i].ParentId).MenuName) : "";
+                                }
+
+                                var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
+                                for (int i = 0; i < menuList1.Count; i++)
+                                {
+                                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
+
+                                    for (int j = 0; j < menuList2.Count; j++)
+                                    {
+                                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
+                                    }
+                                    menuList1[i].Children = menuList2;
+                                }
+
+                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuViewModel>>(menuList1);
+
+                                data.Success = true;
+                                data.Message = "登陆成功";
+                                data.Response = loginViewModel;
+                            }
+                            else
+                            {
+                                data.Message = "该角色没有绑定菜单！";
+                            }
+                        }
+                        else
+                        {
+                            data.Message = "该用户没有绑定角色！";
+                        }
+                    }
+                    else
+                    {
+                        data.Message = "该用户不存在，请核实！";
+                    }
+                }
+            }
+            return data;
         }
     }
 

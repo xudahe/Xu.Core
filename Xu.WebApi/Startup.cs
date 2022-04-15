@@ -108,6 +108,7 @@ namespace Xu.WebApi
 
             services.AddDistributedMemoryCache();
             services.AddSession();
+            services.AddHttpPollySetup();
 
             //启用控制器
             services.AddControllers(options =>

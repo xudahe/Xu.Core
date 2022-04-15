@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Xu.Model;
 using Xu.Model.Models;
+using Xu.Model.ViewModels;
 
 namespace Xu.Extensions
 {
@@ -16,10 +17,16 @@ namespace Xu.Extensions
         public CustomProfile()
         {
             CreateMap<Menu, InfoMenu>(); //第一个参数是原对象，第二个是目的对象
-            CreateMap<InfoMenu, Menu>();
-
             CreateMap<Role, InfoRole>();
-            CreateMap<InfoRole, Role>();
+
+            CreateMap<User, LoginViewModel>()
+                .ForMember(d => d.RoleInfoList, s => s.Ignore())
+                .ForMember(d => d.DeptInfoList, s => s.Ignore())
+                .ForMember(d => d.MenuInfoList, s => s.Ignore());
+
+            CreateMap<Role, RoleViewModel>();
+            CreateMap<Menu, MenuViewModel>();
+            CreateMap<Dept, DeptViewModel>();
 
             //在使用当中，就这一句话完全搞定所有转换：XuViewModels models = IMapper.Map<XuViewModels>(XuArticle);
         }

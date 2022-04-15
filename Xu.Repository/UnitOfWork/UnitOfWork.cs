@@ -10,10 +10,14 @@ namespace Xu.Repository.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ISqlSugarClient _sqlSugarClient;
+        
+        //防止同一范围内，异步执行事务误触非当前线程事务
+        private int _tranCount { get; set; }
 
         public UnitOfWork(ISqlSugarClient sqlSugarClient)
         {
             _sqlSugarClient = sqlSugarClient;
+            _tranCount = 0;
         }
 
         /// <summary>
@@ -31,7 +35,12 @@ namespace Xu.Repository.UnitOfWork
         /// </summary>
         public void BeginTran()
         {
-            GetDbClient().BeginTran();
+             lock (this)
+            {
+                _tranCount++;
+                GetDbClient().BeginTran();
+            }
+        
         }
 
         /// <summary>
@@ -39,14 +48,21 @@ namespace Xu.Repository.UnitOfWork
         /// </summary>
         public void CommitTran()
         {
-            try
+            lock (this)
             {
-                GetDbClient().CommitTran();
-            }
-            catch (Exception)
-            {
-                GetDbClient().RollbackTran();
-                throw;
+                _tranCount--;
+                if (_tranCount == 0)
+                {
+                    try
+                    {
+                        GetDbClient().CommitTran();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        GetDbClient().RollbackTran();
+                    }
+                }
             }
         }
 
@@ -55,7 +71,11 @@ namespace Xu.Repository.UnitOfWork
         /// </summary>
         public void RollbackTran()
         {
-            GetDbClient().RollbackTran();
+            lock (this)
+            {
+                _tranCount--;
+                GetDbClient().RollbackTran();
+            }
         }
     }
 }
