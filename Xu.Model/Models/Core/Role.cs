@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Xu.Common;
 
 namespace Xu.Model.Models
 {
@@ -88,6 +89,7 @@ namespace Xu.Model.Models
                 foreach (var item in _menuInfoList)
                 {
                     XElement xItem = new XElement("InfoItem");
+                    xItem.SetAttributeValue("Id", item.Id);
                     xItem.SetAttributeValue("Guid", item.Guid);
                     xItem.SetAttributeValue("MenuName", item.MenuName);
                     xElement.Add(xItem);
@@ -113,6 +115,7 @@ namespace Xu.Model.Models
                 {
                     InfoMenu item = new InfoMenu
                     {
+                        Id = xElement.Attribute("Id").Value.ToInt32Req(),
                         Guid = xElement.Attribute("Guid").Value,
                         MenuName = xElement.Attribute("MenuName").Value,
                     };

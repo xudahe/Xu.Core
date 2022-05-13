@@ -34,6 +34,11 @@
             删除时间（不为空代表该条数据已删除），逻辑上的删除，非物理删除
             </summary>
         </member>
+        <member name="P:Xu.Model.InfoMenu.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
         <member name="P:Xu.Model.InfoMenu.Guid">
             <summary>
             Guid
@@ -42,6 +47,11 @@
         <member name="P:Xu.Model.InfoMenu.MenuName">
             <summary>
             菜单名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoRole.Id">
+            <summary>
+            Id
             </summary>
         </member>
         <member name="P:Xu.Model.InfoRole.Guid">

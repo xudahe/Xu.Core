@@ -36,15 +36,15 @@ namespace Xu.WebApi.Controllers
         /// 获取角色数据
         /// </summary>
         /// <param name="ids">角色id或guid集合（可空）</param>
-        /// <param name="roleName">角色名称（可空）</param>
+        /// <param name="key">角色名称或角色简码（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetRole(string ids = "", string roleName = "")
+        public async Task<object> GetRole(string ids = "", string key = "")
         {
             var data = await _roleSvc.GetDataByids(ids);
 
-            if (!string.IsNullOrEmpty(roleName))
-                data = data.Where(a => a.RoleName.Contains(roleName)).ToList();
+            if (!string.IsNullOrEmpty(key))
+                data = data.Where(a => a.RoleName.Contains(key) || a.RoleCode.Contains(key)).ToList();
 
             return new MessageModel<List<Role>>()
             {

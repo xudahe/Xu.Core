@@ -108,10 +108,14 @@ namespace Xu.Model.Models
         [SugarColumn(IsNullable = true, ColumnDescription = "是否立即启动")]
         public bool IsStart { get; set; } = false;
 
+        #region 临时类
+
         /// <summary>
         /// 任务内存中的状态
         /// </summary>
         [SugarColumn(IsIgnore = true)]
         public List<TaskInfoDto> Triggers { get; set; }
+
+        #endregion 临时类
     }
 }

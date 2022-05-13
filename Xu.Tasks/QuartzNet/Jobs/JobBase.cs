@@ -55,7 +55,7 @@ namespace Xu.Tasks
                         model.PerformTime = DateTime.Now;
 
                         // 这里注意数据库字段的长度问题，超过限制，会造成数据库remark不更新问题。
-                        model.TasksLog = $"{jobHistory}{separator}" + string.Join(separator, StringHelper.GetTopDataBySeparator(model.TasksLog, separator, 9));
+                        model.TasksLog = $"{jobHistory}{separator}" + string.Join(separator, StringHelper.GetTopDataBySeparator(model.TasksLog, separator, 5));
                         await _tasksQzSvc.Update(model);
 
                         SerilogServer.WriteLog("任务调度--" + model.JobName, new string[] { jobHistory }, false);

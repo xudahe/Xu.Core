@@ -30,10 +30,10 @@ namespace Xu.WebApi.Controllers
         /// 获取部门数据
         /// </summary>
         /// <param name="ids">部门id或guid集合（可空）</param>
-        /// <param name="deptName">部门名称（可空）</param>
+        /// <param name="key">部门名称或部门简码（可空）</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> GetDept(string ids = "", string deptName = "")
+        public async Task<object> GetDept(string ids = "", string key = "")
         {
             var data = await _deptSvc.Query();
             var deptList = await _deptSvc.GetDataByids(ids, data);
@@ -43,9 +43,8 @@ namespace Xu.WebApi.Controllers
                 deptList[i].ParentName = deptList[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == deptList[i].ParentId)?.DeptName) : "";
             }
 
-            if (!string.IsNullOrEmpty(deptName))
-
-                deptList = deptList.Where(a => a.DeptName.Contains(deptName)).ToList();
+            if (!string.IsNullOrEmpty(key))
+                data = data.Where(a => a.DeptName.Contains(key) || a.DeptCode.Contains(key)).ToList();
 
             return new MessageModel<List<Dept>>()
             {

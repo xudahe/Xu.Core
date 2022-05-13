@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Xu.Common;
 
 namespace Xu.Model.Models
 {
@@ -130,6 +131,7 @@ namespace Xu.Model.Models
                 foreach (var item in _roleInfoList)
                 {
                     XElement xItem = new XElement("InfoItem");
+                    xItem.SetAttributeValue("Id", item.Id);
                     xItem.SetAttributeValue("Guid", item.Guid);
                     xItem.SetAttributeValue("RoleName", item.RoleName);
                     xElement.Add(xItem);
@@ -155,6 +157,7 @@ namespace Xu.Model.Models
                 {
                     InfoRole item = new InfoRole
                     {
+                        Id = xElement.Attribute("Id").Value.ToInt32Req(),
                         Guid = xElement.Attribute("Guid").Value,
                         RoleName = xElement.Attribute("RoleName").Value,
                     };

@@ -443,7 +443,7 @@
             获取部门数据
             </summary>
             <param name="ids">部门id或guid集合（可空）</param>
-            <param name="deptName">部门名称（可空）</param>
+            <param name="key">部门名称或部门简码（可空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DeptController.GetDeptByPage(System.Int32,System.Int32,System.String)">
@@ -597,7 +597,7 @@
             获取角色数据
             </summary>
             <param name="ids">角色id或guid集合（可空）</param>
-            <param name="roleName">角色名称（可空）</param>
+            <param name="key">角色名称或角色简码（可空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.RoleController.GetRoleByPage(System.Int32,System.Int32,System.String)">
