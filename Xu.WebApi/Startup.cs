@@ -185,7 +185,7 @@ namespace Xu.WebApi
             app.UseReuestResponseLog();
             // 用户访问记录(必须放到外层，不然如果遇到异常，会报错，因为不能返回流)
             app.UseRecordAccessLogsMildd();
-            // signalr
+            // 注册signalr消息推送中间件
             app.UseSignalRSendMildd();
             // 记录ip请求
             app.UseIPLogMildd();

@@ -2,6 +2,7 @@
 
 namespace Xu.Extensions
 {
+    //这里定义一个中间件Helper，主要作用就是给当前模块的中间件取一个别名
     public static class MiddlewareHelpers
     {
         /// <summary>

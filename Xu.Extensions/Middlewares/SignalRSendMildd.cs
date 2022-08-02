@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xu.Common;
 
@@ -30,6 +31,7 @@ namespace Xu.Extensions
         {
             if (Appsettings.App("Middleware", "SignalR", "Enabled").ToBoolReq())
             {
+                // 给当前连接到 Hub 上的所有连接发送消息，相当于广播
                 await _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData());
             }
             await _next(context);

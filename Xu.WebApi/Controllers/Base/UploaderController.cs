@@ -9,7 +9,7 @@ using Xu.Model.ResultModel;
 namespace Xu.WebApi.Controllers.Base
 {
     /// <summary>
-    /// 文件管理
+    /// 文件管理--配合前端vue-simple-uploader插件使用
     /// </summary>
     [Route("api/[Controller]/[action]")]
     [ApiController]

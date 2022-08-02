@@ -2,6 +2,9 @@
 
 namespace Xu.Common
 {
+    /// <summary>
+    /// 强类型中心
+    /// </summary>
     public interface IChatClient
     {
         /// <summary>

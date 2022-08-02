@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
 namespace Xu.Common
@@ -48,24 +49,24 @@ namespace Xu.Common
         }
 
         /// <summary>
-        /// 当连接建立时运行
+        /// 客户端连接服务端-重要代码
         /// </summary>
         /// <returns></returns>
         public override Task OnConnectedAsync()
         {
-            //TODO..
+            Console.WriteLine($"客户端ConnectionId=>【{Context.ConnectionId}】已连接服务器！");
             return base.OnConnectedAsync();
         }
 
         /// <summary>
-        /// 当链接断开时运行
+        /// 客户端断开连接-重要代码
         /// </summary>
-        /// <param name="ex"></param>
+        /// <param name="exception"></param>
         /// <returns></returns>
-        public override Task OnDisconnectedAsync(System.Exception ex)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
-            //TODO..
-            return base.OnDisconnectedAsync(ex);
+            Console.WriteLine($"客户端ConnectionId=>【{Context.ConnectionId}】已断开服务器连接！");
+            return base.OnDisconnectedAsync(exception);
         }
 
         //接收来自客户端的消息

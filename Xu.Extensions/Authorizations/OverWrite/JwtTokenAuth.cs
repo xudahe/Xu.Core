@@ -12,7 +12,7 @@ namespace Xu.Extensions
     public class JwtTokenAuth
     {
         /// <summary>
-        ///
+        ///中间件一定要有一个next，将管道可以正常的走下去
         /// </summary>
         private readonly RequestDelegate _next;
 
