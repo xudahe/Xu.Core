@@ -367,7 +367,7 @@
         </member>
         <member name="T:Xu.WebApi.Controllers.Base.UploaderController">
             <summary>
-            文件管理
+            文件管理--配合前端vue-simple-uploader插件使用
             </summary>
         </member>
         <member name="M:Xu.WebApi.Controllers.Base.UploaderController.SimpleUploader(System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.String,System.String,System.Int32)">

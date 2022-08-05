@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Xu.Model;
 using Xu.Model.ResultModel;
 
 namespace Blog.Core.Controllers
@@ -16,6 +18,13 @@ namespace Blog.Core.Controllers
     [ApiController]
     public class FileController : Controller
     {
+        private readonly IWebHostEnvironment _env;
+
+        public FileController(IWebHostEnvironment webHostEnvironment)
+        {
+            _env = webHostEnvironment;
+        }
+
         /// <summary>
         /// 下载图片（支持中文字符）
         /// </summary>
@@ -37,73 +46,81 @@ namespace Blog.Core.Controllers
             return File(stream, memi, fileName);
         }
 
+        [HttpGet]
+        [Route("/images/Down/Bmd")]
+        [AllowAnonymous]
+        public FileStreamResult DownBmd(string filename)
+        {
+            if (string.IsNullOrEmpty(filename))
+            {
+                return null;
+            }
+
+            string filepath = Path.Combine(_env.WebRootPath, Path.GetFileName(filename));
+            if (System.IO.File.Exists(filepath))
+            {
+                var stream = System.IO.File.OpenRead(filepath);
+                //string fileExt = ".bmd";
+                //获取文件的ContentType
+                var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+                //var memi = provider.Mappings[fileExt];
+                var fileName = Path.GetFileName(filepath);
+
+                HttpContext.Response.Headers.Add("fileName", fileName);
+
+                return File(stream, "application/octet-stream", fileName);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         /// <summary>
-        /// 上传图片,多文件，可以使用 postman 测试，
-        /// 如果是单文件，可以 参数写 IFormFile file1
+        /// 上传图片,多文件
         /// </summary>
-        /// <param name="environment"></param>
+        /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("/api/File/imgUpload")]
-        public async Task<MessageModel<string>> InsertPicture([FromServices] IWebHostEnvironment environment)
+        [Route("/images/Upload/Pic")]
+        public async Task<MessageModel<string>> InsertPicture([FromForm] UploadFileDto dto)
         {
-            var data = new MessageModel<string>();
-            string path = string.Empty;
-            string foldername = "images";
-            IFormFileCollection files = null;
+            if (dto.Files == null || !dto.Files.Any()) return MessageModel<string>.Msg(false, "请选择上传的文件");
 
-            try
-            {
-                files = Request.Form.Files;
-            }
-            catch (Exception)
-            {
-                files = null;
-            }
-
-            if (files == null || !files.Any()) { data.Message = "请选择上传的文件。"; return data; }
             //格式限制
             var allowType = new string[] { "image/jpg", "image/png", "image/jpeg" };
 
-            string folderpath = Path.Combine(environment.WebRootPath, foldername);
+            var allowedFile = dto.Files.Where(c => allowType.Contains(c.ContentType));
+            if (!allowedFile.Any()) return MessageModel<string>.Msg(false, "图片格式错误");
+            if (allowedFile.Sum(c => c.Length) > 1024 * 1024 * 4) return MessageModel<string>.Msg(false, "图片过大");
+
+            string foldername = "images";
+            string folderpath = Path.Combine(_env.WebRootPath, foldername);
             if (!Directory.Exists(folderpath))
             {
                 Directory.CreateDirectory(folderpath);
             }
-
-            if (files.Any(c => allowType.Contains(c.ContentType)))
+            foreach (var file in allowedFile)
             {
-                if (files.Sum(c => c.Length) <= 1024 * 1024 * 4)
-                {
-                    var file = files.FirstOrDefault();
-                    string strpath = Path.Combine(foldername, file.FileName);
-                    path = Path.Combine(environment.WebRootPath, strpath);
+                string strpath = Path.Combine(foldername, DateTime.Now.ToString("MMddHHmmss") + Path.GetFileName(file.FileName));
+                var path = Path.Combine(_env.WebRootPath, strpath);
 
-                    using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
-                    data = new MessageModel<string>()
-                    {
-                        Response = strpath,
-                        Message = "上传成功",
-                        Success = true,
-                    };
-                    return data;
-                }
-                else
+                using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
-                    data.Message = "图片过大,超过4M";
-                    return data;
+                    await file.CopyToAsync(stream);
                 }
             }
-            else
 
+            var excludeFiles = dto.Files.Except(allowedFile);
+
+            if (excludeFiles.Any())
             {
-                data.Message = "图片格式错误";
-                return data;
+                var infoMsg = $"{string.Join('、', excludeFiles.Select(c => c.FileName))} 图片格式错误";
+
+                return MessageModel<string>.Msg(false, infoMsg);
             }
+
+            return MessageModel<string>.Msg(false, "上传成功");
         }
 
         /// <summary>

@@ -4,8 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+//using Nacos.V2;
 
 namespace Xu.Common
 {
@@ -16,6 +22,14 @@ namespace Xu.Common
     /// </summary>
     public static class DynamicLinqFactory
     {
+        private static readonly Dictionary<string, OperationSymbol> _operatingSystems = new();
+        public static Dictionary<string, OperationSymbol> OperatingSystems => GetOperationSymbol();
+
+        private static readonly Dictionary<string, LinkSymbol> _linkSymbols = new();
+        public static Dictionary<string, LinkSymbol> LinkSymbols => GetLinkSymbol();
+
+        public static bool IsNullOrEmpty(this object thisValue) => thisValue == null || thisValue == DBNull.Value || string.IsNullOrWhiteSpace(thisValue.ToString());
+
         /// <summary>
         /// 生成lambd表达式(如:CompanyID != 1 & CompanyID == 1)
         /// </summary>
@@ -27,10 +41,10 @@ namespace Xu.Common
             // 设置自定义lanbd
             // 定义 lanbd 种子（p=> xxxxxx）中的 p
             if (string.IsNullOrWhiteSpace(propertyStr))
-                return LinqHelper.True<TSource>();//为空就返回空的表达式
+                return LinqHelper.True<TSource>(); //为空就返回空的表达式
 
             var parameter = Expression.Parameter(typeof(TSource), "p");
-            var strArr = SpiltStrings(propertyStr);
+            var strArr = SplitOperationSymbol(propertyStr);
 
             // 第一个判断条件，固定一个判断条件作为最左边
             Expression mainExpressin = ExpressionStudio(null, strArr.FirstOrDefault(x => x.LinkSymbol == LinkSymbol.Empty), parameter);
@@ -67,10 +81,10 @@ namespace Xu.Common
             }
 
             left = left == null
-            // 如果左边表达式为空，则当前的表达式就为最左边
-            ? ChangeOperationSymbol(DynamicLinq.OperationSymbol, mainExpression, DynamicLinq.Right)
-            // 如果不为空，则将当前的表达式连接到左边
-            : ChangeLinkSymbol(DynamicLinq.LinkSymbol, left, ChangeOperationSymbol(DynamicLinq.OperationSymbol, mainExpression, DynamicLinq.Right));
+                // 如果左边表达式为空，则当前的表达式就为最左边
+                ? ChangeOperationSymbol(DynamicLinq.OperationSymbol, mainExpression, DynamicLinq.Right)
+                // 如果不为空，则将当前的表达式连接到左边
+                : ChangeLinkSymbol(DynamicLinq.LinkSymbol, left, ChangeOperationSymbol(DynamicLinq.OperationSymbol, mainExpression, DynamicLinq.Right));
             return left;
         }
 
@@ -96,6 +110,7 @@ namespace Xu.Common
                 });
                 return outList;
             }
+
             // 判断当前 & | 哪个符号在最后一个判断逻辑内
             var key = propertyStr.LastIndexOf('&') > propertyStr.LastIndexOf('|') ? '&' : '|';
 
@@ -114,6 +129,89 @@ namespace Xu.Common
             outList.AddRange(SpiltStrings(propertyStr));
 
             return outList;
+        }
+
+        public static List<DynamicLinqHelper> SplitOperationSymbol(string str)
+        {
+            var outList = new List<DynamicLinqHelper>();
+            var tokens = Regex.Matches(FormatString(str), _pattern, RegexOptions.Compiled)
+                .Select(m => m.Groups[1].Value.Trim())
+                .ToList();
+
+            int lastIndex = tokens.Count - 1;
+            int lastOperatingSymbolIndex = -1;
+            for (int i = tokens.Count - 1; i >= 0; i--)
+            {
+                var token = tokens[i];
+
+                if (OperatingSystems.ContainsKey(token))
+                {
+                    //比较运算符
+                    lastOperatingSymbolIndex = i;
+                }
+                else if (LinkSymbols.ContainsKey(token))
+                {
+                    var left = "";
+                    for (int j = i + 1; j < lastOperatingSymbolIndex; j++)
+                    {
+                        left += tokens[j];
+                    }
+
+                    var right = "";
+                    for (int j = lastOperatingSymbolIndex + 1; j <= lastIndex; j++)
+                    {
+                        right += tokens[j];
+                    }
+
+                    outList.Add(GetDynamicLinqHelper(LinkSymbols[token],
+                        OperatingSystems[tokens[lastOperatingSymbolIndex]],
+                        left,
+                        right));
+                    lastIndex = i - 1;
+                    lastOperatingSymbolIndex = -1;
+                }
+                else if (i == 0 && lastOperatingSymbolIndex != -1)
+                {
+                    var left = "";
+                    for (int j = i; j < lastOperatingSymbolIndex; j++)
+                    {
+                        left += tokens[j];
+                    }
+
+                    var right = "";
+                    for (int j = lastOperatingSymbolIndex + 1; j <= lastIndex; j++)
+                    {
+                        right += tokens[j];
+                    }
+
+                    outList.Add(GetDynamicLinqHelper(LinkSymbol.Empty,
+                        OperatingSystems[tokens[lastOperatingSymbolIndex]],
+                        left,
+                        right));
+                }
+            }
+
+            return outList;
+        }
+
+        public static DynamicLinqHelper GetDynamicLinqHelper(LinkSymbol linkSymbol, OperationSymbol operationSymbol, string left, string right)
+        {
+            var dynamic = new DynamicLinqHelper
+            {
+                LinkSymbol = linkSymbol,
+                OperationSymbol = operationSymbol,
+                Left = left,
+                Right = right
+            };
+
+            if (dynamic.Right.StartsWith("\"") && dynamic.Right.EndsWith("\""))
+            {
+                dynamic.Right = dynamic.Right.Remove(0, 1)
+                    .Remove(dynamic.Right.Length - 2, 1)
+                    .Replace(@"\""", @"""");
+            }
+
+            return dynamic;
         }
 
         /// <summary>
@@ -140,9 +238,9 @@ namespace Xu.Common
         /// <summary>
         /// 将运算枚举符号转成具体使用方法
         /// </summary>
-        public static Expression ChangeLinkSymbol(LinkSymbol Symbol, Expression left, Expression right)
+        public static Expression ChangeLinkSymbol(LinkSymbol symbol, Expression left, Expression right)
         {
-            switch (Symbol)
+            switch (symbol)
             {
                 case LinkSymbol.OrElse:
                     return left.OrElse(right);
@@ -154,6 +252,117 @@ namespace Xu.Common
                     return left;
             }
         }
+
+        public static Dictionary<string, OperationSymbol> GetOperationSymbol()
+        {
+            if (_operatingSystems.Any()) return _operatingSystems;
+
+            var fielding = typeof(OperationSymbol).GetFields();
+            foreach (var item in fielding)
+            {
+                if (item.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute attr && !attr.Name.IsNullOrEmpty())
+                {
+                    foreach (var name in attr.Name.Split(';'))
+                    {
+                        _operatingSystems.Add(name, (OperationSymbol)item.GetValue(null));
+                    }
+                }
+            }
+
+            return _operatingSystems;
+        }
+
+        public static Dictionary<string, LinkSymbol> GetLinkSymbol()
+        {
+            if (_linkSymbols.Any()) return _linkSymbols;
+
+            var fielding = typeof(LinkSymbol).GetFields();
+            foreach (var item in fielding)
+            {
+                if (item.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute attr && !attr.Name.IsNullOrEmpty())
+                {
+                    foreach (var name in attr.Name.Split(';'))
+                    {
+                        _linkSymbols.Add(name, (LinkSymbol)item.GetValue(null));
+                    }
+                }
+            }
+
+            return _linkSymbols;
+        }
+
+        public static string FormatString(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            int firstIndex = -1;
+            int lastIndex = -1;
+            for (int i = 0; i < str.Length; i++)
+            {
+                var character = str[i];
+
+                if (firstIndex == -1)
+                {
+                    if (character.IsNullOrEmpty() && i < str.Length - 2)
+                    {
+                        if ('"'.Equals(str[i + 1]))
+                        {
+                            firstIndex = i + 1;
+                        }
+                    }
+                }
+                else
+                {
+                    if ('\"'.Equals(character))
+                    {
+                        var andIndex = str.IndexOf("\" &", firstIndex);
+                        var orIndex = str.IndexOf("\" |", firstIndex);
+                        var andOrIndex = andIndex > 0 ? andIndex : orIndex;
+                        if (andOrIndex != -1)
+                        {
+                            lastIndex = andOrIndex;
+                        }
+                        else
+                        {
+                            if (i == str.Length - 1 || str[i + 1].IsNullOrEmpty())
+                            {
+                                lastIndex = i;
+                            }
+                        }
+                    }
+
+                    if (lastIndex != -1)
+                    {
+                        var temp = str.Substring(firstIndex + 1, lastIndex - firstIndex - 1).Replace(@"""", @"\""");
+                        sb.Append($" \"{temp}\" ");
+
+                        i = lastIndex;
+                        firstIndex = -1;
+                        lastIndex = -1;
+                        continue;
+                    }
+                }
+
+                if (firstIndex != -1)
+                {
+                    continue;
+                }
+
+                sb.Append(character);
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>tokenizer pattern: Optional-SpaceS...Token...Optional-Spaces</summary>
+        public static readonly string _pattern = @"\s*(" + string.Join("|", new string[]
+        {
+            // operators and punctuation that are longer than one char: longest first
+            string.Join("|", new[] { "||", "&&", "==", "!=", "<=", ">=", "like", "contains" }.Select(Regex.Escape)),
+            @"""(?:\\.|[^""])*""", // string
+            @"\d+(?:\.\d+)?",      // number with optional decimal part
+            @"\w+",                // word
+            @"\S",                 // other 1-char tokens (or eat up one character in case of an error)
+        }) + @")\s*";
 
         /// <summary>
         /// 将字符串符号转成运算枚举符号
@@ -185,6 +394,7 @@ namespace Xu.Common
                 case "like":
                     return OperationSymbol.Contains;
             }
+
             throw new Exception("OperationSymbol IS NULL");
         }
 
@@ -197,9 +407,20 @@ namespace Xu.Common
             // 两者如果Type不匹配则无法接下去的运算操作，抛出异常
             object newTypeRight;
             if (right == null || string.IsNullOrEmpty(right.ToString()) || right.ToString() == "null")
+            {
                 newTypeRight = null;
+            }
             else
-                newTypeRight = Convert.ChangeType(right, key.Type);
+            {
+                if (symbol == OperationSymbol.In)
+                {
+                    newTypeRight = right.ChangeTypeList(key.Type);
+                }
+                else
+                {
+                    newTypeRight = right.ChangeType(key.Type);
+                }
+            }
 
             // 根据当前枚举类别判断使用那种比较方法
             switch (symbol)
@@ -241,8 +462,17 @@ namespace Xu.Common
 
                 case OperationSymbol.Contains:
                     return key.Contains(Expression.Constant(newTypeRight));
+
+                case OperationSymbol.In:
+                    var contains = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                        .Single(x => x.Name == "Contains" && x.GetParameters().Length == 2)
+                        .MakeGenericMethod(key.Type);
+                    return Expression.Constant(newTypeRight).Contains(key);
+
+                    //return Expression.Call(contains, , key);
             }
-            throw new Exception("OperationSymbol IS NULL");
+
+            throw new NotImplementedException("OperationSymbol IS NULL");
         }
     }
 
@@ -269,13 +499,12 @@ namespace Xu.Common
     /// </summary>
     public enum LinkSymbol
     {
-        [Display(Name = "&&")]
+        [Display(Name = "&&;&")]
         AndAlso,
 
-        [Display(Name = "||")]
+        [Display(Name = "||;|")]
         OrElse,
 
-        [Display(Name = "空")]
         Empty
     }
 
@@ -284,7 +513,10 @@ namespace Xu.Common
     /// </summary>
     public enum OperationSymbol
     {
-        [Display(Name = "Contains")]
+        [Display(Name = "in")]
+        In,
+
+        [Display(Name = "like;contains")]
         Contains,
 
         [Display(Name = ">")]
@@ -299,7 +531,7 @@ namespace Xu.Common
         [Display(Name = "<=")]
         LessThanOrEqual,
 
-        [Display(Name = "==")]
+        [Display(Name = "==;=")]
         Equal,
 
         [Display(Name = "!=")]
@@ -315,7 +547,8 @@ namespace Xu.Common
     {
         #region Nacos NamingService
 
-        //private static readonly HttpClient httpclient = new HttpClient();
+        private static readonly HttpClient httpclient = new HttpClient();
+
         //private static string GetServiceUrl(Nacos.V2.INacosNamingService serv, string ServiceName, string Group, string apiurl)
         //{
         //    try
@@ -325,47 +558,51 @@ namespace Xu.Common
         //        if (instance.Metadata.ContainsKey("endpoint")) host = instance.Metadata["endpoint"];
 
         //        var baseUrl = instance.Metadata.TryGetValue("secure", out _)
-        //           ? $"https://{host}"
-        //           : $"http://{host}";
+        //            ? $"https://{host}"
+        //            : $"http://{host}";
 
         //        if (string.IsNullOrWhiteSpace(baseUrl))
         //        {
         //            return "";
         //        }
+
         //        return $"{baseUrl}{apiurl}";
         //    }
         //    catch (Exception e)
         //    {
         //        Console.WriteLine(e.Message);
         //    }
+
         //    return "";
         //}
+
         //public static async Task<string> Cof_NaoceGet(this Nacos.V2.INacosNamingService serv, string ServiceName, string Group, string apiurl, Dictionary<string, string> Parameters = null)
         //{
         //    try
         //    {
         //        var url = GetServiceUrl(serv, ServiceName, Group, apiurl);
         //        if (string.IsNullOrEmpty(url)) return "";
-        //        if (Parameters!=null && Parameters.Any())
+        //        if (Parameters != null && Parameters.Any())
         //        {
         //            StringBuilder sb = new StringBuilder();
         //            foreach (var pitem in Parameters)
         //            {
         //                sb.Append($"{pitem.Key}={pitem.Value}&");
         //            }
+
         //            url = $"{url}?{sb.ToString().Trim('&')}";
         //        }
+
         //        httpclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         //        var result = await httpclient.GetAsync(url);
         //        return await result.Content.ReadAsStringAsync();
-
         //    }
         //    catch (Exception e)
         //    {
         //        Console.WriteLine(e.Message);
         //    }
-        //    return "";
 
+        //    return "";
         //}
 
         //public static async Task<string> Cof_NaocePostForm(this Nacos.V2.INacosNamingService serv, string ServiceName, string Group, string apiurl, Dictionary<string, string> Parameters)
@@ -375,18 +612,19 @@ namespace Xu.Common
         //        var url = GetServiceUrl(serv, ServiceName, Group, apiurl);
         //        if (string.IsNullOrEmpty(url)) return "";
 
-        //        var content = (Parameters != null && Parameters.Any())? new FormUrlEncodedContent(Parameters) : null;
+        //        var content = (Parameters != null && Parameters.Any()) ? new FormUrlEncodedContent(Parameters) : null;
         //        httpclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         //        var result = await httpclient.PostAsync(url, content);
-        //        return await result.Content.ReadAsStringAsync();//.GetAwaiter().GetResult();
-
+        //        return await result.Content.ReadAsStringAsync(); //.GetAwaiter().GetResult();
         //    }
         //    catch (Exception e)
         //    {
         //        Console.WriteLine(e.Message);
         //    }
+
         //    return "";
         //}
+
         //public static async Task<string> Cof_NaocePostJson(this Nacos.V2.INacosNamingService serv, string ServiceName, string Group, string apiurl, string jSonData)
         //{
         //    try
@@ -395,17 +633,17 @@ namespace Xu.Common
         //        if (string.IsNullOrEmpty(url)) return "";
         //        httpclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         //        var result = await httpclient.PostAsync(url, new StringContent(jSonData, Encoding.UTF8, "application/json"));
-        //        return await result.Content.ReadAsStringAsync();//.GetAwaiter().GetResult();
+        //        return await result.Content.ReadAsStringAsync(); //.GetAwaiter().GetResult();
 
         //        //httpClient.BaseAddress = new Uri("https://www.testapi.com");
         //        //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         //        //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
         //    }
         //    catch (Exception e)
         //    {
         //        Console.WriteLine(e.Message);
         //    }
+
         //    return "";
         //}
 
@@ -421,16 +659,17 @@ namespace Xu.Common
         //        {
         //            content.Add(new ByteArrayContent(pitem.Value), "files", pitem.Key);
         //        }
+
         //        httpclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         //        var result = await httpclient.PostAsync(url, content);
-        //        return await result.Content.ReadAsStringAsync();//.GetAwaiter().GetResult();
-
+        //        return await result.Content.ReadAsStringAsync(); //.GetAwaiter().GetResult();
         //    }
         //    catch (Exception e)
         //    {
         //        //InfluxdbHelper.GetInstance().AddLog("Cof_NaocePostFile.Err", ee);
         //        Console.WriteLine(e.Message);
         //    }
+
         //    return "";
         //}
 
@@ -475,6 +714,7 @@ namespace Xu.Common
                 obj = GetFun();
                 cache.Set(key, obj, timeSpanMin);
             }
+
             return obj as T;
         }
 
@@ -495,6 +735,7 @@ namespace Xu.Common
                 obj = await GetFun();
                 cache.Set(key, obj, timeSpanMin);
             }
+
             return obj as T;
         }
 
@@ -513,7 +754,7 @@ namespace Xu.Common
         public static Expression Call(this Expression instance, string methodName, params Expression[] arguments)
         {
             if (instance.Type == typeof(string))
-                return Expression.Call(instance, instance.Type.GetMethod(methodName, new Type[] { typeof(string) }), arguments);  //修复string contains 出现的问题 Ambiguous match found.
+                return Expression.Call(instance, instance.Type.GetMethod(methodName, new Type[] { typeof(string) }), arguments); //修复string contains 出现的问题 Ambiguous match found.
             else
                 return Expression.Call(instance, instance.Type.GetMethod(methodName), arguments);
         }
@@ -534,7 +775,7 @@ namespace Xu.Common
         /// 转Lambda
         /// </summary>
         public static Expression<TDelegate> ToLambda<TDelegate>(this Expression body,
-        params ParameterExpression[] parameters)
+            params ParameterExpression[] parameters)
         {
             return Expression.Lambda<TDelegate>(body, parameters);
         }
@@ -683,16 +924,16 @@ namespace Xu.Common
         public static IQueryable<TSource> ISkip<TSource>(this IQueryable<TSource> source, int count)
         {
             return source.Provider.CreateQuery<TSource>(Expression.Call(
-            // 类别
-            typeof(Queryable),
-            // 调用的方法
-            "Skip",
-            // 元素类别
-            new Type[] { source.ElementType },
-            // 调用的表达树
-            source.Expression,
-            // 参数
-            Expression.Constant(count)));
+                // 类别
+                typeof(Queryable),
+                // 调用的方法
+                "Skip",
+                // 元素类别
+                new Type[] { source.ElementType },
+                // 调用的表达树
+                source.Expression,
+                // 参数
+                Expression.Constant(count)));
         }
 
         /// <summary>
@@ -701,16 +942,16 @@ namespace Xu.Common
         public static IQueryable<TSource> ITake<TSource>(this IQueryable<TSource> source, int count)
         {
             return source.Provider.CreateQuery<TSource>(Expression.Call(
-            // 类别
-            typeof(Queryable),
-            // 调用的方法
-            "Take",
-            // 元素类别
-            new Type[] { source.ElementType },
-            // 调用的表达树
-            source.Expression,
-            // 参数
-            Expression.Constant(count)));
+                // 类别
+                typeof(Queryable),
+                // 调用的方法
+                "Take",
+                // 元素类别
+                new Type[] { source.ElementType },
+                // 调用的表达树
+                source.Expression,
+                // 参数
+                Expression.Constant(count)));
         }
 
         /// <summary>

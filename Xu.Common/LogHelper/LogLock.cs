@@ -397,7 +397,6 @@ namespace Xu.Common
 
             try
             {
-                var s = ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RequestIpInfoLog.log"), Encoding.UTF8);
                 var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RequestIpInfoLog.log"), Encoding.UTF8) + "]");
 
                 Logs = Logs.Where(d => d.Datetime.ToDateTimeReq() >= DateTime.Today).ToList();
@@ -461,6 +460,173 @@ namespace Xu.Common
             else
                 return filList.Union(diiList).ToList();
         }
+
+        #region RequestIpInfoLog
+
+        private static List<RequestInfo> GetRequestInfo(ReadType readType)
+        {
+            List<RequestInfo> requestInfos = new();
+            var accessLogs = ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RequestIpInfoLog.log"), Encoding.UTF8);
+            try
+            {
+                return JsonConvert.DeserializeObject<List<RequestInfo>>("[" + accessLogs + "]");
+            }
+            catch (Exception)
+            {
+                var accLogArr = accessLogs.Split("\r\n");
+                foreach (var item in accLogArr)
+                {
+                    if (item.ObjToString() != "")
+                    {
+                        try
+                        {
+                            var accItem = JsonConvert.DeserializeObject<RequestInfo>(item.TrimEnd(','));
+                            requestInfos.Add(accItem);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+            }
+
+            return requestInfos;
+        }
+
+        public static RequestApiWeekView RequestApiinfoByWeek()
+        {
+            List<RequestInfo> Logs = new List<RequestInfo>();
+            List<ApiWeek> apiWeeks = new List<ApiWeek>();
+            string apiWeeksJson = string.Empty;
+            List<string> columns = new List<string>();
+            columns.Add("日期");
+
+            try
+            {
+                Logs = GetRequestInfo(ReadType.Prefix);
+
+                apiWeeks = (from n in Logs
+                            group n by new { n.Week, n.Url } into g
+                            select new ApiWeek
+                            {
+                                Week = g.Key.Week,
+                                Url = g.Key.Url,
+                                Count = g.Count(),
+                            }).ToList();
+
+                //apiWeeks = apiWeeks.OrderByDescending(d => d.count).Take(8).ToList();
+            }
+            catch (Exception)
+            {
+            }
+
+            StringBuilder jsonBuilder = new StringBuilder();
+            jsonBuilder.Append("[");
+
+            var weeks = apiWeeks.GroupBy(x => new { x.Week }).Select(s => s.First()).ToList();
+            foreach (var week in weeks)
+            {
+                var apiweeksCurrentWeek = apiWeeks.Where(d => d.Week == week.Week).OrderByDescending(d => d.Count).Take(5).ToList();
+                jsonBuilder.Append("{");
+
+                jsonBuilder.Append("\"");
+                jsonBuilder.Append("日期");
+                jsonBuilder.Append("\":\"");
+                jsonBuilder.Append(week.Week);
+                jsonBuilder.Append("\",");
+
+                foreach (var item in apiweeksCurrentWeek)
+                {
+                    columns.Add(item.Url);
+                    jsonBuilder.Append("\"");
+                    jsonBuilder.Append(item.Url);
+                    jsonBuilder.Append("\":\"");
+                    jsonBuilder.Append(item.Count);
+                    jsonBuilder.Append("\",");
+                }
+                if (apiweeksCurrentWeek.Count > 0)
+                {
+                    jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+                }
+                jsonBuilder.Append("},");
+            }
+
+            if (weeks.Count > 0)
+            {
+                jsonBuilder.Remove(jsonBuilder.Length - 1, 1);
+            }
+            jsonBuilder.Append("]");
+
+            //columns.AddRange(apiWeeks.OrderByDescending(d => d.count).Take(8).Select(d => d.url).ToList());
+            columns = columns.Distinct().ToList();
+
+            return new RequestApiWeekView()
+            {
+                Columns = columns,
+                Rows = jsonBuilder.ToString(),
+            };
+        }
+
+        public static AccessApiDateView AccessApiByDate()
+        {
+            List<RequestInfo> Logs = new List<RequestInfo>();
+            List<ApiDate> apiDates = new List<ApiDate>();
+            try
+            {
+                Logs = GetRequestInfo(ReadType.Prefix);
+
+                apiDates = (from n in Logs
+                            group n by new { n.Date } into g
+                            select new ApiDate
+                            {
+                                Date = g.Key.Date,
+                                Count = g.Count(),
+                            }).ToList();
+
+                apiDates = apiDates.OrderByDescending(d => d.Date).Take(7).ToList();
+            }
+            catch (Exception)
+            {
+            }
+
+            return new AccessApiDateView()
+            {
+                Columns = new string[] { "date", "count" },
+                Rows = apiDates.OrderBy(d => d.Date).ToList(),
+            };
+        }
+
+        public static AccessApiDateView AccessApiByHour()
+        {
+            List<RequestInfo> Logs = new List<RequestInfo>();
+            List<ApiDate> apiDates = new List<ApiDate>();
+            try
+            {
+                Logs = GetRequestInfo(ReadType.Prefix);
+
+                apiDates = (from n in Logs
+                            where n.Datetime.ToDateTimeReq() >= DateTime.Today
+                            group n by new { hour = n.Datetime.ToDateTimeReq().Hour } into g
+                            select new ApiDate
+                            {
+                                Date = g.Key.hour.ToString("00"),
+                                Count = g.Count(),
+                            }).ToList();
+
+                apiDates = apiDates.OrderBy(d => d.Date).Take(24).ToList();
+            }
+            catch (Exception)
+            {
+            }
+
+            return new AccessApiDateView()
+            {
+                Columns = new string[] { "date", "count" },
+                Rows = apiDates,
+            };
+        }
+
+        #endregion RequestIpInfoLog
     }
 
     public enum ReadType

@@ -25,6 +25,8 @@ namespace Xu.Common
 
         public string Datetime { get; set; }
         public string Week { get; set; }
+
+        public string Date { get; set; }
     }
 
     public class UserAccessModel

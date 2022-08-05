@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StackExchange.Profiling;
-using System.Threading.Tasks;
-using Xu.Common;
+﻿using Xu.Common;
 using Xu.Common.HttpPolly;
-using Xu.EnumHelper;
 using Xu.EventBus;
+using Xu.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using System;
 using Xu.Extensions.EventHandling;
+using Xu.Model.ResultModel;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Profiling;
+using Xu.EnumHelper;
+using Xu.Core;
 
 namespace Xu.WebApi.Controllers
 {
@@ -23,11 +29,28 @@ namespace Xu.WebApi.Controllers
 
         private readonly IHttpPollyHelper _httpPollyHelper;
 
-        public ValueController(IHttpContextAccessor accessor, IHttpPollyHelper httpPollyHelper)
+        private readonly IAspNetUser _aspNetUser;
+
+        public ValueController(IHttpContextAccessor accessor, IHttpPollyHelper httpPollyHelper, IAspNetUser aspNetUser)
         {
             _accessor = accessor;
             // httpPolly
             _httpPollyHelper = httpPollyHelper;
+            // 测试 Httpcontext
+            _aspNetUser = aspNetUser;
+        }
+
+        /// <summary>
+        /// 测试Redis消息队列
+        /// </summary>
+        /// <param name="_redisBasketRepository"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task RedisMq([FromServices] IRedisBasketRepository _redisBasketRepository)
+        {
+            var msg = $"这里是一条日志{DateTime.Now}";
+            await _redisBasketRepository.ListLeftPushAsync(RedisMqKey.Loging, msg);
         }
 
         /// <summary>
@@ -42,6 +65,37 @@ namespace Xu.WebApi.Controllers
         {
             var piblishEvent = new ProductPriceChangedIntegrationEvent(blogId);//声明事件源
             _eventBus.Publish(piblishEvent);//发布事件
+        }
+
+        /// <summary>
+        /// 通过 HttpContext 获取用户信息
+        /// </summary>
+        /// <param name="ClaimType">声明类型，默认 jti </param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/api/values/UserInfo")]
+        public MessageModel<List<string>> GetUserInfo(string ClaimType = "jti")
+        {
+            var getUserInfoByToken = _aspNetUser.GetUserInfoFromToken(ClaimType);
+            return new MessageModel<List<string>>()
+            {
+                Success = _aspNetUser.IsAuthenticated(),
+                Message = _aspNetUser.IsAuthenticated() ? _aspNetUser.Name.ObjToString() : "未登录",
+                Response = _aspNetUser.GetClaimValueByType(ClaimType)
+            };
+        }
+
+        /// <summary>
+        /// 测试Fulent做参数校验
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<string> FluentVaTest([FromBody] UserRegisterVo param)
+        {
+            await Task.CompletedTask;
+            return "Okay";
         }
 
         /// <summary>
@@ -64,9 +118,7 @@ namespace Xu.WebApi.Controllers
         [AllowAnonymous]
         public async Task<string> HttpPollyPost()
         {
-            var response = await _httpPollyHelper.PostAsync(HttpEnum.LocalHost, "/api/ElasticDemo/EsSearchTest", "{\"from\": 0,\"size\": 10,\"word\": \"非那雄安\"}");
-
-            return response;
+            return await _httpPollyHelper.PostAsync(HttpEnum.LocalHost, "/api/ElasticDemo/EsSearchTest", "{\"from\": 0,\"size\": 10,\"word\": \"非那雄安\"}");
         }
 
         [HttpGet]
@@ -77,5 +129,29 @@ namespace Xu.WebApi.Controllers
         }
 
         #endregion HttpPolly
+
+        #region Apollo 配置
+
+        /// <summary>
+        /// 测试接入Apollo获取配置信息
+        /// </summary>
+        [HttpGet("/apollo")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<KeyValuePair<string, string>>> GetAllConfigByAppllo([FromServices] IConfiguration configuration)
+        {
+            return await Task.FromResult(configuration.AsEnumerable());
+        }
+
+        /// <summary>
+        /// 通过此处的key格式为 xx:xx:x
+        /// </summary>
+        [HttpGet("/apollo/{key}")]
+        [AllowAnonymous]
+        public async Task<string> GetConfigByAppllo(string key)
+        {
+            return await Task.FromResult(Appsettings.App(key));
+        }
+
+        #endregion Apollo 配置
     }
 }
