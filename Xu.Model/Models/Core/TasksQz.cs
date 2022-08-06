@@ -9,6 +9,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 定时任务计划列表
     /// </summary>
+    [SugarTable("TasksQz", "WMBLOG_MYSQL")]
     public class TasksQz : ModelBase
     {
         /// <summary>

@@ -101,6 +101,21 @@
             菜单名称
             </summary>
         </member>
+        <member name="P:Xu.Model.InfoPlatform.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoPlatform.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoPlatform.PlatformName">
+            <summary>
+            平台名称
+            </summary>
+        </member>
         <member name="P:Xu.Model.InfoRole.Id">
             <summary>
             Id
@@ -114,6 +129,21 @@
         <member name="P:Xu.Model.InfoRole.RoleName">
             <summary>
             角色名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoSystem.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoSystem.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoSystem.SystemName">
+            <summary>
+            系统名称
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Dept">
@@ -164,6 +194,11 @@
         <member name="P:Xu.Model.Models.Menu.SystemName">
             <summary>
             系统名称(大屏/应用)
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Menu.SystemId">
+            <summary>
+            系统Id
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Menu.ClassName">
@@ -221,6 +256,56 @@
             父级菜单名称
             </summary>
         </member>
+        <member name="T:Xu.Model.Models.Platform">
+            <summary>
+            平台管理
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.PlatformCode">
+            <summary>
+            平台简码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.PlatformName">
+            <summary>
+            平台名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.Index">
+            <summary>
+            加载序号
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.Theme">
+            <summary>
+            主题
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.SystemIds">
+            <summary>
+            平台关联系统的id或guid集合，不能同时包含两者
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.SystemInfoList">
+            <summary>
+            关联系统List
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Platform.SystemInfoXml">
+            <summary>
+            关联系统Xml
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Role">
             <summary>
             角色表
@@ -259,6 +344,36 @@
         <member name="P:Xu.Model.Models.Role.MenuInfoXml">
             <summary>
             关联菜单Xml
+            </summary>
+        </member>
+        <member name="T:Xu.Model.Models.Systems">
+            <summary>
+            系统管理
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Systems.SystemCode">
+            <summary>
+            系统简码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Systems.SystemName">
+            <summary>
+            系统名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Systems.Index">
+            <summary>
+            加载序号
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Systems.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Systems.Remark">
+            <summary>
+            备注
             </summary>
         </member>
         <member name="T:Xu.Model.Models.TasksQz">
@@ -1558,6 +1673,31 @@
         <member name="P:Xu.Model.ViewModels.MenuViewModel.Children">
             <summary>
             子级菜单
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformViewModel.PlatformCode">
+            <summary>
+            平台简码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformViewModel.PlatformName">
+            <summary>
+            平台名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformViewModel.Index">
+            <summary>
+            加载序号
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformViewModel.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformViewModel.Remark">
+            <summary>
+            备注
             </summary>
         </member>
         <member name="P:Xu.Model.ViewModels.RoleViewModel.RoleCode">

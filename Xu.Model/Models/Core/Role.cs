@@ -9,6 +9,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 角色表
     /// </summary>
+    [SugarTable("Role", "WMBLOG_MYSQL")]
     public class Role : ModelBase
     {
         /// <summary>
@@ -32,6 +33,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 是否禁用
         /// </summary>
+        [SugarColumn(ColumnDescription = "true 禁用，false 可用")]
         public bool Enabled { get; set; }
 
         /// <summary>

@@ -5,6 +5,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 部门管理
     /// </summary>
+    [SugarTable("Dept", "WMBLOG_MYSQL")]
     public class Dept : ModelBase
     {
         /// <summary>
@@ -34,6 +35,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 是否禁用
         /// </summary>
+        [SugarColumn(ColumnDescription = "true 禁用，false 可用")]
         public bool Enabled { get; set; }
 
         /// <summary>

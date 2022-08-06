@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Xu.Common;
-using Xu.Common.LogHelper;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModel;
 using Xu.Services.IDS4Db;
@@ -20,8 +19,6 @@ namespace Xu.WebApi.Controllers
     /// </summary>
     [Route("api/[Controller]/[action]")]
     [ApiController]
-    //[ApiExplorerSettings(GroupName = "v1")]
-    //[Authorize(Permissions.Name)]
     public class MonitorController : ControllerBase
     {
         private readonly IHubContext<ChatHub> _hubContext;

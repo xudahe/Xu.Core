@@ -16,12 +16,11 @@
             <param name="environment"></param>
             <returns></returns>
         </member>
-        <member name="M:Blog.Core.Controllers.FileController.InsertPicture(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:Blog.Core.Controllers.FileController.InsertPicture(Xu.Model.UploadFileDto)">
             <summary>
-            上传图片,多文件，可以使用 postman 测试，
-            如果是单文件，可以 参数写 IFormFile file1
+            上传图片,多文件
             </summary>
-            <param name="environment"></param>
+            <param name="dto"></param>
             <returns></returns>
         </member>
         <member name="M:Blog.Core.Controllers.FileController.FileUpload(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Http.IFormFile)">
@@ -587,6 +586,57 @@
             <param name="falg">true(禁用),false(启用)</param>
             <returns></returns>
         </member>
+        <member name="T:Xu.WebApi.Controllers.PlatformController">
+            <summary>
+            平台管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PlatformController.GetPlatform(System.String,System.String)">
+            <summary>
+            获取平台数据
+            </summary>
+            <param name="ids">平台id或guid集合（可空）</param>
+            <param name="key">平台名称或平台简码（可空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PlatformController.GetPlatformByPage(System.Int32,System.Int32,System.String)">
+            <summary>
+            获取全部平台并分页
+            </summary>
+            <param name="page">页码</param>
+            <param name="pageSize">页大小</param>
+            <param name="deptName">平台名称（可空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PlatformController.PostPlatform(Xu.Model.Models.Platform)">
+            <summary>
+            添加平台
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PlatformController.PutPlatform(Xu.Model.Models.Platform)">
+            <summary>
+            更新平台
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PlatformController.DeletePlatform(System.Int32)">
+            <summary>
+            删除平台
+            </summary>
+            <param name="id">平台id（非空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.PlatformController.DisablePlatform(System.Int32,System.Boolean)">
+            <summary>
+            禁用平台
+            </summary>
+            <param name="id">平台id（非空）</param>
+            <param name="falg">true(禁用),false(启用)</param>
+            <returns></returns>
+        </member>
         <member name="T:Xu.WebApi.Controllers.RoleController">
             <summary>
             角色管理
@@ -635,6 +685,57 @@
             禁用角色
             </summary>
             <param name="id">角色id（非空）</param>
+            <param name="falg">true(禁用),false(启用)</param>
+            <returns></returns>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.SystemController">
+            <summary>
+            系统管理
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.SystemController.GetSystem(System.String,System.String)">
+            <summary>
+            获取系统数据
+            </summary>
+            <param name="ids">系统id或guid集合（可空）</param>
+            <param name="key">系统名称或系统简码（可空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.SystemController.GetSystemByPage(System.Int32,System.Int32,System.String)">
+            <summary>
+            获取全部系统并分页
+            </summary>
+            <param name="page">页码</param>
+            <param name="pageSize">页大小</param>
+            <param name="deptName">系统名称（可空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.SystemController.PostSystem(Xu.Model.Models.Systems)">
+            <summary>
+            添加系统
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.SystemController.PutSystem(Xu.Model.Models.Systems)">
+            <summary>
+            更新系统
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.SystemController.DeleteSystem(System.Int32)">
+            <summary>
+            删除系统
+            </summary>
+            <param name="id">系统id（非空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.SystemController.DisableSystem(System.Int32,System.Boolean)">
+            <summary>
+            禁用系统
+            </summary>
+            <param name="id">系统id（非空）</param>
             <param name="falg">true(禁用),false(启用)</param>
             <returns></returns>
         </member>
@@ -701,6 +802,13 @@
             用户管理
             </summary>
         </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.RedisMq(Xu.Extensions.IRedisBasketRepository)">
+            <summary>
+            测试Redis消息队列
+            </summary>
+            <param name="_redisBasketRepository"></param>
+            <returns></returns>
+        </member>
         <member name="M:Xu.WebApi.Controllers.ValueController.EventBusTry(Xu.EventBus.IEventBus,System.Int32)">
             <summary>
             测试RabbitMQ事件总线
@@ -709,12 +817,36 @@
             <param name="blogId"></param>
             <returns></returns>
         </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.GetUserInfo(System.String)">
+            <summary>
+            通过 HttpContext 获取用户信息
+            </summary>
+            <param name="ClaimType">声明类型，默认 jti </param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.FluentVaTest(Xu.Core.UserRegisterVo)">
+            <summary>
+            测试Fulent做参数校验
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
         <member name="M:Xu.WebApi.Controllers.ValueController.GetHtmlMiniProfiler">
             <summary>
             获取MiniProfiler的html代码片段
             </summary>
             <remarks>将生成的内容拷贝出来粘贴在Swagger的index.html顶部</remarks>
             <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.GetAllConfigByAppllo(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            测试接入Apollo获取配置信息
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.ValueController.GetConfigByAppllo(System.String)">
+            <summary>
+            通过此处的key格式为 xx:xx:x
+            </summary>
         </member>
         <member name="T:Xu.WebApi.AntiSqlInjectFilter">
             <summary>

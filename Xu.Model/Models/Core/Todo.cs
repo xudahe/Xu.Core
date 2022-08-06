@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -9,6 +10,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 待办事项
     /// </summary>
+    [SugarTable("Todo", "WMBLOG_MYSQL")]
     public class Todo : ModelBase
     {
         /// <summary>

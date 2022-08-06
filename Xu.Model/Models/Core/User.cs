@@ -10,7 +10,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 用户信息表
     /// </summary>
-    //[SugarTable("dbo.User", "WMBLOG_MYSQL")]    //对应数据库的dbo.User表
+    [SugarTable("User", "WMBLOG_MYSQL")]    //可不写,对应数据库的dbo.User表
     public class User : ModelBase
     {
         /// <summary>
@@ -74,6 +74,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 是否禁用
         /// </summary>
+        [SugarColumn(ColumnDescription = "true 禁用，false 可用")]
         public bool Enabled { get; set; }
 
         /// <summary>

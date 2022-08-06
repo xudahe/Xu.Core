@@ -6,6 +6,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 菜单配置表（目前菜单共三级）
     /// </summary>
+    [SugarTable("Menu", "WMBLOG_MYSQL")]
     public class Menu : ModelBase
     {
         /// <summary>
@@ -13,6 +14,12 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(ColumnDescription = "系统名称")]
         public string SystemName { get; set; }
+        
+        /// <summary>
+        /// 系统Id
+        /// </summary>
+        [SugarColumn(ColumnDescription = "系统Id")]
+        public string SystemId { get; set; }
 
         /// <summary>
         /// 菜单类名
@@ -59,6 +66,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 是否禁用
         /// </summary>
+        [SugarColumn( ColumnDescription = "true 禁用，false 可用")]
         public bool Enabled { get; set; }
 
         /// <summary>
