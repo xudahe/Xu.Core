@@ -10,7 +10,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 用户信息表
     /// </summary>
-    [SugarTable("User", "WMBLOG_MYSQL")]    //可不写,对应数据库的dbo.User表
+    [SugarTable("User", "WMBLOG_MYSQL_1")]    //可不写,对应数据库的dbo.User表
     public class User : ModelBase
     {
         /// <summary>

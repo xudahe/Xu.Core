@@ -5,7 +5,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 部门管理
     /// </summary>
-    [SugarTable("Dept", "WMBLOG_MYSQL")]
+    [SugarTable("Dept", "WMBLOG_MYSQL_1")]
     public class Dept : ModelBase
     {
         /// <summary>

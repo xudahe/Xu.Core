@@ -21,11 +21,9 @@ namespace Xu.Tasks
     {
         private Task<IScheduler> _scheduler; //用于与调度程序交互的主程序接口
         private readonly IJobFactory _iocjobFactory;
-        private readonly ITasksQzSvc _tasksQzSvc;
 
-        public SchedulerCenter(ITasksQzSvc tasksQzSvc, IJobFactory jobFactory)
+        public SchedulerCenter(IJobFactory jobFactory)
         {
-            _tasksQzSvc = tasksQzSvc;
             _iocjobFactory = jobFactory;
             _scheduler = GetSchedulerAsync();
         }
@@ -155,7 +153,7 @@ namespace Xu.Tasks
 
                     #endregion 通过反射获取程序集类型和类
 
-                    //开启调度器
+                    //判断任务调度是否开启
                     if (!_scheduler.Result.IsStarted)
                     {
                         await StartScheduleAsync();
@@ -164,13 +162,13 @@ namespace Xu.Tasks
                     // 创建触发器
                     ITrigger trigger;
 
-                    #region 创建任务
+                    #region 泛型传递
 
                     //IJobDetail job = JobBuilder.Create<JobQuartz>()
                     //    .WithIdentity(tasksQz.JobName, tasksQz.JobGroup)
                     //    .Build();
 
-                    #endregion 创建任务
+                    #endregion 泛型传递
 
                     //创建一个触发器
                     if (tasksQz.Cron != null && CronExpression.IsValidExpression(tasksQz.Cron) && tasksQz.TriggerType == "cron")

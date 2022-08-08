@@ -88,6 +88,18 @@ namespace Xu.Extensions
             };
             return tm;
         }
+
+        public static bool CustomSafeVerify(string token)
+        {
+            var jwtHandler = new JwtSecurityTokenHandler();
+            var symmetricKeyAsBase64 = AppSecretConfig.Audience_Secret_String;
+            var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
+            var signingKey = new SymmetricSecurityKey(keyByteArray);
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+
+            var jwt = jwtHandler.ReadJwtToken(token);
+            return jwt.RawSignature == Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(jwt.RawHeader + "." + jwt.RawPayload, signingCredentials);
+        }
     }
 
     /// <summary>

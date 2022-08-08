@@ -10,7 +10,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 系统管理
     /// </summary>
-    [SugarTable("Systems", "WMBLOG_MYSQL")]
+    [SugarTable("Systems", "WMBLOG_MYSQL_1")]
     public class Systems : ModelBase
     {
         /// <summary>

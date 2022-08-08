@@ -60,6 +60,16 @@ namespace Xu.Services
         }
 
         /// <summary>
+        /// 批量插入实体(速度快)
+        /// </summary>
+        /// <param name="listEntity">实体集合</param>
+        /// <returns>影响行数</returns>
+        public async Task<int> Add(List<T> listEntity)
+        {
+            return await BaseDal.Add(listEntity);
+        }
+
+        /// <summary>
         /// 更新实体数据
         /// </summary>
         /// <param name="entity">实体类</param>

@@ -9,7 +9,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 角色表
     /// </summary>
-    [SugarTable("Role", "WMBLOG_MYSQL")]
+    [SugarTable("Role", "WMBLOG_MYSQL_1")]
     public class Role : ModelBase
     {
         /// <summary>

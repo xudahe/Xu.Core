@@ -44,6 +44,13 @@ namespace Xu.IRepository
         Task<int> Add(T model);
 
         /// <summary>
+        /// 批量插入实体数据
+        /// </summary>
+        /// <param name="listEntity">实体集合</param>
+        /// <returns></returns>
+        Task<int> Add(List<T> listEntity);
+
+        /// <summary>
         /// 根据Id删除一条数据
         /// </summary>
         /// <param name="id">主键ID</param>

@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Model.ResultModel;
@@ -37,7 +40,7 @@ namespace Xu.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public object Server()
+        public object GetServerInfo()
         {
             return new MessageModel<ServerViewModel>()
             {
@@ -45,12 +48,19 @@ namespace Xu.WebApi.Controllers
                 Success = true,
                 Response = new ServerViewModel()
                 {
+                    //环境变量
                     EnvironmentName = _env.EnvironmentName,
+                    //系统架构
                     OSArchitecture = RuntimeInformation.OSArchitecture.ToString(),
+                    //表示根目录
                     ContentRootPath = _env.ContentRootPath,
+                    //表示根目录 + wwwroot
                     WebRootPath = _env.WebRootPath,
+                    //.NET Core版本
                     FrameworkDescription = RuntimeInformation.FrameworkDescription,
+                    //内存占用
                     MemoryFootprint = (Process.GetCurrentProcess().WorkingSet64 / 1048576).ToString("N2") + " MB",
+                    //启动时间
                     WorkingTime = DateHelper.TimeSubTract(DateTime.Now, Process.GetCurrentProcess().StartTime)
                 }
             };
@@ -188,5 +198,137 @@ namespace Xu.WebApi.Controllers
                 Response = LogLock.AccessApiByHour()
             };
         }
+
+        private static List<UserAccessModel> GetAccessLogsToday(IWebHostEnvironment environment)
+        {
+            List<UserAccessModel> userAccessModels = new();
+            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log", DateTime.Now.ToString("yyyyMMdd")), "RecordAccessLogs.log", Encoding.UTF8, ReadType.PrefixLatest).ObjToString();
+
+            try
+            {
+                return JsonConvert.DeserializeObject<List<UserAccessModel>>("[" + accessLogs + "]");
+            }
+            catch (Exception)
+            {
+                var accLogArr = accessLogs.Split("\n");
+                foreach (var item in accLogArr)
+                {
+                    if (item.ObjToString() != "")
+                    {
+                        try
+                        {
+                            var accItem = JsonConvert.DeserializeObject<UserAccessModel>(item.TrimEnd(','));
+                            userAccessModels.Add(accItem);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+            }
+
+            return userAccessModels;
+        }
+
+        private static List<ActiveUserVM> GetAccessLogsTrend(IWebHostEnvironment environment)
+        {
+            List<ActiveUserVM> userAccessModels = new();
+            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log", DateTime.Now.ToString("yyyyMMdd")), "AccessTrendLog.log", Encoding.UTF8, ReadType.PrefixLatest).ObjToString();
+
+            try
+            {
+                return JsonConvert.DeserializeObject<List<ActiveUserVM>>(accessLogs);
+            }
+            catch (Exception)
+            {
+                var accLogArr = accessLogs.Split("\n");
+                foreach (var item in accLogArr)
+                {
+                    if (item.ObjToString() != "")
+                    {
+                        try
+                        {
+                            var accItem = JsonConvert.DeserializeObject<ActiveUserVM>(item.TrimStart('[').TrimEnd(']'));
+                            userAccessModels.Add(accItem);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                }
+            }
+
+            return userAccessModels;
+        }
+
+        /// <summary>
+        /// 活跃用户
+        /// </summary>
+        /// <param name="environment"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public MessageModel<WelcomeInitData> GetActiveUsers([FromServices] IWebHostEnvironment environment)
+        {
+            var accessLogsToday = GetAccessLogsToday(environment).Where(d => d.BeginTime.ToDateTimeReq() >= DateTime.Today);
+
+            var Logs = accessLogsToday.OrderByDescending(d => d.BeginTime).Take(50).ToList();
+
+            var errorCountToday = LogLock.GetLogData().Where(d => d.Import == 9).Count();
+
+            accessLogsToday = accessLogsToday.Where(d => d.User != "").ToList();
+
+            var activeUsers = (from n in accessLogsToday
+                               group n by new { n.User } into g
+                               select new ActiveUserVM
+                               {
+                                   User = g.Key.User,
+                                   Count = g.Count(),
+                               }).ToList();
+
+            int activeUsersCount = activeUsers.Count;
+            activeUsers = activeUsers.OrderByDescending(d => d.Count).Take(10).ToList();
+
+            return new MessageModel<WelcomeInitData>()
+            {
+                Message = "获取成功",
+                Success = true,
+                Response = new WelcomeInitData()
+                {
+                    ActiveUsers = activeUsers,
+                    ActiveUserCount = activeUsersCount,
+                    ErrorCount = errorCountToday,
+                    Logs = Logs,
+                    ActiveCount = GetAccessLogsTrend(environment)
+                }
+            };
+        }
+    }
+
+    public class WelcomeInitData
+    {
+        /// <summary>
+        /// 今日活跃用户
+        /// </summary>
+        public List<ActiveUserVM> ActiveUsers { get; set; }
+
+        /// <summary>
+        /// 今日活跃用户数量
+        /// </summary>
+        public int ActiveUserCount { get; set; }
+
+        /// <summary>
+        /// 访问日志
+        /// </summary>
+        public List<UserAccessModel> Logs { get; set; }
+
+        /// <summary>
+        /// 今日异常数量
+        /// </summary>
+        public int ErrorCount { get; set; }
+
+        /// <summary>
+        /// 本月活跃用户
+        /// </summary>
+        public List<ActiveUserVM> ActiveCount { get; set; }
     }
 }

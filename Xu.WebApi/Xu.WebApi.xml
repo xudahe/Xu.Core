@@ -223,7 +223,7 @@
             监控管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MonitorController.Server">
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetServerInfo">
             <summary>
             服务器配置信息
             </summary>
@@ -252,6 +252,38 @@
             Api请求访问日志
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetActiveUsers(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            活跃用户
+            </summary>
+            <param name="environment"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveUsers">
+            <summary>
+            今日活跃用户
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveUserCount">
+            <summary>
+            今日活跃用户数量
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.Logs">
+            <summary>
+            访问日志
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ErrorCount">
+            <summary>
+            今日异常数量
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveCount">
+            <summary>
+            本月活跃用户
+            </summary>
         </member>
         <member name="T:Xu.WebApi.Controllers.PublicController">
             <summary>

@@ -84,18 +84,6 @@ namespace Xu.WebApi.Controllers
                     new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_requirement.Expiration.TotalSeconds).ToString()) };
                 claims.AddRange(userRoles.Select(s => new Claim(ClaimTypes.Role, s.RoleName)));
 
-                //var data = await _roleModulePermissionServices.RoleModuleMaps();
-                //var list = (from item in data
-                //            where item.IsDeleted == false
-                //            orderby item.Id
-                //            select new PermissionItem
-                //            {
-                //                Url = item.Module?.LinkUrl,
-                //                Role = item.Role?.Name,
-                //            }).ToList();
-
-                //_requirement.Permissions = list;
-
                 // ids4和jwt切换
                 // jwt
                 if (!Permissions.IsUseIds4)
@@ -108,10 +96,6 @@ namespace Xu.WebApi.Controllers
                                                     Role = item?.RoleName
                                                 }).ToList();
                 }
-
-                //用户标识
-                // var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
-                // identity.AddClaims(claims);
 
                 var token = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
                 return new JsonResult(token);
@@ -146,7 +130,7 @@ namespace Xu.WebApi.Controllers
                 });
             }
             var tokenModel = JwtHelper.SerializeJwt(token);
-            if (tokenModel != null && tokenModel.Id > 0)
+            if (tokenModel != null && JwtHelper.CustomSafeVerify(token) && tokenModel.Id > 0)
             {
                 var user = await _userSvc.QueryById(tokenModel.Id);
                 if (user != null)
