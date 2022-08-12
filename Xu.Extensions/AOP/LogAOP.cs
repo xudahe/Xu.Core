@@ -137,7 +137,7 @@ namespace Xu.Extensions
             });
         }
 
-        private void LogEx(Exception ex, string dataIntercept)
+        private static void LogEx(Exception ex, string dataIntercept)
         {
             if (ex != null)
             {

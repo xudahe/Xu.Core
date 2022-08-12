@@ -474,19 +474,16 @@ namespace Xu.Tasks
             DateTimeOffset starRunTime = DateBuilder.NextGivenSecondDate(tasksQz.StartTime.HasValue ? tasksQz.StartTime : DateTime.Now, 1);
             DateTimeOffset endRunTime = DateBuilder.NextGivenSecondDate(tasksQz.EndTime.HasValue ? tasksQz.EndTime : DateTime.MaxValue.AddDays(-1), 1);
 
-            if (tasksQz.RunTimes > 0)
+            if (tasksQz.CycleRunTimes > 0)
             {
-                ITrigger trigger = TriggerBuilder.Create() //创建触发器trigger实例
+                ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(tasksQz.Id.ToString(), tasksQz.JobGroup)
-                .StartAt(starRunTime) //开始时间
-                .EndAt(endRunTime) //结束时间
+                .StartAt(starRunTime)  //开始时间
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(tasksQz.IntervalSecond.Value)  //执行时间间隔，单位秒
-                    .WithRepeatCount(tasksQz.RunTimes) //执行次数、默认从0开始
-                )
-                .ForJob(tasksQz.Id.ToString(), tasksQz.JobGroup) //作业名称
+                    .WithIntervalInSeconds(tasksQz.IntervalSecond) //执行时间间隔，单位:秒
+                    .WithRepeatCount(tasksQz.CycleRunTimes - 1))  //执行次数、默认从0开始
+                .EndAt(endRunTime)  //结束时间
                 .Build();
-
                 return trigger;
             }
             else
@@ -494,17 +491,14 @@ namespace Xu.Tasks
                 ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(tasksQz.Id.ToString(), tasksQz.JobGroup)
                 .StartAt(starRunTime)
-                .EndAt(endRunTime)
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(tasksQz.IntervalSecond.Value) //执行时间间隔，单位秒
-                    .RepeatForever()  //无限循环
+                    .WithIntervalInSeconds(tasksQz.IntervalSecond)
+                    .RepeatForever()//无限循环
                 )
-                .ForJob(tasksQz.Id.ToString(), tasksQz.JobGroup)
+                .EndAt(endRunTime)
                 .Build();
-
                 return trigger;
             }
-            // 触发作业立即运行，然后每10秒重复一次，无限循环
         }
 
         /// <summary>

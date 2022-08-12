@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Quartz;
 using System.Threading.Tasks;
+using Xu.IServices;
 
 /// <summary>
 /// 这里要注意下，命名空间和程序集是一样的，不然反射不到
@@ -11,9 +12,10 @@ namespace Xu.Tasks
     {
         private readonly IWebHostEnvironment _environment;
 
-        public JobQuartz(IWebHostEnvironment environment)
+        public JobQuartz(IWebHostEnvironment environment, ITasksQzSvc tasksQzSvc)
         {
             _environment = environment;
+            _tasksQzSvc = tasksQzSvc;
         }
 
         public async Task Execute(IJobExecutionContext context)

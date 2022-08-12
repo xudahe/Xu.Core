@@ -21,10 +21,11 @@ namespace Xu.Tasks
         private readonly IAccessTrendLogSvc _accessTrendLogSvc;
         private readonly IWebHostEnvironment _environment;
 
-        public Job_AccessTrendLog(IAccessTrendLogSvc accessTrendLogSvc, IWebHostEnvironment environment)
+        public Job_AccessTrendLog(IAccessTrendLogSvc accessTrendLogSvc, IWebHostEnvironment environment, ITasksQzSvc tasksQzSvc)
         {
             _accessTrendLogSvc = accessTrendLogSvc;
             _environment = environment;
+            _tasksQzSvc = tasksQzSvc;
         }
 
         public async Task Execute(IJobExecutionContext context)

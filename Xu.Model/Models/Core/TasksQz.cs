@@ -89,7 +89,13 @@ namespace Xu.Model.Models
         /// simple模式 -- 循环周期(单位：秒)
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "循环周期(单位：秒)")]
-        public int? IntervalSecond { get; set; }
+        public int IntervalSecond { get; set; }
+
+        /// <summary>
+        /// simple模式 -- 循环执行次数(单位：次)
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "循环执行次数(单位：次)")]
+        public int CycleRunTimes { get; set; }
 
         /// <summary>
         /// 运行状态
@@ -103,13 +109,13 @@ namespace Xu.Model.Models
         [SugarColumn(IsNullable = true, ColumnDescription = "执行传参")]
         public string JobParams { get; set; }
 
+        #region 临时类
+
         /// <summary>
         /// 是否立即启动
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "是否立即启动")]
+        [SugarColumn(IsIgnore = true)]
         public bool IsStart { get; set; } = false;
-
-        #region 临时类
 
         /// <summary>
         /// 任务内存中的状态

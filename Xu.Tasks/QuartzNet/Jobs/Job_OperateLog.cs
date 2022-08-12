@@ -20,10 +20,11 @@ namespace Xu.Tasks
         private readonly IOperateLogSvc _operateLogSvc;
         private readonly IWebHostEnvironment _environment;
 
-        public Job_OperateLog(IOperateLogSvc operateLogSvc, IWebHostEnvironment environment)
+        public Job_OperateLog(IOperateLogSvc operateLogSvc, IWebHostEnvironment environment, ITasksQzSvc tasksQzSvc)
         {
             _operateLogSvc = operateLogSvc;
             _environment = environment;
+            _tasksQzSvc = tasksQzSvc;
         }
 
         public async Task Execute(IJobExecutionContext context)

@@ -160,7 +160,7 @@ namespace Xu.WebApi.Controllers
                 _unitOfWork.BeginTran();
 
                 tasksQz.ModifyTime = DateTime.Now;
-                tasksQz.JobStatus = tasksQz.IsStart ? JobStatus.运行中 : JobStatus.已停止;
+                tasksQz.JobStatus = tasksQz.JobStatus;
                 data.Success = await _tasksQzSvc.Update(tasksQz);
                 data.Response = tasksQz?.Id.ToString();
                 data.Message = data.Success ? "更新成功" : "更新失败";
@@ -169,7 +169,7 @@ namespace Xu.WebApi.Controllers
                 {
                     if (data.Success)
                     {
-                        if (tasksQz.IsStart)
+                        if (tasksQz.JobStatus == JobStatus.运行中)
                         {
                             var resuleModelStop = await _schedulerCenter.StopScheduleJobAsync(tasksQz);
                             data.Success = resuleModelStop.Success;
