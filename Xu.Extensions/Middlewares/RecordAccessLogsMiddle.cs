@@ -9,18 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Xu.Common;
+using Xu.IServices;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 中间件
     /// 记录用户方访问数据
     /// </summary>
-    public class RecordAccessLogsMildd
+    public class RecordAccessLogsMiddle
     {
         private readonly RequestDelegate _next;
         private readonly IAspNetUser _user;
-        private readonly ILogger<RecordAccessLogsMildd> _logger;
+        private readonly ILogger<RecordAccessLogsMiddle> _logger;
         private readonly IWebHostEnvironment _environment;
         private Stopwatch _stopwatch;
 
@@ -28,7 +29,7 @@ namespace Xu.Extensions
         /// 构造函数
         /// </summary>
         /// <param name="next"></param>
-        public RecordAccessLogsMildd(RequestDelegate next, IAspNetUser user, ILogger<RecordAccessLogsMildd> logger, IWebHostEnvironment environment)
+        public RecordAccessLogsMiddle(RequestDelegate next, IAspNetUser user, ILogger<RecordAccessLogsMiddle> logger, IWebHostEnvironment environment)
         {
             _next = next;
             _user = user;
@@ -54,7 +55,7 @@ namespace Xu.Extensions
                     UserAccessModel userAccessModel = new UserAccessModel();
 
                     userAccessModel.User = _user.Name;
-                    userAccessModel.ClientIP = IPLogMildd.GetClientIP(context)?.Replace("::ffff:", "");
+                    userAccessModel.ClientIP = IPLogMiddle.GetClientIP(context)?.Replace("::ffff:", "");
                     userAccessModel.ServiceIP = context.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + context.Connection.LocalPort;
                     userAccessModel.Url = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + context.Request.Path;
                     userAccessModel.BeginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");

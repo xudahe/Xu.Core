@@ -29,7 +29,9 @@ namespace Xu.Model.ViewModels
         /// </summary>
         public string Remark { get; set; }
 
-
+        /// <summary>
+        /// 所关联的菜单
+        /// </summary>
         public IList<MenuViewModel> MenuInfoList { get; set; }
     }
 }

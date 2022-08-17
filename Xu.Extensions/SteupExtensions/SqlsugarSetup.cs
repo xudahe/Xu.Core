@@ -85,7 +85,7 @@ namespace Xu.Extensions
                     }
                    );
                 });
-                SqlSugarClient db = new SqlSugarClient(listConfig);
+                SqlSugarScope db = new SqlSugarScope(listConfig);
 
                 db.QueryFilter
                  .Add(new SqlFilterItem()//单表全局过滤器

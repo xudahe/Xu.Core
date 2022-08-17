@@ -30,6 +30,7 @@ namespace Xu.WebApi.Controllers
         private readonly IUserSvc _userSvc;
         private readonly IRoleSvc _roleSvc;
         private readonly IMenuSvc _menuSvc;
+        private readonly ISystemSvc _systemSvc;
         private readonly PermissionRequirement _requirement;
 
         /// <summary>
@@ -40,13 +41,14 @@ namespace Xu.WebApi.Controllers
         /// <param name="roleSvc"></param>
         /// <param name="menuSvc"></param>
         /// <param name="requirement"></param>
-        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement)
+        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement, ISystemSvc systemSvc)
         {
             _mapper = mapper;
             _userSvc = userSvc;
             _roleSvc = roleSvc;
             _menuSvc = menuSvc;
             _requirement = requirement;
+            _systemSvc = systemSvc;
         }
 
         /// <summary>
@@ -146,10 +148,19 @@ namespace Xu.WebApi.Controllers
                 });
             }
             var tokenModel = JwtHelper.SerializeJwt(token);
-            if (tokenModel != null && tokenModel.Id > 0)
+            if (tokenModel != null && JwtHelper.CustomSafeVerify(token) && tokenModel.Id > 0)
             {
                 var user = await _userSvc.QueryById(tokenModel.Id);
-                if (user != null)
+                var value = User.Claims.SingleOrDefault(s => s.Type == JwtRegisteredClaimNames.Iat)?.Value;
+                if (value != null && user.CriticalModifyTime > value.ToDateTimeReq())
+                {
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "很抱歉,授权已失效,请重新授权！"
+                    });
+                }
+                if (user != null && !(value != null && user.CriticalModifyTime > value.ToDateTimeReq()))
                 {
                     var userRoles = await _roleSvc.GetDataByids(user.RoleIds);
 
@@ -227,22 +238,45 @@ namespace Xu.WebApi.Controllers
                             var menuData = await _menuSvc.Query();
                             var menuList = await _menuSvc.GetDataByids(menuIds, menuData);
 
+                            var systemList = await _systemSvc.Query();
+
                             if (menuList.Count > 0)
                             {
                                 for (int i = 0; i < menuList.Count; i++)
                                 {
-                                    menuList[i].ParentName = menuList[i].ParentId.HasValue ? (menuData.FirstOrDefault(s => s.Id == menuList[i].ParentId).MenuName) : "";
+                                    if (!string.IsNullOrEmpty(menuList[i].SystemId))
+                                    {
+                                        if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
+                                            menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
+                                        else
+                                            menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(menuList[i].ParentId))
+                                    {
+                                        if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
+                                            menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
+                                        else
+                                            menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
+                                    }
                                 }
 
-                                var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
+                                //获取一级菜单
+                                var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).OrderBy(s => s.Index).ToList();
+
+                                //获取二级菜单
                                 for (int i = 0; i < menuList1.Count; i++)
                                 {
-                                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
+                                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).OrderBy(s => s.Index).ToList();
+                                    //var menuList2 = menuList.Where(s => s.ParentId.ToInt32() == menuList1[i].Id).OrderBy(s => s.Index).ToList();
 
+                                    //获取三级菜单
                                     for (int j = 0; j < menuList2.Count; j++)
                                     {
-                                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
+                                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).OrderBy(s => s.Index).ToList();
+                                        //menuList2[j].Children = menuList.Where(s => s.ParentId.ToInt32() == menuList2[j].Id).OrderBy(s => s.Index).ToList();
                                     }
+
                                     menuList1[i].Children = menuList2;
                                 }
 
@@ -274,7 +308,7 @@ namespace Xu.WebApi.Controllers
 
     public class SwaggerLoginRequest
     {
-        public string Name { get; set; }
-        public string Pwd { get; set; }
+        public string? Name { get; set; }
+        public string? Pwd { get; set; }
     }
 }

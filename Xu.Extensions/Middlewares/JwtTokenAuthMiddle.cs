@@ -2,17 +2,18 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 中间件
     /// 原做为自定义授权中间件
     /// 先做检查 header token的使用
     /// </summary>
-    public class JwtTokenAuth
+    /// </summary>
+    public class JwtTokenAuthMiddle
     {
         /// <summary>
-        ///中间件一定要有一个next，将管道可以正常的走下去
+        ///
         /// </summary>
         private readonly RequestDelegate _next;
 
@@ -20,7 +21,7 @@ namespace Xu.Extensions
         ///
         /// </summary>
         /// <param name="next"></param>
-        public JwtTokenAuth(RequestDelegate next)
+        public JwtTokenAuthMiddle(RequestDelegate next)
         {
             _next = next;
         }

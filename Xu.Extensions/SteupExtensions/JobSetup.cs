@@ -21,9 +21,10 @@ namespace Xu.Extensions
             //services.AddHostedService<Job2TimedService>();
 
             services.AddSingleton<IJobFactory, JobFactory>();
+            //services.AddTransient<JobQuartz>();//Job使用瞬时依赖注入，或者使用下方的程序集注入
+            //services.AddTransient<Job_OperateLog>();
+            //services.AddTransient<Job_AccessTrendLog>();
             services.AddSingleton<ISchedulerCenter, SchedulerCenter>();
-
-            //services.AddTransient<JobQuartz>(); //这里使用瞬时依赖注入，或者使用下方的程序集注入
 
             //通过程序集注入任务
             var baseType = typeof(IJob);

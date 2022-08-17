@@ -4,13 +4,13 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
-    public class SwaggerAuthMildd
+    public class SwaggerAuthMiddle
     {
         private readonly RequestDelegate next;
 
-        public SwaggerAuthMildd(RequestDelegate next)
+        public SwaggerAuthMiddle(RequestDelegate next)
         {
             this.next = next;
         }
@@ -74,7 +74,7 @@ namespace Xu.Extensions
     {
         public static IApplicationBuilder UseSwaggerAuthorized(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<SwaggerAuthMildd>();
+            return builder.UseMiddleware<SwaggerAuthMiddle>();
         }
     }
 }

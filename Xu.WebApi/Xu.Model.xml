@@ -146,6 +146,71 @@
             系统名称
             </summary>
         </member>
+        <member name="T:Xu.Model.AccessTrendLog">
+            <summary>
+            用户访问趋势日志
+            </summary>
+        </member>
+        <member name="P:Xu.Model.AccessTrendLog.User">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="P:Xu.Model.AccessTrendLog.Count">
+            <summary>
+            次数
+            </summary>
+        </member>
+        <member name="T:Xu.Model.OperateLog">
+            <summary>
+            日志记录
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.IsDeleted">
+             <summary>
+            获取或设置是否禁用，逻辑上的删除，非物理删除
+             </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.Area">
+            <summary>
+            区域名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.Controller">
+            <summary>
+            区域控制器名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.Action">
+            <summary>
+            Action名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.IPAddress">
+            <summary>
+            IP地址
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.LogTime">
+            <summary>
+            登录时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.LoginName">
+            <summary>
+            登录名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.OperateLog.UserId">
+            <summary>
+            用户ID
+            </summary>
+        </member>
         <member name="T:Xu.Model.Models.Dept">
             <summary>
             部门管理
@@ -168,7 +233,7 @@
         </member>
         <member name="P:Xu.Model.Models.Dept.ParentId">
             <summary>
-            上级部门
+            上级部门id或guid
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Dept.Enabled">
@@ -191,14 +256,9 @@
             菜单配置表（目前菜单共三级）
             </summary>
         </member>
-        <member name="P:Xu.Model.Models.Menu.SystemName">
-            <summary>
-            系统名称(大屏/应用)
-            </summary>
-        </member>
         <member name="P:Xu.Model.Models.Menu.SystemId">
             <summary>
-            系统Id
+            关联的系统Id或guid
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Menu.ClassName">
@@ -223,7 +283,7 @@
         </member>
         <member name="P:Xu.Model.Models.Menu.ParentId">
             <summary>
-            父级菜单Id
+            父级菜单Id或guid
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Menu.LoadWay">
@@ -254,6 +314,11 @@
         <member name="P:Xu.Model.Models.Menu.ParentName">
             <summary>
             父级菜单名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Menu.SystemName">
+            <summary>
+            系统名称
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Platform">
@@ -393,12 +458,12 @@
         </member>
         <member name="P:Xu.Model.Models.TasksQz.AssemblyName">
             <summary>
-            任务所在DLL对应的程序集名称，默认值："Xu.Tasks"
+            任务所在DLL对应的程序集名称，例如："Xu.Tasks"
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.ClassName">
             <summary>
-            任务所在类，默认值："JobQuartz"
+            任务所在类，例如："JobQuartz"
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.Remark">
@@ -423,7 +488,7 @@
         </member>
         <member name="P:Xu.Model.Models.TasksQz.RunTimes">
             <summary>
-            重复执行次数,默认为0
+            循环次数(单位：次)
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.PerformTime">
@@ -438,13 +503,18 @@
         </member>
         <member name="P:Xu.Model.Models.TasksQz.Cron">
             <summary>
-            间隔（Cron）-- 任务运行时间表达式
+            cron模式 -- Cron表达式
             <a href="http://cron.qqe2.com/" target="_blank">cron在线生成</a>
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.IntervalSecond">
             <summary>
-            执行间隔时间, 秒为单位
+            simple模式 -- 循环周期(单位：秒)
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.TasksQz.CycleRunTimes">
+            <summary>
+            simple模式 -- 循环执行次数(单位：次)
             </summary>
         </member>
         <member name="P:Xu.Model.Models.TasksQz.JobStatus">
@@ -574,7 +644,7 @@
         </member>
         <member name="P:Xu.Model.Models.User.DeptId">
             <summary>
-            所属部门
+            关联部门Id或guid
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.Remark">
@@ -585,11 +655,6 @@
         <member name="P:Xu.Model.Models.User.LastErrTime">
             <summary>
             最后登录时间
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.User.ErrorCount">
-            <summary>
-            登录错误次数
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.Sex">
@@ -605,6 +670,16 @@
         <member name="P:Xu.Model.Models.User.Address">
             <summary>
             地址
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.User.CriticalModifyTime">
+            <summary>
+            关键业务修改时间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.User.ErrorCount">
+            <summary>
+            登录错误次数
             </summary>
         </member>
         <member name="P:Xu.Model.Models.User.Enabled">
@@ -1299,7 +1374,7 @@
             <param name="WebRootPath"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateControllers(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+        <member name="M:Xu.Model.FrameSeed.CreateControllers(SqlSugar.SqlSugarScope,System.String,System.Boolean,System.String[])">
             <summary>
             生成Controller层
             </summary>
@@ -1309,7 +1384,7 @@
             <param name="isMuti"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateModels(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+        <member name="M:Xu.Model.FrameSeed.CreateModels(SqlSugar.SqlSugarScope,System.String,System.Boolean,System.String[])">
             <summary>
             生成Model层
             </summary>
@@ -1319,7 +1394,7 @@
             <param name="isMuti"></param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateIRepositorys(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+        <member name="M:Xu.Model.FrameSeed.CreateIRepositorys(SqlSugar.SqlSugarScope,System.String,System.Boolean,System.String[])">
             <summary>
             生成IRepository层
             </summary>
@@ -1329,7 +1404,7 @@
             <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateIServices(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+        <member name="M:Xu.Model.FrameSeed.CreateIServices(SqlSugar.SqlSugarScope,System.String,System.Boolean,System.String[])">
             <summary>
             生成 IService 层
             </summary>
@@ -1339,7 +1414,7 @@
             <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateRepository(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+        <member name="M:Xu.Model.FrameSeed.CreateRepository(SqlSugar.SqlSugarScope,System.String,System.Boolean,System.String[])">
             <summary>
             生成 Repository 层
             </summary>
@@ -1349,7 +1424,7 @@
             <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.CreateServices(SqlSugar.SqlSugarClient,System.String,System.Boolean,System.String[])">
+        <member name="M:Xu.Model.FrameSeed.CreateServices(SqlSugar.SqlSugarScope,System.String,System.Boolean,System.String[])">
             <summary>
             生成 Service 层
             </summary>
@@ -1359,7 +1434,7 @@
             <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.Model.FrameSeed.Create_Controller_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean,System.Boolean)">
+        <member name="M:Xu.Model.FrameSeed.Create_Controller_ClassFileByDBTalbe(SqlSugar.SqlSugarScope,System.String,System.String,System.String,System.String[],System.String,System.Boolean,System.Boolean)">
             <summary>
             功能描述:根据数据库表生产Controller层
             </summary>
@@ -1372,7 +1447,7 @@
             <param name="isMuti"></param>
             <param name="blnSerializable">是否序列化</param>
         </member>
-        <member name="M:Xu.Model.FrameSeed.Create_Model_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean,System.Boolean)">
+        <member name="M:Xu.Model.FrameSeed.Create_Model_ClassFileByDBTalbe(SqlSugar.SqlSugarScope,System.String,System.String,System.String,System.String[],System.String,System.Boolean,System.Boolean)">
             <summary>
             功能描述:根据数据库表生产Model层
             </summary>
@@ -1385,7 +1460,7 @@
             <param name="isMuti"></param>
             <param name="blnSerializable">是否序列化</param>
         </member>
-        <member name="M:Xu.Model.FrameSeed.Create_IRepository_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+        <member name="M:Xu.Model.FrameSeed.Create_IRepository_ClassFileByDBTalbe(SqlSugar.SqlSugarScope,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
             <summary>
             功能描述:根据数据库表生产IRepository层
             </summary>
@@ -1397,7 +1472,7 @@
             <param name="strInterface">实现接口</param>
             <param name="isMuti"></param>
         </member>
-        <member name="M:Xu.Model.FrameSeed.Create_IServices_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+        <member name="M:Xu.Model.FrameSeed.Create_IServices_ClassFileByDBTalbe(SqlSugar.SqlSugarScope,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
             <summary>
             功能描述:根据数据库表生产IServices层
             </summary>
@@ -1409,7 +1484,7 @@
             <param name="strInterface">实现接口</param>
             <param name="isMuti"></param>
         </member>
-        <member name="M:Xu.Model.FrameSeed.Create_Repository_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+        <member name="M:Xu.Model.FrameSeed.Create_Repository_ClassFileByDBTalbe(SqlSugar.SqlSugarScope,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
             <summary>
             功能描述:根据数据库表生产 Repository 层
             </summary>
@@ -1421,7 +1496,7 @@
             <param name="strInterface">实现接口</param>
             <param name="isMuti"></param>
         </member>
-        <member name="M:Xu.Model.FrameSeed.Create_Services_ClassFileByDBTalbe(SqlSugar.SqlSugarClient,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
+        <member name="M:Xu.Model.FrameSeed.Create_Services_ClassFileByDBTalbe(SqlSugar.SqlSugarScope,System.String,System.String,System.String,System.String[],System.String,System.Boolean)">
             <summary>
             功能描述:根据数据库表生产 Services 层
             </summary>
@@ -1477,7 +1552,7 @@
             </summary>
             <returns>返回值</returns>
         </member>
-        <member name="M:Xu.Model.MyContext.GetEntityDB``1(SqlSugar.SqlSugarClient)">
+        <member name="M:Xu.Model.MyContext.GetEntityDB``1(SqlSugar.SqlSugarScope)">
             <summary>
             功能描述:获取数据库处理对象
             </summary>
@@ -1526,7 +1601,7 @@
             <param name="config">config</param>
             <returns>返回值</returns>
         </member>
-        <member name="M:Xu.Model.MyContext.GetCustomEntityDB``1(SqlSugar.SqlSugarClient)">
+        <member name="M:Xu.Model.MyContext.GetCustomEntityDB``1(SqlSugar.SqlSugarScope)">
             <summary>
             功能描述:获取一个自定义的数据库处理对象
             </summary>
@@ -1620,6 +1695,11 @@
             系统名称(大屏/应用)
             </summary>
         </member>
+        <member name="P:Xu.Model.ViewModels.MenuViewModel.SystemId">
+            <summary>
+            关联的系统Id或guid
+            </summary>
+        </member>
         <member name="P:Xu.Model.ViewModels.MenuViewModel.ClassName">
             <summary>
             菜单类名
@@ -1698,6 +1778,11 @@
         <member name="P:Xu.Model.ViewModels.PlatformViewModel.Remark">
             <summary>
             备注
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformViewModel.MenuInfoList">
+            <summary>
+            所关联的菜单
             </summary>
         </member>
         <member name="P:Xu.Model.ViewModels.RoleViewModel.RoleCode">

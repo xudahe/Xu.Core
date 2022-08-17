@@ -62,7 +62,7 @@ namespace Xu.Extensions
             }
         }
 
-        private async Task SuccessAction(IInvocation invocation)
+        private static async Task SuccessAction(IInvocation invocation)
         {
             await Task.Run(() =>
             {
@@ -78,7 +78,7 @@ namespace Xu.Extensions
                 );
         }
 
-        private async Task TestActionAsync(IInvocation invocation)
+        private static async Task TestActionAsync(IInvocation invocation)
         {
             await Task.Run(null);
         }

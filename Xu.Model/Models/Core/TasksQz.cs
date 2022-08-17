@@ -9,7 +9,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 定时任务计划列表
     /// </summary>
-    [SugarTable("TasksQz", "WMBLOG_MYSQL")]
+    [SugarTable("TasksQz", "WMBLOG_MYSQL_1")]
     public class TasksQz : ModelBase
     {
         /// <summary>
@@ -25,13 +25,13 @@ namespace Xu.Model.Models
         public string JobGroup { get; set; }
 
         /// <summary>
-        /// 任务所在DLL对应的程序集名称，默认值："Xu.Tasks"
+        /// 任务所在DLL对应的程序集名称，例如："Xu.Tasks"
         /// </summary>
         [SugarColumn(ColumnDescription = "任务所在DLL对应的程序集名称")]
         public string AssemblyName { get; set; } = "Xu.Tasks";
 
         /// <summary>
-        /// 任务所在类，默认值："JobQuartz"
+        /// 任务所在类，例如："JobQuartz"
         /// </summary>
         [SugarColumn(ColumnDescription = "任务所在类")]
         public string ClassName { get; set; } = "JobQuartz";
@@ -61,9 +61,9 @@ namespace Xu.Model.Models
         public DateTime? EndTime { get; set; }
 
         /// <summary>
-        /// 重复执行次数,默认为0
+        /// 循环次数(单位：次)
         /// </summary>
-        [SugarColumn(ColumnDescription = "重复执行次数")]
+        [SugarColumn(ColumnDescription = "循环次数(单位：次)")]
         public int RunTimes { get; set; }
 
         /// <summary>
@@ -79,17 +79,23 @@ namespace Xu.Model.Models
         public string TriggerType { get; set; }
 
         /// <summary>
-        /// 间隔（Cron）-- 任务运行时间表达式
+        /// cron模式 -- Cron表达式
         /// <a href="http://cron.qqe2.com/" target="_blank">cron在线生成</a>
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "间隔（Cron）")]
+        [SugarColumn(IsNullable = true, ColumnDescription = " Cron表达式")]
         public string Cron { get; set; }
 
         /// <summary>
-        /// 执行间隔时间, 秒为单位
+        /// simple模式 -- 循环周期(单位：秒)
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "执行间隔时间, 秒为单位")]
-        public int? IntervalSecond { get; set; }
+        [SugarColumn(IsNullable = true, ColumnDescription = "循环周期(单位：秒)")]
+        public int IntervalSecond { get; set; }
+
+        /// <summary>
+        /// simple模式 -- 循环执行次数(单位：次)
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "循环执行次数(单位：次)")]
+        public int CycleRunTimes { get; set; }
 
         /// <summary>
         /// 运行状态
@@ -103,13 +109,13 @@ namespace Xu.Model.Models
         [SugarColumn(IsNullable = true, ColumnDescription = "执行传参")]
         public string JobParams { get; set; }
 
+        #region 临时类
+
         /// <summary>
         /// 是否立即启动
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "是否立即启动")]
+        [SugarColumn(IsIgnore = true)]
         public bool IsStart { get; set; } = false;
-
-        #region 临时类
 
         /// <summary>
         /// 任务内存中的状态

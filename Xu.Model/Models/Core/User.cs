@@ -10,7 +10,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 用户信息表
     /// </summary>
-    [SugarTable("User", "WMBLOG_MYSQL")]    //可不写,对应数据库的dbo.User表
+    [SugarTable("User", "WMBLOG_MYSQL_1")]    //可不写,对应数据库的dbo.User表
     public class User : ModelBase
     {
         /// <summary>
@@ -30,10 +30,10 @@ namespace Xu.Model.Models
         public string RealName { get; set; }
 
         /// <summary>
-        /// 所属部门
+        /// 关联部门Id或guid
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "所属部门")]
-        public int? DeptId { get; set; }
+        [SugarColumn(IsNullable = true, ColumnDescription = "关联部门Id或guid")]
+        public string DeptId { get; set; }
 
         /// <summary>
         /// 备注
@@ -46,12 +46,6 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "最后登录时间")]
         public DateTime? LastErrTime { get; set; }
-
-        /// <summary>
-        /// 登录错误次数
-        /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "登录错误次数")]
-        public int? ErrorCount { get; set; }
 
         /// <summary>
         /// 性别
@@ -70,6 +64,18 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true)]
         public string Address { get; set; }
+
+        /// <summary>
+        /// 关键业务修改时间
+        /// </summary>
+        [SugarColumn(ColumnDescription = "关键业务修改时间")]
+        public DateTime CriticalModifyTime { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// 登录错误次数
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDescription = "登录错误次数")]
+        public int ErrorCount { get; set; }
 
         /// <summary>
         /// 是否禁用

@@ -11,7 +11,6 @@ using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers
 {
-
     /// <summary>
     /// 系统管理
     /// </summary>
@@ -39,7 +38,7 @@ namespace Xu.WebApi.Controllers
             var data = await _systemSvc.GetDataByids(ids);
 
             if (!string.IsNullOrEmpty(key))
-                data = data.Where(a => a.SystemName.Contains(key) || a.SystemCode.Contains(key)).ToList();
+                data = data.Where(a => a.SystemName.Contains(key) || a.SystemCode.Contains(key)).OrderBy(s => s.Index).ToList();
 
             return new MessageModel<List<Systems>>()
             {
@@ -111,7 +110,7 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = model?.Id.ToString();
+                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -135,7 +134,7 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = model?.Id.ToString();
+                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -162,7 +161,7 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model?.Id.ToString();
+                data.Response = model.Id.ToString();
             }
 
             return data;

@@ -39,6 +39,13 @@ namespace Xu.IServices
         Task<int> Add(T entity);
 
         /// <summary>
+        /// 批量插入实体(速度快)
+        /// </summary>
+        /// <param name="listEntity">实体集合</param>
+        /// <returns></returns>
+        Task<int> Add(List<T> listEntity);
+
+        /// <summary>
         /// 删除指定ID的数据
         /// </summary>
         /// <param name="id">主键ID</param>

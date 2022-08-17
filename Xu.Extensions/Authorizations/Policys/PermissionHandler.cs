@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.IServices;
 
 namespace Xu.Extensions
 {
@@ -25,15 +27,20 @@ namespace Xu.Extensions
         //private readonly IRoleModulePermissionServices _roleModulePermissionServices;
         private readonly IHttpContextAccessor _accessor;
 
+        private readonly IAspNetUser _aspNetUser;
+        private readonly IUserSvc _userSvc;
+
         /// <summary>
         /// 构造函数注入
         /// </summary>
         /// <param name="schemes"></param>
         /// <param name="roleModulePermissionServices"></param>
         /// <param name="accessor"></param>
-        public PermissionHandler(IAuthenticationSchemeProvider schemes, IHttpContextAccessor accessor)
+        public PermissionHandler(IAuthenticationSchemeProvider schemes, IHttpContextAccessor accessor, IAspNetUser aspNetUser, IUserSvc userSvc)
         {
             _accessor = accessor;
+            _aspNetUser = aspNetUser;
+            _userSvc = userSvc;
             Schemes = schemes;
             //_roleModulePermissionServices = roleModulePermissionServices;
         }
@@ -144,8 +151,8 @@ namespace Xu.Extensions
                             {
                                 // if (Regex.Match(questUrl, item.Url?.ToString().ToLower())?.Value == questUrl)
                                 // {
-                                    isMatchRole = true;
-                                    break;
+                                isMatchRole = true;
+                                break;
                                 // }
                             }
                             catch (Exception)
@@ -173,15 +180,27 @@ namespace Xu.Extensions
                             // jwt
                             isExp = (httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) != null && DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) >= DateTime.Now;
                         }
-                        if (isExp)
+
+                        if (!isExp)
                         {
-                            context.Succeed(requirement);
-                        }
-                        else
-                        {
-                            context.Fail();
+                            context.Fail(new AuthorizationFailureReason(this, "授权已过期,请重新授权"));
                             return;
                         }
+
+                        // 校验签发时间
+                        var value = httpContext.User.Claims.SingleOrDefault(s => s.Type == JwtRegisteredClaimNames.Iat)?.Value;
+                        if (value != null)
+                        {
+                            var user = await _userSvc.QueryById(_aspNetUser.ID, true);
+                            if (user.CriticalModifyTime > value.ToDateTimeReq())
+                            {
+                                _aspNetUser.MessageModel = new ApiResponse(StatusCode.CODE401, "很抱歉,授权已失效,请重新授权").MessageModel;
+                                context.Fail(new AuthorizationFailureReason(this, _aspNetUser.MessageModel.Message));
+                                return;
+                            }
+                        }
+
+                        context.Succeed(requirement);
                         return;
                     }
                 }

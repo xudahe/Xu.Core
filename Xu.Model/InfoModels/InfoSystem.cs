@@ -1,4 +1,6 @@
-﻿namespace Xu.Model
+﻿using System.Collections.Generic;
+
+namespace Xu.Model
 {
     public class InfoSystem
     {
@@ -16,5 +18,8 @@
         /// 系统名称
         /// </summary>
         public string SystemName { get; set; }
+
+
+        public IList<InfoMenu> InfoMenuList { get; set; }
     }
 }

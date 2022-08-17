@@ -20,10 +20,12 @@ namespace Xu.WebApi.Controllers
     public class MenuController : ControllerBase
     {
         private readonly IMenuSvc _menuSvc;
+        private readonly ISystemSvc _systemSvc;
 
-        public MenuController(IMenuSvc menuSvc)
+        public MenuController(IMenuSvc menuSvc, ISystemSvc systemSvc)
         {
             _menuSvc = menuSvc;
+            _systemSvc = systemSvc;
         }
 
         /// <summary>
@@ -40,14 +42,19 @@ namespace Xu.WebApi.Controllers
 
             for (int i = 0; i < data.Count; i++)
             {
-                data[i].ParentName = data[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == data[i].ParentId)?.MenuName) : "";
+                if (string.IsNullOrEmpty(data[i].ParentId)) continue;
+
+                if (GUIDHelper.IsGuidByReg(data[i].ParentId))
+                    data[i].ParentName = data.First(s => s.Guid == data[i].ParentId).MenuName;
+                else
+                    data[i].ParentName = data.First(s => s.Id == data[i].ParentId.ToInt32()).MenuName;
             }
 
             if (!string.IsNullOrEmpty(menuName))
                 data = data.Where(a => a.MenuName.Contains(menuName)).ToList();
 
             if (!string.IsNullOrEmpty(parentId))
-                data = data.Where(a => a.ParentId == parentId.ToInt32Req()).ToList();
+                data = data.Where(a => a.ParentId == parentId).ToList();
 
             return new MessageModel<List<Menu>>()
             {
@@ -86,24 +93,113 @@ namespace Xu.WebApi.Controllers
         [HttpGet]
         public async Task<object> GetMenuByIds(string ids)
         {
-            var data = await _menuSvc.Query();
+            var menuData = await _menuSvc.Query();
+            var menuList = await _menuSvc.GetDataByids(ids, menuData);
 
-            var menuList = await _menuSvc.GetDataByids(ids, data);
+            var systemList = await _systemSvc.Query();
 
             for (int i = 0; i < menuList.Count; i++)
             {
-                menuList[i].ParentName = menuList[i].ParentId.HasValue ? (data.FirstOrDefault(s => s.Id == menuList[i].ParentId).MenuName) : "";
+                if (!string.IsNullOrEmpty(menuList[i].SystemId))
+                {
+                    if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
+                        menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
+                    else
+                        menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
+                }
+
+                if (string.IsNullOrEmpty(menuList[i].ParentId))
+                {
+                    if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
+                        menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
+                    else
+                        menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
+                }
             }
 
-            var menuList1 = menuList.Where(s => !s.ParentId.HasValue).OrderBy(s => s.Index).ToList(); //获取一级菜单（顶部）
+            //获取一级菜单
+            var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).OrderBy(s => s.Index).ToList();
+
+            //获取二级菜单
             for (int i = 0; i < menuList1.Count; i++)
             {
-                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id).OrderBy(s => s.Index).ToList(); //获取二级菜单
+                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).OrderBy(s => s.Index).ToList();
+                //var menuList2 = menuList.Where(s => s.ParentId.ToInt32() == menuList1[i].Id).OrderBy(s => s.Index).ToList();
 
+                //获取三级菜单
                 for (int j = 0; j < menuList2.Count; j++)
                 {
-                    menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id).OrderBy(s => s.Index).ToList(); //获取三级菜单
+                    menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).OrderBy(s => s.Index).ToList();
+                    //menuList2[j].Children = menuList.Where(s => s.ParentId.ToInt32() == menuList2[j].Id).OrderBy(s => s.Index).ToList();
                 }
+
+                menuList1[i].Children = menuList2;
+            }
+
+            return new MessageModel<object>()
+            {
+                Response = menuList1,
+                Success = true,
+                Message = "获取成功"
+            };
+        }
+
+        /// <summary>
+        /// 根据系统Id或guid 获取菜单数据（树状）
+        /// </summary>
+        /// <param name="id">系统Id或guid（非空）</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<object> GetMenuBySystemId(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return new MessageModel<object>()
+                {
+                    Success = true,
+                    Message = "系统Id或guid不能为空"
+                };
+            }
+            var menuData = await _menuSvc.Query();
+            var menuList = await _menuSvc.GetDataBySystemId(id, menuData);
+
+            var systemList = await _systemSvc.Query();
+
+            for (int i = 0; i < menuList.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(menuList[i].SystemId))
+                {
+                    if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
+                        menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
+                    else
+                        menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
+                }
+
+                if (!string.IsNullOrEmpty(menuList[i].ParentId))
+                {
+                    if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
+                        menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
+                    else
+                        menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
+                }
+            }
+
+            //获取一级菜单
+            var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).OrderBy(s => s.Index).ToList();
+
+            //获取二级菜单
+            for (int i = 0; i < menuList1.Count; i++)
+            {
+                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).OrderBy(s => s.Index).ToList();
+                //var menuList2 = menuList.Where(s => s.ParentId.ToInt32() == menuList1[i].Id).OrderBy(s => s.Index).ToList();
+
+                //获取三级菜单
+                for (int j = 0; j < menuList2.Count; j++)
+                {
+                    menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).OrderBy(s => s.Index).ToList();
+                    //menuList2[j].Children = menuList.Where(s => s.ParentId.ToInt32() == menuList2[j].Id).OrderBy(s => s.Index).ToList();
+                }
+
                 menuList1[i].Children = menuList2;
             }
 
@@ -156,7 +252,7 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = model?.Id.ToString();
+                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -180,7 +276,7 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = model?.Id.ToString();
+                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -207,7 +303,7 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model?.Id.ToString();
+                data.Response = model.Id.ToString();
             }
 
             return data;

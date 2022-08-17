@@ -7,6 +7,9 @@ using Xu.IServices;
 
 namespace Xu.Tasks
 {
+    /// <summary>
+    /// 封装基础类
+    /// </summary>
     public class JobBase
     {
         public ITasksQzSvc _tasksQzSvc;

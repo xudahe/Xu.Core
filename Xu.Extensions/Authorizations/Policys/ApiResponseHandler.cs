@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Xu.Common;
+using Xu.IServices;
 
 namespace Xu.Extensions
 {
@@ -14,8 +16,11 @@ namespace Xu.Extensions
     /// </summary>
     public class ApiResponseHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        public ApiResponseHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        private readonly IAspNetUser _aspNetUser;
+
+        public ApiResponseHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IAspNetUser aspNetUser) : base(options, logger, encoder, clock)
         {
+            _aspNetUser = aspNetUser;
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -33,8 +38,16 @@ namespace Xu.Extensions
         protected override async Task HandleForbiddenAsync(AuthenticationProperties properties)
         {
             Response.ContentType = "application/json";
-            Response.StatusCode = StatusCodes.Status403Forbidden;
-            await Response.WriteAsync(JsonConvert.SerializeObject((new ApiResponse(StatusCode.CODE403)).MessageModel));
+            if (_aspNetUser.MessageModel != null)
+            {
+                Response.StatusCode = _aspNetUser.MessageModel.Status;
+                await Response.WriteAsync(JsonConvert.SerializeObject(_aspNetUser.MessageModel));
+            }
+            else
+            {
+                Response.StatusCode = StatusCodes.Status403Forbidden;
+                await Response.WriteAsync(JsonConvert.SerializeObject((new ApiResponse(StatusCode.CODE403)).MessageModel));
+            }
         }
     }
 }

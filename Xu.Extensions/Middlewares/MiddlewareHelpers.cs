@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     //这里定义一个中间件Helper，主要作用就是给当前模块的中间件取一个别名
     public static class MiddlewareHelpers
@@ -12,7 +12,7 @@ namespace Xu.Extensions
         /// <returns></returns>
         public static IApplicationBuilder UseJwtTokenAuth(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<JwtTokenAuth>();
+            return app.UseMiddleware<JwtTokenAuthMiddle>();
         }
 
         /// <summary>
@@ -20,9 +20,9 @@ namespace Xu.Extensions
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseReuestResponseLog(this IApplicationBuilder app)
+        public static IApplicationBuilder UseRequRespLogMiddle(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<RequRespLogMildd>();
+            return app.UseMiddleware<RequRespLogMiddle>();
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace Xu.Extensions
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseSignalRSendMildd(this IApplicationBuilder app)
+        public static IApplicationBuilder UseSignalRSendMiddle(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<SignalRSendMildd>();
+            return app.UseMiddleware<SignalRSendMiddle>();
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace Xu.Extensions
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseExceptionHandlerMidd(this IApplicationBuilder app)
+        public static IApplicationBuilder UseExceptionHandlerMiddle(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<ExceptionHandlerMidd>();
+            return app.UseMiddleware<ExceptionHandlerMiddle>();
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace Xu.Extensions
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseIPLogMildd(this IApplicationBuilder app)
+        public static IApplicationBuilder UseIpLogMiddle(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<IPLogMildd>();
+            return app.UseMiddleware<IPLogMiddle>();
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace Xu.Extensions
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseRecordAccessLogsMildd(this IApplicationBuilder app)
+        public static IApplicationBuilder UseRecordAccessLogsMiddle(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<RecordAccessLogsMildd>();
+            return app.UseMiddleware<RecordAccessLogsMiddle>();
         }
     }
 }

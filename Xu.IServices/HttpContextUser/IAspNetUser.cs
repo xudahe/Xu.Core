@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using Xu.Model.ResultModel;
 
-namespace Xu.Common
+namespace Xu.IServices
 {
     public interface IAspNetUser
     {
@@ -17,5 +18,7 @@ namespace Xu.Common
         string GetToken();
 
         List<string> GetUserInfoFromToken(string ClaimType);
+
+        MessageModel<string> MessageModel { get; set; }
     }
 }

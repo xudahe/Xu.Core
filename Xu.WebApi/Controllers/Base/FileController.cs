@@ -49,7 +49,7 @@ namespace Blog.Core.Controllers
         [HttpGet]
         [Route("/images/Down/Bmd")]
         [AllowAnonymous]
-        public FileStreamResult DownBmd(string filename)
+        public FileStreamResult? DownBmd(string filename)
         {
             if (string.IsNullOrEmpty(filename))
             {

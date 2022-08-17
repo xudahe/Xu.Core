@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Profiling;
 using Xu.EnumHelper;
-using Xu.Core;
+using Xu.IServices;
 
 namespace Xu.WebApi.Controllers
 {

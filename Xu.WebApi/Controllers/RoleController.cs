@@ -120,7 +120,7 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = model?.Id.ToString();
+                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -144,7 +144,7 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = model?.Id.ToString();
+                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -171,7 +171,7 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model?.Id.ToString();
+                data.Response = model.Id.ToString();
             }
 
             return data;

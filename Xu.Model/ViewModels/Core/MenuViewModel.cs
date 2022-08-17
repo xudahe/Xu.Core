@@ -11,6 +11,11 @@ namespace Xu.Model.ViewModels
         public string SystemName { get; set; }
 
         /// <summary>
+        /// 关联的系统Id或guid
+        /// </summary>
+        public string SystemId { get; set; }
+
+        /// <summary>
         /// 菜单类名
         /// </summary>
         public string ClassName { get; set; }

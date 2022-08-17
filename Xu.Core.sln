@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29521.150
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.WebApi", "Xu.WebApi\Xu.WebApi.csproj", "{8EB2CB03-3F84-4869-9DD9-2D46CC9F2B99}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.Extensions", "Xu.Extensi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.EventBus", "Xu.EventBus\Xu.EventBus.csproj", "{7A261678-93B3-438E-9E83-DFC92534416A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xu.EnumHelper", "Xu.EnumHelper\Xu.EnumHelper.csproj", "{7C182D1F-86B8-4BB7-AD62-6070BF34AF04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xu.EnumHelper", "Xu.EnumHelper\Xu.EnumHelper.csproj", "{7C182D1F-86B8-4BB7-AD62-6070BF34AF04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

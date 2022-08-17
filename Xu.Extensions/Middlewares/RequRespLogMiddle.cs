@@ -6,22 +6,22 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xu.Common;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 中间件
     /// 记录请求和响应数据
     /// </summary>
-    public class RequRespLogMildd
+    public class RequRespLogMiddle
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<RequRespLogMildd> _logger;
+        private readonly ILogger<RequRespLogMiddle> _logger;
 
         /// <summary>
         ///构造函数
         /// </summary>
         /// <param name="next"></param>
-        public RequRespLogMildd(RequestDelegate next, ILogger<RequRespLogMildd> logger)
+        public RequRespLogMiddle(RequestDelegate next, ILogger<RequRespLogMiddle> logger)
         {
             _next = next;
             _logger = logger;

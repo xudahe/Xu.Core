@@ -64,7 +64,7 @@ namespace Xu.WebApi
                 else
                 {
                     //-----------变量接收模式----------//
-                    var dy = (JObject)JsonConvert.DeserializeObject(dataJson);
+                    var dy = JsonConvert.DeserializeObject(dataJson) as JObject;
                     var parameterslist = context.ActionDescriptor.Parameters.ToList();
                     foreach (var item in parameterslist)
                     {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Xu.EventBus\Xu.EventBus.csproj" />
     <ProjectReference Include="..\Xu.Repository\Xu.Repository.csproj" />
+    <ProjectReference Include="..\Xu.Services\Xu.Services.csproj" />
     <ProjectReference Include="..\Xu.Tasks\Xu.Tasks.csproj" />
   </ItemGroup>
 

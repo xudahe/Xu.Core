@@ -6,16 +6,16 @@ using Xu.EnumHelper;
 using Xu.IServices;
 using Xu.Tasks;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// Quartz 启动服务（定时任务）
     /// </summary>
-    public static class QuartzJobMildd
+    public static class QuartzJobMiddle
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(QuartzJobMildd));
+        private static readonly ILog log = LogManager.GetLogger(typeof(QuartzJobMiddle));
 
-        public static void UseQuartzJobMildd(this IApplicationBuilder app, ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter)
+        public static void UseQuartzJobMiddle(this IApplicationBuilder app, ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 

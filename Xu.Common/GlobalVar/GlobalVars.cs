@@ -19,6 +19,7 @@
         /// 当前项目是否启用IDS4权限方案
         /// true：表示启动IDS4
         /// false：表示使用JWT
+        /// </summary>
         public static bool IsUseIds4 = false;
     }
 

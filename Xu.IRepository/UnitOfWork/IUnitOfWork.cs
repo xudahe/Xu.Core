@@ -5,9 +5,9 @@ namespace Xu.IRepository
     public interface IUnitOfWork
     {
         /// <summary>
-        /// 创建SqlSugarClient 实列
+        /// SqlSugarScope 实列
         /// </summary>
-        SqlSugarClient GetDbClient();
+        SqlSugarScope GetDbClient();
 
         /// <summary>
         /// 开始事务

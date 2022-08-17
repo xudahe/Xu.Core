@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Builder;
 using System;
 using Xu.Common;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// MiniProfiler性能分析
     /// </summary>
-    public static class MiniProfilerMildd
+    public static class MiniProfilerMiddle
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(MiniProfilerMildd));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MiniProfilerMiddle));
 
-        public static void UseMiniProfilerMildd(this IApplicationBuilder app)
+        public static void UseMiniProfilerMiddle(this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 

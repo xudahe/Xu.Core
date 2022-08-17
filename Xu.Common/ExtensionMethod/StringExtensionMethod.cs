@@ -753,7 +753,7 @@ namespace Xu.Common
             {
                 var attributes = (EnumTextAttribute[])typeof(T).GetField(value.ToString()).GetCustomAttributes(typeof(EnumTextAttribute), false);
                 string text = value.ToString();
-                if (attributes.Count() > 0)
+                if (attributes.Length > 0)
                     text = attributes.First().Value;
 
                 if (text == t)

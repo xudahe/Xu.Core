@@ -10,7 +10,9 @@ namespace Xu.Common
         /*
          * 目前是多库操作，默认加载的是appsettings.json设置为true的第一个db连接。
          */
-        public static (List<MutiDBOperate>, List<MutiDBOperate>) MutiConnectionString => MutiInitConn();
+
+        //public static (List<MutiDBOperate>, List<MutiDBOperate>) MutiConnectionString => MutiInitConn();
+        public static (List<MutiDBOperate> allDbs, List<MutiDBOperate> slaveDbs) MutiConnectionString => MutiInitConn();
 
         private static string DifDBConnOfSecurity(params string[] conn)
         {

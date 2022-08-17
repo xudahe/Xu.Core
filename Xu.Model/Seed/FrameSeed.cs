@@ -16,7 +16,7 @@ namespace Xu.Model
         /// <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
         /// <param name="isMuti"></param>
         /// <returns></returns>
-        public static bool CreateControllers(SqlSugarClient sqlSugarClient, string ConnId = null, bool isMuti = false, string[] tableNames = null)
+        public static bool CreateControllers(SqlSugarScope sqlSugarClient, string ConnId = null, bool isMuti = false, string[] tableNames = null)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Xu.Model
         /// <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
         /// <param name="isMuti"></param>
         /// <returns></returns>
-        public static bool CreateModels(SqlSugarClient sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
+        public static bool CreateModels(SqlSugarScope sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Xu.Model
         /// <param name="isMuti"></param>
         /// <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
         /// <returns></returns>
-        public static bool CreateIRepositorys(SqlSugarClient sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
+        public static bool CreateIRepositorys(SqlSugarScope sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Xu.Model
         /// <param name="isMuti"></param>
         /// <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
         /// <returns></returns>
-        public static bool CreateIServices(SqlSugarClient sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
+        public static bool CreateIServices(SqlSugarScope sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace Xu.Model
         /// <param name="isMuti"></param>
         /// <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
         /// <returns></returns>
-        public static bool CreateRepository(SqlSugarClient sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
+        public static bool CreateRepository(SqlSugarScope sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace Xu.Model
         /// <param name="isMuti"></param>
         /// <param name="tableNames">数据库表名数组，默认空，生成所有表</param>
         /// <returns></returns>
-        public static bool CreateServices(SqlSugarClient sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
+        public static bool CreateServices(SqlSugarScope sqlSugarClient, string ConnId, bool isMuti = false, string[] tableNames = null)
         {
             try
             {
@@ -148,7 +148,7 @@ namespace Xu.Model
         /// <param name="isMuti"></param>
         /// <param name="blnSerializable">是否序列化</param>
         private static void Create_Controller_ClassFileByDBTalbe(
-          SqlSugarClient sqlSugarClient,
+          SqlSugarScope sqlSugarClient,
           string ConnId,
           string strPath,
           string strNameSpace,
@@ -306,7 +306,7 @@ namespace " + strNameSpace + @"
         /// <param name="isMuti"></param>
         /// <param name="blnSerializable">是否序列化</param>
         private static void Create_Model_ClassFileByDBTalbe(
-          SqlSugarClient sqlSugarClient,
+          SqlSugarScope sqlSugarClient,
           string ConnId,
           string strPath,
           string strNameSpace,
@@ -370,7 +370,7 @@ namespace " + strNameSpace + @"
         /// <param name="strInterface">实现接口</param>
         /// <param name="isMuti"></param>
         private static void Create_IRepository_ClassFileByDBTalbe(
-          SqlSugarClient sqlSugarClient,
+          SqlSugarScope sqlSugarClient,
           string ConnId,
           string strPath,
           string strNameSpace,
@@ -426,7 +426,7 @@ namespace " + strNameSpace + @"
         /// <param name="strInterface">实现接口</param>
         /// <param name="isMuti"></param>
         private static void Create_IServices_ClassFileByDBTalbe(
-          SqlSugarClient sqlSugarClient,
+          SqlSugarScope sqlSugarClient,
           string ConnId,
           string strPath,
           string strNameSpace,
@@ -481,7 +481,7 @@ namespace " + strNameSpace + @"
         /// <param name="strInterface">实现接口</param>
         /// <param name="isMuti"></param>
         private static void Create_Repository_ClassFileByDBTalbe(
-          SqlSugarClient sqlSugarClient,
+          SqlSugarScope sqlSugarClient,
           string ConnId,
           string strPath,
           string strNameSpace,
@@ -539,7 +539,7 @@ namespace " + strNameSpace + @"
         /// <param name="strInterface">实现接口</param>
         /// <param name="isMuti"></param>
         private static void Create_Services_ClassFileByDBTalbe(
-          SqlSugarClient sqlSugarClient,
+          SqlSugarScope sqlSugarClient,
           string ConnId,
           string strPath,
           string strNameSpace,

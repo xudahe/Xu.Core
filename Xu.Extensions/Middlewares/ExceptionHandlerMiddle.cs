@@ -4,14 +4,14 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
-    public class ExceptionHandlerMidd
+    public class ExceptionHandlerMiddle
     {
         private readonly RequestDelegate _next;
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ExceptionHandlerMidd));
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ExceptionHandlerMiddle));
 
-        public ExceptionHandlerMidd(RequestDelegate next)
+        public ExceptionHandlerMiddle(RequestDelegate next)
         {
             _next = next;
         }

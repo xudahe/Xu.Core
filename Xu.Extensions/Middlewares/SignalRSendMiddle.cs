@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xu.Common;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 中间件
     /// SignalR发送数据
     /// </summary>
-    public class SignalRSendMildd
+    public class SignalRSendMiddle
     {
         private readonly RequestDelegate _next;
 
@@ -21,7 +21,7 @@ namespace Xu.Extensions
         /// </summary>
         /// <param name="next"></param>
         /// <param name="hubContext"></param>
-        public SignalRSendMildd(RequestDelegate next, IHubContext<ChatHub> hubContext)
+        public SignalRSendMiddle(RequestDelegate next, IHubContext<ChatHub> hubContext)
         {
             _next = next;
             _hubContext = hubContext;

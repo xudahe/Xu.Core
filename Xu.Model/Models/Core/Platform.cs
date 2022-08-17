@@ -9,15 +9,15 @@ namespace Xu.Model.Models
     /// <summary>
     /// 平台管理
     /// </summary>
-    [SugarTable("Platform", "WMBLOG_MYSQL")]
+    [SugarTable("Platform", "WMBLOG_MYSQL_1")]
     public class Platform : ModelBase
     {
         /// <summary>
         /// 平台简码
         /// </summary>
         [SugarColumn(ColumnDescription = "平台简码")]
-        public string PlatformCode { get; set; }  
-        
+        public string PlatformCode { get; set; }
+
         /// <summary>
         /// 平台名称
         /// </summary>
@@ -29,7 +29,6 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "加载序号")]
         public int Index { get; set; }
-
 
         /// <summary>
         /// 主题

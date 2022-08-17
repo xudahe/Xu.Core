@@ -10,7 +10,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 待办事项
     /// </summary>
-    [SugarTable("Todo", "WMBLOG_MYSQL")]
+    [SugarTable("Todo", "WMBLOG_MYSQL_1")]
     public class Todo : ModelBase
     {
         /// <summary>

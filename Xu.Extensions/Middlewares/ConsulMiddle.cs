@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using Xu.Common;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// Consul 注册服务, 它的核心功能就是服务注册和发现
@@ -14,9 +14,9 @@ namespace Xu.Extensions
     /// Consul 客户端通过将自己注册到 Consul 服务器集群，然后等待调用方去发现服务，实现代理转发到真正的业务系统，还可以基于服务发现做负载均衡，
     /// 甚至可以在客户端请求到底服务之前进行拦截，做一些基础性的工作，比如身份验证、限流、熔断等等业务系统的前瞻性工作。
     /// </remarks>
-    public static class ConsulMildd
+    public static class ConsulMiddle
     {
-        public static IApplicationBuilder UseConsulMildd(this IApplicationBuilder app, IConfiguration configuration, IHostApplicationLifetime lifetime)
+        public static IApplicationBuilder UseConsulMiddle(this IApplicationBuilder app, IConfiguration configuration, IHostApplicationLifetime lifetime)
         {
             if (configuration["Middleware:Consul:Enabled"].ToBoolReq())
             {

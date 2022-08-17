@@ -43,7 +43,7 @@ namespace Xu.Model
         /// <summary>
         /// 数据连接对象
         /// </summary>
-        public SqlSugarClient Db { get; private set; }
+        public SqlSugarScope Db { get; private set; }
 
         /// <summary>
         /// 数据库上下文实例（自动关闭连接）
@@ -63,7 +63,7 @@ namespace Xu.Model
         {
             if (string.IsNullOrEmpty(ConnectionString))
                 throw new ArgumentNullException("数据库连接字符串为空");
-            Db = new SqlSugarClient(new ConnectionConfig()
+            Db = new SqlSugarScope(new ConnectionConfig()
             {
                 ConnectionString = ConnectionString,
                 DbType = DbType,
@@ -97,7 +97,7 @@ namespace Xu.Model
         /// </summary>
         /// <param name="db">db</param>
         /// <returns>返回值</returns>
-        public SimpleClient<T> GetEntityDB<T>(SqlSugarClient db) where T : class, new()
+        public SimpleClient<T> GetEntityDB<T>(SqlSugarScope db) where T : class, new()
         {
             return new SimpleClient<T>(db);
         }
@@ -194,9 +194,9 @@ namespace Xu.Model
         /// </summary>
         /// <param name="config">config</param>
         /// <returns>返回值</returns>
-        public static SqlSugarClient GetCustomDB(ConnectionConfig config)
+        public static SqlSugarScope GetCustomDB(ConnectionConfig config)
         {
-            return new SqlSugarClient(config);
+            return new SqlSugarScope(config);
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace Xu.Model
         /// </summary>
         /// <param name="sugarClient">sugarClient</param>
         /// <returns>返回值</returns>
-        public static SimpleClient<T> GetCustomEntityDB<T>(SqlSugarClient sugarClient) where T : class, new()
+        public static SimpleClient<T> GetCustomEntityDB<T>(SqlSugarScope sugarClient) where T : class, new()
         {
             return new SimpleClient<T>(sugarClient);
         }
@@ -216,7 +216,7 @@ namespace Xu.Model
         /// <returns>返回值</returns>
         public static SimpleClient<T> GetCustomEntityDB<T>(ConnectionConfig config) where T : class, new()
         {
-            SqlSugarClient sugarClient = GetCustomDB(config);
+            SqlSugarScope sugarClient = GetCustomDB(config);
             return GetCustomEntityDB<T>(sugarClient);
         }
 

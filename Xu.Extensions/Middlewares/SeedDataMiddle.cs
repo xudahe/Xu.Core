@@ -4,16 +4,16 @@ using System;
 using Xu.Common;
 using Xu.Model;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 生成种子数据中间件服务
     /// </summary>
-    public static class SeedDataMildd
+    public static class SeedDataMiddle
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(SeedDataMildd));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SeedDataMiddle));
 
-        public static void UseSeedDataMildd(this IApplicationBuilder app, MyContext myContext, string webRootPath)
+        public static void UseSeedDataMilddle(this IApplicationBuilder app, MyContext myContext, string webRootPath)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 

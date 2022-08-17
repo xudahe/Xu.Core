@@ -7,14 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 查看所有注入的服务
     /// </summary>
-    public static class AllServicesMildd
+    public static class AllServicesMiddle
     {
-        public static void UseAllServicesMildd(this IApplicationBuilder app, IServiceCollection _services)
+        public static void UseAllServicesMiddle(this IApplicationBuilder app, IServiceCollection _services)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 

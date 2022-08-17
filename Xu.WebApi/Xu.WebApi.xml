@@ -223,7 +223,7 @@
             监控管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.MonitorController.Server">
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetServerInfo">
             <summary>
             服务器配置信息
             </summary>
@@ -252,6 +252,38 @@
             Api请求访问日志
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MonitorController.GetActiveUsers(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            活跃用户
+            </summary>
+            <param name="environment"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveUsers">
+            <summary>
+            今日活跃用户
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveUserCount">
+            <summary>
+            今日活跃用户数量
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.Logs">
+            <summary>
+            访问日志
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ErrorCount">
+            <summary>
+            今日异常数量
+            </summary>
+        </member>
+        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveCount">
+            <summary>
+            本月活跃用户
+            </summary>
         </member>
         <member name="T:Xu.WebApi.Controllers.PublicController">
             <summary>
@@ -404,14 +436,29 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.GetFrameFiles">
             <summary>
-            获取 整体框架 文件
+            获取 整体框架 文件(主库)(一般可用第一次生成)
             </summary>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.GetFrameFilesByTableNames(System.String[],System.String)">
             <summary>
-            根据数据库表名 生成整体框架
-            仅针对通过CodeFirst生成表的情况
+            获取仓储层和服务层(需指定表名和数据库)
+            </summary>
+            <param name="ConnID">数据库链接名称</param>
+            <param name="tableNames">需要生成的表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.DbFirstController.GetFrameFilesByTableNamesForEntity(System.String[],System.String)">
+            <summary>
+            获取实体(需指定表名和数据库)
+            </summary>
+            <param name="ConnID">数据库链接名称</param>
+            <param name="tableNames">需要生成的表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.DbFirstController.GetFrameFilesByTableNamesForController(System.String[],System.String)">
+            <summary>
+            获取控制器(需指定表名和数据库)
             </summary>
             <param name="ConnID">数据库链接名称</param>
             <param name="tableNames">需要生成的表名</param>
@@ -419,7 +466,7 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.DbFirstController.GetAllFrameFilesByTableNames(System.String[],System.String)">
             <summary>
-            DbFrist 根据数据库表名 生成整体框架,包含Model层
+            DbFrist 根据数据库表名 生成整体框架,包含Model层(一般可用第一次生成)
             </summary>
             <param name="ConnID">数据库链接名称</param>
             <param name="tableNames">需要生成的表名</param>
@@ -488,7 +535,7 @@
             登录管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(AutoMapper.IMapper,Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.Extensions.PermissionRequirement)">
+        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(AutoMapper.IMapper,Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.Extensions.PermissionRequirement,Xu.IServices.ISystemSvc)">
             <summary>
             构造函数注入
             </summary>
@@ -555,6 +602,13 @@
             根据菜单Ids集合获取菜单数据（树状）
             </summary>
             <param name="ids">菜单id或guid集合（可空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetMenuBySystemId(System.String)">
+            <summary>
+            根据系统Id或guid 获取菜单数据（树状）
+            </summary>
+            <param name="id">系统Id或guid（非空）</param>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.PostMenu(Xu.Model.Models.Menu)">
@@ -824,7 +878,7 @@
             <param name="ClaimType">声明类型，默认 jti </param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.ValueController.FluentVaTest(Xu.Core.UserRegisterVo)">
+        <member name="M:Xu.WebApi.Controllers.ValueController.FluentVaTest(Xu.WebApi.UserRegisterVo)">
             <summary>
             测试Fulent做参数校验
             </summary>
@@ -958,24 +1012,6 @@
             <param name="type">数据类型</param>
             <param name="obj">对象</param>
             <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Program.Main(System.String[])">
-            <summary>
-            Main方法负责初始化Web主机，调用Startup和执行应用程序
-            </summary>
-            <param name="args"></param>
-        </member>
-        <member name="M:Xu.WebApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            应用程序运行时将服务添加到容器中
-            </summary>
-            <param name="services"></param>
-            <remarks>
-            权重：AddSingleton→AddTransient→AddScoped
-            AddSingleton的生命周期：项目启动-项目关闭 相当于静态类  只会有一个
-            AddScoped   的生命周期：请求开始-请求结束  在这次请求中获取的对象都是同一个
-            AddTransient的生命周期：请求获取-（GC回收-主动释放） 每一次获取的对象都不是同一个
-            </remarks>
         </member>
         <member name="T:Xu.Controllers.WeChatController">
             <summary>

@@ -5,7 +5,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 部门管理
     /// </summary>
-    [SugarTable("Dept", "WMBLOG_MYSQL")]
+    [SugarTable("Dept", "WMBLOG_MYSQL_1")]
     public class Dept : ModelBase
     {
         /// <summary>
@@ -27,10 +27,10 @@ namespace Xu.Model.Models
         public string DeptManager { get; set; }
 
         /// <summary>
-        /// 上级部门
+        /// 上级部门id或guid
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "上级部门Id")]
-        public int? ParentId { get; set; }
+        [SugarColumn(IsNullable = true, ColumnDescription = "上级部门id或guid")]
+        public string ParentId { get; set; }
 
         /// <summary>
         /// 是否禁用

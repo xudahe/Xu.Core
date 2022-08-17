@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Builder;
 using System;
 using Xu.Common;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// ip 限流
     /// </summary>
-    public static class IpLimitMildd
+    public static class IpLimitMiddle
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(IpLimitMildd));
+        private static readonly ILog log = LogManager.GetLogger(typeof(IpLimitMiddle));
 
-        public static void UseIpLimitMildd(this IApplicationBuilder app)
+        public static void UseIpLimitMiddle(this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 

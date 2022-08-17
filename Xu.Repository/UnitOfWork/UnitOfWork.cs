@@ -10,7 +10,7 @@ namespace Xu.Repository.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ISqlSugarClient _sqlSugarClient;
-        
+
         //防止同一范围内，异步执行事务误触非当前线程事务
         private int _tranCount { get; set; }
 
@@ -24,10 +24,10 @@ namespace Xu.Repository.UnitOfWork
         /// 获取DB，保证唯一性
         /// </summary>
         /// <returns></returns>
-        public SqlSugarClient GetDbClient()
+        public SqlSugarScope GetDbClient()
         {
             // 必须要as，后边会用到切换数据库操作
-            return _sqlSugarClient as SqlSugarClient;
+            return _sqlSugarClient as SqlSugarScope;
         }
 
         /// <summary>
@@ -35,12 +35,11 @@ namespace Xu.Repository.UnitOfWork
         /// </summary>
         public void BeginTran()
         {
-             lock (this)
+            lock (this)
             {
                 _tranCount++;
                 GetDbClient().BeginTran();
             }
-        
         }
 
         /// <summary>

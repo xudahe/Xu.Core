@@ -6,16 +6,16 @@ using System.Linq;
 using Xu.Common;
 using static Xu.Extensions.CustomApiVersion;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// Swagger中间件
     /// </summary>
-    public static class SwaggerMildd
+    public static class SwaggerMiddle
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(SwaggerMildd));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SwaggerMiddle));
 
-        public static void UseSwaggerMildd(this IApplicationBuilder app, Func<Stream> streamHtml)
+        public static void UseSwaggerMiddle(this IApplicationBuilder app, Func<Stream> streamHtml)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 
@@ -40,7 +40,7 @@ namespace Xu.Extensions
 
                 if (Permissions.IsUseIds4)
                 {
-                    c.OAuthClientId("blogadminjs"); 
+                    c.OAuthClientId("blogadminjs");
                 }
 
                 c.DefaultModelsExpandDepth(-1); // 不显示models

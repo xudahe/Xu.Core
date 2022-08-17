@@ -13,7 +13,7 @@ namespace Xu.Repository
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : class, new()
     {
-        private readonly SqlSugarClient _dbBase;
+        private readonly SqlSugarScope _dbBase;
 
         private ISqlSugarClient _db
         {

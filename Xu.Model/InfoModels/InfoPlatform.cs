@@ -1,4 +1,6 @@
-﻿namespace Xu.Model
+﻿using System.Collections.Generic;
+
+namespace Xu.Model
 {
     public class InfoPlatform
     {
@@ -16,5 +18,7 @@
         /// 平台名称
         /// </summary>
         public string PlatformName { get; set; }
+
+        public IList<InfoSystem> InfoSystemList { get; set; }
     }
 }

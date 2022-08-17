@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xu.Common;
+using Xu.IServices;
+using Xu.Services;
 
 namespace Xu.Extensions
 {

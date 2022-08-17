@@ -4,17 +4,17 @@ using System;
 using System.Threading.Tasks;
 using Xu.Common;
 
-namespace Xu.Extensions
+namespace Xu.Extensions.Middlewares
 {
     /// <summary>
     /// 中间件
     /// 记录IP请求数据
     /// </summary>
-    public class IPLogMildd
+    public class IPLogMiddle
     {
         private readonly RequestDelegate _next;
 
-        public IPLogMildd(RequestDelegate next)
+        public IPLogMiddle(RequestDelegate next)
         {
             _next = next;
         }
