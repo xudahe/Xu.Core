@@ -8,8 +8,8 @@
         [EnumText("一般")]
         一般 = 1,
 
-        [EnumText("急")]
-        急 = 2,
+        [EnumText("紧急")]
+        紧急 = 2,
 
         [EnumText("特急")]
         特急 = 3,

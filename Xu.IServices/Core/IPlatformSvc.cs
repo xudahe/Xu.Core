@@ -7,7 +7,7 @@ using Xu.Model.Models;
 
 namespace Xu.IServices
 {
-         public interface IPlatformSvc : IBaseSvc<Platform>
+    public interface IPlatformSvc : IBaseSvc<Platform>
     {
         /// <summary>
         /// 根据平台id或guid集合 过滤数据

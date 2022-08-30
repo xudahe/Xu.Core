@@ -19,7 +19,6 @@ namespace Xu.Model
         /// </summary>
         public string SystemName { get; set; }
 
-
-        public IList<InfoMenu> InfoMenuList { get; set; }
+        public IList<InfoMenu> InfoMenuList { get; set; } = new List<InfoMenu>();
     }
 }

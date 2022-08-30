@@ -608,7 +608,13 @@
             <summary>
             根据系统Id或guid 获取菜单数据（树状）
             </summary>
-            <param name="id">系统Id或guid（非空）</param>
+            <param name="systemId">系统Id或guid（非空）</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.MenuController.GetParentMenu">
+            <summary>
+            获取一级菜单
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Xu.WebApi.Controllers.MenuController.PostMenu(Xu.Model.Models.Menu)">
@@ -696,6 +702,16 @@
             角色管理
             </summary>
         </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.#ctor(AutoMapper.IMapper,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.IServices.ISystemSvc,Xu.IServices.IPlatformSvc)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="mapper"></param>
+            <param name="roleSvc"></param>
+            <param name="menuSvc"></param>
+            <param name="systemSvc"></param>
+            <param name="platformSvc"></param>
+        </member>
         <member name="M:Xu.WebApi.Controllers.RoleController.GetRole(System.String,System.String)">
             <summary>
             获取角色数据
@@ -740,6 +756,16 @@
             </summary>
             <param name="id">角色id（非空）</param>
             <param name="falg">true(禁用),false(启用)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.RoleController.RoleByMenuId(System.String,System.String,System.String,System.String)">
+            <summary>
+            角色-->平台-->菜单
+            </summary>
+            <param name="roleId">角色id或guid</param>
+            <param name="platId">平台id或guid</param>
+            <param name="systemId">系统id或guid</param>
+            <param name="menuIds">菜单id或guid，小写逗号隔开","</param>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.SystemController">

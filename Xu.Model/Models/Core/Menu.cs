@@ -10,9 +10,9 @@ namespace Xu.Model.Models
     public class Menu : ModelBase
     {
         /// <summary>
-        /// 关联的系统Id或guid
+        /// 系统Id
         /// </summary>
-        [SugarColumn(ColumnDescription = "关联的系统Id或guid")]
+        [SugarColumn(ColumnDescription = "系统Id")]
         public string SystemId { get; set; }
 
         /// <summary>

@@ -7,10 +7,10 @@ using Xu.Model.Models;
 
 namespace Xu.IServices
 {
-         public interface ISystemSvc : IBaseSvc<Systems>
+    public interface ISystemSvc : IBaseSvc<Systems>
     {
         /// <summary>
-        /// 根据平台id或guid集合 过滤数据
+        /// 根据系统id或guid集合 过滤数据
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="list"></param>

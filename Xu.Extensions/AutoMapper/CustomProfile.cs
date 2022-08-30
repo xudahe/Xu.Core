@@ -18,6 +18,8 @@ namespace Xu.Extensions
         {
             CreateMap<Menu, InfoMenu>(); //第一个参数是原对象，第二个是目的对象
             CreateMap<Role, InfoRole>();
+            CreateMap<Systems, InfoSystem>();
+            CreateMap<Platform, InfoPlatform>();
 
             CreateMap<User, LoginViewModel>()
                 .ForMember(d => d.RoleInfoList, s => s.Ignore())

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Xu.IServices;
 using Xu.Common;
 using Xu.Model.Models;
-using Xu.Model;
 
 /// <summary>
 /// 本月活跃用户（使用任务调度，1分钟统计一次）

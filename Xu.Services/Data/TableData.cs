@@ -14,17 +14,17 @@ namespace Xu.Services
         private readonly IDeptSvc _deptSvc;
         private readonly IRoleSvc _roleSvc;
         private readonly IMenuSvc _menuSvc;
-        private readonly ISystemSvc _systemsSvc;
+        private readonly ISystemSvc _systemSvc;
         private readonly IPlatformSvc _platformSvc;
         private readonly ITasksQzSvc _tasksQzSvc;
 
-        public TableData(IUserSvc userSvc, IDeptSvc deptSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, ISystemSvc systemsSvc, IPlatformSvc platformSvc, ITasksQzSvc tasksQzSvc)
+        public TableData(IUserSvc userSvc, IDeptSvc deptSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, ISystemSvc systemSvc, IPlatformSvc platformSvc, ITasksQzSvc tasksQzSvc)
         {
             _userSvc = userSvc;
             _deptSvc = deptSvc;
             _roleSvc = roleSvc;
             _menuSvc = menuSvc;
-            _systemsSvc = systemsSvc;
+            _systemSvc = systemSvc;
             _platformSvc = platformSvc;
             _tasksQzSvc = tasksQzSvc;
         }
@@ -63,7 +63,7 @@ namespace Xu.Services
                     break;
 
                 case "systems":
-                    dic.Add(typeof(Systems).Name, JsonHelper.JSON(await _systemsSvc.Query()));
+                    dic.Add(typeof(Systems).Name, JsonHelper.JSON(await _systemSvc.Query()));
                     break;
 
                 case "platform":
@@ -75,7 +75,7 @@ namespace Xu.Services
                     dic.Add(typeof(Dept).Name, JsonHelper.JSON(await _deptSvc.Query()));
                     dic.Add(typeof(Role).Name, JsonHelper.JSON(await _roleSvc.Query()));
                     dic.Add(typeof(Menu).Name, JsonHelper.JSON(await _menuSvc.Query()));
-                    dic.Add(typeof(Systems).Name, JsonHelper.JSON(await _systemsSvc.Query()));
+                    dic.Add(typeof(Systems).Name, JsonHelper.JSON(await _systemSvc.Query()));
                     dic.Add(typeof(Platform).Name, JsonHelper.JSON(await _platformSvc.Query()));
                     dic.Add(typeof(TasksQz).Name, JsonHelper.JSON(await _tasksQzSvc.Query()));
                     break;

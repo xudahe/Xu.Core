@@ -19,6 +19,6 @@ namespace Xu.Model
         /// </summary>
         public string PlatformName { get; set; }
 
-        public IList<InfoSystem> InfoSystemList { get; set; }
+        public IList<InfoSystem> InfoSystemList { get; set; } = new List<InfoSystem>();
     }
 }

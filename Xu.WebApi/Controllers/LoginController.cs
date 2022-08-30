@@ -86,18 +86,6 @@ namespace Xu.WebApi.Controllers
                     new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_requirement.Expiration.TotalSeconds).ToString()) };
                 claims.AddRange(userRoles.Select(s => new Claim(ClaimTypes.Role, s.RoleName)));
 
-                //var data = await _roleModulePermissionServices.RoleModuleMaps();
-                //var list = (from item in data
-                //            where item.IsDeleted == false
-                //            orderby item.Id
-                //            select new PermissionItem
-                //            {
-                //                Url = item.Module?.LinkUrl,
-                //                Role = item.Role?.Name,
-                //            }).ToList();
-
-                //_requirement.Permissions = list;
-
                 // ids4和jwt切换
                 // jwt
                 if (!Permissions.IsUseIds4)
@@ -110,10 +98,6 @@ namespace Xu.WebApi.Controllers
                                                     Role = item?.RoleName
                                                 }).ToList();
                 }
-
-                //用户标识
-                // var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
-                // identity.AddClaims(claims);
 
                 var token = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
                 return new JsonResult(token);
@@ -233,6 +217,8 @@ namespace Xu.WebApi.Controllers
                             var roleList = await _roleSvc.GetDataByids(model.RoleIds);
                             loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleViewModel>>(roleList);
 
+                            //需要修改数据结构，通过InfoList来获取所关联平台菜单等数据
+
                             var menuIds = roleList.Select(s => s.MenuIds).ToList().JoinToString(",");
 
                             var menuData = await _menuSvc.Query();
@@ -262,25 +248,25 @@ namespace Xu.WebApi.Controllers
                                 }
 
                                 //获取一级菜单
-                                var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).OrderBy(s => s.Index).ToList();
+                                var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).ToList();
 
                                 //获取二级菜单
                                 for (int i = 0; i < menuList1.Count; i++)
                                 {
-                                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).OrderBy(s => s.Index).ToList();
-                                    //var menuList2 = menuList.Where(s => s.ParentId.ToInt32() == menuList1[i].Id).OrderBy(s => s.Index).ToList();
+                                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).ToList();
+                                    //var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id.ToString()).ToList();
 
                                     //获取三级菜单
                                     for (int j = 0; j < menuList2.Count; j++)
                                     {
-                                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).OrderBy(s => s.Index).ToList();
-                                        //menuList2[j].Children = menuList.Where(s => s.ParentId.ToInt32() == menuList2[j].Id).OrderBy(s => s.Index).ToList();
+                                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).ToList();
+                                        //menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id.ToString()).ToList();
                                     }
 
                                     menuList1[i].Children = menuList2;
                                 }
 
-                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuViewModel>>(menuList1);
+                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuViewModel>>(menuList1.OrderBy(s => s.Index).ToList());
 
                                 data.Success = true;
                                 data.Message = "登陆成功";
@@ -302,6 +288,7 @@ namespace Xu.WebApi.Controllers
                     }
                 }
             }
+
             return data;
         }
     }

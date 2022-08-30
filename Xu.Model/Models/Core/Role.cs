@@ -132,155 +132,155 @@ namespace Xu.Model.Models
 
         #region 绑定平台
 
-        //private string _infoItem;
+        private string _infoItem;
 
-        //[SugarColumn(IsIgnore = true)]
-        //private IList<InfoPlatform> _infoList { get; set; }
+        [SugarColumn(IsIgnore = true)]
+        private IList<InfoPlatform> _infoList { get; set; }
 
-        ///// <summary>
-        ///// 关联平台List
-        ///// </summary>
-        //[SugarColumn(IsIgnore = true)]
-        //public IList<InfoPlatform> InfoList
-        //{
-        //    get { return _infoList; }
-        //    set
-        //    {
-        //        _infoList = value;
-        //        if (_infoList != null && _infoList.Count > 0)
-        //            _infoItem = ToItemInfo_Xml();
-        //        else
-        //            _infoItem = null;
-        //    }
-        //}
+        /// <summary>
+        /// 关联平台List
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public IList<InfoPlatform> InfoList
+        {
+            get { return _infoList; }
+            set
+            {
+                _infoList = value;
+                if (_infoList != null && _infoList.Count > 0)
+                    _infoItem = ToItemInfo_Xml();
+                else
+                    _infoItem = null;
+            }
+        }
 
-        ///// <summary>
-        ///// 关联平台--系统--菜单 Xml
-        ///// </summary>
-        //[SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联平台--系统--菜单 Xml")]
-        //public string InfoXml
-        //{
-        //    get { return _infoItem; }
-        //    set
-        //    {
-        //        _infoItem = value;
-        //        if (!string.IsNullOrEmpty(_infoItem))
-        //            _infoList = FromItemInfo_Xml();
-        //    }
-        //}
+        /// <summary>
+        /// 关联平台--系统--菜单 Xml
+        /// </summary>
+        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联平台--系统--菜单 Xml")]
+        public string InfoXml
+        {
+            get { return _infoItem; }
+            set
+            {
+                _infoItem = value;
+                if (!string.IsNullOrEmpty(_infoItem))
+                    _infoList = FromItemInfo_Xml();
+            }
+        }
 
-        //public string ToItemInfo_Xml()
-        //{
-        //    XElement xElement = new XElement("InfoItem");
-        //    xElement.SetAttributeValue("Version", "1");
+        public string ToItemInfo_Xml()
+        {
+            XElement xElement = new XElement("InfoItem");
+            xElement.SetAttributeValue("Version", "1");
 
-        //    //平台
-        //    if (_infoList.Count > 0)
-        //    {
-        //        foreach (var item in _infoList)
-        //        {
-        //            XElement xItem = new XElement("Platform");
-        //            xItem.SetAttributeValue("Id", item.Id);
-        //            xItem.SetAttributeValue("Guid", item.Guid);
-        //            xItem.SetAttributeValue("PlatformName", item.PlatformName);
+            //平台
+            if (_infoList.Count > 0)
+            {
+                foreach (var item in _infoList)
+                {
+                    XElement xItem = new XElement("Platform");
+                    xItem.SetAttributeValue("Id", item.Id);
+                    xItem.SetAttributeValue("Guid", item.Guid);
+                    xItem.SetAttributeValue("PlatformName", item.PlatformName);
 
-        //            //系统
-        //            if (item.InfoSystemList.Count > 0)
-        //            {
-        //                foreach (var item2 in item.InfoSystemList)
-        //                {
-        //                    XElement xItem2 = new XElement("System");
-        //                    xItem2.SetAttributeValue("Id", item2.Id);
-        //                    xItem2.SetAttributeValue("Guid", item2.Guid);
-        //                    xItem2.SetAttributeValue("SystemName", item2.SystemName);
+                    //系统
+                    if (item.InfoSystemList.Count > 0)
+                    {
+                        foreach (var item2 in item.InfoSystemList)
+                        {
+                            XElement xItem2 = new XElement("System");
+                            xItem2.SetAttributeValue("Id", item2.Id);
+                            xItem2.SetAttributeValue("Guid", item2.Guid);
+                            xItem2.SetAttributeValue("SystemName", item2.SystemName);
 
-        //                    //菜单
-        //                    if (item2.InfoMenuList.Count > 0)
-        //                    {
-        //                        foreach (var item3 in item2.InfoMenuList)
-        //                        {
-        //                            XElement xItem3 = new XElement("Menu");
-        //                            xItem3.SetAttributeValue("Id", item3.Id);
-        //                            xItem3.SetAttributeValue("Guid", item3.Guid);
-        //                            xItem3.SetAttributeValue("MenuName", item3.MenuName);
-        //                            xItem2.Add(xItem3);
-        //                        }
-        //                    }
+                            //菜单
+                            if (item2.InfoMenuList.Count > 0)
+                            {
+                                foreach (var item3 in item2.InfoMenuList)
+                                {
+                                    XElement xItem3 = new XElement("Menu");
+                                    xItem3.SetAttributeValue("Id", item3.Id);
+                                    xItem3.SetAttributeValue("Guid", item3.Guid);
+                                    xItem3.SetAttributeValue("MenuName", item3.MenuName);
+                                    xItem2.Add(xItem3);
+                                }
+                            }
 
-        //                    xItem.Add(xItem2);
-        //                }
-        //            }
+                            xItem.Add(xItem2);
+                        }
+                    }
 
-        //            xElement.Add(xItem);
-        //        }
-        //        return xElement.ToString();
-        //    }
-        //    return null;
-        //}
+                    xElement.Add(xItem);
+                }
+                return xElement.ToString();
+            }
+            return null;
+        }
 
-        //public IList<InfoPlatform> FromItemInfo_Xml()
-        //{
-        //    IList<InfoPlatform> list = new List<InfoPlatform>();
-        //    XElement x = XElement.Parse(_infoItem);
-        //    if (x.Name != "InfoItem")
-        //        return list;
-        //    XAttribute ver = x.Attribute("Version");
-        //    if (ver == null || ver.Value != "1")
-        //        return list;
+        public IList<InfoPlatform> FromItemInfo_Xml()
+        {
+            IList<InfoPlatform> list = new List<InfoPlatform>();
+            XElement x = XElement.Parse(_infoItem);
+            if (x.Name != "InfoItem")
+                return list;
+            XAttribute ver = x.Attribute("Version");
+            if (ver == null || ver.Value != "1")
+                return list;
 
-        //    //平台
-        //    IList<XElement> xitems = x.Descendants("Platform").ToList();
-        //    if (xitems.Count > 0)
-        //    {
-        //        foreach (var xElement in xitems)
-        //        {
-        //            InfoPlatform item = new InfoPlatform
-        //            {
-        //                Id = xElement.Attribute("Id").Value.ToInt32Req(),
-        //                Guid = xElement.Attribute("Guid").Value,
-        //                PlatformName = xElement.Attribute("PlatformName").Value,
-        //            };
+            //平台
+            IList<XElement> xitems = x.Descendants("Platform").ToList();
+            if (xitems.Count > 0)
+            {
+                foreach (var xElement in xitems)
+                {
+                    InfoPlatform item = new InfoPlatform
+                    {
+                        Id = xElement.Attribute("Id").Value.ToInt32Req(),
+                        Guid = xElement.Attribute("Guid").Value,
+                        PlatformName = xElement.Attribute("PlatformName").Value,
+                    };
 
-        //            //系统
-        //            IList<XElement> xitems2 = xElement.Descendants("System").ToList();
-        //            if (xitems2.Count > 0)
-        //            {
-        //                foreach (var xElement2 in xitems2)
-        //                {
-        //                    InfoSystem item2 = new InfoSystem
-        //                    {
-        //                        Id = xElement2.Attribute("Id").Value.ToInt32Req(),
-        //                        Guid = xElement2.Attribute("Guid").Value,
-        //                        SystemName = xElement2.Attribute("SystemName").Value,
-        //                    };
+                    //系统
+                    IList<XElement> xitems2 = xElement.Descendants("System").ToList();
+                    if (xitems2.Count > 0)
+                    {
+                        foreach (var xElement2 in xitems2)
+                        {
+                            InfoSystem item2 = new InfoSystem
+                            {
+                                Id = xElement2.Attribute("Id").Value.ToInt32Req(),
+                                Guid = xElement2.Attribute("Guid").Value,
+                                SystemName = xElement2.Attribute("SystemName").Value,
+                            };
 
-        //                    //菜单
-        //                    IList<XElement> xitems3 = xElement2.Descendants("Menu").ToList();
-        //                    if (xitems3.Count > 0)
-        //                    {
-        //                        foreach (var xElement3 in xitems3)
-        //                        {
-        //                            InfoMenu item3 = new InfoMenu
-        //                            {
-        //                                Id = xElement3.Attribute("Id").Value.ToInt32Req(),
-        //                                Guid = xElement3.Attribute("Guid").Value,
-        //                                MenuName = xElement3.Attribute("MenuName").Value,
-        //                            };
+                            //菜单
+                            IList<XElement> xitems3 = xElement2.Descendants("Menu").ToList();
+                            if (xitems3.Count > 0)
+                            {
+                                foreach (var xElement3 in xitems3)
+                                {
+                                    InfoMenu item3 = new InfoMenu
+                                    {
+                                        Id = xElement3.Attribute("Id").Value.ToInt32Req(),
+                                        Guid = xElement3.Attribute("Guid").Value,
+                                        MenuName = xElement3.Attribute("MenuName").Value,
+                                    };
 
-        //                            item2.InfoMenuList.Add(item3);
-        //                        }
-        //                    }
+                                    item2.InfoMenuList.Add(item3);
+                                }
+                            }
 
-        //                    item.InfoSystemList.Add(item2);
-        //                }
-        //            }
+                            item.InfoSystemList.Add(item2);
+                        }
+                    }
 
-        //            list.Add(item);
-        //        }
-        //        return list;
-        //    }
-        //    return null;
-        //}
+                    list.Add(item);
+                }
+                return list;
+            }
+            return null;
+        }
 
         #endregion 绑定平台
     }

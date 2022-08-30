@@ -45,7 +45,7 @@ namespace Xu.Extensions.Middlewares
 
                 c.DefaultModelsExpandDepth(-1); // 不显示models
 
-                c.RoutePrefix = "";//路径配置，设置后直接输入IP就可以进入接口文档
+                c.RoutePrefix = "";//路径配置为空，设置后直接输入IP就可以进入接口文档
             });
         }
     }

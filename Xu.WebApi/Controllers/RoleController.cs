@@ -24,12 +24,24 @@ namespace Xu.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly IRoleSvc _roleSvc;
         private readonly IMenuSvc _menuSvc;
+        private readonly ISystemSvc _systemSvc;
+        private readonly IPlatformSvc _platformSvc;
 
-        public RoleController(IMapper mapper, IRoleSvc roleSvc, IMenuSvc menuSvc)
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="roleSvc"></param>
+        /// <param name="menuSvc"></param>
+        /// <param name="systemSvc"></param>
+        /// <param name="platformSvc"></param>
+        public RoleController(IMapper mapper, IRoleSvc roleSvc, IMenuSvc menuSvc, ISystemSvc systemSvc, IPlatformSvc platformSvc)
         {
             _mapper = mapper;
             _roleSvc = roleSvc;
             _menuSvc = menuSvc;
+            _systemSvc = systemSvc;
+            _platformSvc = platformSvc;
         }
 
         /// <summary>
@@ -175,6 +187,95 @@ namespace Xu.WebApi.Controllers
             }
 
             return data;
+        }
+
+        /// <summary>
+        /// 角色-->平台-->菜单
+        /// </summary>
+        /// <param name="roleId">角色id或guid</param>
+        /// <param name="platId">平台id或guid</param>
+        /// <param name="systemId">系统id或guid</param>
+        /// <param name="menuIds">菜单id或guid，小写逗号隔开","</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<object> RoleByMenuId(string roleId, string platId, string systemId, string menuIds)
+        {
+            try
+            {
+                var roleModal = (await _roleSvc.GetDataByids(roleId.ToString())).First();
+
+                var platModal = (await _platformSvc.GetDataByids(platId.ToString())).First();
+
+                var systemModal = await _systemSvc.GetDataByids(systemId.ToString());
+
+                var menuModal = await _menuSvc.GetDataByids(menuIds);
+
+                InfoPlatform infoPlatform = _mapper.Map<Platform, InfoPlatform>(platModal);
+                InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal.First());
+                IList<InfoMenu> infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
+
+                IList<InfoPlatform> defaultList = new List<InfoPlatform>();
+
+                var platFalg = false;
+
+                if (roleModal.InfoList != null && roleModal.InfoList.Count > 0)
+                {
+                    defaultList = roleModal.InfoList;
+
+                    for (int i = 0; i < defaultList.Count; i++)
+                    {
+                        //是否存在该平台
+                        if (defaultList[i].Guid == infoPlatform.Guid)
+                        {
+                            platFalg = true;
+
+                            var systemFlag = false;
+
+                            if (defaultList[i].InfoSystemList != null && defaultList[i].InfoSystemList.Count > 0)
+                            {
+                                for (int j = 0; j < defaultList[i].InfoSystemList.Count; j++)
+                                {
+                                    //是否存在该系统
+                                    if (defaultList[i].InfoSystemList[j].Guid == infoSystem.Guid)
+                                    {
+                                        systemFlag = true;
+                                        defaultList[i].InfoSystemList[j].InfoMenuList = infoMenuList;
+                                    }
+                                }
+                            }
+
+                            if (!systemFlag)
+                            {
+                                infoSystem.InfoMenuList = infoMenuList;
+                                defaultList[i].InfoSystemList.Add(infoSystem);
+                            }
+                        }
+                    }
+                }
+                if (!platFalg)
+                {
+                    infoSystem.InfoMenuList = infoMenuList;
+                    infoPlatform.InfoSystemList.Add(infoSystem);
+                    defaultList.Add(infoPlatform);
+                }
+
+                roleModal.InfoList = defaultList;
+                await _roleSvc.Update(roleModal);
+
+                return new MessageModel<string>()
+                {
+                    Success = true,
+                    Message = "更新成功"
+                };
+            }
+            catch (Exception)
+            {
+                return new MessageModel<string>()
+                {
+                    Success = false,
+                    Message = "更新失败"
+                };
+            }
         }
     }
 }
