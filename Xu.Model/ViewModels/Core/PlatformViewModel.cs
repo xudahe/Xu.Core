@@ -32,6 +32,6 @@ namespace Xu.Model.ViewModels
         /// <summary>
         /// 所关联的菜单
         /// </summary>
-        public IList<MenuViewModel> MenuInfoList { get; set; }
+        public IList<InfoSystem> MenuInfoList { get; set; }
     }
 }

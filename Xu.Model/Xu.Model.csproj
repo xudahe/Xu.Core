@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="InfoModels\InfoPlatform.cs~RF42acc86.TMP" />
+    <None Remove="XmlModels\InfoPlatform.cs~RF42acc86.TMP" />
   </ItemGroup>
 
   <ItemGroup>

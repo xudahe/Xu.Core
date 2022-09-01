@@ -206,6 +206,36 @@ namespace Xu.Model
 
                     #endregion TasksQz
 
+
+
+                    #region Platform
+
+                    if (!await myContext.Db.Queryable<Platform>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<Platform>().InsertRange(JsonHelper.ParseFormByJson<List<Platform>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "Platform"), Encoding.UTF8)));
+                        Console.WriteLine("Table:Platform created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:Platform already exists...");
+                    }
+
+                    #endregion Platform
+
+                    #region Systems
+
+                    if (!await myContext.Db.Queryable<Systems>().AnyAsync())
+                    {
+                        myContext.GetEntityDB<Systems>().InsertRange(JsonHelper.ParseFormByJson<List<Systems>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "Systems"), Encoding.UTF8)));
+                        Console.WriteLine("Table:Systems created success!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Table:Systems already exists...");
+                    }
+
+                    #endregion Systems
+
                     ConsoleHelper.WriteSuccessLine($"Done seeding database!");
                 }
 

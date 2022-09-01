@@ -86,66 +86,6 @@
             用户表
             </summary>
         </member>
-        <member name="P:Xu.Model.InfoMenu.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoMenu.Guid">
-            <summary>
-            Guid
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoMenu.MenuName">
-            <summary>
-            菜单名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoPlatform.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoPlatform.Guid">
-            <summary>
-            Guid
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoPlatform.PlatformName">
-            <summary>
-            平台名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoRole.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoRole.Guid">
-            <summary>
-            Guid
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoRole.RoleName">
-            <summary>
-            角色名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoSystem.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoSystem.Guid">
-            <summary>
-            Guid
-            </summary>
-        </member>
-        <member name="P:Xu.Model.InfoSystem.SystemName">
-            <summary>
-            系统名称
-            </summary>
-        </member>
         <member name="T:Xu.Model.AccessTrendLog">
             <summary>
             用户访问趋势日志
@@ -413,7 +353,7 @@
         </member>
         <member name="P:Xu.Model.Models.Role.MenuIds">
             <summary>
-            角色关联菜单的id或guid集合，不能同时包含两者
+            角色关联菜单的id或guid集合，不能同时包含两者（旧：是角色绑定菜单）
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.MenuInfoList">
@@ -1675,6 +1615,11 @@
             备注
             </summary>
         </member>
+        <member name="T:Xu.Model.ViewModels.LoginViewModel">
+            <summary>
+            登录接口返回的用户信息
+            </summary>
+        </member>
         <member name="P:Xu.Model.ViewModels.LoginViewModel.LoginName">
             <summary>
             登录账号(用户名)
@@ -1713,6 +1658,171 @@
         <member name="P:Xu.Model.ViewModels.LoginViewModel.Enabled">
             <summary>
             是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.LoginViewModel.PlatformInfoList">
+            <summary>
+            返回所关联数据： 平台-->系统-->菜单
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModels.RoleModel">
+            <summary>
+            返回的角色信息
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.RoleModel.RoleCode">
+            <summary>
+            角色简码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.RoleModel.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.RoleModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.RoleModel.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModels.PlatformModel">
+            <summary>
+            返回的平台信息
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformModel.PlatformCode">
+            <summary>
+            平台简码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformModel.PlatformName">
+            <summary>
+            平台名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformModel.Index">
+            <summary>
+            加载序号
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformModel.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.PlatformModel.MenuInfoList">
+            <summary>
+            所关联的菜单
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModels.SystemModel">
+            <summary>
+            平台所关联的系统信息
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.SystemModel.SystemCode">
+            <summary>
+            系统简码
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.SystemModel.SystemName">
+            <summary>
+            系统名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.SystemModel.Index">
+            <summary>
+            加载序号
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.SystemModel.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.SystemModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.SystemModel.MenuInfoList">
+            <summary>
+            所关联的菜单
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModels.MenuModel">
+            <summary>
+            系统所关联的菜单信息
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.SystemId">
+            <summary>
+            所关联的系统Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.SystemName">
+            <summary>
+            系统名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.ClassName">
+            <summary>
+            菜单类名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.MenuName">
+            <summary>
+            菜单名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.Icon">
+            <summary>
+            菜单图标
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.RouterUrl">
+            <summary>
+            菜单路由
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.ParentId">
+            <summary>
+            父级菜单Id或guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.ParentName">
+            <summary>
+            父级菜单名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.LoadWay">
+            <summary>
+            加载方式
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.Index">
+            <summary>
+            加载序号
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.Enabled">
+            <summary>
+            是否禁用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.MenuModel.Remark">
+            <summary>
+            备注
             </summary>
         </member>
         <member name="P:Xu.Model.ViewModels.MenuViewModel.SystemName">
@@ -2775,6 +2885,66 @@
             </summary>
             <param name="token">The token.</param>
             <returns>Dictionary&lt;System.String, System.Object&gt;.</returns>
+        </member>
+        <member name="P:Xu.Model.InfoMenu.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoMenu.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoMenu.MenuName">
+            <summary>
+            菜单名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoPlatform.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoPlatform.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoPlatform.PlatformName">
+            <summary>
+            平台名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoRole.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoRole.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoRole.RoleName">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoSystem.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoSystem.Guid">
+            <summary>
+            Guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.InfoSystem.SystemName">
+            <summary>
+            系统名称
+            </summary>
         </member>
     </members>
 </doc>

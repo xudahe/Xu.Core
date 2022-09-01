@@ -215,7 +215,7 @@ namespace Xu.WebApi.Controllers
                         if (model.RoleIds != "")
                         {
                             var roleList = await _roleSvc.GetDataByids(model.RoleIds);
-                            loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleViewModel>>(roleList);
+                            loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleModel>>(roleList);
 
                             //需要修改数据结构，通过InfoList来获取所关联平台菜单等数据
 

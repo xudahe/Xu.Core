@@ -26,9 +26,17 @@ namespace Xu.Extensions
                 .ForMember(d => d.DeptInfoList, s => s.Ignore())
                 .ForMember(d => d.MenuInfoList, s => s.Ignore());
 
+            //接口返回映射类
             CreateMap<Role, RoleViewModel>();
             CreateMap<Menu, MenuViewModel>();
             CreateMap<Dept, DeptViewModel>();
+            CreateMap<Platform, PlatformViewModel>();
+
+            //登录接口成功后返回映射类
+            CreateMap<Role, RoleModel>();
+            CreateMap<Platform, PlatformModel>();
+            CreateMap<Systems, SystemModel>();
+            CreateMap<Menu, MenuModel>();
 
             //在使用当中，就这一句话完全搞定所有转换：XuViewModels models = IMapper.Map<XuViewModels>(XuArticle);
         }

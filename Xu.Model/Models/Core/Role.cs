@@ -37,12 +37,12 @@ namespace Xu.Model.Models
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// 角色关联菜单的id或guid集合，不能同时包含两者
+        /// 角色关联菜单的id或guid集合，不能同时包含两者（旧：是角色绑定菜单）
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "角色关联菜单的id或guid集合")]
         public string MenuIds { get; set; }
 
-        #region 绑定菜单
+        #region 绑定菜单--（旧：是角色绑定菜单，跟上面的MenuIds实体相互匹配）
 
         private string _menuInfoItem;
 
@@ -128,9 +128,9 @@ namespace Xu.Model.Models
             return null;
         }
 
-        #endregion 绑定菜单
+        #endregion 绑定菜单--（旧：是角色绑定菜单，跟上面的MenuIds实体相互匹配）
 
-        #region 绑定平台
+        #region 绑定平台--（新：平台-->系统-->菜单）
 
         private string _infoItem;
 
@@ -282,6 +282,6 @@ namespace Xu.Model.Models
             return null;
         }
 
-        #endregion 绑定平台
+        #endregion 绑定平台--（新：平台-->系统-->菜单）
     }
 }
