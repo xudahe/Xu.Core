@@ -86,69 +86,59 @@
             用户表
             </summary>
         </member>
-        <member name="T:Xu.Model.AccessTrendLog">
+        <member name="T:Xu.Model.Models.GblLogAudit">
             <summary>
-            用户访问趋势日志
+            定义对日志实例进行持久化支撑的实体
             </summary>
         </member>
-        <member name="P:Xu.Model.AccessTrendLog.User">
+        <member name="P:Xu.Model.Models.GblLogAudit.Id">
             <summary>
-            用户
+            ID
             </summary>
         </member>
-        <member name="P:Xu.Model.AccessTrendLog.Count">
+        <member name="P:Xu.Model.Models.GblLogAudit.TraceId">
             <summary>
-            次数
+            HttpContext.TraceIdentifier 事件链路ID（获取或设置一个唯一标识符，用于在跟踪日志中表示此请求。）
             </summary>
         </member>
-        <member name="T:Xu.Model.OperateLog">
+        <member name="P:Xu.Model.Models.GblLogAudit.Date">
             <summary>
-            日志记录
+            时间
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.IsDeleted">
-             <summary>
-            获取或设置是否禁用，逻辑上的删除，非物理删除
-             </summary>
-        </member>
-        <member name="P:Xu.Model.OperateLog.Area">
+        <member name="P:Xu.Model.Models.GblLogAudit.Thread">
             <summary>
-            区域名
+            线程
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.Controller">
+        <member name="P:Xu.Model.Models.GblLogAudit.Level">
             <summary>
-            区域控制器名
+            等级
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.Action">
+        <member name="P:Xu.Model.Models.GblLogAudit.Logger">
             <summary>
-            Action名称
+            记录器
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.IPAddress">
+        <member name="P:Xu.Model.Models.GblLogAudit.LogType">
             <summary>
-            IP地址
+            日志类型
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.Description">
+        <member name="P:Xu.Model.Models.GblLogAudit.DataType">
             <summary>
-            描述
+            数据类型
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.LogTime">
+        <member name="P:Xu.Model.Models.GblLogAudit.Message">
             <summary>
-            登录时间
+            错误信息
             </summary>
         </member>
-        <member name="P:Xu.Model.OperateLog.LoginName">
+        <member name="P:Xu.Model.Models.GblLogAudit.Exception">
             <summary>
-            登录名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.OperateLog.UserId">
-            <summary>
-            用户ID
+            异常
             </summary>
         </member>
         <member name="T:Xu.Model.Models.AccessTrendLog">
@@ -354,16 +344,6 @@
         <member name="P:Xu.Model.Models.Role.MenuIds">
             <summary>
             角色关联菜单的id或guid集合，不能同时包含两者（旧：是角色绑定菜单）
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Role.MenuInfoList">
-            <summary>
-            关联菜单List
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Role.MenuInfoXml">
-            <summary>
-            关联菜单Xml
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.InfoList">
@@ -1142,41 +1122,6 @@
             修改人
             </summary>
         </member>
-        <member name="P:Xu.Model.DesInsRelaConUnitService.DpsInfoList">
-            <summary>
-            成员集合
-            </summary>
-        </member>
-        <member name="P:Xu.Model.DesInsRelaConUnitService.DpsInfoXml">
-            <summary>
-            成员集合
-            </summary>
-        </member>
-        <member name="T:Xu.Model.DspInfoItem">
-            <summary>
-            临时实体
-            </summary>
-        </member>
-        <member name="P:Xu.Model.DspInfoItem.UserRole">
-            <summary>
-            角色
-            </summary>
-        </member>
-        <member name="P:Xu.Model.DspInfoItem.UserId">
-            <summary>
-            项目组成员
-            </summary>
-        </member>
-        <member name="P:Xu.Model.DspInfoItem.Department">
-            <summary>
-            部门
-            </summary>
-        </member>
-        <member name="P:Xu.Model.DspInfoItem.PhoneNumber">
-            <summary>
-            联系方式
-            </summary>
-        </member>
         <member name="T:Xu.Model.ResultModel.MessageModel`1">
             <summary>
             通用返回信息类
@@ -1940,6 +1885,106 @@
             是否禁用
             </summary>
         </member>
+        <member name="T:Xu.Model.ViewModels.QuartzReflectionViewModel">
+            <summary>
+            实现IJob的类
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.QuartzReflectionViewModel.nameSpace">
+            <summary>
+            命名空间
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.QuartzReflectionViewModel.nameClass">
+            <summary>
+            类名
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.QuartzReflectionViewModel.remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModels.ServerViewModel">
+            <summary>
+            服务器VM
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.EnvironmentName">
+            <summary>
+            环境变量
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.OSArchitecture">
+            <summary>
+            系统架构
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.ContentRootPath">
+            <summary>
+            ContentRootPath
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.WebRootPath">
+            <summary>
+            WebRootPath
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.FrameworkDescription">
+            <summary>
+            .NET Core版本
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.MemoryFootprint">
+            <summary>
+            内存占用
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.ServerViewModel.WorkingTime">
+            <summary>
+            启动时间
+            </summary>
+        </member>
+        <member name="T:Xu.Model.ViewModels.TaskInfoDto">
+            <summary>
+            调度任务触发器信息实体
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.jobId">
+            <summary>
+            任务ID
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.jobName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.jobGroup">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.triggerId">
+            <summary>
+            触发器ID
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.triggerName">
+            <summary>
+            触发器名称
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.triggerGroup">
+            <summary>
+            触发器分组
+            </summary>
+        </member>
+        <member name="P:Xu.Model.ViewModels.TaskInfoDto.triggerStatus">
+            <summary>
+            触发器状态
+            </summary>
+        </member>
         <member name="T:Xu.Model.ViewModels.WeChatApiDto">
             <summary>
             微信接口消息DTO
@@ -2614,106 +2659,6 @@
         <member name="P:Xu.Model.ViewModels.WeChatXMLDto.Precision">
             <summary>
             地理位置精度
-            </summary>
-        </member>
-        <member name="T:Xu.Model.ViewModel.QuartzReflectionViewModel">
-            <summary>
-            实现IJob的类
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.QuartzReflectionViewModel.nameSpace">
-            <summary>
-            命名空间
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.QuartzReflectionViewModel.nameClass">
-            <summary>
-            类名
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.QuartzReflectionViewModel.remark">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="T:Xu.Model.ViewModel.ServerViewModel">
-            <summary>
-            服务器VM
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.EnvironmentName">
-            <summary>
-            环境变量
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.OSArchitecture">
-            <summary>
-            系统架构
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.ContentRootPath">
-            <summary>
-            ContentRootPath
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.WebRootPath">
-            <summary>
-            WebRootPath
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.FrameworkDescription">
-            <summary>
-            .NET Core版本
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.MemoryFootprint">
-            <summary>
-            内存占用
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.ServerViewModel.WorkingTime">
-            <summary>
-            启动时间
-            </summary>
-        </member>
-        <member name="T:Xu.Model.ViewModel.TaskInfoDto">
-            <summary>
-            调度任务触发器信息实体
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.jobId">
-            <summary>
-            任务ID
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.jobName">
-            <summary>
-            任务名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.jobGroup">
-            <summary>
-            任务分组
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerId">
-            <summary>
-            触发器ID
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerName">
-            <summary>
-            触发器名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerGroup">
-            <summary>
-            触发器分组
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModel.TaskInfoDto.triggerStatus">
-            <summary>
-            触发器状态
             </summary>
         </member>
         <member name="T:Xu.Model.WeChatHelper">

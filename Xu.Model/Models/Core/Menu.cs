@@ -66,7 +66,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
         #region 临时类

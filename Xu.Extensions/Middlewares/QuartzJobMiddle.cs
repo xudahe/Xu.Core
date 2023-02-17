@@ -21,7 +21,7 @@ namespace Xu.Extensions.Middlewares
 
             try
             {
-                if (Appsettings.App("Middleware", "QuartzNetJob", "Enabled").ToBoolReq())
+                if (AppSettings.App("Middleware", "QuartzNetJob", "Enabled").ToBoolReq())
                 {
                     var allQzServices = tasksQzSvc.Query().Result;
                     foreach (var item in allQzServices)

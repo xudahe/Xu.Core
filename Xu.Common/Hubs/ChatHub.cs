@@ -80,7 +80,7 @@ namespace Xu.Common
         public async Task GetLatestCount(string random)
         {
             //2、服务端主动向客户端发送数据，名字千万不能错
-            if (Appsettings.App(new string[] { "Middleware", "SignalRSendLog", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Middleware", "SignalRSendLog", "Enabled" }).ToBoolReq())
             {
                 await Clients.All.ReceiveUpdate(LogLock.GetLogData());
             }

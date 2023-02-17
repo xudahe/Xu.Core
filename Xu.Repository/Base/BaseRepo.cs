@@ -13,6 +13,8 @@ namespace Xu.Repository
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : class, new()
     {
+        private readonly IUnitOfWorkManage _unitOfWorkManage;
+
         private readonly SqlSugarScope _dbBase;
 
         private ISqlSugarClient _db
@@ -23,7 +25,7 @@ namespace Xu.Repository
                  * 1、在appsettings.json 中开启MutiDBEnabled节点为true，必填
                  * 2、设置一个主连接的数据库ID，节点MainDB，对应的连接字符串的Enabled也必须true，必填
                  */
-                if (Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+                if (AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
                 {
                     if (typeof(T).GetTypeInfo().GetCustomAttributes(typeof(SugarTable), true).FirstOrDefault((x => x.GetType() == typeof(SugarTable))) is SugarTable sugarTable && !string.IsNullOrEmpty(sugarTable.TableDescription))
                     {
@@ -49,10 +51,11 @@ namespace Xu.Repository
         /// 注入工作单元接口，用来将 sqlsugar 实例统一起来，这样就能保证每次一个scope ，都能是同一个实例。
         /// 不是每次都 new，通过工作单元来控制：
         /// </summary>
-        /// <param name="unitOfWork"></param>
-        public BaseRepo(IUnitOfWork unitOfWork)
+        /// <param name="unitOfWorkManage"></param>
+        public BaseRepo(IUnitOfWorkManage unitOfWorkManage)
         {
-            _dbBase = unitOfWork.GetDbClient();
+            _unitOfWorkManage = unitOfWorkManage;
+            _dbBase = unitOfWorkManage.GetDbClient();
         }
 
         /// <summary>

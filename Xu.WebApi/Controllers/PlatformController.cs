@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -6,8 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
+using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
+using Xu.Services;
 
 namespace Xu.WebApi.Controllers
 {
@@ -19,11 +22,15 @@ namespace Xu.WebApi.Controllers
     [Authorize(Permissions.Name)]
     public class PlatformController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IPlatformSvc _platformSvc;
+        private readonly ISystemSvc _systemSvc;
 
-        public PlatformController(IPlatformSvc platformSvc)
+        public PlatformController(IMapper mapper, IPlatformSvc platformSvc, ISystemSvc systemSvc)
         {
+            _mapper = mapper;
             _platformSvc = platformSvc;
+            _systemSvc = systemSvc;
         }
 
         /// <summary>
@@ -83,12 +90,12 @@ namespace Xu.WebApi.Controllers
             if (dataList.Count > 0)
             {
                 data.Message = "该平台名称已存在";
-                data.Success = false;
             }
             else
             {
                 model.Id = await _platformSvc.Add(model);
                 data.Response = model;
+                data.Message = "添加成功";
             }
 
             return data;
@@ -103,14 +110,16 @@ namespace Xu.WebApi.Controllers
         public async Task<object> PutPlatform([FromBody] Platform model)
         {
             var data = new MessageModel<string>();
+
+            var dataList = await _systemSvc.GetDataByids(model.SystemIds);
+            model.SystemInfoList = _mapper.Map<IList<Systems>, IList<InfoSystem>>(dataList);
+
             if (model != null && model.Id > 0)
             {
-                model.ModifyTime = DateTime.Now;
                 data.Success = await _platformSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -134,7 +143,6 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -161,7 +169,38 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model.Id.ToString();
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// 平台-->系统
+        /// </summary>
+        /// <param name="platId">用户id或guid</param>
+        /// <param name="systemId">角色id或guid，小写逗号隔开","</param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<object> PlatformBysystemId(string platId, string systemId)
+        {
+            var data = new MessageModel<string>();
+            var platInfo = (await _platformSvc.GetDataByids(platId)).First();
+
+            if (platInfo != null && platInfo.Id > 0)
+            {
+                var systemList = await _systemSvc.GetDataByids(systemId);
+                platInfo.SystemInfoList = _mapper.Map<IList<Systems>, IList<InfoSystem>>(systemList);
+                platInfo.SystemIds = systemId;
+
+                data.Success = await _systemSvc.Update(platInfo);
+                if (data.Success)
+                {
+                    data.Message = "更新成功";
+                }
+            }
+            else
+            {
+                data.Message = "该平台不存在，请联系管理员";
             }
 
             return data;

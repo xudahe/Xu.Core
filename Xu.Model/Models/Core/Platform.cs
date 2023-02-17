@@ -45,13 +45,13 @@ namespace Xu.Model.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
         /// <summary>
         /// 平台关联系统的id或guid集合，不能同时包含两者
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "平台关联系统的id或guid集合")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "平台关联系统的id或guid集合")]
         public string SystemIds { get; set; }
 
         #region 绑定系统
@@ -64,7 +64,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联系统List
         /// </summary>
-        [SugarColumn(IsIgnore = true)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, IsJson = true, ColumnDescription = "关联系统 json")]
         public IList<InfoSystem> SystemInfoList
         {
             get { return _systemInfoList; }
@@ -81,7 +81,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联系统Xml
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联系统")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "关联系统 xml")]
         public string SystemInfoXml
         {
             get { return _systemInfoItem; }

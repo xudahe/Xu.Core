@@ -54,7 +54,7 @@ namespace Xu.WebApi
             //采用log4net 进行错误日志记录
             _loggerHelper.LogError(json.Message + WriteLog(json.Message, context.Exception));
             //每次更新日志，推送到客户端——实时短信
-            if (Appsettings.App(new string[] { "Middleware", "SignalRSendLog", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Middleware", "SignalRSendLog", "Enabled" }).ToBoolReq())
             {
                 _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData()).Wait();
             }

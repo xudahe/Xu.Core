@@ -48,7 +48,6 @@ namespace Xu.Tasks
             }
 
             var accLogs = GetAccessLogs().Where(d => d.User != "" && d.BeginTime.ToDateTimeReq() >= lastestLogDatetime).ToList();
-            var logUpdate = DateTime.Now;
 
             var activeUsers = (from n in accLogs
                                group n by new { n.User } into g
@@ -64,7 +63,6 @@ namespace Xu.Tasks
                 if (user != null)
                 {
                     user.Count += item.Count;
-                    user.ModifyTime = logUpdate;
                     await _accessTrendLogSvc.Update(user);
                 }
                 else
@@ -72,7 +70,6 @@ namespace Xu.Tasks
                     await _accessTrendLogSvc.Add(new AccessTrendLog()
                     {
                         Count = item.Count,
-                        ModifyTime = logUpdate,
                         User = item.User
                     });
                 }
@@ -94,7 +91,7 @@ namespace Xu.Tasks
 
             Parallel.For(0, 1, e =>
             {
-                LogLock.OutSql2Log("AccessTrendLog", new string[] { JsonConvert.SerializeObject(activeUserVMs) }, false, true);
+                LogLock.OutLogAOP("AccessTrendLog", "", new string[] { activeUserVMs.GetType().ToString(), JsonConvert.SerializeObject(activeUserVMs) }, false);
             });
         }
 

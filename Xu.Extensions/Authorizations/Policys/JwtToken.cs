@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Xu.Model.ViewModel;
+using Xu.Model.ViewModels;
 
 namespace Xu.Extensions
 {
@@ -34,7 +34,6 @@ namespace Xu.Extensions
             //打包返回前台
             var responseJson = new TokenInfoViewModel
             {
-                Success = true,
                 Token = encodedJwt,
                 Expires_in = permissionRequirement.Expiration.TotalSeconds,
                 Token_type = "Bearer"

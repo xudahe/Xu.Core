@@ -18,7 +18,7 @@ namespace Xu.Extensions.Middlewares
 
             try
             {
-                if (Appsettings.App("Startup", "MiniProfiler", "Enabled").ToBoolReq())
+                if (AppSettings.App("Startup", "MiniProfiler", "Enabled").ToBoolReq())
                 {
                     // 性能分析
                     app.UseMiniProfiler();

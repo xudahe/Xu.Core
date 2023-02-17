@@ -1,13 +1,17 @@
 ﻿using log4net;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Xu.Common;
+using Xu.EnumHelper;
 using static Xu.Extensions.CustomApiVersion;
 
 namespace Xu.Extensions
@@ -25,7 +29,7 @@ namespace Xu.Extensions
 
             var basePath = AppContext.BaseDirectory;
             //var basePath2 = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
-            var ApiName = Appsettings.App(new string[] { "Startup", "ApiName" });
+            var ApiName = AppSettings.App(new string[] { "Startup", "ApiName" });
 
             services.AddSwaggerGen(c =>
             {
@@ -36,7 +40,7 @@ namespace Xu.Extensions
                     {
                         Version = version,
                         Title = $"{ApiName} 接口文档——{RuntimeInformation.FrameworkDescription}",
-                        //Description = $"{ApiName} HTTP API " + version,
+                        Description = $"{ApiName} HTTP API " + version,
                         //Contact = new OpenApiContact { Name = ApiName, Email = "webApi@xxx.com", Url = new Uri("https://www.jianshu.com/u/94102b59cc2a") },
                         //License = new OpenApiLicense { Name = ApiName + " 官方文档", Url = new Uri("http://apk.neters.club/.doc/") }
                     });
@@ -67,6 +71,8 @@ namespace Xu.Extensions
                 // 在header中添加token，传递到后台
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
 
+                c.DocumentFilter<SwaggerHiddenApi>();
+
                 // ids4和jwt切换
                 if (Permissions.IsUseIds4)
                 {
@@ -78,7 +84,7 @@ namespace Xu.Extensions
                         {
                             Implicit = new OpenApiOAuthFlow
                             {
-                                AuthorizationUrl = new Uri($"{Appsettings.App(new string[] { "Startup", "IdentityServer4", "AuthorizationUrl" })}/connect/authorize"),
+                                AuthorizationUrl = new Uri($"{AppSettings.App(new string[] { "Startup", "IdentityServer4", "AuthorizationUrl" })}/connect/authorize"),
                                 Scopes = new Dictionary<string, string> {
                                 {
                                     "blog.core.api","ApiResource id"
@@ -116,12 +122,47 @@ namespace Xu.Extensions
             /// <summary>
             /// V1 版本
             /// </summary>
+            [EnumText("V1")]
             V1 = 1,
 
             /// <summary>
             /// V2 版本
             /// </summary>
+            [EnumText("V2")]
             V2 = 2,
+        }
+    }
+
+
+    public class SwaggerHiddenApi : IDocumentFilter
+    {
+        /// <summary>
+        /// 隐藏swagger接口特性标识，控制器上添加[SwaggerApi.HideApi]
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+        public class HideApiAttribute : System.Attribute
+        {
+        }
+
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+        {
+            foreach (ApiDescription description in context.ApiDescriptions)
+            {
+                if (description.TryGetMethodInfo(out MethodInfo method))
+                {
+                    if (method.ReflectedType.CustomAttributes.Any(t => t.AttributeType == typeof(HideApiAttribute))
+                            || method.CustomAttributes.Any(t => t.AttributeType == typeof(HideApiAttribute)))
+                    {
+                        string key = "/" + description.RelativePath;
+                        if (key.Contains("?"))
+                        {
+                            int idx = key.IndexOf("?", System.StringComparison.Ordinal);
+                            key = key.Substring(0, idx);
+                        }
+                        swaggerDoc.Paths.Remove(key);
+                    }
+                }
+            }
         }
     }
 }

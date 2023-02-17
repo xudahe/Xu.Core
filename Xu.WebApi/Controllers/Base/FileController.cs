@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xu.Model;
 using Xu.Model.ResultModel;
+using Xu.Model.ViewModels;
 
 namespace Blog.Core.Controllers
 {

@@ -16,6 +16,7 @@ using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
 
+
 namespace Xu.WebApi.Controllers
 {
     /// <summary>
@@ -65,11 +66,7 @@ namespace Xu.WebApi.Controllers
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(pass))
             {
-                return new JsonResult(new
-                {
-                    Status = false,
-                    message = "用户名或密码不能为空"
-                });
+                return MessageModel<string>.Msg(false, "用户名或密码不能为空");
             }
 
             if (RSACryption.IsBase64(pass)) pass = RSACryption.RSADecrypt(pass);
@@ -100,15 +97,12 @@ namespace Xu.WebApi.Controllers
                 }
 
                 var token = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
-                return new JsonResult(token);
+
+                return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功",token);
             }
             else
             {
-                return new JsonResult(new
-                {
-                    success = false,
-                    message = "认证失败"
-                });
+                return MessageModel<string>.Msg(false, "认证失败");
             }
         }
 
@@ -125,11 +119,7 @@ namespace Xu.WebApi.Controllers
 
             if (string.IsNullOrEmpty(token))
             {
-                return new JsonResult(new
-                {
-                    success = false,
-                    message = "传入的token参数不能为空！"
-                });
+               return MessageModel<string>.Msg(false, "传入的token参数不能为空！");
             }
             var tokenModel = JwtHelper.SerializeJwt(token);
             if (tokenModel != null && JwtHelper.CustomSafeVerify(token) && tokenModel.Id > 0)
@@ -138,11 +128,7 @@ namespace Xu.WebApi.Controllers
                 var value = User.Claims.SingleOrDefault(s => s.Type == JwtRegisteredClaimNames.Iat)?.Value;
                 if (value != null && user.CriticalModifyTime > value.ToDateTimeReq())
                 {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "很抱歉,授权已失效,请重新授权！"
-                    });
+                    return MessageModel<string>.Msg(false, "很抱歉,授权已失效,请重新授权！");
                 }
                 if (user != null && !(value != null && user.CriticalModifyTime > value.ToDateTimeReq()))
                 {
@@ -160,15 +146,11 @@ namespace Xu.WebApi.Controllers
                     identity.AddClaims(claims);
 
                     var refreshToken = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
-                    return new JsonResult(refreshToken);
+                    return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功", refreshToken);
                 }
             }
-
-            return new JsonResult(new
-            {
-                success = false,
-                message = "认证失败"
-            });
+     
+            return MessageModel<string>.Msg(false, "认证失败");
         }
 
         /// <summary>

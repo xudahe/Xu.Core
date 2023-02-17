@@ -38,7 +38,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 用户关联角色的id或guid集合，不能同时包含两者
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "用户关联角色的id或guid集合")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "用户关联角色的id或guid集合")]
         public string RoleIds { get; set; }
 
         #region 绑定角色
@@ -99,7 +99,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联角色List
         /// </summary>
-        [SugarColumn(IsIgnore = true)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, IsJson = true, ColumnDescription = "关联角色 json")]
         public IList<InfoRole> RoleInfoList
         {
             get { return _roleInfoList; }
@@ -116,7 +116,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联角色Xml
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "关联角色")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "关联角色 xml")]
         public string RoleInfoXml
         {
             get { return _roleInfoItem; }

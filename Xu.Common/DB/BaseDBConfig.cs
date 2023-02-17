@@ -33,7 +33,7 @@ namespace Xu.Common
 
         public static (List<MutiDBOperate>, List<MutiDBOperate>) MutiInitConn()
         {
-            List<MutiDBOperate> listdatabase = Appsettings.App<MutiDBOperate>("DBS").Where(i => i.Enabled).ToList();
+            List<MutiDBOperate> listdatabase = AppSettings.App<MutiDBOperate>("DBS").Where(i => i.Enabled).ToList();
             foreach (var i in listdatabase)
             {
                 SpecialDbString(i);
@@ -42,7 +42,7 @@ namespace Xu.Common
             List<MutiDBOperate> listdatabaseSlaveDB = new List<MutiDBOperate>();//从库
 
             // 单库，且不开启读写分离，只保留一个
-            if (!Appsettings.App(new string[] { "CQRSEnabled" }).ToBoolReq() && !Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+            if (!AppSettings.App(new string[] { "CQRSEnabled" }).ToBoolReq() && !AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
             {
                 if (listdatabase.Count == 1)
                 {
@@ -50,7 +50,7 @@ namespace Xu.Common
                 }
                 else
                 {
-                    var dbFirst = listdatabase.FirstOrDefault(d => d.ConnId == Appsettings.App(new string[] { "MainDB" }).ToString());
+                    var dbFirst = listdatabase.FirstOrDefault(d => d.ConnId == AppSettings.App(new string[] { "MainDB" }).ToString());
                     if (dbFirst == null)
                     {
                         dbFirst = listdatabase.FirstOrDefault();
@@ -61,11 +61,11 @@ namespace Xu.Common
             }
 
             // 读写分离，且必须是单库模式，获取从库
-            if (Appsettings.App(new string[] { "CQRSEnabled" }).ToBoolReq() && !Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "CQRSEnabled" }).ToBoolReq() && !AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
             {
                 if (listdatabase.Count > 1)
                 {
-                    listdatabaseSlaveDB = listdatabase.Where(d => d.ConnId != Appsettings.App(new string[] { "MainDB" }).ToString()).ToList();
+                    listdatabaseSlaveDB = listdatabase.Where(d => d.ConnId != AppSettings.App(new string[] { "MainDB" }).ToString()).ToList();
                 }
             }
 

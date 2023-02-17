@@ -250,6 +250,7 @@ namespace Xu.WebApi.Controllers
             {
                 model.Id = await _menuSvc.Add(model);
                 data.Response = model;
+                data.Message = "添加成功";
             }
 
             return data;
@@ -266,12 +267,9 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (model != null && model.Id > 0)
             {
-                model.ModifyTime = DateTime.Now;
-                data.Success = await _menuSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -295,7 +293,6 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -322,7 +319,6 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model.Id.ToString();
             }
 
             return data;

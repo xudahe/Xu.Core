@@ -9,6 +9,7 @@ using Xu.Common;
 using Xu.Extensions;
 using Xu.IRepository;
 using Xu.IServices;
+using Xu.Repository;
 using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
@@ -23,17 +24,19 @@ namespace Xu.WebApi.Controllers
     [Authorize(Permissions.Name)]
     public class UserController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkManage _unitOfWorkManage;
         private readonly IMapper _mapper;
         private readonly IRoleSvc _roleSvc;
         private readonly IUserSvc _userSvc;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUnitOfWork unitOfWork, IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc)
+        public UserController(IUnitOfWorkManage unitOfWorkManage, IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, ILogger<UserController> logger)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWorkManage = unitOfWorkManage;
             _mapper = mapper;
             _userSvc = userSvc;
             _roleSvc = roleSvc;
+            _logger = logger;
         }
 
         /// <summary>
@@ -126,6 +129,7 @@ namespace Xu.WebApi.Controllers
             {
                 model.Id = await _userSvc.Add(model);
                 data.Response = model;
+                data.Message = "添加成功";
             }
 
             return data;
@@ -143,28 +147,26 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             try
             {
-                _unitOfWork.BeginTran();
+                _unitOfWorkManage.BeginTran();
 
                 var roleList = await _roleSvc.GetDataByids(model.RoleIds);
                 model.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
 
                 if (model != null && model.Id > 0)
                 {
-                    model.ModifyTime = DateTime.Now;
                     data.Success = await _userSvc.Update(model);
 
-                    _unitOfWork.CommitTran();
+                    _unitOfWorkManage.CommitTran();
 
                     if (data.Success)
                     {
                         data.Message = "更新成功";
-                        data.Response = model.Id.ToString();
                     }
                 }
             }
             catch (Exception)
             {
-                _unitOfWork.RollbackTran();
+                _unitOfWorkManage.RollbackTran();
             }
 
             return data;
@@ -187,7 +189,6 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = menu.Id.ToString();
                 }
             }
 
@@ -214,9 +215,40 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model.Id.ToString();
             }
 
+            return data;
+        }
+
+        /// <summary>
+        /// 用户-->角色
+        /// </summary>
+        /// <param name="userId">用户id或guid</param>
+        /// <param name="roleId">角色id或guid，小写逗号隔开","</param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<object> UserByRoleId(string userId,string roleId)
+        {
+            var data = new MessageModel<string>();
+            var userInfo = (await _userSvc.GetDataByids(userId)).First();
+
+            if (userInfo != null && userInfo.Id > 0)
+            {
+                var roleList = await _roleSvc.GetDataByids(roleId);
+                userInfo.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
+                userInfo.RoleIds = roleId;
+
+                data.Success = await _userSvc.Update(userInfo);
+                if (data.Success)
+                {
+                    data.Message = "更新成功";
+                }
+            }
+            else
+            {
+                data.Message = "该用户不存在，请联系管理员";
+            }
+       
             return data;
         }
     }

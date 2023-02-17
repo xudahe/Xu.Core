@@ -19,13 +19,13 @@ namespace Xu.Extensions
 
             services.AddCors(c =>
             {
-                if (!Appsettings.App(new string[] { "Startup", "Cors", "EnableAllIPs" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "Startup", "Cors", "EnableAllIPs" }).ToBoolReq())
                 {
-                    c.AddPolicy(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }),
+                    c.AddPolicy(AppSettings.App(new string[] { "Startup", "Cors", "PolicyName" }),
                         policy =>
                         {
                             policy
-                            .WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(','))
+                            .WithOrigins(AppSettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(','))
                             .AllowAnyHeader()//Ensures that the policy allows any header.
                             .AllowAnyMethod();
                         });
@@ -33,7 +33,7 @@ namespace Xu.Extensions
                 else
                 {
                     //允许任意跨域请求
-                    c.AddPolicy(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }),
+                    c.AddPolicy(AppSettings.App(new string[] { "Startup", "Cors", "PolicyName" }),
                         policy =>
                         {
                             policy
@@ -44,7 +44,7 @@ namespace Xu.Extensions
                         });
                 }
 
-                //.WithOrigins(Appsettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(',')) //允许部分站点跨域请求
+                //.WithOrigins(AppSettings.App(new string[] { "Startup", "Cors", "IPs" }).Split(',')) //允许部分站点跨域请求
                 //.SetPreflightMaxAge(TimeSpan.FromSeconds(2520)) //添加预检请求过期时间
                 //.SetIsOriginAllowed(origin => true) //允许任何域
                 //.AllowAnyHeader()  //允许任何头

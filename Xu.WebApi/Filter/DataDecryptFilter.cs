@@ -20,7 +20,7 @@ namespace Xu.WebApi
         {
             base.OnActionExecuting(context);
 
-            var noEncrypt = Appsettings.App(new string[] { "RSACryption", "NoEncrypt" }).ToString(); ;//白名单
+            var noEncrypt = AppSettings.App(new string[] { "RSACryption", "NoEncrypt" }).ToString(); ;//白名单
             var method = context.HttpContext.Request.Method;
             if (method == "POST" && !noEncrypt.Contains(context.HttpContext.Request.Path))
             {

@@ -15,7 +15,7 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (Appsettings.App(new string[] { "Kafka", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Kafka", "Enabled" }).ToBoolReq())
             {
                 services.Configure<KafkaOptions>(configuration.GetSection("kafka"));
                 services.AddSingleton<IKafkaConnectionPool, KafkaConnectionPool>();

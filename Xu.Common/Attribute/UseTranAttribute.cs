@@ -8,5 +8,9 @@ namespace Xu.Common
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
     public class UseTranAttribute : Attribute
     {
+        /// <summary>
+        /// 事务传播方式
+        /// </summary>
+        public Propagation Propagation { get; set; } = Propagation.Required;
     }
 }

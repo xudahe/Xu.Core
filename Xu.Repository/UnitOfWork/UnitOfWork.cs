@@ -1,80 +1,50 @@
-﻿using SqlSugar;
-using System;
-using Xu.IRepository;
+﻿using System;
+using Microsoft.Extensions.Logging;
+using SqlSugar;
 
-/// <summary>
-/// 工作单元，对事务行为做实现
-/// </summary>
-namespace Xu.Repository.UnitOfWork
+namespace Xu.Repository;
+
+public class UnitOfWork : IDisposable
 {
-    public class UnitOfWork : IUnitOfWork
+    public ILogger Logger { get; set; }
+    public ISqlSugarClient Db { get; internal set; }
+
+    public ITenant Tenant { get; internal set; }
+
+    public bool IsTran { get; internal set; }
+
+    public bool IsCommit { get; internal set; }
+
+    public bool IsClose { get; internal set; }
+
+    public void Dispose()
     {
-        private readonly ISqlSugarClient _sqlSugarClient;
-
-        //防止同一范围内，异步执行事务误触非当前线程事务
-        private int _tranCount { get; set; }
-
-        public UnitOfWork(ISqlSugarClient sqlSugarClient)
+        if (this.IsTran && !this.IsCommit)
         {
-            _sqlSugarClient = sqlSugarClient;
-            _tranCount = 0;
+            Logger.LogDebug("UnitOfWork RollbackTran");
+            this.Tenant.RollbackTran();
         }
 
-        /// <summary>
-        /// 获取DB，保证唯一性
-        /// </summary>
-        /// <returns></returns>
-        public SqlSugarScope GetDbClient()
+        if (this.Db.Ado.Transaction != null || this.IsClose)
+            return;
+        this.Db.Close();
+    }
+
+    public bool Commit()
+    {
+        if (this.IsTran && !this.IsCommit)
         {
-            // 必须要as，后边会用到切换数据库操作
-            return _sqlSugarClient as SqlSugarScope;
+            Logger.LogDebug("UnitOfWork CommitTran");
+            this.Tenant.CommitTran();
+            this.IsCommit = true;
         }
 
-        /// <summary>
-        /// 开始事务
-        /// </summary>
-        public void BeginTran()
+        if (this.Db.Ado.Transaction == null && !this.IsClose)
         {
-            lock (this)
-            {
-                _tranCount++;
-                GetDbClient().BeginTran();
-            }
+            this.Db.Close();
+            this.IsClose = true;
         }
 
-        /// <summary>
-        /// 提交事务
-        /// </summary>
-        public void CommitTran()
-        {
-            lock (this)
-            {
-                _tranCount--;
-                if (_tranCount == 0)
-                {
-                    try
-                    {
-                        GetDbClient().CommitTran();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        GetDbClient().RollbackTran();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 回滚事务
-        /// </summary>
-        public void RollbackTran()
-        {
-            lock (this)
-            {
-                _tranCount--;
-                GetDbClient().RollbackTran();
-            }
-        }
+        return this.IsCommit;
     }
 }

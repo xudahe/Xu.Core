@@ -40,10 +40,10 @@ namespace Xu.Extensions.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (Appsettings.App("Middleware", "RecordAccessLogs", "Enabled").ToBoolReq())
+            if (AppSettings.App("Middleware", "RecordAccessLogs", "Enabled").ToBoolReq())
             {
                 var api = context.Request.Path.ToString().TrimEnd('/').ToLower();
-                var ignoreApis = Appsettings.App("Middleware", "RecordAccessLogs", "IgnoreApis"); //忽略的接口
+                var ignoreApis = AppSettings.App("Middleware", "RecordAccessLogs", "IgnoreApis"); //忽略的接口
 
                 // 过滤，只有接口
                 if (api.Contains("api") && !ignoreApis.Contains(api))
@@ -54,6 +54,7 @@ namespace Xu.Extensions.Middlewares
 
                     UserAccessModel userAccessModel = new UserAccessModel();
 
+                    userAccessModel.Api = api;
                     userAccessModel.User = _user.Name;
                     userAccessModel.ClientIP = IPLogMiddle.GetClientIP(context)?.Replace("::ffff:", "");
                     userAccessModel.ServiceIP = context.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + context.Connection.LocalPort;
@@ -102,11 +103,11 @@ namespace Xu.Extensions.Middlewares
 
                         // 自定义log输出
                         var requestInfo = JsonConvert.SerializeObject(userAccessModel);
-                        //Parallel.For(0, 1, e =>
-                        //{
-                        //    LogLock.OutSql2Log("RecordAccessLogs", new string[] { requestInfo + "," }, false);
-                        //});
-                        SerilogServer.WriteLog("RecordAccessLogs", new string[] { requestInfo + ", " }, false);
+                        Parallel.For(0, 1, e =>
+                        {
+                            LogLock.OutLogAOP("RecordAccessLogs", context.TraceIdentifier, new string[] { userAccessModel.GetType().ToString(), requestInfo }, false);
+                        });
+                        //SerilogServer.WriteLog("RecordAccessLogs", new string[] { userAccessModel.GetType().ToString(), requestInfo }, false);
 
                         return Task.CompletedTask;
                     });

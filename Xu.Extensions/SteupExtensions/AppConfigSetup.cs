@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Com.Ctrip.Framework.Apollo.Enums;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -13,14 +14,17 @@ namespace Xu.Extensions
     /// </summary>
     public static class AppConfigSetup
     {
-        public static void AddAppConfigSetup(this IServiceCollection services)
+        public static void AddAppConfigSetup(this IServiceCollection services, IHostEnvironment env)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (Appsettings.App(new string[] { "Startup", "AppConfigAlert", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Startup", "AppConfigAlert", "Enabled" }).ToBoolReq())
             {
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                Console.OutputEncoding = Encoding.GetEncoding("GB2312"); //避免乱码
+                if (env.IsDevelopment())
+                {
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                    Console.OutputEncoding = Encoding.GetEncoding("GB2312"); //避免乱码
+                }
 
                 Console.WriteLine("************ WebApi Config Set *****************");
 
@@ -37,7 +41,7 @@ namespace Xu.Extensions
                 }
 
                 // Redis缓存AOP
-                if (!Appsettings.App(new string[] { "AppSettings", "RedisCachingAOP", "Enabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "AppSettings", "RedisCachingAOP", "Enabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"Redis Caching AOP: False");
                 }
@@ -47,7 +51,7 @@ namespace Xu.Extensions
                 }
 
                 // 内存缓存AOP
-                if (!Appsettings.App(new string[] { "AppSettings", "MemoryCachingAOP", "Enabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "AppSettings", "MemoryCachingAOP", "Enabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"Memory Caching AOP: False");
                 }
@@ -57,7 +61,7 @@ namespace Xu.Extensions
                 }
 
                 // 服务日志AOP
-                if (!Appsettings.App(new string[] { "AppSettings", "LogAOP", "Enabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "AppSettings", "LogAOP", "Enabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"Service Log AOP: False");
                 }
@@ -66,8 +70,18 @@ namespace Xu.Extensions
                     ConsoleHelper.WriteSuccessLine($"Service Log AOP: True");
                 }
 
+                // 开启的中间件日志
+                var requestResponseLogOpen = AppSettings.App(new string[] { "Middleware", "RequestResponseLog", "Enabled" }).ToBoolReq();
+                var ipLogOpen = AppSettings.App(new string[] { "Middleware", "IPLog", "Enabled" }).ToBoolReq();
+                var recordAccessLogsOpen = AppSettings.App(new string[] { "Middleware", "RecordAccessLogs", "Enabled" }).ToBoolReq();
+                ConsoleHelper.WriteSuccessLine($"OPEN Log: " +
+                    (requestResponseLogOpen ? "RequestResponseLog √," : "") +
+                    (ipLogOpen ? "IPLog √," : "") +
+                    (recordAccessLogsOpen ? "RecordAccessLogs √," : "")
+                    );
+
                 // 事务AOP
-                if (!Appsettings.App(new string[] { "AppSettings", "TranAOP", "Enabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "AppSettings", "TranAOP", "Enabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"Transaction AOP: False");
                 }
@@ -77,7 +91,7 @@ namespace Xu.Extensions
                 }
 
                 // 数据库Sql执行AOP
-                if (!Appsettings.App(new string[] { "AppSettings", "SqlAOP", "Enabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "AppSettings", "SqlAOP", "Enabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"DB Sql AOP: False");
                 }
@@ -86,8 +100,18 @@ namespace Xu.Extensions
                     ConsoleHelper.WriteSuccessLine($"DB Sql AOP: True");
                 }
 
+                // Sql执行日志输出到控制台
+                if (!AppSettings.App(new string[] { "AppSettings", "SqlAOP", "LogToConsole", "Enabled" }).ToBoolReq())
+                {
+                    Console.WriteLine($"DB Sql AOP To Console: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"DB Sql AOP To Console: True");
+                }
+
                 // SingnalR发送数据
-                if (!Appsettings.App(new string[] { "Middleware", "SignalR", "Enabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "Middleware", "SignalR", "Enabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"SignalR send data: False");
                 }
@@ -97,7 +121,7 @@ namespace Xu.Extensions
                 }
 
                 // IP限流
-                if (!Appsettings.App("Middleware", "IpRateLimit", "Enabled").ToBoolReq())
+                if (!AppSettings.App("Middleware", "IpRateLimit", "Enabled").ToBoolReq())
                 {
                     Console.WriteLine($"IpRateLimiting: False");
                 }
@@ -107,7 +131,7 @@ namespace Xu.Extensions
                 }
 
                 // 性能分析
-                if (!Appsettings.App("Startup", "MiniProfiler", "Enabled").ToBoolReq())
+                if (!AppSettings.App("Startup", "MiniProfiler", "Enabled").ToBoolReq())
                 {
                     Console.WriteLine($"MiniProfiler: False");
                 }
@@ -117,7 +141,7 @@ namespace Xu.Extensions
                 }
 
                 // CORS跨域
-                if (!Appsettings.App("Startup", "Cors", "EnableAllIPs").ToBoolReq())
+                if (!AppSettings.App("Startup", "Cors", "EnableAllIPs").ToBoolReq())
                 {
                     Console.WriteLine($"EnableAllIPs For CORS: False");
                 }
@@ -127,7 +151,7 @@ namespace Xu.Extensions
                 }
 
                 // redis消息队列
-                if (!Appsettings.App("Startup", "RedisMq", "Enabled").ToBoolReq())
+                if (!AppSettings.App("Startup", "RedisMq", "Enabled").ToBoolReq())
                 {
                     Console.WriteLine($"Redis MQ: False");
                 }
@@ -136,8 +160,18 @@ namespace Xu.Extensions
                     ConsoleHelper.WriteSuccessLine($"Redis MQ: True");
                 }
 
+                // RabbitMQ 消息队列
+                if (!AppSettings.App("RabbitMQ", "Enabled").ToBoolReq())
+                {
+                    Console.WriteLine($"RabbitMQ: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"RabbitMQ: True");
+                }
+
                 // Consul 注册服务
-                if (!Appsettings.App("Middleware", "Consul", "Enabled").ToBoolReq())
+                if (!AppSettings.App("Middleware", "Consul", "Enabled").ToBoolReq())
                 {
                     Console.WriteLine($"Consul service: False");
                 }
@@ -146,8 +180,18 @@ namespace Xu.Extensions
                     ConsoleHelper.WriteSuccessLine($"Consul service: True");
                 }
 
+                // EventBus 事件总线
+                if (!AppSettings.App("EventBus", "Enabled").ToBoolReq())
+                {
+                    Console.WriteLine($"EventBus: False");
+                }
+                else
+                {
+                    ConsoleHelper.WriteSuccessLine($"EventBus: True");
+                }
+
                 // 多库
-                if (!Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"Is multi-DataBase: False");
                 }
@@ -157,7 +201,7 @@ namespace Xu.Extensions
                 }
 
                 // 读写分离
-                if (!Appsettings.App(new string[] { "CQRSEnabled" }).ToBoolReq())
+                if (!AppSettings.App(new string[] { "CQRSEnabled" }).ToBoolReq())
                 {
                     Console.WriteLine($"Is CQRS: False");
                 }
@@ -174,7 +218,7 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (Appsettings.App(new string[] { "Startup", "AppConfigAlert", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Startup", "AppConfigAlert", "Enabled" }).ToBoolReq())
             {
                 if (env.IsDevelopment())
                 {
@@ -188,12 +232,12 @@ namespace Xu.Extensions
                 {
                     new string[] { "当前环境", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") },
                     new string[] { "当前的授权方案", Permissions.IsUseIds4 ? "Ids4" : "JWT" },
-                    new string[] { "CORS跨域", Appsettings.App("Startup", "Cors", "EnableAllIPs") },
-                    new string[] { "RabbitMQ消息列队", Appsettings.App("RabbitMQ", "Enabled") },
-                    new string[] { "事件总线(必须开启消息列队)", Appsettings.App("EventBus", "Enabled") },
-                    new string[] { "redis消息队列", Appsettings.App("Startup", "RedisMq", "Enabled") },
-                    new string[] { "是否多库", Appsettings.App("MutiDBEnabled") },
-                    new string[] { "读写分离", Appsettings.App("CQRSEnabled") },
+                    new string[] { "CORS跨域", AppSettings.App("Startup", "Cors", "EnableAllIPs") },
+                    new string[] { "RabbitMQ消息列队", AppSettings.App("RabbitMQ", "Enabled") },
+                    new string[] { "事件总线(必须开启消息列队)", AppSettings.App("EventBus", "Enabled") },
+                    new string[] { "redis消息队列", AppSettings.App("Startup", "RedisMq", "Enabled") },
+                    new string[] { "是否多库", AppSettings.App("MutiDBEnabled") },
+                    new string[] { "读写分离", AppSettings.App("CQRSEnabled") },
                 };
 
                 new ConsoleTable()
@@ -214,12 +258,12 @@ namespace Xu.Extensions
 
                 List<string[]> aopInfos = new()
                 {
-                    new string[] { "Redis缓存AOP", Appsettings.App("AppSettings", "RedisCachingAOP", "Enabled") },
-                    new string[] { "内存缓存AOP", Appsettings.App("AppSettings", "MemoryCachingAOP", "Enabled") },
-                    new string[] { "服务日志AOP", Appsettings.App("AppSettings", "LogAOP", "Enabled") },
-                    new string[] { "事务AOP", Appsettings.App("AppSettings", "TranAOP", "Enabled") },
-                    new string[] { "Sql执行AOP", Appsettings.App("AppSettings", "SqlAOP", "OutToLogFile", "Enabled") },
-                    new string[] { "Sql执行AOP控制台输出", Appsettings.App("AppSettings", "SqlAOP", "OutToConsole", "Enabled") },
+                    new string[] { "Redis缓存AOP", AppSettings.App("AppSettings", "RedisCachingAOP", "Enabled") },
+                    new string[] { "内存缓存AOP", AppSettings.App("AppSettings", "MemoryCachingAOP", "Enabled") },
+                    new string[] { "服务日志AOP", AppSettings.App("AppSettings", "LogAOP", "Enabled") },
+                    new string[] { "事务AOP", AppSettings.App("AppSettings", "TranAOP", "Enabled") },
+                    new string[] { "Sql执行AOP", AppSettings.App("AppSettings", "SqlAOP", "LogToFile", "Enabled") },
+                    new string[] { "Sql执行AOP控制台输出", AppSettings.App("AppSettings", "SqlAOP", "LogToConsole", "Enabled") },
                 };
 
                 new ConsoleTable
@@ -240,13 +284,13 @@ namespace Xu.Extensions
 
                 List<string[]> MiddlewareInfos = new()
                 {
-                    new string[] { "API请求记录中间件", Appsettings.App("Middleware", "RecordAccessLogs", "Enabled") },
-                    new string[] { "IP记录中间件", Appsettings.App("Middleware", "IPLog", "Enabled") },
-                    new string[] { "请求响应日志中间件", Appsettings.App("Middleware", "RequestResponseLog", "Enabled") },
-                    new string[] { "SingnalR实时发送请求数据中间件", Appsettings.App("Middleware", "SignalR", "Enabled") },
-                    new string[] { "IP限流中间件", Appsettings.App("Middleware", "IpRateLimit", "Enabled") },
-                    new string[] { "性能分析中间件", Appsettings.App("Startup", "MiniProfiler", "Enabled") },
-                    new string[] { "Consul注册服务", Appsettings.App("Middleware", "Consul", "Enabled") },
+                    new string[] { "API请求记录中间件", AppSettings.App("Middleware", "RecordAccessLogs", "Enabled") },
+                    new string[] { "IP记录中间件", AppSettings.App("Middleware", "IPLog", "Enabled") },
+                    new string[] { "请求响应日志中间件", AppSettings.App("Middleware", "RequestResponseLog", "Enabled") },
+                    new string[] { "SingnalR实时发送请求数据中间件", AppSettings.App("Middleware", "SignalR", "Enabled") },
+                    new string[] { "IP限流中间件", AppSettings.App("Middleware", "IpRateLimit", "Enabled") },
+                    new string[] { "性能分析中间件", AppSettings.App("Startup", "MiniProfiler", "Enabled") },
+                    new string[] { "Consul注册服务", AppSettings.App("Middleware", "Consul", "Enabled") },
                 };
 
                 new ConsoleTable

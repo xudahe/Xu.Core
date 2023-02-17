@@ -1,10 +1,12 @@
 ﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IRepository;
+using Xu.Repository;
 
 namespace Xu.Extensions
 {
@@ -13,11 +15,13 @@ namespace Xu.Extensions
     /// </summary>
     public class TranAOP : IInterceptor
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<TranAOP> _logger;
+        private readonly IUnitOfWorkManage _unitOfWorkManage;
 
-        public TranAOP(IUnitOfWork unitOfWork)
+        public TranAOP(IUnitOfWorkManage unitOfWorkManage, ILogger<TranAOP> logger)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWorkManage = unitOfWorkManage;
+            _logger = logger;
         }
 
         /// <summary>
@@ -29,13 +33,11 @@ namespace Xu.Extensions
             var method = invocation.MethodInvocationTarget ?? invocation.Method;
             //对当前方法的特性验证
             //如果需要验证
-            if (method.GetCustomAttributes(true).FirstOrDefault(x => x.GetType() == typeof(UseTranAttribute)) is UseTranAttribute)
+            if (method.GetCustomAttribute<UseTranAttribute>(true) is { } uta)
             {
                 try
                 {
-                    Console.WriteLine($"Begin Transaction");
-
-                    _unitOfWork.BeginTran();
+                    Before(method, uta.Propagation);
 
                     invocation.Proceed();
 
@@ -48,12 +50,14 @@ namespace Xu.Extensions
                             Task.WaitAll(result as Task);
                         }
                     }
-                    _unitOfWork.CommitTran();
+
+                    After(method);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Console.WriteLine($"Rollback Transaction");
-                    _unitOfWork.RollbackTran();
+                    _logger.LogError(ex.ToString());
+                    AfterException(method);
+                    throw;
                 }
             }
             else
@@ -61,6 +65,47 @@ namespace Xu.Extensions
                 invocation.Proceed();//直接执行被拦截方法
             }
         }
+
+        private void Before(MethodInfo method, Propagation propagation)
+        {
+            switch (propagation)
+            {
+                case Propagation.Required:
+                    if (_unitOfWorkManage.TranCount <= 0)
+                    {
+                        _logger.LogDebug($"Begin Transaction");
+                        Console.WriteLine($"Begin Transaction");
+                        _unitOfWorkManage.BeginTran(method);
+                    }
+
+                    break;
+                case Propagation.Mandatory:
+                    if (_unitOfWorkManage.TranCount <= 0)
+                    {
+                        throw new Exception("事务传播机制为:[Mandatory],当前不存在事务");
+                    }
+
+                    break;
+                case Propagation.Nested:
+                    _logger.LogDebug($"Begin Transaction");
+                    Console.WriteLine($"Begin Transaction");
+                    _unitOfWorkManage.BeginTran(method);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(propagation), propagation, null);
+            }
+        }
+
+        private void After(MethodInfo method)
+        {
+            _unitOfWorkManage.CommitTran(method);
+        }
+
+        private void AfterException(MethodInfo method)
+        {
+            _unitOfWorkManage.RollbackTran(method);
+        }
+
 
         private static async Task SuccessAction(IInvocation invocation)
         {

@@ -33,14 +33,14 @@ namespace Xu.Model
                 SeedDataFolder = Path.Combine(WebRootPath, SeedDataFolder);
 
                 Console.WriteLine("************ WebApi DataBase Set *****************");
-                Console.WriteLine($"Is multi-DataBase: {Appsettings.App(new string[] { "MutiDBEnabled" })}");
-                Console.WriteLine($"Is CQRS: {Appsettings.App(new string[] { "CQRSEnabled" })}");
+                Console.WriteLine($"Is multi-DataBase: {AppSettings.App(new string[] { "MutiDBEnabled" })}");
+                Console.WriteLine($"Is CQRS: {AppSettings.App(new string[] { "CQRSEnabled" })}");
                 Console.WriteLine();
                 Console.WriteLine($"Master DB ConId: {MyContext.ConnId}");
                 Console.WriteLine($"Master DB Type: {MyContext.DbType}");
                 Console.WriteLine($"Master DB ConnectString: {MyContext.ConnectionString}");
                 Console.WriteLine();
-                if (Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+                if (AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
                 {
                     var slaveIndex = 0;
                     BaseDBConfig.MutiConnectionString.Item1.Where(x => x.ConnId != MainDb.CurrentDbConnId).ToList().ForEach(m =>
@@ -52,7 +52,7 @@ namespace Xu.Model
                         Console.WriteLine($"--------------------------------------");
                     });
                 }
-                else if (Appsettings.App(new string[] { "CQRSEnabled" }).ToBoolReq())
+                else if (AppSettings.App(new string[] { "CQRSEnabled" }).ToBoolReq())
                 {
                     var slaveIndex = 0;
                     BaseDBConfig.MutiConnectionString.Item2.Where(x => x.ConnId != MainDb.CurrentDbConnId).ToList().ForEach(m =>
@@ -86,17 +86,6 @@ namespace Xu.Model
                 // 创建数据库表，遍历指定命名空间下的class，注意不要把其他命名空间下的也添加进来。
                 Console.WriteLine("Create Tables...");
 
-                //var modelTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
-                //                 where t.IsClass && t.Namespace == "Xu.Model.Models"
-                //                 select t;
-                //modelTypes.ToList().ForEach(t =>
-                //{
-                //    if (!myContext.Db.DbMaintenance.IsAnyTable(t.Name))
-                //    {
-                //        Console.WriteLine(t.Name);
-                //        myContext.Db.CodeFirst.InitTables(t);
-                //    }
-                //});
                 var path = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
                 var referencedAssemblies = System.IO.Directory.GetFiles(path, "Xu.Model.dll").Select(Assembly.LoadFrom).ToArray();
                 var modelTypes = referencedAssemblies
@@ -116,7 +105,7 @@ namespace Xu.Model
                 ConsoleHelper.WriteSuccessLine($"Tables created successfully!");
                 Console.WriteLine();
 
-                if (Appsettings.App(new string[] { "AppSettings", "SeedDBDataEnabled" }).ToBoolReq())
+                if (AppSettings.App(new string[] { "AppSettings", "SeedDBDataEnabled" }).ToBoolReq())
                 {
                     JsonSerializerSettings setting = new JsonSerializerSettings();
                     JsonConvert.DefaultSettings = new Func<JsonSerializerSettings>(() =>
@@ -205,8 +194,6 @@ namespace Xu.Model
                     }
 
                     #endregion TasksQz
-
-
 
                     #region Platform
 

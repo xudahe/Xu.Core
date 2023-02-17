@@ -15,7 +15,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 用户
         /// </summary>
-        [SugarColumn(Length = 128, IsNullable = true, ColumnDataType = "nvarchar")]
+        [SugarColumn(Length = 128, IsNullable = true, ColumnDataType = "varchar")]
         public string User { get; set; }
 
         /// <summary>

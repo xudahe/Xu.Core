@@ -514,7 +514,7 @@ namespace " + strNameSpace + @"
 	/// </summary>
     public class {ClassName}Repo : BaseRepo<{ClassName}>, I{ClassName}Repo" + (string.IsNullOrEmpty(strInterface) ? "" : (" , " + strInterface)) + @"
     {
-        public {ClassName}Repo(IUnitOfWork unitOfWork) : base(unitOfWork)
+        public {ClassName}Repo(IUnitOfWorkManage unitOfWorkManage) : base(unitOfWorkManage)
         {
         }
     }

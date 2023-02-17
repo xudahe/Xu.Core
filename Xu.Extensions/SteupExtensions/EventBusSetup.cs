@@ -18,14 +18,14 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
             {
-                var subscriptionClientName = Appsettings.App(new string[] { "EventBus", "SubscriptionClientName" });
+                var subscriptionClientName = AppSettings.App(new string[] { "EventBus", "SubscriptionClientName" });
 
                 services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
                 services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
 
-                if (Appsettings.App(new string[] { "RabbitMQ", "Enabled" }).ToBoolReq())
+                if (AppSettings.App(new string[] { "RabbitMQ", "Enabled" }).ToBoolReq())
                 {
                     services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
                     {
@@ -35,15 +35,15 @@ namespace Xu.Extensions
                         var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                         var retryCount = 5;
-                        if (!string.IsNullOrEmpty(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" })))
+                        if (!string.IsNullOrEmpty(AppSettings.App(new string[] { "RabbitMQ", "RetryCount" })))
                         {
-                            retryCount = int.Parse(Appsettings.App(new string[] { "RabbitMQ", "RetryCount" }));
+                            retryCount = int.Parse(AppSettings.App(new string[] { "RabbitMQ", "RetryCount" }));
                         }
 
                         return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
                     });
                 }
-                if (Appsettings.App(new string[] { "Kafka", "Enabled" }).ToBoolReq())
+                if (AppSettings.App(new string[] { "Kafka", "Enabled" }).ToBoolReq())
                 {
                     services.AddHostedService<KafkaConsumerHostService>();
                     services.AddSingleton<IEventBus, EventBusKafka>();
@@ -53,7 +53,7 @@ namespace Xu.Extensions
 
         public static void ConfigureEventBus(this IApplicationBuilder App)
         {
-            if (Appsettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
             {
                 var eventBus = App.ApplicationServices.GetRequiredService<IEventBus>();
 

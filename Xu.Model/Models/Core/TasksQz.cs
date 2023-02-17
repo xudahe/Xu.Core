@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Xu.EnumHelper;
-using Xu.Model.ViewModel;
+using Xu.Model.ViewModels;
 
 namespace Xu.Model.Models
 {
@@ -39,13 +39,13 @@ namespace Xu.Model.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue)]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue)]
         public string Remark { get; set; }
 
         /// <summary>
         /// 执行日志
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "nvarchar", Length = int.MaxValue, ColumnDescription = "执行日志")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "执行日志")]
         public string TasksLog { get; set; }
 
         /// <summary>

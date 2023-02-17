@@ -14,7 +14,7 @@ namespace Xu.Extensions
 
         public RedisCacheManager()
         {
-            string redisConfiguration = Appsettings.App(new string[] { "AppSettings", "RedisCachingAOP", "ConnectionString" });//获取连接字符串
+            string redisConfiguration = AppSettings.App(new string[] { "AppSettings", "RedisCachingAOP", "ConnectionString" });//获取连接字符串
 
             if (string.IsNullOrWhiteSpace(redisConfiguration))
             {

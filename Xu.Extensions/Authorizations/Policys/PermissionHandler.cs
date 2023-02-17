@@ -81,14 +81,13 @@ namespace Xu.Extensions
                     //            Url = item.Module?.LinkUrl,
                     //            Role = item.Role?.Name.ObjToString(),
                     //        }).ToList();
-
-                    requirement.Permissions = list;
                 }
                 requirement.Permissions = list;
             }
 
             if (httpContext != null)
             {
+                //请求Url
                 var questUrl = httpContext.Request.Path.Value.ToLower();
 
                 // 整体结构类似认证中间件UseAuthentication的逻辑，具体查看开源地址
@@ -118,7 +117,7 @@ namespace Xu.Extensions
                     var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
 
                     // 是否开启测试环境
-                    var isTestCurrent = Appsettings.App(new string[] { "AppSettings", "UseLoadTest" }).ToBoolReq();
+                    var isTestCurrent = AppSettings.App(new string[] { "AppSettings", "UseLoadTest" }).ToBoolReq();
 
                     //result?.Principal不为空即登录成功
                     if (result?.Principal != null || isTestCurrent)

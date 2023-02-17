@@ -34,6 +34,11 @@ namespace Xu.Common
         /// <summary>
         /// 操作人
         /// </summary>
+        public string Api { get; set; }
+
+        /// <summary>
+        /// 操作人
+        /// </summary>
         public string User { get; set; }
 
         /// <summary>

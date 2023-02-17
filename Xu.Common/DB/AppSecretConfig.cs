@@ -4,8 +4,8 @@ namespace Xu.Common
 {
     public class AppSecretConfig
     {
-        private static readonly string Audience_Secret = Appsettings.App(new string[] { "Audience", "Secret" });
-        private static readonly string Audience_Secret_File = Appsettings.App(new string[] { "Audience", "SecretFile" });
+        private static readonly string Audience_Secret = AppSettings.App(new string[] { "Audience", "Secret" });
+        private static readonly string Audience_Secret_File = AppSettings.App(new string[] { "Audience", "SecretFile" });
 
         public static string Audience_Secret_String => InitAudience_Secret();
 

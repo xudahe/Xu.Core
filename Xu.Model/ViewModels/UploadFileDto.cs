@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Xu.Model
+namespace Xu.Model.ViewModels
 {
     public class UploadFileDto
     {

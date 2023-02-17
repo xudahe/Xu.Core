@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿
+using Xu.Common;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -15,6 +16,7 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
+
             // 添加Identityserver4认证
             services.AddAuthentication(o =>
             {
@@ -24,9 +26,9 @@ namespace Xu.Extensions
             })
             .AddJwtBearer(options =>
             {
-                options.Authority = Appsettings.App(new string[] { "Startup", "IdentityServer4", "AuthorizationUrl" });
+                options.Authority = AppSettings.App(new string[] { "Startup", "IdentityServer4", "AuthorizationUrl" });
                 options.RequireHttpsMetadata = false;
-                options.Audience = Appsettings.App(new string[] { "Startup", "IdentityServer4", "ApiName" });
+                options.Audience = AppSettings.App(new string[] { "Startup", "IdentityServer4", "ApiName" });
             })
             .AddScheme<AuthenticationSchemeOptions, ApiResponseHandler>(nameof(ApiResponseHandler), o => { });
         }

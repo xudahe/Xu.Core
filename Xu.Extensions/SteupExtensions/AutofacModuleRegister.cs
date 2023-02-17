@@ -7,7 +7,9 @@ using System.IO;
 using System.Reflection;
 using Xu.Common;
 using Xu.IRepository;
+using Xu.IServices;
 using Xu.Repository;
+using Xu.Services;
 
 namespace Xu.Extensions
 {
@@ -37,43 +39,51 @@ namespace Xu.Extensions
 
             // AOP 开关，如果想要打开指定的功能，只需要在 appsettigns.json 对应对应 true 就行。
             var cacheType = new List<Type>();
-            if (Appsettings.App(new string[] { "AppSettings", "RedisCachingAOP", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "AppSettings", "RedisCachingAOP", "Enabled" }).ToBoolReq())
             {
                 builder.RegisterType<RedisCacheAOP>(); //Redis缓存切面
                 cacheType.Add(typeof(RedisCacheAOP));
             }
-            if (Appsettings.App(new string[] { "AppSettings", "MemoryCachingAOP", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "AppSettings", "MemoryCachingAOP", "Enabled" }).ToBoolReq())
             {
                 builder.RegisterType<CacheAOP>(); //memory缓存切面
                 cacheType.Add(typeof(CacheAOP));
             }
-            if (Appsettings.App(new string[] { "AppSettings", "TranAOP", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "AppSettings", "TranAOP", "Enabled" }).ToBoolReq())
             {
                 builder.RegisterType<TranAOP>(); //Tran事务切面
                 cacheType.Add(typeof(TranAOP));
             }
-            if (Appsettings.App(new string[] { "AppSettings", "LogAOP", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "AppSettings", "LogAOP", "Enabled" }).ToBoolReq())
             {
                 builder.RegisterType<LogAOP>(); //Log日志切面
                 cacheType.Add(typeof(LogAOP));
             }
 
-            //注册仓储
-            builder.RegisterGeneric(typeof(BaseRepo<>)).As(typeof(IBaseRepo<>)).InstancePerDependency();
+           
+            builder.RegisterGeneric(typeof(BaseRepo<>)).As(typeof(IBaseRepo<>)).InstancePerDependency();//注册仓储
+            builder.RegisterGeneric(typeof(BaseSvc<>)).As(typeof(IBaseSvc<>)).InstancePerDependency();//注册服务
 
             // 获取 Service.dll 程序集服务，并注册
             var assemblysServices = Assembly.LoadFrom(servicesDllFile);
             builder.RegisterAssemblyTypes(assemblysServices)
-                      .AsImplementedInterfaces()
-                      .InstancePerDependency()
-                      .EnableInterfaceInterceptors()//引用Autofac.Extras.DynamicProxy;
-                      .InterceptedBy(cacheType.ToArray());//允许将拦截器服务的列表分配给注册。
+                .AsImplementedInterfaces()
+                .InstancePerDependency()
+                .PropertiesAutowired()
+                .EnableInterfaceInterceptors()       //引用Autofac.Extras.DynamicProxy;
+                .InterceptedBy(cacheType.ToArray()); //允许将拦截器服务的列表分配给注册。
 
             // 获取 Repository.dll 程序集服务，并注册
             var assemblysRepository = Assembly.LoadFrom(repositoryDllFile);
             builder.RegisterAssemblyTypes(assemblysRepository)
-                   .AsImplementedInterfaces()
-                   .InstancePerDependency();
+                .AsImplementedInterfaces()
+                .PropertiesAutowired()
+                .InstancePerDependency();
+
+            builder.RegisterType<UnitOfWorkManage>().As<IUnitOfWorkManage>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope()
+                .PropertiesAutowired();
 
             #endregion 带有接口层的服务注入
 

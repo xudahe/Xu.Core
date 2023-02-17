@@ -17,7 +17,7 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            if (Appsettings.App(new string[] { "Startup", "MiniProfiler", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Startup", "MiniProfiler", "Enabled" }).ToBoolReq())
             {
                 // 3.x使用MiniProfiler，必须要注册MemoryCache服务
                 services.AddMiniProfiler(options =>

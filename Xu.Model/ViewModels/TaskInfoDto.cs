@@ -1,4 +1,4 @@
-namespace Xu.Model.ViewModel
+namespace Xu.Model.ViewModels
 {
     /// <summary>
     /// 调度任务触发器信息实体

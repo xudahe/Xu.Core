@@ -21,7 +21,7 @@ namespace Xu.Extensions.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (Appsettings.App("Middleware", "IPLog", "Enabled").ToBoolReq())
+            if (AppSettings.App("Middleware", "IPLog", "Enabled").ToBoolReq())
             {
                 // 过滤，只有接口
                 if (context.Request.Path.Value.Contains("api"))
@@ -44,11 +44,11 @@ namespace Xu.Extensions.Middlewares
                         if (!string.IsNullOrEmpty(requestInfo))
                         {
                             // 自定义log输出
-                            //Parallel.For(0, 1, e =>
-                            //{
-                            //    LogLock.OutSql2Log("RequestIpInfoLog", new string[] { requestInfo + "," }, false);
-                            //});
-                            SerilogServer.WriteLog("RequestIpInfoLog", new string[] { requestInfo + ", " }, false);
+                            Parallel.For(0, 1, e =>
+                            {
+                                LogLock.OutLogAOP("RequestIpInfoLog", context.TraceIdentifier, new string[] { requestInfo.GetType().ToString(), requestInfo }, false);
+                            });
+                            //SerilogServer.WriteLog("RequestIpInfoLog", new string[] {  requestInfo.GetType().ToString(), requestInfo }, false);
 
                             // 这里读取过body  Position是读取过几次  而此操作优于控制器先行 控制器只会读取Position为零次的
                             request.Body.Position = 0;

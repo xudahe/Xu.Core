@@ -9,6 +9,7 @@ using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
+using Xu.Repository;
 using Xu.Services;
 
 namespace Blog.Core.Services
@@ -19,14 +20,14 @@ namespace Blog.Core.Services
     public class WeChatConfigServices : BaseSvc<WeChatConfig>, IWeChatConfigServices
     {
         private readonly IBaseRepo<WeChatConfig> _dal;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkManage _unitOfWorkManage;
         private readonly ILogger<WeChatConfigServices> _logger;
 
-        public WeChatConfigServices(IBaseRepo<WeChatConfig> dal, IUnitOfWork unitOfWork, ILogger<WeChatConfigServices> logger)
+        public WeChatConfigServices(IBaseRepo<WeChatConfig> dal, IUnitOfWorkManage unitOfWorkManage, ILogger<WeChatConfigServices> logger)
         {
             this._dal = dal;
             base.BaseDal = dal;
-            this._unitOfWork = unitOfWork;
+            this._unitOfWorkManage = unitOfWorkManage;
             this._logger = logger;
         }
 
@@ -864,17 +865,17 @@ namespace Blog.Core.Services
 
             try
             {
-                _unitOfWork.BeginTran();
+                _unitOfWorkManage.BeginTran();
                 await _dal.Db.Updateable<WeChatQR>(ticket).ExecuteCommandAsync();
                 if (isNewBind)
                     await _dal.Db.Insertable<WeChatSub>(bindUser).ExecuteCommandAsync();
                 else
                     await _dal.Db.Updateable<WeChatSub>(bindUser).ExecuteCommandAsync();
-                _unitOfWork.CommitTran();
+                _unitOfWorkManage.CommitTran();
             }
             catch
             {
-                _unitOfWork.RollbackTran();
+                _unitOfWorkManage.RollbackTran();
                 throw;
             }
             return @$"<xml><ToUserName><![CDATA[{weChat.FromUserName}]]></ToUserName>

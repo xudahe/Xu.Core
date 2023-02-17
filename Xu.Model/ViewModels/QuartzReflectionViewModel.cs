@@ -1,4 +1,4 @@
-namespace Xu.Model.ViewModel
+namespace Xu.Model.ViewModels
 {
     /// <summary>
     /// 实现IJob的类

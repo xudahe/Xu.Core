@@ -7,7 +7,7 @@ using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 
-namespace Blog.Core.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
 	/// WeChatConfigController

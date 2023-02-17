@@ -25,15 +25,13 @@ namespace Xu.WebApi.Controllers
     [Authorize(Permissions.Name)]
     public class ValueController : ControllerBase
     {
-        private readonly IHttpContextAccessor _accessor;
 
         private readonly IHttpPollyHelper _httpPollyHelper;
 
         private readonly IAspNetUser _aspNetUser;
 
-        public ValueController(IHttpContextAccessor accessor, IHttpPollyHelper httpPollyHelper, IAspNetUser aspNetUser)
+        public ValueController( IHttpPollyHelper httpPollyHelper, IAspNetUser aspNetUser)
         {
-            _accessor = accessor;
             // httpPolly
             _httpPollyHelper = httpPollyHelper;
             // 测试 Httpcontext
@@ -98,20 +96,6 @@ namespace Xu.WebApi.Controllers
             return "Okay";
         }
 
-        /// <summary>
-        /// 获取MiniProfiler的html代码片段
-        /// </summary>
-        /// <remarks>将生成的内容拷贝出来粘贴在Swagger的index.html顶部</remarks>
-        /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
-        public string GetHtmlMiniProfiler()
-        {
-            var html = MiniProfiler.Current.RenderIncludes(_accessor.HttpContext);
-
-            return html.Value;
-        }
-
         #region HttpPolly
 
         [HttpPost]
@@ -149,7 +133,7 @@ namespace Xu.WebApi.Controllers
         [AllowAnonymous]
         public async Task<string> GetConfigByAppllo(string key)
         {
-            return await Task.FromResult(Appsettings.App(key));
+            return await Task.FromResult(AppSettings.App(key));
         }
 
         #endregion Apollo 配置

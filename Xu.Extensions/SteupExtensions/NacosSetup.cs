@@ -17,7 +17,7 @@ namespace Xu.Extensions
 
             // 在实际生产工作中 本地开发是不需要注册nacos的 所以根据环境变量去判断
             // 比如 开发环境 dev  测试环境 test  生产 prod  只有这几种环境变量的时候才需要去注册nacos
-            if (Appsettings.App(new string[] { "Startup", "Nacos", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Startup", "Nacos", "Enabled" }).ToBoolReq())
             {
                 // 从当前配置取文件去注册naocs
                 services.AddNacosV2Config(x =>

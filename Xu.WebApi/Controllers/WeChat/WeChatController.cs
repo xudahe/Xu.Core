@@ -8,7 +8,7 @@ using Xu.IServices;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
 
-namespace Xu.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
     /// 微信公众号管理

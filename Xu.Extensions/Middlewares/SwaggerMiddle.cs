@@ -23,7 +23,7 @@ namespace Xu.Extensions.Middlewares
             app.UseSwaggerUI(c =>
             {
                 //根据版本名称倒序 遍历展示
-                var ApiName = Appsettings.App(new string[] { "Startup", "ApiName" });
+                var ApiName = AppSettings.App(new string[] { "Startup", "ApiName" });
                 typeof(ApiVersions).GetEnumNames().OrderByDescending(e => e).ToList().ForEach(version =>
                 {
                     c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{ApiName} {version}");
@@ -45,7 +45,7 @@ namespace Xu.Extensions.Middlewares
 
                 c.DefaultModelsExpandDepth(-1); // 不显示models
 
-                c.RoutePrefix = "";//路径配置为空，设置后直接输入IP就可以进入接口文档
+                c.RoutePrefix = string.Empty;//路径配置为空，设置后直接输入IP就可以进入接口文档
             });
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -29,7 +30,7 @@ namespace Xu.Extensions.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (Appsettings.App("Middleware", "RequestResponseLog", "Enabled").ToBoolReq())
+            if (AppSettings.App("Middleware", "RequestResponseLog", "Enabled").ToBoolReq())
             {
                 // 过滤，只有接口
                 if (context.Request.Path.Value.Contains("api"))
@@ -58,7 +59,6 @@ namespace Xu.Extensions.Middlewares
                     catch (Exception ex)
                     {
                         // 记录异常
-                        //ErrorLogData(context.Response, ex);
                         _logger.LogError(ex.Message + "" + ex.InnerException);
                     }
                     finally
@@ -86,16 +86,22 @@ namespace Xu.Extensions.Middlewares
         {
             var request = context.Request;
             var sr = new StreamReader(request.Body);
-
-            var content = $" QueryData：{request.Path + request.QueryString}\r\n BodyData：{await sr.ReadToEndAsync()}";
+            RequestLogInfo requestResponse = new RequestLogInfo()
+            {
+                Path = request.Path,
+                QueryString = request.QueryString.ToString(),
+                BodyData = await sr.ReadToEndAsync()
+            };
+            var content = JsonConvert.SerializeObject(requestResponse);
+            //var content = $" QueryData:{request.Path + request.QueryString}\r\n BodyData:{await sr.ReadToEndAsync()}";
 
             if (!string.IsNullOrEmpty(content))
             {
-                //Parallel.For(0, 1, e =>
-                //{
-                //    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Request Data:", content });
-                //});
-                SerilogServer.WriteLog("RequestLog", new string[] { "Request Data：", content });
+                Parallel.For(0, 1, e =>
+                {
+                    LogLock.OutLogAOP("RequestLog", context.TraceIdentifier, new string[] { "Request Data -  RequestJsonDataType:" + requestResponse.GetType().ToString(), content });
+                });
+                //SerilogServer.WriteLog("RequestLog", new string[] { "Request Data -  RequestJsonDataType:" + requestResponse.GetType().ToString(), content });
 
                 request.Body.Position = 0;
             }
@@ -117,11 +123,11 @@ namespace Xu.Extensions.Middlewares
 
             if (!string.IsNullOrEmpty(ResponseBody))
             {
-                //Parallel.For(0, 1, e =>
-                //{
-                //    LogLock.OutSql2Log("RequestResponseLog", new string[] { "Response Data:", ResponseBody });
-                //});
-                SerilogServer.WriteLog("ResponseLog", new string[] { "Response Data：", ResponseBody });
+                Parallel.For(0, 1, e =>
+                {
+                    LogLock.OutLogAOP("ResponseLog", response.HttpContext.TraceIdentifier, new string[] { "Response Data -  ResponseJsonDataType:" + ResponseBody.GetType().ToString(), ResponseBody });
+                });
+                //SerilogServer.WriteLog("ResponseLog", new string[] { "Response Data：", ResponseBody });
             }
         }
     }

@@ -101,12 +101,12 @@ namespace Xu.WebApi.Controllers
             if (dataList.Count > 0)
             {
                 data.Message = "该角色已存在";
-                data.Success = false;
             }
             else
             {
                 model.Id = await _roleSvc.Add(model);
                 data.Response = model;
+                data.Message = "添加成功";
             }
 
             return data;
@@ -122,17 +122,12 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            var menuList = await _menuSvc.GetDataByids(model.MenuIds);
-            model.MenuInfoList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuList);
-
             if (model != null && model.Id > 0)
             {
-                model.ModifyTime = DateTime.Now;
                 data.Success = await _roleSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";
-                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -156,7 +151,6 @@ namespace Xu.WebApi.Controllers
                 if (data.Success)
                 {
                     data.Message = "删除成功";
-                    data.Response = model.Id.ToString();
                 }
             }
 
@@ -183,7 +177,6 @@ namespace Xu.WebApi.Controllers
             if (data.Success)
             {
                 data.Message = falg ? "禁用成功" : "启用成功";
-                data.Response = model.Id.ToString();
             }
 
             return data;
@@ -206,12 +199,12 @@ namespace Xu.WebApi.Controllers
 
                 var platModal = (await _platformSvc.GetDataByids(platId.ToString())).First();
 
-                var systemModal = await _systemSvc.GetDataByids(systemId.ToString());
+                var systemModal = (await _systemSvc.GetDataByids(systemId.ToString())).First();
 
                 var menuModal = await _menuSvc.GetDataByids(menuIds);
 
                 InfoPlatform infoPlatform = _mapper.Map<Platform, InfoPlatform>(platModal);
-                InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal.First());
+                InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal);
                 IList<InfoMenu> infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
 
                 IList<InfoPlatform> defaultList = new List<InfoPlatform>();
@@ -259,6 +252,7 @@ namespace Xu.WebApi.Controllers
                     defaultList.Add(infoPlatform);
                 }
 
+                roleModal.MenuIds = menuIds;
                 roleModal.InfoList = defaultList;
                 await _roleSvc.Update(roleModal);
 
@@ -272,7 +266,6 @@ namespace Xu.WebApi.Controllers
             {
                 return new MessageModel<string>()
                 {
-                    Success = false,
                     Message = "更新失败"
                 };
             }

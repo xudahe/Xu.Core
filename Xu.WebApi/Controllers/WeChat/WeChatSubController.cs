@@ -7,11 +7,11 @@ using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 
-namespace Blog.Core.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
-	/// WeChatSubController
-	/// </summary>
+    /// WeChatSubController
+    /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize(Permissions.Name)]

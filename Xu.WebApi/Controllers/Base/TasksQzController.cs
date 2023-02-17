@@ -12,8 +12,9 @@ using Xu.IRepository;
 using Xu.IServices;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
-using Xu.Model.ViewModel;
+using Xu.Model.ViewModels;
 using Xu.Tasks;
+using Xu.Repository;
 
 namespace Xu.WebApi.Controllers
 {
@@ -27,11 +28,11 @@ namespace Xu.WebApi.Controllers
     {
         private readonly ITasksQzSvc _tasksQzSvc;
         private readonly ISchedulerCenter _schedulerCenter;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkManage _unitOfWorkManage;
 
-        public TasksQzController(ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter, IUnitOfWork unitOfWork)
+        public TasksQzController(ITasksQzSvc tasksQzSvc, ISchedulerCenter schedulerCenter, IUnitOfWorkManage unitOfWorkManage)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWorkManage = unitOfWorkManage;
             _tasksQzSvc = tasksQzSvc;
             _schedulerCenter = schedulerCenter;
         }
@@ -102,7 +103,7 @@ namespace Xu.WebApi.Controllers
         {
             var data = new MessageModel<string>();
 
-            _unitOfWork.BeginTran();
+            _unitOfWorkManage.BeginTran();
 
             tasksQz.JobStatus = tasksQz.IsStart ? JobStatus.运行中 : JobStatus.未启动;
             var id = await _tasksQzSvc.Add(tasksQz);
@@ -137,9 +138,9 @@ namespace Xu.WebApi.Controllers
             finally
             {
                 if (data.Success)
-                    _unitOfWork.CommitTran();
+                    _unitOfWorkManage.CommitTran();
                 else
-                    _unitOfWork.RollbackTran();
+                    _unitOfWorkManage.RollbackTran();
             }
 
             return data;
@@ -157,12 +158,11 @@ namespace Xu.WebApi.Controllers
 
             if (tasksQz != null && tasksQz.Id > 0)
             {
-                _unitOfWork.BeginTran();
+                _unitOfWorkManage.BeginTran();
 
-                tasksQz.ModifyTime = DateTime.Now;
                 tasksQz.JobStatus = tasksQz.JobStatus;
                 data.Success = await _tasksQzSvc.Update(tasksQz);
-                data.Response = tasksQz?.Id.ToString();
+                data.Response = tasksQz.Id.ToString();
                 data.Message = data.Success ? "更新成功" : "更新失败";
 
                 try
@@ -198,9 +198,9 @@ namespace Xu.WebApi.Controllers
                 finally
                 {
                     if (data.Success)
-                        _unitOfWork.CommitTran();
+                        _unitOfWorkManage.CommitTran();
                     else
-                        _unitOfWork.RollbackTran();
+                        _unitOfWorkManage.RollbackTran();
                 }
             }
             return data;
@@ -219,12 +219,12 @@ namespace Xu.WebApi.Controllers
             var model = await _tasksQzSvc.QueryById(id);
             if (model != null)
             {
-                _unitOfWork.BeginTran();
+                _unitOfWorkManage.BeginTran();
 
                 model.DeleteTime = DateTime.Now;
                 model.JobStatus = JobStatus.已停止;
                 data.Success = await _tasksQzSvc.Update(model);
-                data.Response = model?.Id.ToString();
+                data.Response = model.Id.ToString();
                 data.Message = data.Success ? "更新成功" : "更新失败";
 
                 try
@@ -250,9 +250,9 @@ namespace Xu.WebApi.Controllers
                 finally
                 {
                     if (data.Success)
-                        _unitOfWork.CommitTran();
+                        _unitOfWorkManage.CommitTran();
                     else
-                        _unitOfWork.RollbackTran();
+                        _unitOfWorkManage.RollbackTran();
                 }
             }
             else

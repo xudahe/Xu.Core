@@ -3,17 +3,18 @@ using Microsoft.Extensions.Configuration.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xu.Common;
 
 namespace Xu.Common
 {
     /// <summary>
     /// appsettings.json操作类
     /// </summary>
-    public class Appsettings
+    public class AppSettings
     {
         private static IConfiguration Configuration { get; set; }
 
-        public Appsettings(string contentPath)
+        public AppSettings(string contentPath)
         {
             string Path = "appsettings.json";
 
@@ -26,7 +27,7 @@ namespace Xu.Common
                .Build();
         }
 
-        public Appsettings(IConfiguration configuration)
+        public AppSettings(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -59,6 +60,7 @@ namespace Xu.Common
         public static List<T> App<T>(params string[] sections)
         {
             List<T> list = new List<T>();
+            // 引用 Microsoft.Extensions.Configuration.Binder 包
             Configuration.Bind(string.Join(":", sections), list);
             return list;
         }
@@ -80,3 +82,31 @@ namespace Xu.Common
         }
     }
 }
+
+#region 使用方式，多种方式均可使用
+
+//1、按一定的层级路径，组成多个逗号隔开的一组参数
+//Permissions.IsUseIds4 = AppSettings.app("Startup", "IdentityServer4", "Enabled").ObjToBool();
+//RoutePrefix.Name = AppSettings.app("AppSettings", "SvcName").ObjToString();
+
+
+//2、按照一定的层级路径，组成字符串数组
+
+//Permissions.IsUseIds4 = AppSettings.app(new string[] { "Startup", "IdentityServer4", "Enabled" }).ObjToBool();
+//RoutePrefix.Name = AppSettings.app(new string[] { "AppSettings", "SvcName" }).ObjToString();
+
+
+//3、按照一定的层级路径，组成冒号隔开的字符串
+
+//string PermissionServName = AppSettings.GetValue("ApiGateWay:PermissionServName");
+//string PermissionServGroup = AppSettings.GetValue("ApiGateWay:PermissionServGroup");
+//string PermissionServUrl = AppSettings.GetValue("ApiGateWay:PermissionServUrl");
+
+
+//4、返回结果除了是字符串以外，也支持返回List泛型数组或对象
+//List<MutiDBOperate> listdatabase = AppSettings.app<MutiDBOperate>("DBS")
+//    .Where(i => i.Enabled).ToList();
+//List<Urlobj> WhiteList = _cache.Cof_GetICaching<List<Urlobj>>("WhiteList", () => AppSettings.app<Urlobj>("WhiteList"), 10);
+
+
+#endregion

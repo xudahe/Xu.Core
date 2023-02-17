@@ -23,7 +23,7 @@ namespace Xu.Extensions
             services.AddSingleton<ConnectionMultiplexer>(sp =>
             {
                 //获取连接字符串
-                string redisConfiguration = Appsettings.App(new string[] { "Redis", "ConnectionString" });
+                string redisConfiguration = AppSettings.App(new string[] { "Redis", "ConnectionString" });
 
                 var configuration = ConfigurationOptions.Parse(redisConfiguration, true);
 

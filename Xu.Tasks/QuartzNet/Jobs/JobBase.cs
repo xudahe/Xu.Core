@@ -28,7 +28,7 @@ namespace Xu.Tasks
             //JOB组名
             string groupName = context.JobDetail.Key.Group;
             //日志
-            string jobHistory = $"【{DateTime.Now:yyyy-MM-dd HH:mm:ss}】【执行开始】【Id：{jobid}，组别：{groupName}】";
+            string jobHistory = $"【Id：{jobid}，组别：{groupName}】【{DateTime.Now:yyyy-MM-dd HH:mm:ss} 执行开始】";
             //耗时
             double taskSeconds = 0;
             try
@@ -36,18 +36,18 @@ namespace Xu.Tasks
                 stopwatch.Start();
                 await func();//执行任务
                 stopwatch.Stop();
-                jobHistory += $"，【{DateTime.Now:yyyy-MM-dd HH:mm:ss}】【执行成功】";
+                jobHistory += $"，【{DateTime.Now:yyyy-MM-dd HH:mm:ss} 执行成功】";
             }
             catch (Exception ex)
             {
                 JobExecutionException e2 = new JobExecutionException(ex);
                 e2.RefireImmediately = true; //true 是立即重新执行任务
-                jobHistory += $"，【{DateTime.Now:yyyy-MM-dd HH:mm:ss}】【执行失败:{ex.Message}】";
+                jobHistory += $"，【{DateTime.Now:yyyy-MM-dd HH:mm:ss} 执行失败】({ex.Message})";
             }
             finally
             {
                 taskSeconds = Math.Round(stopwatch.Elapsed.TotalSeconds, 3);  // 总秒数
-                jobHistory += $"，【{DateTime.Now:yyyy-MM-dd HH:mm:ss}】【执行结束】(耗时:{taskSeconds}秒)";
+                jobHistory += $"，【{DateTime.Now:yyyy-MM-dd HH:mm:ss} 执行结束】(耗时:{taskSeconds}秒)";
                 if (_tasksQzSvc != null)
                 {
                     var separator = "<br>";
@@ -58,7 +58,7 @@ namespace Xu.Tasks
                         model.PerformTime = DateTime.Now;
 
                         // 这里注意数据库字段的长度问题，超过限制，会造成数据库remark不更新问题。
-                        model.TasksLog = $"{jobHistory}{separator}" + string.Join(separator, StringHelper.GetTopDataBySeparator(model.TasksLog, separator, 5));
+                        model.TasksLog = $"{jobHistory}{separator}" + string.Join(separator, StringHelper.GetTopDataBySeparator(model.TasksLog, separator, 3));
                         await _tasksQzSvc.Update(model);
 
                         SerilogServer.WriteLog("任务调度--" + model.JobName, new string[] { jobHistory }, false);

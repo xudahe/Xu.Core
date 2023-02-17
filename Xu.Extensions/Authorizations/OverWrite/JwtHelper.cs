@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SqlSugar.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,8 +19,8 @@ namespace Xu.Extensions
         /// <returns></returns>
         public static string IssueJwt(TokenModelJwt tokenModel)
         {
-            string iss = Appsettings.App(new string[] { "Audience", "Issuer" });
-            string aud = Appsettings.App(new string[] { "Audience", "Audience" });
+            string iss = AppSettings.App(new string[] { "Audience", "Issuer" });
+            string aud = AppSettings.App(new string[] { "Audience", "Audience" });
             string secret = AppSecretConfig.Audience_Secret_String;
 
             //var claims = new Claim[] //old
@@ -70,23 +71,25 @@ namespace Xu.Extensions
         public static TokenModelJwt SerializeJwt(string jwtStr)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(jwtStr);
-            object role;
-            try
+            TokenModelJwt tokenModelJwt = new TokenModelJwt();
+
+            // token校验
+            if (jwtStr.IsNotEmptyOrNull() && jwtHandler.CanReadToken(jwtStr))
             {
+
+                JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(jwtStr);
+
+                object role;
+
                 jwtToken.Payload.TryGetValue(ClaimTypes.Role, out role);
+
+                tokenModelJwt = new TokenModelJwt
+                {
+                    Id = (jwtToken.Id).ObjToInt(),
+                    Role = role != null ? role.ToString() : "",
+                };
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            var tm = new TokenModelJwt
-            {
-                Id = (jwtToken.Id).ToInt32Req(),
-                Role = role != null ? role.ToString() : "",
-            };
-            return tm;
+            return tokenModelJwt;
         }
 
         public static bool CustomSafeVerify(string token)

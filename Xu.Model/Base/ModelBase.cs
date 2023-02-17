@@ -26,6 +26,8 @@ namespace Xu.Model
         // IsOnlyIgnoreInsert //是否仅对添加忽略
         // IsOnlyIgnoreUpdate //是否仅对修改忽略
 
+        //[SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)] //IsJson 支持JObject JArray ，实体 ，集合等类型
+
         /// <summary>
         /// 主键Id，领域对象标识
         /// </summary>
@@ -42,7 +44,7 @@ namespace Xu.Model
         /// 创建时间
         /// </summary>
         [SugarColumn(IsNullable = true, IsOnlyIgnoreUpdate = true, ColumnDescription = "创建时间")]
-        public DateTime CreateTime { get; set; } = DateTime.Now;
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// 修改时间

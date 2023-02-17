@@ -51,13 +51,13 @@ builder.Host
 });
 
 // 2、配置服务
-builder.Services.AddSingleton(new Appsettings(builder.Configuration));
+builder.Services.AddSingleton(new AppSettings(builder.Configuration));
 builder.Services.AddSingleton(new LogLock(builder.Environment.ContentRootPath));//接口请求日志
-//builder.Services.AddSingleton(new SerilogServer(builder.Environment.ContentRootPath)); //接口请求日志
 //builder.Services.AddUiFilesZipSetup(builder.Environment);
 
-Permissions.IsUseIds4 = Appsettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
-RoutePrefix.Name = Appsettings.App(new string[] { "AppSettings", "SvcName" }).ObjToString();
+Permissions.IsUseIds4 = AppSettings.App(new string[] { "Startup", "IdentityServer4", "Enabled" }).ToBoolReq();
+Permissions.IsUseAuthing = AppSettings.App(new string[] { "Startup", "Authing", "Enabled" }).ToBoolReq();
+RoutePrefix.Name = AppSettings.App(new string[] { "AppSettings", "SvcName" }).ObjToString();
 
 // 确保从ids4认证中心返回的ClaimType不被更改，不使用Map映射
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -85,9 +85,10 @@ builder.Services.AddNacosSetup(builder.Configuration);
 
 // 授权+认证 (jwt or ids4)
 builder.Services.AddAuthorizationSetup();
-if (Permissions.IsUseIds4)
+if (Permissions.IsUseIds4 || Permissions.IsUseAuthing)
 {
-    builder.Services.AddAuthentication_Ids4Setup();
+    if (Permissions.IsUseIds4) builder.Services.AddAuthentication_Ids4Setup();
+    else if (Permissions.IsUseAuthing) builder.Services.AddAuthentication_AuthingSetup();
 }
 else
 {
@@ -117,7 +118,7 @@ builder.Services.AddHttpPollySetup();
 
 builder.Services.AddControllers(options => //启用控制器
 {
-    if (Appsettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq())
+    if (AppSettings.App(new string[] { "RSACryption", "Enabled" }).ToBoolReq())
     {
         options.Filters.Add(typeof(DataDecryptFilter)); //数据解密过滤器
     }
@@ -178,13 +179,15 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 //builder.WebHost.ConfigureKestrel(options => options.ListenAnyIP(5000, opts => opts.Protocols = HttpProtocols.Http1));
 //builder.WebHost.UseUrls("http://localhost:1081;https://localhost:1082");
+
+//如果用IIS部署 需要注释UseKestrel
 builder.WebHost.UseKestrel((host, options) =>
 {
-    options.ListenAnyIP(1081);
-    options.ListenAnyIP(1082);
-    //options.Listen(IPAddress.Loopback, 5000);
-    //options.Listen(IPAddress.Loopback, 5001);
-    //options.ListenLocalhost(5004, opts => opts.UseHttps());
+   options.ListenAnyIP(1081);
+   options.ListenAnyIP(1082);
+   //options.Listen(IPAddress.Loopback, 5000);
+   //options.Listen(IPAddress.Loopback, 5001);
+   //options.ListenLocalhost(5004, opts => opts.UseHttps());
 });
 
 #endregion //配置启动地址
@@ -219,7 +222,7 @@ app.UseSwaggerAuthorized();
 app.UseSwaggerMiddle(() => Assembly.GetExecutingAssembly().GetManifestResourceStream("Xu.WebApi.index.html"));
 
 // ↓↓↓↓↓↓ 注意下边这些中间件的顺序，很重要 ↓↓↓↓↓↓
-app.UseCors(Appsettings.App(new string[] { "Startup", "Cors", "PolicyName" }));   // CORS跨域
+app.UseCors(AppSettings.App(new string[] { "Startup", "Cors", "PolicyName" }));   // CORS跨域
 //app.UseHttpsRedirection();  // 重定向中间件，用于将 HTTP 请求重定向到 HTTPS
 
 // 使用静态文件

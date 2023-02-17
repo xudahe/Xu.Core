@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Xu.IServices;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
-using Xu.Model.ViewModel;
+using Xu.Model.ViewModels;
 
 namespace Xu.Tasks
 {

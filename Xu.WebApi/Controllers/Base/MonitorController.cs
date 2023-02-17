@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Model.ResultModel;
-using Xu.Model.ViewModel;
+using Xu.Model.ViewModels;
 using Xu.Services.IDS4Db;
 
 namespace Xu.WebApi.Controllers
@@ -74,7 +74,7 @@ namespace Xu.WebApi.Controllers
         [HttpGet]
         public MessageModel<List<LogInfo>> Get()
         {
-            if (Appsettings.App(new string[] { "Middleware", "SignalRSendLog", "Enabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "Middleware", "SignalRSendLog", "Enabled" }).ToBoolReq())
             {
                 _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData()).Wait();
             }
@@ -131,7 +131,7 @@ namespace Xu.WebApi.Controllers
         {
             List<ApiDate> apiDates = new List<ApiDate>();
 
-            if (Appsettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+            if (AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
             {
                 var users = await _applicationUserSvc.Query(d => d.TdIsDelete == false);
 

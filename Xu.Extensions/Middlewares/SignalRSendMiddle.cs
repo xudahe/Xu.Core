@@ -29,7 +29,7 @@ namespace Xu.Extensions.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (Appsettings.App("Middleware", "SignalR", "Enabled").ToBoolReq())
+            if (AppSettings.App("Middleware", "SignalR", "Enabled").ToBoolReq())
             {
                 // 给当前连接到 Hub 上的所有连接发送消息，相当于广播
                 await _hubContext.Clients.All.SendAsync("ReceiveUpdate", LogLock.GetLogData());

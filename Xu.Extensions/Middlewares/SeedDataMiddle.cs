@@ -19,7 +19,7 @@ namespace Xu.Extensions.Middlewares
 
             try
             {
-                if (Appsettings.App("AppSettings", "SeedDBEnabled").ToBoolReq() || Appsettings.App("AppSettings", "SeedDBDataEnabled").ToBoolReq())
+                if (AppSettings.App("AppSettings", "SeedDBEnabled").ToBoolReq() || AppSettings.App("AppSettings", "SeedDBDataEnabled").ToBoolReq())
                 {
                     DBSeed.SeedAsync(myContext, webRootPath).Wait();
                 }

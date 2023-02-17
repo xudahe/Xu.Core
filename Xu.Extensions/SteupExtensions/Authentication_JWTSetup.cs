@@ -1,4 +1,5 @@
-﻿using Castle.Core.Internal;
+﻿
+using Xu.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -21,25 +21,25 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            //读取配置文件
+
             var symmetricKeyAsBase64 = AppSecretConfig.Audience_Secret_String;
             var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
             var signingKey = new SymmetricSecurityKey(keyByteArray);
-            var Issuer = Appsettings.App(new string[] { "Audience", "Issuer" });
-            var Audience = Appsettings.App(new string[] { "Audience", "Audience" });
+            var Issuer = AppSettings.App(new string[] { "Audience", "Issuer" });
+            var Audience = AppSettings.App(new string[] { "Audience", "Audience" });
 
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             // 令牌验证参数
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,//是否验证SecurityKey
+                ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
-                ValidateIssuer = true,//是否验证Issuer
+                ValidateIssuer = true,
                 ValidIssuer = Issuer,//发行人
-                ValidateAudience = true,//是否验证Audience
+                ValidateAudience = true,
                 ValidAudience = Audience,//订阅人
-                ValidateLifetime = true,//是否验证失效时间
+                ValidateLifetime = true,
                 ClockSkew = TimeSpan.FromSeconds(30),
                 RequireExpirationTime = true,
             };
@@ -65,9 +65,9 @@ namespace Xu.Extensions
                      OnAuthenticationFailed = context =>
                      {
                          var jwtHandler = new JwtSecurityTokenHandler();
-                         var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                         var token = context.Request.Headers["Authorization"].ObjToString().Replace("Bearer ", "");
 
-                         if (!token.IsNullOrEmpty() && jwtHandler.CanReadToken(token))
+                         if (token.IsNotEmptyOrNull() && jwtHandler.CanReadToken(token))
                          {
                              var jwtToken = jwtHandler.ReadJwtToken(token);
 
@@ -82,6 +82,7 @@ namespace Xu.Extensions
                              }
                          }
 
+
                          // 如果过期，则把<是否过期>添加到，返回头信息中
                          if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                          {
@@ -92,6 +93,7 @@ namespace Xu.Extensions
                  };
              })
              .AddScheme<AuthenticationSchemeOptions, ApiResponseHandler>(nameof(ApiResponseHandler), o => { });
+
         }
     }
 }

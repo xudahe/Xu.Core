@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Extensions;
 using Xu.IServices;
 using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 
-namespace Blog.Core.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
 	/// WeChatCompanyController

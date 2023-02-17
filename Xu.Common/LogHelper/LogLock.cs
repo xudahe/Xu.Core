@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,19 +30,49 @@ namespace Xu.Common
         /// <param name="dataParas"></param>
         /// <param name="IsHeader"></param>
         /// <param name="isWrt"></param>
-        public static void OutSql2Log(string prefix, string[] dataParas, bool IsHeader = true, bool isWrt = false)
+        public static void OutLogAOP(string prefix, string traceId, string[] dataParas, bool IsHeader = true)
         {
-            if (Appsettings.App(new string[] { "AppSettings", "LogToDb", "Enabled" }).ToBoolReq())
+            string AppSetingNodeName = "AppSettings";
+            string AppSetingName = "LogAOP";
+            switch (prefix)
             {
-                OutSql2LogToDB(prefix, dataParas, IsHeader);
+                case "AOPLog":
+                case "AOPLogEx":
+                    AppSetingName = "LogAOP";
+                    break;
+                case "RequestIpInfoLog":
+                    AppSetingNodeName = "Middleware";
+                    AppSetingName = "IPLog";
+                    break;
+                case "RecordAccessLogs":
+                    AppSetingNodeName = "Middleware";
+                    AppSetingName = "RecordAccessLogs";
+                    break;
+                case "SqlLog":
+                    AppSetingName = "SqlAOP";
+                    break;
+                case "RequestLog":
+                case "ResponseLog":
+                    AppSetingNodeName = "Middleware";
+                    AppSetingName = "RequestResponseLog";
+                    break;
+                default:
+                    break;
             }
-            else
+            if (AppSettings.App(new string[] { AppSetingNodeName, AppSetingName, "Enabled" }).ToBoolReq())
             {
-                OutSql2LogToFile(prefix, dataParas, IsHeader, isWrt);
+                if (AppSettings.App(new string[] { AppSetingNodeName, AppSetingName, "LogToDB", "Enabled" }).ToBoolReq())
+                {
+                    OutSql2LogToDB(prefix, traceId, dataParas, IsHeader);
+                }
+                if (AppSettings.App(new string[] { AppSetingNodeName, AppSetingName, "LogToFile", "Enabled" }).ToBoolReq())
+                {
+                    OutSql2LogToFile(prefix, traceId, dataParas, IsHeader);
+                }
             }
         }
 
-        public static void OutSql2LogToFile(string filename, string[] dataParas, bool IsHeader = true, bool isWrt = false)
+        public static void OutSql2LogToFile(string prefix, string traceId, string[] dataParas, bool IsHeader = true, bool isWrt = false)
         {
             try
             {
@@ -51,26 +82,71 @@ namespace Xu.Common
                 //      因进入与退出写入模式应在同一个try finally语句块内，所以在请求进入写入模式之前不能触发异常，否则释放次数大于请求次数将会触发异常
                 LogWriteLock.EnterWriteLock();
 
-                var path = Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"));
-                if (!Directory.Exists(path))//如果路径不存在
+                var folderPath = Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"));
+                if (!Directory.Exists(folderPath))
                 {
-                    Directory.CreateDirectory(path);//创建一个路径的文件夹
+                    //如果路径不存在，创建一个路径的文件夹
+                    Directory.CreateDirectory(folderPath);
                 }
-
-                string logFilePath = Path.Combine(path, $@"{filename}.log");
-
-                string logContent = string.Join("\r\n", dataParas);
+                //string logFilePath = Path.Combine(path, $@"{filename}.log");
+                var logFilePath = FileHelper.GetAvailableFileWithPrefixOrderSize(folderPath, prefix);
+                switch (prefix)
+                {
+                    case "AOPLog":
+                        AOPLogInfo apiLogAopInfo = JsonConvert.DeserializeObject<AOPLogInfo>(dataParas[1]);
+                        //记录被拦截方法信息的日志信息
+                        var dataIntercept = "" +
+                            $"【操作时间】：{apiLogAopInfo.RequestTime}\r\n" +
+                            $"【当前操作用户】：{apiLogAopInfo.OpUserName} \r\n" +
+                            $"【当前执行方法】：{apiLogAopInfo.RequestMethodName} \r\n" +
+                            $"【携带的参数有】： {apiLogAopInfo.RequestParamsName} \r\n" +
+                            $"【携带的参数JSON】： {apiLogAopInfo.RequestParamsData} \r\n" +
+                            $"【响应时间】：{apiLogAopInfo.ResponseIntervalTime}\r\n" +
+                            $"【执行完成时间】：{apiLogAopInfo.ResponseTime}\r\n" +
+                            $"【执行完成结果】：{apiLogAopInfo.ResponseJsonData}\r\n";
+                        dataParas = new string[] { dataIntercept };
+                        break;
+                    case "AOPLogEx":
+                        AOPLogExInfo apiLogAopExInfo = JsonConvert.DeserializeObject<AOPLogExInfo>(dataParas[1]);
+                        var dataInterceptEx = "" +
+                            $"【操作时间】：{apiLogAopExInfo.AOPLogInfo.RequestTime}\r\n" +
+                            $"【当前操作用户】：{apiLogAopExInfo.AOPLogInfo.OpUserName} \r\n" +
+                            $"【当前执行方法】：{apiLogAopExInfo.AOPLogInfo.RequestMethodName} \r\n" +
+                            $"【携带的参数有】： {apiLogAopExInfo.AOPLogInfo.RequestParamsName} \r\n" +
+                            $"【携带的参数JSON】： {apiLogAopExInfo.AOPLogInfo.RequestParamsData} \r\n" +
+                            $"【响应时间】：{apiLogAopExInfo.AOPLogInfo.ResponseIntervalTime}\r\n" +
+                            $"【执行完成时间】：{apiLogAopExInfo.AOPLogInfo.ResponseTime}\r\n" +
+                            $"【执行完成结果】：{apiLogAopExInfo.AOPLogInfo.ResponseJsonData}\r\n" +
+                            $"【执行完成异常信息】：方法中出现异常：{apiLogAopExInfo.ExMessage}\r\n" +
+                            $"【执行完成异常】：方法中出现异常：{apiLogAopExInfo.InnerException}\r\n";
+                        dataParas = new string[] { dataInterceptEx };
+                        break;
+                }
+                var now = DateTime.Now;
+                string logContent = String.Join("\r\n", dataParas);
                 if (IsHeader)
                 {
                     logContent = (
                        "--------------------------------\r\n" +
                        DateTime.Now + "|\r\n" +
-                       string.Join("\r\n", dataParas) + "\r\n"
+                       String.Join("\r\n", dataParas) + "\r\n"
                        );
                 }
+                else
+                {
+                    logContent = (
+                       dataParas[1] + ",\r\n"
+                       );
+                }
+
+                //if (logContent.IsNotEmptyOrNull() && logContent.Length > 500)
+                //{
+                //    logContent = logContent.Substring(0, 500) + "\r\n";
+                //}
                 if (isWrt)
                 {
                     File.WriteAllText(logFilePath, logContent);
+
                 }
                 else
                 {
@@ -93,39 +169,43 @@ namespace Xu.Common
             }
         }
 
-        public static void OutSql2LogToDB(string prefix, string[] dataParas, bool IsHeader = true)
+        public static void OutSql2LogToDB(string prefix, string traceId, string[] dataParas, bool IsHeader = true)
         {
-            string logContent = String.Join("\r\n", dataParas);
+            log4net.LogicalThreadContext.Properties["LogType"] = prefix;
+            log4net.LogicalThreadContext.Properties["TraceId"] = traceId;
+            if (dataParas.Length >= 2)
+            {
+                log4net.LogicalThreadContext.Properties["DataType"] = dataParas[0];
+            }
+
+            dataParas = dataParas.Skip(1).ToArray();
+
+            string logContent = string.Join("", dataParas);
             if (IsHeader)
             {
-                logContent = (
-                   "--------------------------------\r\n" +
-                   DateTime.Now + "|\r\n" +
-                   string.Join("\r\n", dataParas) + "\r\n"
-                   );
+                logContent = (string.Join("", dataParas));
             }
             switch (prefix)
             {
+                //DEBUG | INFO | WARN | ERROR | FATAL
                 case "AOPLog":
                     log.Info(logContent);
                     break;
-
                 case "AOPLogEx":
                     log.Error(logContent);
                     break;
-
                 case "RequestIpInfoLog":
                     log.Debug(logContent);
                     break;
-
                 case "RecordAccessLogs":
                     log.Debug(logContent);
                     break;
-
                 case "SqlLog":
                     log.Info(logContent);
                     break;
-
+                case "RequestResponseLog":
+                    log.Debug(logContent);
+                    break;
                 default:
                     break;
             }

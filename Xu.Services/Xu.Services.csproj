@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Xu.IRepository\Xu.IRepository.csproj" />
     <ProjectReference Include="..\Xu.IServices\Xu.IServices.csproj" />
+    <ProjectReference Include="..\Xu.Repository\Xu.Repository.csproj" />
   </ItemGroup>
 
 </Project>

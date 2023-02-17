@@ -7,12 +7,13 @@ using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 
-namespace Xu.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
 	/// WeChatPushLogController
 	/// </summary>
     [Route("api/[controller]/[action]")]
+    //[CustomRoute(ApiVersions.V2)]
     [ApiController]
     [Authorize(Permissions.Name)]
     public partial class WeChatPushLogController : Controller

@@ -19,7 +19,7 @@ namespace Xu.Extensions.Middlewares
 
             try
             {
-                if (Appsettings.App("Middleware", "IpRateLimit", "Enabled").ToBoolReq())
+                if (AppSettings.App("Middleware", "IpRateLimit", "Enabled").ToBoolReq())
                 {
                     app.UseIpRateLimiting();
                 }
