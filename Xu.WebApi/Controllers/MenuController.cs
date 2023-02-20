@@ -267,6 +267,7 @@ namespace Xu.WebApi.Controllers
             var data = new MessageModel<string>();
             if (model != null && model.Id > 0)
             {
+                data.Success = await _menuSvc.Update(model);
                 if (data.Success)
                 {
                     data.Message = "更新成功";

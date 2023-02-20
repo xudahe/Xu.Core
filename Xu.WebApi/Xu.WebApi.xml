@@ -628,7 +628,7 @@
         </member>
         <member name="M:Xu.WebApi.Controllers.RoleController.RoleByMenuId(System.String,System.String,System.String,System.String)">
             <summary>
-            角色-->平台-->菜单
+            角色-->平台-->系统-->菜单
             </summary>
             <param name="roleId">角色id或guid</param>
             <param name="platId">平台id或guid</param>

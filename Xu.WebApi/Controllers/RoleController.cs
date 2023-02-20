@@ -183,7 +183,7 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 角色-->平台-->菜单
+        /// 角色-->平台-->系统-->菜单
         /// </summary>
         /// <param name="roleId">角色id或guid</param>
         /// <param name="platId">平台id或guid</param>
@@ -201,15 +201,23 @@ namespace Xu.WebApi.Controllers
 
                 var systemModal = (await _systemSvc.GetDataByids(systemId.ToString())).First();
 
-                var menuModal = await _menuSvc.GetDataByids(menuIds);
+                var menuModal = new List<Menu>();  
 
                 InfoPlatform infoPlatform = _mapper.Map<Platform, InfoPlatform>(platModal);
                 InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal);
-                IList<InfoMenu> infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
+                IList<InfoMenu> infoMenuList = new List<InfoMenu>();
+
+                if (!string.IsNullOrEmpty(menuIds)) 
+                {
+                     menuModal = await _menuSvc.GetDataByids(menuIds);
+                     infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
+                }
+         
 
                 IList<InfoPlatform> defaultList = new List<InfoPlatform>();
 
                 var platFalg = false;
+                var menuIds_new = menuIds;
 
                 if (roleModal.InfoList != null && roleModal.InfoList.Count > 0)
                 {
@@ -234,6 +242,7 @@ namespace Xu.WebApi.Controllers
                                         systemFlag = true;
                                         defaultList[i].InfoSystemList[j].InfoMenuList = infoMenuList;
                                     }
+                                    menuIds_new += "," + defaultList[i].InfoSystemList[j].InfoMenuList.Select(s => s.Guid).JoinToString(",");
                                 }
                             }
 
@@ -252,7 +261,9 @@ namespace Xu.WebApi.Controllers
                     defaultList.Add(infoPlatform);
                 }
 
-                roleModal.MenuIds = menuIds;
+
+
+                roleModal.MenuIds = menuIds_new.TrimStart(',').TrimEnd(',');
                 roleModal.InfoList = defaultList;
                 await _roleSvc.Update(roleModal);
 
