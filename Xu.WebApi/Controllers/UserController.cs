@@ -13,6 +13,7 @@ using Xu.Repository;
 using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
+using Xu.Model.XmlModels;
 
 namespace Xu.WebApi.Controllers
 {

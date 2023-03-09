@@ -12,6 +12,7 @@
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
     <PackageReference Include="PinYinConverterCore" Version="1.0.2" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
     <PackageReference Include="QRCoder" Version="1.4.1" />
@@ -25,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xu.EnumHelper\Xu.EnumHelper.csproj" />
+    <ProjectReference Include="..\Xu.Model\Xu.Model.csproj" />
   </ItemGroup>
 
 </Project>

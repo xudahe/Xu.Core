@@ -9,7 +9,8 @@ namespace Xu.Model.Models
     /// <summary>
     /// 定时任务计划列表
     /// </summary>
-    [SugarTable("TasksQz", "WMBLOG_MYSQL_1")]
+    [SugarTable("TasksQz", "任务调度")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class TasksQz : ModelBase
     {
         /// <summary>

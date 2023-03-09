@@ -13,6 +13,7 @@ using Xu.Model.Models;
 
 /// <summary>
 /// 本月活跃用户（使用任务调度，1分钟统计一次）
+/// 这里要注意下，命名空间和程序集是一样的，不然反射不到
 /// </summary>
 namespace Xu.Tasks
 {
@@ -98,7 +99,7 @@ namespace Xu.Tasks
         private List<UserAccessFromFIles> GetAccessLogs()
         {
             List<UserAccessFromFIles> userAccessModels = new();
-            var accessLogs = LogLock.ReadLog(Path.Combine(_environment.ContentRootPath, "Log", DateTime.Now.ToString("yyyyMMdd")), "AccessTrendLog.log", Encoding.UTF8, ReadType.PrefixLatest, 2).ObjToString().TrimEnd(',');
+            var accessLogs = LogLock.ReadLog(Path.Combine(_environment.ContentRootPath, "Log"), "AccessTrendLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
             try
             {

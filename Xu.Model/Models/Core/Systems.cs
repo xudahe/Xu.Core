@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 namespace Xu.Model.Models
 {
     /// <summary>
-    /// 系统管理
+    /// 系统信息表
     /// </summary>
-    [SugarTable("Systems", "WMBLOG_MYSQL_1")]
+    [SugarTable("Systems", "系统信息表")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class Systems : ModelBase
     {
         /// <summary>

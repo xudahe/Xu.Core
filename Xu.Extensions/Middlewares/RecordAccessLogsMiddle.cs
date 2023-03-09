@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Xu.Common;
+using Xu.Common.HttpContextUser;
 using Xu.IServices;
 
 namespace Xu.Extensions.Middlewares

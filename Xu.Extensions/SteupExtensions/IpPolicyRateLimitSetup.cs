@@ -28,6 +28,7 @@ namespace Xu.Extensions
             //注入计数器和规则存储
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            // services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 
             // inject counter and rules distributed cache stores
             //services.AddSingleton<IIpPolicyStore, DistributedCacheIpPolicyStore>();

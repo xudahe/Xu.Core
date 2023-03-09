@@ -1,17 +1,7 @@
-﻿namespace Xu.Model
+﻿namespace Xu.Model.XmlModels
 {
-    public class InfoMenu
+    public class InfoMenu : RootEntityTkey
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Guid
-        /// </summary>
-        public string Guid { get; set; }
-
         /// <summary>
         /// 菜单名称
         /// </summary>

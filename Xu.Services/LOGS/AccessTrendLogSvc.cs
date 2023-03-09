@@ -4,11 +4,11 @@ using Xu.Model.Models;
 
 namespace Xu.Services
 {
-    public partial class OperateLogServices : BaseSvc<OperateLog>, IOperateLogSvc
+    public partial class AccessTrendLogSvc : BaseSvc<AccessTrendLog>, IAccessTrendLogSvc
     {
-        private IBaseRepo<OperateLog> _dal;
+        private IBaseRepo<AccessTrendLog> _dal;
 
-        public OperateLogServices(IBaseRepo<OperateLog> dal)
+        public AccessTrendLogSvc(IBaseRepo<AccessTrendLog> dal)
         {
             this._dal = dal;
             base.BaseDal = dal;

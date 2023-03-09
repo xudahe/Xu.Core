@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Xu.Model.ViewModels
+﻿namespace Xu.Model.ViewModels
 {
     public class PlatformViewModel : ModelBase
     {
@@ -28,10 +26,5 @@ namespace Xu.Model.ViewModels
         /// 备注
         /// </summary>
         public string Remark { get; set; }
-
-        /// <summary>
-        /// 所关联的菜单
-        /// </summary>
-        public IList<InfoSystem> MenuInfoList { get; set; }
     }
 }

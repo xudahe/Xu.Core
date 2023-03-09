@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Xu.Model.Models;
-
-namespace Xu.Model.ViewModels
+﻿namespace Xu.Model.ViewModels
 {
     public class MenuViewModel : ModelBase
     {
@@ -64,10 +61,5 @@ namespace Xu.Model.ViewModels
         /// 备注
         /// </summary>
         public string Remark { get; set; }
-
-        /// <summary>
-        /// 子级菜单
-        /// </summary>
-        public List<Menu> Children { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -202,7 +203,7 @@ namespace Xu.WebApi.Controllers
         private static List<UserAccessModel> GetAccessLogsToday(IWebHostEnvironment environment)
         {
             List<UserAccessModel> userAccessModels = new();
-            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log", DateTime.Now.ToString("yyyyMMdd")), "RecordAccessLogs.log", Encoding.UTF8, ReadType.PrefixLatest).ObjToString();
+            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log"), "RecordAccessLogs", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
             try
             {
@@ -233,7 +234,7 @@ namespace Xu.WebApi.Controllers
         private static List<ActiveUserVM> GetAccessLogsTrend(IWebHostEnvironment environment)
         {
             List<ActiveUserVM> userAccessModels = new();
-            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log", DateTime.Now.ToString("yyyyMMdd")), "AccessTrendLog.log", Encoding.UTF8, ReadType.PrefixLatest).ObjToString();
+            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log"), "AccessTrendLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
             try
             {

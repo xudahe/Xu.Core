@@ -10,7 +10,7 @@ using Xu.Model;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
 
-namespace Blog.Core.Controllers
+namespace Xu.Controllers
 {
     /// <summary>
     /// 图片管理

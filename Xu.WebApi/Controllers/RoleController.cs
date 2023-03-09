@@ -10,6 +10,7 @@ using Xu.IServices;
 using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
+using Xu.Model.XmlModels;
 
 namespace Xu.WebApi.Controllers
 {
@@ -201,18 +202,25 @@ namespace Xu.WebApi.Controllers
 
                 var systemModal = (await _systemSvc.GetDataByids(systemId.ToString())).First();
 
-                var menuModal = new List<Menu>();  
+                var menuModal = new List<Menu>();
 
                 InfoPlatform infoPlatform = _mapper.Map<Platform, InfoPlatform>(platModal);
                 InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal);
                 IList<InfoMenu> infoMenuList = new List<InfoMenu>();
 
-                if (!string.IsNullOrEmpty(menuIds)) 
+                if (!string.IsNullOrEmpty(menuIds))
                 {
-                     menuModal = await _menuSvc.GetDataByids(menuIds);
-                     infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
+                    menuModal = await _menuSvc.GetDataByids(menuIds);
+                    infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
                 }
-         
+                else
+                {
+                    return new MessageModel<string>()
+                    {
+                        Message = "关联的菜单为空！"
+                    };
+                }
+
 
                 IList<InfoPlatform> defaultList = new List<InfoPlatform>();
 

@@ -3,15 +3,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Xu.WebApi
 {
+    /// <summary>
+    /// 测试注入，【暂时无用】
+    /// </summary>
     public class UseServiceDIAttribute : ActionFilterAttribute
     {
-        protected readonly ILogger<UseServiceDIAttribute> _logger;
-
         //private readonly IBlogArticleServices _blogArticleServices;
 
         public UseServiceDIAttribute(ILogger<UseServiceDIAttribute> logger)
         {
-            _logger = logger;
             //_blogArticleServices = blogArticleServices;
         }
 

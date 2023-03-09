@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xu.Model.Models;
 
 namespace Xu.Model.ViewModels
@@ -52,42 +49,16 @@ namespace Xu.Model.ViewModels
         /// </summary>
         public bool Enabled { get; set; }
 
-        public IList<RoleModel> RoleInfoList { get; set; }
-
-        public IList<MenuViewModel> MenuInfoList { get; set; }
-
         public IList<DeptViewModel> DeptInfoList { get; set; }
+
+        public IList<RoleViewModel> RoleInfoList { get; set; }
+
+        public IList<MenuModel> MenuInfoList { get; set; }
 
         /// <summary>
         /// 返回所关联数据： 平台-->系统-->菜单
         /// </summary>
         public IList<PlatformModel> PlatformInfoList { get; set; }
-    }
-
-    /// <summary>
-    /// 返回的角色信息
-    /// </summary>
-    public class RoleModel : ModelBase
-    {
-        /// <summary>
-        /// 角色简码
-        /// </summary>
-        public string RoleCode { get; set; }
-
-        /// <summary>
-        /// 角色名称
-        /// </summary>
-        public string RoleName { get; set; }
-
-        /// <summary>
-        /// 备注
-        /// </summary>
-        public string Remark { get; set; }
-
-        /// <summary>
-        /// 是否禁用
-        /// </summary>
-        public bool Enabled { get; set; }
     }
 
     /// <summary>
@@ -123,7 +94,7 @@ namespace Xu.Model.ViewModels
         /// <summary>
         /// 所关联的菜单
         /// </summary>
-        public IList<SystemModel> MenuInfoList { get; set; }
+        public IList<SystemModel> SystemfoList { get; set; }
     }
 
     /// <summary>
@@ -226,5 +197,20 @@ namespace Xu.Model.ViewModels
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 子级菜单
+        /// </summary>
+        public List<Menu> Children { get; set; }
+    }
+
+
+    public class SParent : ModelBase
+    {
+        public string ParentId { get; set; }
+    }
+    public class MParent : ModelBase
+    {
+        public string ParentId { get; set; }
     }
 }

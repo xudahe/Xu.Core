@@ -14,6 +14,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using Xu.Common;
+using Xu.Common.Core;
 using Xu.Extensions;
 using Xu.Extensions.Apollo;
 using Xu.Extensions.Middlewares;
@@ -82,6 +83,7 @@ builder.Services.AddRabbitMQSetup();
 builder.Services.AddKafkaSetup(builder.Configuration);
 builder.Services.AddEventBusSetup();
 builder.Services.AddNacosSetup(builder.Configuration);
+builder.Services.AddInitializationHostServiceSetup();
 
 // 授权+认证 (jwt or ids4)
 builder.Services.AddAuthorizationSetup();
@@ -194,6 +196,7 @@ builder.WebHost.UseKestrel((host, options) =>
 
 // 3、配置中间件
 var app = builder.Build();
+app.ConfigureApplication();
 
 if (app.Environment.IsDevelopment())
 {
@@ -253,21 +256,10 @@ app.UseMiniProfilerMiddle();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-         name: "default",
-         pattern: "{controller=Home}/{action=Index}/{id?}");
+         name: "default",         pattern: "{controller=Home}/{action=Index}/{id?}");
 
     endpoints.MapHub<ChatHub>("/api/chatHub");
 });
-
-var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-var myContext = scope.ServiceProvider.GetRequiredService<MyContext>();
-var tasksQzServices = scope.ServiceProvider.GetRequiredService<ITasksQzSvc>();
-var schedulerCenter = scope.ServiceProvider.GetRequiredService<ISchedulerCenter>();
-var lifetime = scope.ServiceProvider.GetRequiredService<IHostApplicationLifetime>();
-app.UseSeedDataMilddle(myContext, builder.Environment.WebRootPath);  // 生成种子数据
-app.UseQuartzJobMiddle(tasksQzServices, schedulerCenter);  // 开启QuartzNetJob调度服务
-app.UseConsulMiddle(builder.Configuration, lifetime);  // 服务注册
-app.ConfigureEventBus();    // 事件总线，订阅服务
 
 // 4、运行
 app.Run();

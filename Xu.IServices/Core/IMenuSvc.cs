@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xu.Model.Models;
 
@@ -13,5 +14,14 @@ namespace Xu.IServices
         /// <param name="list"></param>
         /// <returns></returns>
         Task<List<Menu>> GetDataByids(string ids, List<Menu> list = null);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="menuData"></param>
+        /// <param name="menuList"></param>
+        /// <param name="systemList"></param>
+        /// <returns></returns>
+        Task<List<Menu>> GetMenuTree(List<Menu> menuData, List<Menu> menuList, List<Systems> systemList);
     }
 }

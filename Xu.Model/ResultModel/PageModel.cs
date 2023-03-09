@@ -31,5 +31,15 @@ namespace Xu.Model.ResultModel
         /// 返回数据
         /// </summary>
         public List<T> Data { get; set; }
+
+        public PageModel() { }
+
+        public PageModel(int page, int dataCount, int pageSize, List<T> data)
+        {
+            this.Page = page;
+            this.PageCount = dataCount;
+            this.PageSize = pageSize;
+            this.Data = data;
+        }
     }
 }

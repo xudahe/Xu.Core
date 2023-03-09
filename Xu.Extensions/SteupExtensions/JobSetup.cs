@@ -17,12 +17,8 @@ namespace Xu.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            //services.AddHostedService<Job1TimedService>();
-            //services.AddHostedService<Job2TimedService>();
-
             services.AddSingleton<IJobFactory, JobFactory>();
             //services.AddTransient<JobQuartz>();//Job使用瞬时依赖注入，或者使用下方的程序集注入
-            //services.AddTransient<Job_OperateLog>();
             //services.AddTransient<Job_AccessTrendLog>();
             services.AddSingleton<ISchedulerCenter, SchedulerCenter>();
 

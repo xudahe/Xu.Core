@@ -6,7 +6,7 @@ namespace Xu.Model.Models
     /// <summary>
     /// 定义对日志实例进行持久化支撑的实体
     /// </summary>
-    [SugarTable("GblLogAudit", TableDescription = "日志审计")]
+    [SugarTable("GblLogAudit", "日志审计")]
     public class GblLogAudit
     {
         ///<summary>

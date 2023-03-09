@@ -38,6 +38,11 @@ namespace Xu.WebApi
             });
         }
 
+        /// <summary>
+        /// 判断用户名是否合法
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static bool IsLegalName(string username)
         {
             //判断用户名是否合法
@@ -45,9 +50,13 @@ namespace Xu.WebApi
             return (!string.IsNullOrEmpty(username) && Regex.IsMatch(username, pattern));
         }
 
+        /// <summary>
+        /// 判断手机号
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
         public static bool IsLegalPhone(string phone)
         {
-            //判断手机号
             const string pattern = "(^1\\d{10}$)";
             return (!string.IsNullOrEmpty(phone) && Regex.IsMatch(phone, pattern));
         }

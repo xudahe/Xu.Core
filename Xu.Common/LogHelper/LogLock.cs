@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -189,22 +190,22 @@ namespace Xu.Common
             {
                 //DEBUG | INFO | WARN | ERROR | FATAL
                 case "AOPLog":
-                    log.Info(logContent);
+                    //log.Info(logContent);
                     break;
                 case "AOPLogEx":
-                    log.Error(logContent);
+                    //log.Error(logContent);
                     break;
                 case "RequestIpInfoLog":
-                    log.Debug(logContent);
+                    //log.Debug(logContent);
                     break;
                 case "RecordAccessLogs":
-                    log.Debug(logContent);
+                    //log.Debug(logContent);
                     break;
                 case "SqlLog":
-                    log.Info(logContent);
+                    //log.Info(logContent);
                     break;
                 case "RequestResponseLog":
-                    log.Debug(logContent);
+                    //log.Debug(logContent);
                     break;
                 default:
                     break;
@@ -289,40 +290,6 @@ namespace Xu.Common
             return s;
         }
 
-        /// <summary>
-        /// 读取log文件内容
-        /// </summary>
-        /// <param name="Path"></param>
-        /// <param name="encode"></param>
-        /// <returns></returns>
-        public static string ReadLog(string Path, Encoding encode)
-        {
-            string s = "";
-            try
-            {
-                LogWriteLock.EnterReadLock();
-
-                if (!File.Exists(Path))
-                {
-                    s = null;
-                }
-                else
-                {
-                    StreamReader f2 = new StreamReader(Path, encode);
-                    s = f2.ReadToEnd();
-                    f2.Close();
-                    f2.Dispose();
-                }
-            }
-            catch (Exception)
-            {
-            }
-            finally
-            {
-                LogWriteLock.ExitReadLock();
-            }
-            return s;
-        }
 
         /// <summary>
         /// 获取所有日志
@@ -363,11 +330,11 @@ namespace Xu.Common
 
             try
             {
-                var aoplogContent = ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "AOPLog.log"), Encoding.UTF8);
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "AOPLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
-                if (!string.IsNullOrEmpty(aoplogContent))
+                if (!string.IsNullOrEmpty(logContent))
                 {
-                    aopLogs = aoplogContent.Split("--------------------------------")
+                    aopLogs = logContent.Split("--------------------------------")
                                            .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
                                            .Select(d => new LogInfo
                                            {
@@ -392,9 +359,9 @@ namespace Xu.Common
 
             try
             {
-                var exclogContent = ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RequestResponseLog.log"), Encoding.UTF8);
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RequestResponseLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
-                resLogs = exclogContent.Split("--------------------------------")
+                resLogs = logContent.Split("--------------------------------")
                                        .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
                                        .Select(d => new LogInfo
                                        {
@@ -418,11 +385,11 @@ namespace Xu.Common
 
             try
             {
-                var exclogContent = ReadLog(Path.Combine(_contentRoot, "Log", $"GlobalExcepLogs_{DateTime.Now:yyyMMdd}.log"), Encoding.GetEncoding("gb2312"));
+                var logContent = ReadLog(Path.Combine(_contentRoot, "Log"), $"GlobalExcepLogs_{DateTime.Now.ToString("yyyMMdd")}.log", Encoding.UTF8);
 
-                if (!string.IsNullOrEmpty(exclogContent))
+                if (!string.IsNullOrEmpty(logContent))
                 {
-                    excLogs = exclogContent.Split("--------------------------------")
+                    excLogs = logContent.Split("--------------------------------")
                                  .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
                                  .Select(d => new LogInfo
                                  {
@@ -448,11 +415,12 @@ namespace Xu.Common
 
             try
             {
-                var sqllogContent = ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "SqlLog.log"), Encoding.UTF8);
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "SqlLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
-                if (!string.IsNullOrEmpty(sqllogContent))
+
+                if (!string.IsNullOrEmpty(logContent))
                 {
-                    sqlLogs = sqllogContent.Split("--------------------------------")
+                    sqlLogs = logContent.Split("--------------------------------")
                                            .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
                                            .Select(d => new LogInfo
                                            {
@@ -477,7 +445,9 @@ namespace Xu.Common
 
             try
             {
-                var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RequestIpInfoLog.log"), Encoding.UTF8) + "]");
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+
+                var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + logContent + "]");
 
                 Logs = Logs.Where(d => d.Datetime.ToDateTimeReq() >= DateTime.Today).ToList();
 
@@ -504,7 +474,9 @@ namespace Xu.Common
 
             try
             {
-                var Logs = JsonConvert.DeserializeObject<List<UserAccessModel>>("[" + LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RecordAccessLogs.log"), Encoding.UTF8) + "]");
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RecordAccessLogs", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+
+                var Logs = JsonConvert.DeserializeObject<List<UserAccessModel>>("[" + logContent + "]");
 
                 aceLogs = Logs.Where(d => d.BeginTime.ToDateTime() >= DateTime.Today).OrderByDescending(d => d.BeginTime).Take(50).ToList();
             }
@@ -513,47 +485,21 @@ namespace Xu.Common
             return aceLogs;
         }
 
-        public static List<string> GetFileList(string type = "")
-        {
-            List<string> filList = new List<string>();//定义list变量，存放获取到的路径
-            List<string> diiList = new List<string>();
-
-            DirectoryInfo dir = new DirectoryInfo(Path.Combine(_contentRoot, "Log"));
-            FileInfo[] fil = dir.GetFiles();  // 获取子文件夹内的文件列表
-            DirectoryInfo[] dii = dir.GetDirectories(); // 获取子文件夹内的文件夹列表
-
-            filList.Clear();
-            diiList.Clear();
-            foreach (FileInfo f in fil)
-            {
-                filList.Add(f.FullName);//添加文件的路径到列表
-            }
-            foreach (DirectoryInfo d in dii)
-            {
-                diiList.Add(d.FullName);//添加文件夹的路径到列表
-            }
-
-            if (type == "fil")
-                return filList;
-            else if (type == "dii")
-                return diiList;
-            else
-                return filList.Union(diiList).ToList();
-        }
-
         #region RequestIpInfoLog
 
         private static List<RequestInfo> GetRequestInfo(ReadType readType)
         {
             List<RequestInfo> requestInfos = new();
-            var accessLogs = ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd"), "RequestIpInfoLog.log"), Encoding.UTF8);
+
+            var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+
             try
             {
-                return JsonConvert.DeserializeObject<List<RequestInfo>>("[" + accessLogs + "]");
+                return JsonConvert.DeserializeObject<List<RequestInfo>>("[" + logContent + "]");
             }
             catch (Exception)
             {
-                var accLogArr = accessLogs.Split("\r\n");
+                var accLogArr = logContent.Split("\r\n");
                 foreach (var item in accLogArr)
                 {
                     if (item.ObjToString() != "")

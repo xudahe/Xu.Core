@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Xu.Model.ViewModels
+﻿namespace Xu.Model.ViewModels
 {
     public class DeptViewModel : ModelBase
     {

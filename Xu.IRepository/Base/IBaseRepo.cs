@@ -210,5 +210,49 @@ namespace Xu.IRepository
             Expression<Func<T1, T2, T3, object[]>> joinExpression,
             Expression<Func<T1, T2, T3, TResult>> selectExpression,
             Expression<Func<T1, T2, T3, bool>> whereLambda = null) where T1 : class, new();
+
+        /// <summary>
+        /// 两表联查-分页
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="joinExpression"></param>
+        /// <param name="selectExpression"></param>
+        /// <param name="whereExpression"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="orderByFields"></param>
+        /// <returns></returns>
+        Task<PageModel<TResult>> QueryTabsPage<T1, T2, TResult>(
+            Expression<Func<T1, T2, object[]>> joinExpression,
+            Expression<Func<T1, T2, TResult>> selectExpression,
+            Expression<Func<TResult, bool>> whereExpression,
+            int pageIndex = 1,
+            int pageSize = 20,
+            string orderByFields = null);
+
+        /// <summary>
+        /// 两表联合查询-分页-分组
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="joinExpression"></param>
+        /// <param name="selectExpression"></param>
+        /// <param name="whereExpression"></param>
+        /// <param name="groupExpression"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="orderByFields"></param>
+        /// <returns></returns>
+        Task<PageModel<TResult>> QueryTabsPage<T1, T2, TResult>(
+            Expression<Func<T1, T2, object[]>> joinExpression,
+            Expression<Func<T1, T2, TResult>> selectExpression,
+            Expression<Func<TResult, bool>> whereExpression,
+            Expression<Func<T1, object>> groupExpression,
+            int pageIndex = 1,
+            int pageSize = 20,
+            string orderByFields = null);
     }
 }

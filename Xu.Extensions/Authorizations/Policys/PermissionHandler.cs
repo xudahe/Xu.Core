@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Common.HttpContextUser;
 using Xu.IServices;
 
 namespace Xu.Extensions

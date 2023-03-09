@@ -2,8 +2,8 @@
 using SqlSugar.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IRepository;
@@ -21,23 +21,26 @@ namespace Xu.Repository
         {
             get
             {
+                ISqlSugarClient db = _dbBase;
+
                 /* 如果要开启多库支持，
-                 * 1、在appsettings.json 中开启MutiDBEnabled节点为true，必填
-                 * 2、设置一个主连接的数据库ID，节点MainDB，对应的连接字符串的Enabled也必须true，必填
-                 */
-                if (AppSettings.App(new string[] { "MutiDBEnabled" }).ToBoolReq())
+                * 1、在appsettings.json 中开启MutiDBEnabled节点为true，必填
+                * 2、设置一个主连接的数据库ID，节点MainDB，对应的连接字符串的Enabled也必须true，必填
+                */
+                if (AppSettings.App(new[] { "MutiDBEnabled" }).ToBoolReq())
                 {
-                    if (typeof(T).GetTypeInfo().GetCustomAttributes(typeof(SugarTable), true).FirstOrDefault((x => x.GetType() == typeof(SugarTable))) is SugarTable sugarTable && !string.IsNullOrEmpty(sugarTable.TableDescription))
+                    //修改使用 model备注字段作为切换数据库条件，使用sqlsugar TenantAttribute存放数据库ConnId
+                    //参考 https://www.donet5.com/Home/Doc?typeId=2246
+                    var tenantAttr = typeof(T).GetCustomAttribute<TenantAttribute>();
+                    if (tenantAttr != null)
                     {
-                        _dbBase.ChangeDatabase(sugarTable.TableDescription.ToLower());
-                    }
-                    else
-                    {
-                        _dbBase.ChangeDatabase(MainDb.CurrentDbConnId.ToLower()); //切换数据库 ConfigId = 0
+                        //统一处理 configId 小写
+                        db = _dbBase.GetConnectionScope(tenantAttr.configId.ToString().ToLower());
+                        return db;
                     }
                 }
 
-                return _dbBase;
+                return db;
             }
         }
 
@@ -385,6 +388,68 @@ namespace Xu.Repository
                 return await _db.Queryable(joinExpression).Select(selectExpression).ToListAsync();
             }
             return await _db.Queryable(joinExpression).Where(whereLambda).Select(selectExpression).ToListAsync();
+        }
+
+        /// <summary>
+        /// 两表联合查询-分页
+        /// </summary>
+        /// <typeparam name="T1">实体1</typeparam>
+        /// <typeparam name="T2">实体1</typeparam>
+        /// <typeparam name="TResult">返回对象</typeparam>
+        /// <param name="joinExpression">关联表达式</param>
+        /// <param name="selectExpression">返回表达式</param>
+        /// <param name="whereExpression">查询表达式</param>
+        /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="orderByFields">排序字段</param>
+        /// <returns></returns>
+        public async Task<PageModel<TResult>> QueryTabsPage<T1, T2, TResult>(
+            Expression<Func<T1, T2, object[]>> joinExpression,
+            Expression<Func<T1, T2, TResult>> selectExpression,
+            Expression<Func<TResult, bool>> whereExpression,
+            int pageIndex = 1,
+            int pageSize = 20,
+            string orderByFields = null)
+        {
+            RefAsync<int> totalCount = 0;
+            var list = await _db.Queryable<T1, T2>(joinExpression)
+                .Select(selectExpression)
+                .OrderByIF(!string.IsNullOrEmpty(orderByFields), orderByFields)
+                .WhereIF(whereExpression != null, whereExpression)
+                .ToPageListAsync(pageIndex, pageSize, totalCount);
+            return new PageModel<TResult>(pageIndex, totalCount, pageSize, list);
+        }
+
+        /// <summary>
+        /// 两表联合查询-分页-分组
+        /// </summary>
+        /// <typeparam name="T1">实体1</typeparam>
+        /// <typeparam name="T2">实体1</typeparam>
+        /// <typeparam name="TResult">返回对象</typeparam>
+        /// <param name="joinExpression">关联表达式</param>
+        /// <param name="selectExpression">返回表达式</param>
+        /// <param name="whereExpression">查询表达式</param>
+        /// <param name="groupExpression">group表达式</param>
+        /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">页大小</param>
+        /// <param name="orderByFields">排序字段</param>
+        /// <returns></returns>
+        public async Task<PageModel<TResult>> QueryTabsPage<T1, T2, TResult>(
+            Expression<Func<T1, T2, object[]>> joinExpression,
+            Expression<Func<T1, T2, TResult>> selectExpression,
+            Expression<Func<TResult, bool>> whereExpression,
+            Expression<Func<T1, object>> groupExpression,
+            int pageIndex = 1,
+            int pageSize = 20,
+            string orderByFields = null)
+        {
+            RefAsync<int> totalCount = 0;
+            var list = await _db.Queryable<T1, T2>(joinExpression).GroupBy(groupExpression)
+                .Select(selectExpression)
+                .OrderByIF(!string.IsNullOrEmpty(orderByFields), orderByFields)
+                .WhereIF(whereExpression != null, whereExpression)
+                .ToPageListAsync(pageIndex, pageSize, totalCount);
+            return new PageModel<TResult>(pageIndex, totalCount, pageSize, list);
         }
     }
 }

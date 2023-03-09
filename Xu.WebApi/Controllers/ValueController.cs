@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using StackExchange.Profiling;
 using Xu.EnumHelper;
 using Xu.IServices;
+using Xu.Common.HttpContextUser;
 
 namespace Xu.WebApi.Controllers
 {

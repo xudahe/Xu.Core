@@ -1,16 +1,18 @@
 ﻿using SqlSugar;
+using SqlSugar.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Xu.Common;
+using Xu.Model.XmlModels;
 
 namespace Xu.Model.Models
 {
     /// <summary>
     /// 用户信息表
     /// </summary>
-    [SugarTable("User", "WMBLOG_MYSQL_1")]    //可不写,对应数据库的dbo.User表
+    [SugarTable("User", "用户信息表")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class User : ModelBase
     {
         /// <summary>
@@ -84,6 +86,12 @@ namespace Xu.Model.Models
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// 租户Id
+        /// </summary>
+        [SugarColumn(IsNullable = false, DefaultValue = "0")]
+        public int TenantId { get; set; }
+
+        /// <summary>
         /// 用户关联角色的id或guid集合，不能同时包含两者
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "用户关联角色的id或guid集合")]
@@ -130,14 +138,14 @@ namespace Xu.Model.Models
 
         public string ToItemInfoXml()
         {
-            XElement xElement = new XElement("Role");
+            XElement xElement = new XElement("Xml");
             xElement.SetAttributeValue("Version", "1");
 
             if (_roleInfoList.Count > 0)
             {
                 foreach (var item in _roleInfoList)
                 {
-                    XElement xItem = new XElement("InfoItem");
+                    XElement xItem = new XElement("Role");
                     xItem.SetAttributeValue("Id", item.Id);
                     xItem.SetAttributeValue("Guid", item.Guid);
                     xItem.SetAttributeValue("RoleName", item.RoleName);
@@ -152,19 +160,19 @@ namespace Xu.Model.Models
         {
             IList<InfoRole> list = new List<InfoRole>();
             XElement x = XElement.Parse(_roleInfoItem);
-            if (x.Name != "Role")
+            if (x.Name != "Xml")
                 return list;
             XAttribute ver = x.Attribute("Version");
             if (ver == null || ver.Value != "1")
                 return list;
-            IList<XElement> xitems = x.Descendants("InfoItem").ToList();
+            IList<XElement> xitems = x.Descendants("Role").ToList();
             if (xitems.Count > 0)
             {
                 foreach (var xElement in xitems)
                 {
                     InfoRole item = new InfoRole
                     {
-                        Id = xElement.Attribute("Id").Value.ToInt32Req(),
+                        Id = xElement.Attribute("Id").Value.ObjToInt(),
                         Guid = xElement.Attribute("Guid").Value,
                         RoleName = xElement.Attribute("RoleName").Value,
                     };

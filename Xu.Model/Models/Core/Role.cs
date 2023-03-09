@@ -1,15 +1,17 @@
 ﻿using SqlSugar;
+using SqlSugar.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Xu.Common;
+using Xu.Model.XmlModels;
 
 namespace Xu.Model.Models
 {
     /// <summary>
-    /// 角色表
+    /// 角色信息表
     /// </summary>
-    [SugarTable("Role", "WMBLOG_MYSQL_1")]
+    [SugarTable("Role", "角色信息表")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class Role : ModelBase
     {
         /// <summary>
@@ -83,7 +85,7 @@ namespace Xu.Model.Models
 
         public string ToItemInfo_Xml()
         {
-            XElement xElement = new XElement("InfoItem");
+            XElement xElement = new XElement("Xml");
             xElement.SetAttributeValue("Version", "1");
 
             //平台
@@ -134,7 +136,7 @@ namespace Xu.Model.Models
         {
             IList<InfoPlatform> list = new List<InfoPlatform>();
             XElement x = XElement.Parse(_infoItem);
-            if (x.Name != "InfoItem")
+            if (x.Name != "Xml")
                 return list;
             XAttribute ver = x.Attribute("Version");
             if (ver == null || ver.Value != "1")
@@ -148,7 +150,7 @@ namespace Xu.Model.Models
                 {
                     InfoPlatform item = new InfoPlatform
                     {
-                        Id = xElement.Attribute("Id").Value.ToInt32Req(),
+                        Id = xElement.Attribute("Id").Value.ObjToInt(),
                         Guid = xElement.Attribute("Guid").Value,
                         PlatformName = xElement.Attribute("PlatformName").Value,
                     };
@@ -161,7 +163,7 @@ namespace Xu.Model.Models
                         {
                             InfoSystem item2 = new InfoSystem
                             {
-                                Id = xElement2.Attribute("Id").Value.ToInt32Req(),
+                                Id = xElement2.Attribute("Id").Value.ObjToInt(),
                                 Guid = xElement2.Attribute("Guid").Value,
                                 SystemName = xElement2.Attribute("SystemName").Value,
                             };
@@ -174,7 +176,7 @@ namespace Xu.Model.Models
                                 {
                                     InfoMenu item3 = new InfoMenu
                                     {
-                                        Id = xElement3.Attribute("Id").Value.ToInt32Req(),
+                                        Id = xElement3.Attribute("Id").Value.ObjToInt(),
                                         Guid = xElement3.Attribute("Guid").Value,
                                         MenuName = xElement3.Attribute("MenuName").Value,
                                     };

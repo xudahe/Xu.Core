@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xu.Common;
+using Xu.Common.HttpContextUser;
 using Xu.IServices;
 using Xu.Services;
 

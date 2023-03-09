@@ -98,47 +98,12 @@ namespace Xu.WebApi.Controllers
 
             var systemList = await _systemSvc.Query();
 
-            for (int i = 0; i < menuList.Count; i++)
-            {
-                if (!string.IsNullOrEmpty(menuList[i].SystemId))
-                {
-                    if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
-                        menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
-                    else
-                        menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
-                }
-
-                if (!string.IsNullOrEmpty(menuList[i].ParentId))
-                {
-                    if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
-                        menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
-                    else
-                        menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
-                }
-            }
-
-            //获取一级菜单
-            var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).ToList();
-
-            //获取二级菜单
-            for (int i = 0; i < menuList1.Count; i++)
-            {
-                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).ToList();
-                //var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id.ToString()).ToList();
-
-                //获取三级菜单
-                for (int j = 0; j < menuList2.Count; j++)
-                {
-                    menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).ToList();
-                    //menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id.ToString()).ToList();
-                }
-
-                menuList1[i].Children = menuList2;
-            }
+            //获取数据结构
+            var menuList1 = await _menuSvc.GetMenuTree(menuData,menuList,systemList);
 
             return new MessageModel<object>()
             {
-                Response = menuList1.OrderBy(s => s.Index).ToList(),
+                Response = menuList1,
                 Success = true,
                 Message = "获取成功"
             };
@@ -166,47 +131,12 @@ namespace Xu.WebApi.Controllers
 
             var systemList = await _systemSvc.Query();
 
-            for (int i = 0; i < menuList.Count; i++)
-            {
-                if (!string.IsNullOrEmpty(menuList[i].SystemId))
-                {
-                    if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
-                        menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
-                    else
-                        menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
-                }
-
-                if (!string.IsNullOrEmpty(menuList[i].ParentId))
-                {
-                    if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
-                        menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
-                    else
-                        menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
-                }
-            }
-
-            //获取一级菜单
-            var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).ToList();
-
-            //获取二级菜单
-            for (int i = 0; i < menuList1.Count; i++)
-            {
-                var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).ToList();
-                //var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id.ToString()).ToList();
-
-                //获取三级菜单
-                for (int j = 0; j < menuList2.Count; j++)
-                {
-                    menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).ToList();
-                    //menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id.ToString()).ToList();
-                }
-
-                menuList1[i].Children = menuList2;
-            }
+            //获取数据结构
+            var menuList1 = await _menuSvc.GetMenuTree(menuData,menuList,systemList);
 
             return new MessageModel<object>()
             {
-                Response = menuList1.OrderBy(s => s.Index).ToList(),
+                Response = menuList1,
                 Success = true,
                 Message = "获取成功"
             };

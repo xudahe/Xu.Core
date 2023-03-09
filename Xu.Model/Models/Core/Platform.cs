@@ -1,15 +1,17 @@
 ﻿using SqlSugar;
+using SqlSugar.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Xu.Common;
+using Xu.Model.XmlModels;
 
 namespace Xu.Model.Models
 {
     /// <summary>
-    /// 平台管理
+    /// 平台信息表
     /// </summary>
-    [SugarTable("Platform", "WMBLOG_MYSQL_1")]
+    [SugarTable("Platform", "平台信息表")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class Platform : ModelBase
     {
         /// <summary>
@@ -95,14 +97,14 @@ namespace Xu.Model.Models
 
         public string ToItemInfoXml()
         {
-            XElement xElement = new XElement("System");
+            XElement xElement = new XElement("Xml");
             xElement.SetAttributeValue("Version", "1");
 
             if (_systemInfoList.Count > 0)
             {
                 foreach (var item in _systemInfoList)
                 {
-                    XElement xItem = new XElement("InfoItem");
+                    XElement xItem = new XElement("System");
                     xItem.SetAttributeValue("Id", item.Id);
                     xItem.SetAttributeValue("Guid", item.Guid);
                     xItem.SetAttributeValue("SystemName", item.SystemName);
@@ -117,19 +119,19 @@ namespace Xu.Model.Models
         {
             IList<InfoSystem> list = new List<InfoSystem>();
             XElement x = XElement.Parse(_systemInfoItem);
-            if (x.Name != "System")
+            if (x.Name != "Xml")
                 return list;
             XAttribute ver = x.Attribute("Version");
             if (ver == null || ver.Value != "1")
                 return list;
-            IList<XElement> xitems = x.Descendants("InfoItem").ToList();
+            IList<XElement> xitems = x.Descendants("System").ToList();
             if (xitems.Count > 0)
             {
                 foreach (var xElement in xitems)
                 {
                     InfoSystem item = new InfoSystem
                     {
-                        Id = xElement.Attribute("Id").Value.ToInt32Req(),
+                        Id = xElement.Attribute("Id").Value.ObjToInt(),
                         Guid = xElement.Attribute("Guid").Value,
                         SystemName = xElement.Attribute("SystemName").Value,
                     };

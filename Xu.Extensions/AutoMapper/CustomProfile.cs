@@ -2,6 +2,7 @@
 using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ViewModels;
+using Xu.Model.XmlModels;
 
 namespace Xu.Extensions
 {
@@ -30,10 +31,10 @@ namespace Xu.Extensions
             CreateMap<Role, RoleViewModel>();
             CreateMap<Menu, MenuViewModel>();
             CreateMap<Dept, DeptViewModel>();
+            CreateMap<Systems, SystemViewModel>();
             CreateMap<Platform, PlatformViewModel>();
 
             //登录接口成功后返回映射类
-            CreateMap<Role, RoleModel>();
             CreateMap<Platform, PlatformModel>();
             CreateMap<Systems, SystemModel>();
             CreateMap<Menu, MenuModel>();

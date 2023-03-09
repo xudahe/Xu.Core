@@ -1,19 +1,10 @@
 ﻿using System.Collections.Generic;
+using Xu.Model.XmlModels;
 
-namespace Xu.Model
+namespace Xu.Model.XmlModels
 {
-    public class InfoPlatform
+    public class InfoPlatform : RootEntityTkey
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Guid
-        /// </summary>
-        public string Guid { get; set; }
-
         /// <summary>
         /// 平台名称
         /// </summary>

@@ -29,7 +29,7 @@ namespace Xu.Extensions.EventHandling
         {
             _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, "Blog.Core", @event);
 
-            ConsoleHelper.WriteSuccessLine($"----- Handling integration event: {@event.Id} at Blog.Core - ({@event})");
+            ConsoleHelper.WriteSuccessLine($"----- Handling integration event: {@event.Id} at Xu.Core - ({@event})");
 
             await _userSvc.GetUserNameById(@event.ProductId);
         }

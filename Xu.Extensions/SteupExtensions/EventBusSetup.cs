@@ -50,15 +50,5 @@ namespace Xu.Extensions
                 }
             }
         }
-
-        public static void ConfigureEventBus(this IApplicationBuilder App)
-        {
-            if (AppSettings.App(new string[] { "EventBus", "Enabled" }).ToBoolReq())
-            {
-                var eventBus = App.ApplicationServices.GetRequiredService<IEventBus>();
-
-                eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
-            }
-        }
     }
 }

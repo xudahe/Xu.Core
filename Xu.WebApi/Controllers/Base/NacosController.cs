@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Model.ResultModel;
 
-namespace Blog.Core.Api.Controllers
+namespace Xu.WebApi.Controllers
 {
     /// <summary>
     /// 服务管理

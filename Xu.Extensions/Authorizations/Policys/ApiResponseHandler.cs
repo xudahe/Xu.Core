@@ -7,6 +7,7 @@ using System;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Xu.Common;
+using Xu.Common.HttpContextUser;
 using Xu.IServices;
 
 namespace Xu.Extensions

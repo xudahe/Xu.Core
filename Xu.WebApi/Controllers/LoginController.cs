@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
+using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
@@ -31,6 +32,7 @@ namespace Xu.WebApi.Controllers
         private readonly IUserSvc _userSvc;
         private readonly IRoleSvc _roleSvc;
         private readonly IMenuSvc _menuSvc;
+        private readonly IPlatformSvc _platformSvc;
         private readonly ISystemSvc _systemSvc;
         private readonly PermissionRequirement _requirement;
 
@@ -42,14 +44,17 @@ namespace Xu.WebApi.Controllers
         /// <param name="roleSvc"></param>
         /// <param name="menuSvc"></param>
         /// <param name="requirement"></param>
-        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement, ISystemSvc systemSvc)
+        /// <param name="systemSvc"></param>
+        /// <param name="platformSvc"></param>
+        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement, ISystemSvc systemSvc, IPlatformSvc platformSvc)
         {
             _mapper = mapper;
             _userSvc = userSvc;
             _roleSvc = roleSvc;
             _menuSvc = menuSvc;
-            _requirement = requirement;
             _systemSvc = systemSvc;
+            _platformSvc = platformSvc;
+            _requirement = requirement;
         }
 
         /// <summary>
@@ -80,8 +85,16 @@ namespace Xu.WebApi.Controllers
                 var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, name),
                     new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
-                    new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_requirement.Expiration.TotalSeconds).ToString()) };
+                    new Claim("TenantId", user.TenantId.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+                    new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_requirement.Expiration.TotalSeconds).ToString())
+                };
                 claims.AddRange(userRoles.Select(s => new Claim(ClaimTypes.Role, s.RoleName)));
+
+                if (userRoles.Count == 0)
+                {
+                    return MessageModel<string>.Msg(false, "用户未绑定相关角色");
+                }
 
                 // ids4和jwt切换
                 // jwt
@@ -98,7 +111,7 @@ namespace Xu.WebApi.Controllers
 
                 var token = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
 
-                return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功",token);
+                return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功", token);
             }
             else
             {
@@ -119,7 +132,7 @@ namespace Xu.WebApi.Controllers
 
             if (string.IsNullOrEmpty(token))
             {
-               return MessageModel<string>.Msg(false, "传入的token参数不能为空！");
+                return MessageModel<string>.Msg(false, "传入的token参数不能为空！");
             }
             var tokenModel = JwtHelper.SerializeJwt(token);
             if (tokenModel != null && JwtHelper.CustomSafeVerify(token) && tokenModel.Id > 0)
@@ -136,9 +149,11 @@ namespace Xu.WebApi.Controllers
 
                     //如果是基于用户的授权策略，这里要添加用户;如果是基于角色的授权策略，这里要添加角色
                     var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Name, user.LoginName),
-                    new Claim(JwtRegisteredClaimNames.Jti, tokenModel.Id.ToString()),
-                    new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_requirement.Expiration.TotalSeconds).ToString()) };
+                        new Claim(ClaimTypes.Name, user.LoginName),
+                        new Claim(JwtRegisteredClaimNames.Jti, tokenModel.Id.ToString()),
+                        new Claim("TenantId", user.TenantId.ToString()),
+                        new Claim(ClaimTypes.Expiration, DateTime.Now.AddSeconds(_requirement.Expiration.TotalSeconds).ToString())
+                    };
                     claims.AddRange(userRoles.Select(s => new Claim(ClaimTypes.Role, s.RoleName)));
 
                     //用户标识
@@ -149,7 +164,7 @@ namespace Xu.WebApi.Controllers
                     return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功", refreshToken);
                 }
             }
-     
+
             return MessageModel<string>.Msg(false, "认证失败");
         }
 
@@ -197,58 +212,97 @@ namespace Xu.WebApi.Controllers
                         if (model.RoleIds != "")
                         {
                             var roleList = await _roleSvc.GetDataByids(model.RoleIds);
-                            loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleModel>>(roleList);
-
-                            //需要修改数据结构，通过InfoList来获取所关联平台菜单等数据
-
-                            var menuIds = roleList.Select(s => s.MenuIds).ToList().JoinToString(",");
 
                             var menuData = await _menuSvc.Query();
-                            var menuList = await _menuSvc.GetDataByids(menuIds, menuData);
+                            var menuList = await _menuSvc.GetDataByids(roleList.Select(s => s.MenuIds).JoinToString(","), menuData);
 
+                            var platformList = await _platformSvc.Query();
                             var systemList = await _systemSvc.Query();
+
+                            #region  通过InfoList来获取所关联平台菜单等数据
+                            var InfoPlatformList = new List<PlatformModel>();
+
+                            var p_ids = new List<string>();
+                            var s_ids = new List<SParent>();
+                            var m_ids = new List<MParent>();
+
+                            for (int i = 0; i < roleList.Count; i++)
+                            {
+                                if (roleList[i].InfoList == null || roleList[i].InfoList.Count == 0) continue;
+
+                                for (int j = 0; j < roleList[i].InfoList.Count; j++)
+                                {
+                                    var platModel = roleList[i].InfoList[j];
+                                    p_ids.Add(platModel.Guid);
+
+                                    for (int k = 0; k < platModel.InfoSystemList.Count; k++)
+                                    {
+                                        var systemModel = platModel.InfoSystemList[k];
+                                        s_ids.Add(new SParent()
+                                        {
+                                            Guid = systemModel.Guid,
+                                            ParentId = platModel.Guid
+                                        });
+
+                                        for (int x = 0; x < systemModel.InfoMenuList.Count; x++)
+                                        {
+                                            var menuModel = systemModel.InfoMenuList[x];
+                                            m_ids.Add(new MParent()
+                                            {
+                                                Guid = menuModel.Guid,
+                                                ParentId = systemModel.Guid
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+
+                            p_ids = p_ids.Distinct().ToList();
+
+                            if (p_ids.Count > 0)
+                            {
+                                for (int i = 0; i < p_ids.Count; i++)
+                                {
+                                    var p_model = platformList.First(s => s.Guid == p_ids[i]);
+                                    var pmodel = _mapper.Map<Platform, PlatformModel>(p_model);
+
+                                    var sList = s_ids.Where(s => s.ParentId == p_ids[i]).ToList();
+
+                                    var s_list = new List<SystemModel>();
+                                    for (int j = 0; j < sList.Count; j++)
+                                    {
+                                        var s_model = systemList.First(s => s.Guid == sList[j].Guid);
+                                        var smodel = _mapper.Map<Systems, SystemModel>(s_model);
+
+                                        var mList = m_ids.Where(s => s.ParentId == sList[j].Guid).ToList();
+
+                                        var m_list = new List<Menu>();
+                                        for (int k = 0; k < mList.Count; k++)
+                                        {
+                                            var m_model = menuData.First(s => s.Guid == mList[k].Guid);
+                                            m_list.Add(m_model);
+                                        }
+                                        var m_list1 = await _menuSvc.GetMenuTree(menuData, m_list, systemList);
+
+                                        smodel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuModel>>(m_list1);
+                                        s_list.Add(smodel);
+                                    }
+
+                                    pmodel.SystemfoList = s_list;
+                                    InfoPlatformList.Add(pmodel);
+                                }
+                            }
+                            #endregion
+
+                            loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleViewModel>>(roleList);
+                            loginViewModel.PlatformInfoList = InfoPlatformList;
 
                             if (menuList.Count > 0)
                             {
-                                for (int i = 0; i < menuList.Count; i++)
-                                {
-                                    if (!string.IsNullOrEmpty(menuList[i].SystemId))
-                                    {
-                                        if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
-                                            menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
-                                        else
-                                            menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
-                                    }
+                                //获取数据结构
+                                var menuList1 = await _menuSvc.GetMenuTree(menuData, menuList, systemList);
 
-                                    if (!string.IsNullOrEmpty(menuList[i].ParentId))
-                                    {
-                                        if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
-                                            menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
-                                        else
-                                            menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
-                                    }
-                                }
-
-                                //获取一级菜单
-                                var menuList1 = menuList.Where(s => string.IsNullOrEmpty(s.ParentId)).ToList();
-
-                                //获取二级菜单
-                                for (int i = 0; i < menuList1.Count; i++)
-                                {
-                                    var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Guid).ToList();
-                                    //var menuList2 = menuList.Where(s => s.ParentId == menuList1[i].Id.ToString()).ToList();
-
-                                    //获取三级菜单
-                                    for (int j = 0; j < menuList2.Count; j++)
-                                    {
-                                        menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Guid).ToList();
-                                        //menuList2[j].Children = menuList.Where(s => s.ParentId == menuList2[j].Id.ToString()).ToList();
-                                    }
-
-                                    menuList1[i].Children = menuList2;
-                                }
-
-                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuViewModel>>(menuList1.OrderBy(s => s.Index).ToList());
+                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuModel>>(menuList1);
 
                                 data.Success = true;
                                 data.Message = "登陆成功";

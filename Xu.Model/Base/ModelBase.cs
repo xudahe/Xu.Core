@@ -1,14 +1,13 @@
 ﻿using SqlSugar;
 using System;
-using Xu.Common;
 
 namespace Xu.Model
 {
     /// <summary>
-    /// 领域对象泛型基类，领域对象类名不能超过50个字符
+    /// 领域对象泛型基类
     /// </summary>
     //[Serializable]
-    public abstract class ModelBase
+    public abstract class ModelBase : RootEntityTkey
     {
         // ColumnName //列名
         // IsIgnore //是否忽略
@@ -28,17 +27,6 @@ namespace Xu.Model
 
         //[SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)] //IsJson 支持JObject JArray ，实体 ，集合等类型
 
-        /// <summary>
-        /// 主键Id，领域对象标识
-        /// </summary>
-        [SugarColumn(IsPrimaryKey = true, IsIdentity = true, ColumnDescription = "主键Id")]
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Guid
-        /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDescription = "Guid")]
-        public string Guid { get; set; } = GUIDHelper.Guid32();
 
         /// <summary>
         /// 创建时间

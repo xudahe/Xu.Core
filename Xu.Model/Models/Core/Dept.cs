@@ -3,9 +3,10 @@
 namespace Xu.Model.Models
 {
     /// <summary>
-    /// 部门管理
+    /// 部门信息表
     /// </summary>
-    [SugarTable("Dept", "WMBLOG_MYSQL_1")]
+    [SugarTable("Dept", "部门信息表")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class Dept : ModelBase
     {
         /// <summary>

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 namespace Xu.Model.Models
 {
     /// <summary>
-    /// 菜单配置表（目前菜单共三级）
+    /// 菜单信息表（目前菜单共三级）
     /// </summary>
-    [SugarTable("Menu", "WMBLOG_MYSQL_1")]
+    [SugarTable("Menu", "菜单信息表")]
+    [TenantAttribute("WMBLOG_MYSQL_1")]
     public class Menu : ModelBase
     {
         /// <summary>
