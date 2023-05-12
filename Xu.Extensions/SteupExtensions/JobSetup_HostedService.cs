@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using Xu.Tasks;
 
 namespace Xu.Extensions
 {
@@ -15,7 +14,6 @@ namespace Xu.Extensions
 
             services.AddHostedService<Job1TimedService>();
             services.AddHostedService<Job2TimedService>();
-
         }
     }
 }

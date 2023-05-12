@@ -32,24 +32,24 @@ namespace Xu.Services.Core
             return list;
         }
 
-        public async Task<List<Menu>> GetMenuTree(List<Menu> menuData, List<Menu> menuList,List<Systems> systemList)
+        public async Task<List<Menu>> GetMenuTree(List<Menu> menuData, List<Menu> menuList, List<Systems> systemList)
         {
             for (int i = 0; i < menuList.Count; i++)
             {
                 if (!string.IsNullOrEmpty(menuList[i].SystemId))
                 {
                     if (GUIDHelper.IsGuidByReg(menuList[i].SystemId))
-                        menuList[i].SystemName = systemList.First(s => s.Guid == menuList[i].SystemId).SystemName;
+                        menuList[i].SystemName = systemList.Where(s => s.Guid == menuList[i].SystemId).FirstOrDefault()?.SystemName;
                     else
-                        menuList[i].SystemName = systemList.First(s => s.Id == menuList[i].SystemId.ToInt32()).SystemName;
+                        menuList[i].SystemName = systemList.Where(s => s.Id == menuList[i].SystemId.ToInt32()).FirstOrDefault()?.SystemName;
                 }
 
                 if (!string.IsNullOrEmpty(menuList[i].ParentId))
                 {
                     if (GUIDHelper.IsGuidByReg(menuList[i].ParentId))
-                        menuList[i].ParentName = menuData.First(s => s.Guid == menuList[i].ParentId).MenuName;
+                        menuList[i].ParentName = menuData.Where(s => s.Guid == menuList[i].ParentId).FirstOrDefault()?.MenuName;
                     else
-                        menuList[i].ParentName = menuData.First(s => s.Id == menuList[i].ParentId.ToInt32()).MenuName;
+                        menuList[i].ParentName = menuData.Where(s => s.Id == menuList[i].ParentId.ToInt32()).FirstOrDefault()?.MenuName;
                 }
             }
 

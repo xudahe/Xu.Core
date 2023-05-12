@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using SqlSugar;
+﻿using SqlSugar;
+using System.Reflection;
 
 namespace Xu.Repository
 {
@@ -18,18 +18,21 @@ namespace Xu.Repository
         /// 开始事务
         /// </summary>
         void BeginTran();
+
         void BeginTran(MethodInfo method);
 
         /// <summary>
         /// 提交事务
         /// </summary>
         void CommitTran();
+
         void CommitTran(MethodInfo method);
 
         /// <summary>
         /// 回滚事务
         /// </summary>
         void RollbackTran();
+
         void RollbackTran(MethodInfo method);
     }
 }

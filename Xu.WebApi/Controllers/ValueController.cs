@@ -1,20 +1,13 @@
-﻿using Xu.Common;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Xu.Common;
+using Xu.Common.HttpContextUser;
 using Xu.Common.HttpPolly;
+using Xu.EnumHelper;
 using Xu.EventBus;
 using Xu.Extensions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using System;
 using Xu.Extensions.EventHandling;
 using Xu.Model.ResultModel;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using StackExchange.Profiling;
-using Xu.EnumHelper;
-using Xu.IServices;
-using Xu.Common.HttpContextUser;
 
 namespace Xu.WebApi.Controllers
 {
@@ -26,12 +19,11 @@ namespace Xu.WebApi.Controllers
     [Authorize(Permissions.Name)]
     public class ValueController : ControllerBase
     {
-
         private readonly IHttpPollyHelper _httpPollyHelper;
 
         private readonly IAspNetUser _aspNetUser;
 
-        public ValueController( IHttpPollyHelper httpPollyHelper, IAspNetUser aspNetUser)
+        public ValueController(IHttpPollyHelper httpPollyHelper, IAspNetUser aspNetUser)
         {
             // httpPolly
             _httpPollyHelper = httpPollyHelper;

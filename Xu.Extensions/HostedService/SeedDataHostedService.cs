@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Xu.Common;
 using SqlSugar.Extensions;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Xu.Common;
 
 namespace Xu.Extensions;
 

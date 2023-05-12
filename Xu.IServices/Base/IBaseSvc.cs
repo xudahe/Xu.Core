@@ -73,6 +73,8 @@ namespace Xu.IServices
         /// <returns></returns>
         Task<bool> Update(T model);
 
+        Task<bool> Update(List<T> model);
+
         Task<bool> Update(T entity, string strWhere);
 
         Task<bool> Update(object operateAnonymousObjects);

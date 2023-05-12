@@ -72,7 +72,7 @@ namespace Xu.Common
         /// <summary>
         /// 配置文件名称常量
         /// </summary>
-        private static readonly string AppSettingsFileName = $"appsettings{ GetAppSettingsConfigName() }json";
+        private static readonly string AppSettingsFileName = $"appsettings{GetAppSettingsConfigName()}json";
 
         /// <summary>
         /// 根据环境变量定向配置文件名称

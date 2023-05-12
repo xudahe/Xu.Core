@@ -3,5 +3,6 @@ using Xu.Model.IDS4DbModels;
 
 namespace Xu.Services.IDS4Db
 {
-    public partial interface IApplicationUserSvc : IBaseSvc<ApplicationUser> { }
+    public partial interface IApplicationUserSvc : IBaseSvc<ApplicationUser>
+    { }
 }

@@ -1,16 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using Xu.Common.HttpContextUser;
-using Xu.IServices;
+﻿using System.Threading.Tasks;
 
 namespace Xu.Extensions.Authorizations.Behaviors
 {
     public class UserBehaviorService : IUserBehaviorService
     {
-
         public UserBehaviorService()
         {
-      
         }
 
         public Task<bool> CheckTokenIsNormal()

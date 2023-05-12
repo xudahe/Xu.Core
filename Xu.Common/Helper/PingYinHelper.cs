@@ -45,6 +45,7 @@ namespace Xu.Common.Helper
 
             return totalPingYinList;
         }
+
         /// <summary>
         /// 获取汉语拼音全拼
         /// </summary>

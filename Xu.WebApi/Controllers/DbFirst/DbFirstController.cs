@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.ResultModel;
 
 namespace Xu.WebApi.Controllers

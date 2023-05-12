@@ -8,7 +8,7 @@ namespace Xu.Common;
 
 public class App
 {
-    public static IServiceProvider RootServices => InternalApp.RootServices ;
+    public static IServiceProvider RootServices => InternalApp.RootServices;
 
     /// <summary>
     /// 获取请求上下文

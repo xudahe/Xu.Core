@@ -1,9 +1,7 @@
 ﻿using log4net;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,22 +39,27 @@ namespace Xu.Common
                 case "AOPLogEx":
                     AppSetingName = "LogAOP";
                     break;
+
                 case "RequestIpInfoLog":
                     AppSetingNodeName = "Middleware";
                     AppSetingName = "IPLog";
                     break;
+
                 case "RecordAccessLogs":
                     AppSetingNodeName = "Middleware";
                     AppSetingName = "RecordAccessLogs";
                     break;
+
                 case "SqlLog":
                     AppSetingName = "SqlAOP";
                     break;
+
                 case "RequestLog":
                 case "ResponseLog":
                     AppSetingNodeName = "Middleware";
                     AppSetingName = "RequestResponseLog";
                     break;
+
                 default:
                     break;
             }
@@ -107,6 +110,7 @@ namespace Xu.Common
                             $"【执行完成结果】：{apiLogAopInfo.ResponseJsonData}\r\n";
                         dataParas = new string[] { dataIntercept };
                         break;
+
                     case "AOPLogEx":
                         AOPLogExInfo apiLogAopExInfo = JsonConvert.DeserializeObject<AOPLogExInfo>(dataParas[1]);
                         var dataInterceptEx = "" +
@@ -147,7 +151,6 @@ namespace Xu.Common
                 if (isWrt)
                 {
                     File.WriteAllText(logFilePath, logContent);
-
                 }
                 else
                 {
@@ -192,21 +195,27 @@ namespace Xu.Common
                 case "AOPLog":
                     //log.Info(logContent);
                     break;
+
                 case "AOPLogEx":
                     //log.Error(logContent);
                     break;
+
                 case "RequestIpInfoLog":
                     //log.Debug(logContent);
                     break;
+
                 case "RecordAccessLogs":
                     //log.Debug(logContent);
                     break;
+
                 case "SqlLog":
                     //log.Info(logContent);
                     break;
+
                 case "RequestResponseLog":
                     //log.Debug(logContent);
                     break;
+
                 default:
                     break;
             }
@@ -289,7 +298,6 @@ namespace Xu.Common
             }
             return s;
         }
-
 
         /// <summary>
         /// 获取所有日志
@@ -416,7 +424,6 @@ namespace Xu.Common
             try
             {
                 var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "SqlLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
-
 
                 if (!string.IsNullOrEmpty(logContent))
                 {

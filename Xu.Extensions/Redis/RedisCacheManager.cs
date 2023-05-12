@@ -1,6 +1,6 @@
-﻿using Xu.Common;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System;
+using Xu.Common;
 
 namespace Xu.Extensions
 {

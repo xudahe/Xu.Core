@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Xu.WebApi;
+﻿using Microsoft.AspNetCore.Mvc;
 using static Xu.Extensions.CustomApiVersion;
 
 namespace Xu.WebApi.Controllers.v1

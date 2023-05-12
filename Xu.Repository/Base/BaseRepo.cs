@@ -147,6 +147,16 @@ namespace Xu.Repository
             return await _db.Updateable(entity).ExecuteCommandHasChangeAsync();
         }
 
+        /// <summary>
+        /// 更新实体数据
+        /// </summary>
+        /// <param name="entity">实体类</param>
+        /// <returns></returns>
+        public async Task<bool> Update(List<T> entity)
+        {
+            return await _db.Updateable(entity).ExecuteCommandHasChangeAsync();
+        }
+
         public async Task<bool> Update(T entity, string strWhere)
         {
             return await _db.Updateable(entity).Where(strWhere).ExecuteCommandHasChangeAsync();

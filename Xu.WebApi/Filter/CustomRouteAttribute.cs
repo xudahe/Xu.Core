@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using System;
 using static Xu.Extensions.CustomApiVersion;
 
 namespace Xu.WebApi

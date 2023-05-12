@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System;
 using Xu.Common.Helper;
 
 namespace Xu.WebApi

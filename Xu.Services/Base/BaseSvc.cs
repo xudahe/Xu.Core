@@ -79,6 +79,16 @@ namespace Xu.Services
             return await BaseDal.Update(entity);
         }
 
+        /// <summary>
+        /// 更新实体数据
+        /// </summary>
+        /// <param name="entity">实体类</param>
+        /// <returns></returns>
+        public async Task<bool> Update(List<T> entity)
+        {
+            return await BaseDal.Update(entity);
+        }
+
         public async Task<bool> Update(T entity, string strWhere)
         {
             return await BaseDal.Update(entity, strWhere);

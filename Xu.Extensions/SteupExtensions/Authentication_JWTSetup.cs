@@ -1,6 +1,4 @@
-﻿
-using Xu.Common;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -20,7 +19,6 @@ namespace Xu.Extensions
         public static void AddAuthentication_JWTSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
-
 
             var symmetricKeyAsBase64 = AppSecretConfig.Audience_Secret_String;
             var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
@@ -82,7 +80,6 @@ namespace Xu.Extensions
                              }
                          }
 
-
                          // 如果过期，则把<是否过期>添加到，返回头信息中
                          if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                          {
@@ -93,7 +90,6 @@ namespace Xu.Extensions
                  };
              })
              .AddScheme<AuthenticationSchemeOptions, ApiResponseHandler>(nameof(ApiResponseHandler), o => { });
-
         }
     }
 }

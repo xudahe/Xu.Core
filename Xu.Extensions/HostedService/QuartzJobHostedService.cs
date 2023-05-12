@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SqlSugar.Extensions;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Xu.IServices;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Xu.Tasks;
 using Xu.Common;
-using SqlSugar.Extensions;
 using Xu.EnumHelper;
+using Xu.IServices;
+using Xu.Tasks;
 
 namespace Xu.Extensions.HostedService;
 

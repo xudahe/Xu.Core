@@ -32,7 +32,8 @@ namespace Xu.Model.ResultModel
         /// </summary>
         public List<T> Data { get; set; }
 
-        public PageModel() { }
+        public PageModel()
+        { }
 
         public PageModel(int page, int dataCount, int pageSize, List<T> data)
         {

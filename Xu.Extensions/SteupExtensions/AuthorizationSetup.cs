@@ -1,6 +1,4 @@
-﻿
-using Xu.Common;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -25,7 +24,6 @@ namespace Xu.Extensions
             // 1、这个很简单，其他什么都不用做， 只需要在API层的controller上边，增加特性即可
             // [Authorize(Roles = "Admin,System")]
 
-
             // 2、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
             // 然后这么写 [Authorize(Policy = "Admin")]
             services.AddAuthorization(options =>
@@ -36,17 +34,16 @@ namespace Xu.Extensions
                 options.AddPolicy("A_S_O", policy => policy.RequireRole("Admin", "System", "Others"));
             });
 
-
-
-
             #region 参数
-            //读取配置文件
-            var symmetricKeyAsBase64 = AppSecretConfig.Audience_Secret_String;
-            var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
-            var signingKey = new SymmetricSecurityKey(keyByteArray);
-            var Issuer = AppSettings.App(new string[] { "Audience", "Issuer" });
-            var Audience = AppSettings.App(new string[] { "Audience", "Audience" });
 
+            //读取配置文件
+            var symmetricKeyAsBase64 = AppSecretConfig.Audience_Secret_String;  //密钥
+            var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);   //取出私钥
+            var signingKey = new SymmetricSecurityKey(keyByteArray);            //验证私钥
+            var Issuer = AppSettings.App(new string[] { "Audience", "Issuer" }); //注册人
+            var Audience = AppSettings.App(new string[] { "Audience", "Audience" }); //访问人
+
+            //使用HmacSha256来验证加密后的私钥生成数字签名
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             // 如果要数据库动态绑定，这里先留个空，后边处理器里动态赋值
@@ -62,14 +59,15 @@ namespace Xu.Extensions
                 signingCredentials,//签名凭据
                 expiration: TimeSpan.FromSeconds(60 * 60)//接口的过期时间
                 );
-            #endregion
+
+            #endregion 参数
+
             // 3、自定义复杂的策略授权
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(Permissions.Name,
                          policy => policy.Requirements.Add(permissionRequirement));
             });
-
 
             // 4、基于Scope策略授权
             //services.AddAuthorization(options =>

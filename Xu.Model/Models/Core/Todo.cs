@@ -92,7 +92,8 @@ namespace Xu.Model.Models
         /// <summary>
         /// 是否已处理
         /// </summary>
-        public bool IsAction { get { return ActionTime.HasValue; } }
+        public bool IsAction
+        { get { return ActionTime.HasValue; } }
 
         public static string ToXml(IDictionary<string, string> data)
         {

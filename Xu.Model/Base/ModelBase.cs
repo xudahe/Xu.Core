@@ -27,7 +27,6 @@ namespace Xu.Model
 
         //[SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)] //IsJson 支持JObject JArray ，实体 ，集合等类型
 
-
         /// <summary>
         /// 创建时间
         /// </summary>

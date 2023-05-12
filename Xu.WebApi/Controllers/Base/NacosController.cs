@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nacos.V2;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Model.ResultModel;
 

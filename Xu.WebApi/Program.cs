@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Reflection;
 using System.Text;
 using Xu.Common;
@@ -18,9 +17,6 @@ using Xu.Common.Core;
 using Xu.Extensions;
 using Xu.Extensions.Apollo;
 using Xu.Extensions.Middlewares;
-using Xu.IServices;
-using Xu.Model;
-using Xu.Tasks;
 using Xu.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -159,8 +155,12 @@ builder.Services.AddControllers(options => //启用控制器
     //Include 序列化和反序列化对象时包含空值
     options.SerializerSettings.NullValueHandling = NullValueHandling.Include; //比如"name":null
 
+    //设置本地时间而非UTC时间
     options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+    //添加Enum转string
     options.SerializerSettings.Converters.Add(new StringEnumConverter());
+    //将long类型转为string
+    options.SerializerSettings.Converters.Add(new NumberConverter(NumberConverterShip.Int64));
 })
 .AddFluentValidation(config =>
 {
@@ -185,11 +185,11 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 //如果用IIS部署 需要注释UseKestrel
 builder.WebHost.UseKestrel((host, options) =>
 {
-   options.ListenAnyIP(1081);
-   options.ListenAnyIP(1082);
-   //options.Listen(IPAddress.Loopback, 5000);
-   //options.Listen(IPAddress.Loopback, 5001);
-   //options.ListenLocalhost(5004, opts => opts.UseHttps());
+    options.ListenAnyIP(1081);
+    options.ListenAnyIP(1082);
+    //options.Listen(IPAddress.Loopback, 5000);
+    //options.Listen(IPAddress.Loopback, 5001);
+    //options.ListenLocalhost(5004, opts => opts.UseHttps());
 });
 
 #endregion //配置启动地址
@@ -256,7 +256,7 @@ app.UseMiniProfilerMiddle();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-         name: "default",         pattern: "{controller=Home}/{action=Index}/{id?}");
+         name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
     endpoints.MapHub<ChatHub>("/api/chatHub");
 });

@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using System.Threading.Tasks;
-using WebApiClient;
 
 namespace Xu.Common.Algorithm
 {
@@ -60,9 +54,7 @@ namespace Xu.Common.Algorithm
                 msg += Convert.ToDecimal(bags[i]) / 100 + ",";
             }
 
-
             return msg;
         }
     }
-
 }

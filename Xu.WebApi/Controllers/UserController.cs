@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
-using Xu.IRepository;
 using Xu.IServices;
-using Xu.Repository;
 using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
-using Xu.Model.XmlModels;
+using Xu.Repository;
 
 namespace Xu.WebApi.Controllers
 {
@@ -228,10 +222,10 @@ namespace Xu.WebApi.Controllers
         /// <param name="roleId">角色id或guid，小写逗号隔开","</param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<object> UserByRoleId(string userId,string roleId)
+        public async Task<object> UserByRoleId(string userId, string roleId)
         {
             var data = new MessageModel<string>();
-            var userInfo = (await _userSvc.GetDataByids(userId)).First();
+            var userInfo = (await _userSvc.GetDataByids(userId)).FirstOrDefault();
 
             if (userInfo != null && userInfo.Id > 0)
             {
@@ -249,7 +243,7 @@ namespace Xu.WebApi.Controllers
             {
                 data.Message = "该用户不存在，请联系管理员";
             }
-       
+
             return data;
         }
     }

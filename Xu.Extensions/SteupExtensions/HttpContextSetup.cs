@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Xu.Common;
 using Xu.Common.HttpContextUser;
-using Xu.IServices;
-using Xu.Services;
 
 namespace Xu.Extensions
 {

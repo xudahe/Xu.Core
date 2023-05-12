@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using Xu.Extensions.HostedService;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Xu.Extensions;
 

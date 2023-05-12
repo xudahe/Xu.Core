@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Quartz;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.EnumHelper;
-using Xu.IRepository;
 using Xu.IServices;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
-using Xu.Tasks;
 using Xu.Repository;
+using Xu.Tasks;
 
 namespace Xu.WebApi.Controllers
 {
@@ -23,7 +18,6 @@ namespace Xu.WebApi.Controllers
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize(Permissions.Name)]
     public class TasksQzController : ControllerBase
     {
         private readonly ITasksQzSvc _tasksQzSvc;

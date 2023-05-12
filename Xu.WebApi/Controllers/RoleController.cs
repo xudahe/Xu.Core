@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.XmlModels;
@@ -221,7 +216,6 @@ namespace Xu.WebApi.Controllers
                     };
                 }
 
-
                 IList<InfoPlatform> defaultList = new List<InfoPlatform>();
 
                 var platFalg = false;
@@ -268,8 +262,6 @@ namespace Xu.WebApi.Controllers
                     infoPlatform.InfoSystemList.Add(infoSystem);
                     defaultList.Add(infoPlatform);
                 }
-
-
 
                 roleModal.MenuIds = menuIds_new.TrimStart(',').TrimEnd(',');
                 roleModal.InfoList = defaultList;

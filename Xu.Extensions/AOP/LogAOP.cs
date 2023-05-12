@@ -60,12 +60,11 @@ namespace Xu.Extensions
                 //在被拦截的方法执行完毕后 继续执行当前方法，注意是被拦截的是异步的
                 invocation.Proceed();
 
-
                 // 异步获取异常，先执行
                 if (IsAsyncMethod(invocation.Method))
                 {
-
                     #region 方案一
+
                     //Wait task execution and modify return value
                     if (invocation.Method.ReturnType == typeof(Task))
                     {
@@ -88,10 +87,11 @@ namespace Xu.Extensions
                              LogEx(ex, apiLogAopInfo);
                          });
                     }
-                    #endregion
 
+                    #endregion 方案一
 
                     // 如果方案一不行，试试这个方案
+
                     #region 方案二
 
                     //var type = invocation.Method.ReturnType;
@@ -107,7 +107,7 @@ namespace Xu.Extensions
                     //    LogLock.OutLogAOP("AOPLog", new string[] { apiLogAopInfo.GetType().ToString() + " - ResponseJsonDataType:" + type, JsonConvert.SerializeObject(apiLogAopInfo) });
                     //});
 
-                    #endregion
+                    #endregion 方案二
                 }
                 else
                 {
@@ -149,14 +149,13 @@ namespace Xu.Extensions
             }
         }
 
-        private  async Task SuccessAction(IInvocation invocation, AOPLogInfo apiLogAopInfo, DateTime startTime, object o = null)
+        private async Task SuccessAction(IInvocation invocation, AOPLogInfo apiLogAopInfo, DateTime startTime, object o = null)
         {
             DateTime endTime = DateTime.Now;
             string ResponseTime = (endTime - startTime).Milliseconds.ToString();
             apiLogAopInfo.ResponseTime = endTime.ToString("yyyy-MM-dd hh:mm:ss fff");
             apiLogAopInfo.ResponseIntervalTime = ResponseTime + "ms";
             apiLogAopInfo.ResponseJsonData = JsonConvert.SerializeObject(o);
-
 
             await Task.Run(() =>
             {
@@ -168,7 +167,7 @@ namespace Xu.Extensions
             });
         }
 
-        private  void LogEx(Exception ex, AOPLogInfo dataIntercept)
+        private void LogEx(Exception ex, AOPLogInfo dataIntercept)
         {
             if (ex != null)
             {
@@ -188,7 +187,6 @@ namespace Xu.Extensions
                     LogLock.OutLogAOP("AOPLogEx", _accessor.HttpContext?.TraceIdentifier, new string[] { apiLogAopExInfo.GetType().ToString(), JsonConvert.SerializeObject(apiLogAopExInfo) });
                 });
                 //SerilogServer.WriteLog("AOPLog", new string[] { apiLogAopExInfo.GetType().ToString(), JsonConvert.SerializeObject(apiLogAopExInfo) });
-
             }
         }
 

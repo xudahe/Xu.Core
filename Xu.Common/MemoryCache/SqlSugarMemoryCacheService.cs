@@ -3,10 +3,7 @@ using SqlSugar;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Xu.Common.MemoryCache
 {
@@ -16,18 +13,22 @@ namespace Xu.Common.MemoryCache
     public class SqlSugarMemoryCacheService : ICacheService
     {
         protected IMemoryCache _memoryCache;
+
         public SqlSugarMemoryCacheService(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }
+
         public void Add<V>(string key, V value)
         {
             _memoryCache.Set(key, value);
         }
+
         public void Add<V>(string key, V value, int cacheDurationInSeconds)
         {
             _memoryCache.Set(key, value, DateTimeOffset.Now.AddSeconds(cacheDurationInSeconds));
         }
+
         public bool ContainsKey<V>(string key)
         {
             return _memoryCache.TryGetValue(key, out _);

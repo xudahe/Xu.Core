@@ -12,7 +12,7 @@ namespace Xu.Common
         private SqlSugarScope _db;
 
         /// <summary>
-        /// 连接字符串 
+        /// 连接字符串
         /// </summary>
         public static MutiDBOperate GetMainConnectionDb()
         {
@@ -31,24 +31,27 @@ namespace Xu.Common
 
             return mainConnetctDb;
         }
+
         /// <summary>
-        /// 连接字符串 
+        /// 连接字符串
         /// </summary>
         public static string ConnectionString
         {
             get { return _connectionString; }
             set { _connectionString = value; }
         }
+
         /// <summary>
-        /// 数据库类型 
+        /// 数据库类型
         /// </summary>
         public static DbType DbType
         {
             get { return _dbType; }
             set { _dbType = value; }
         }
+
         /// <summary>
-        /// 数据连接对象 
+        /// 数据连接对象
         /// </summary>
         public SqlSugarScope Db
         {
@@ -65,11 +68,10 @@ namespace Xu.Common
                 throw new ArgumentNullException("数据库连接字符串为空");
 
             _db = sqlSugarClient as SqlSugarScope;
-
         }
 
-
         #region 实例方法
+
         /// <summary>
         /// 功能描述:获取数据库处理对象
         /// </summary>
@@ -78,6 +80,7 @@ namespace Xu.Common
         {
             return new SimpleClient<T>(_db);
         }
+
         /// <summary>
         /// 功能描述:获取数据库处理对象
         /// </summary>
@@ -88,12 +91,10 @@ namespace Xu.Common
         //    return new SimpleClient<T>(db);
         //}
 
-
-
-        #endregion
-
+        #endregion 实例方法
 
         #region 根据实体类生成数据库表
+
         /// <summary>
         /// 功能描述:根据实体类生成数据库表
         /// </summary>
@@ -123,15 +124,15 @@ namespace Xu.Common
         {
             if (blnBackupTable)
             {
-                _db.CodeFirst.BackupTable().InitTables(lstEntitys); //change entity backupTable            
+                _db.CodeFirst.BackupTable().InitTables(lstEntitys); //change entity backupTable
             }
             else
             {
                 _db.CodeFirst.InitTables(lstEntitys);
             }
         }
-        #endregion
 
+        #endregion 根据实体类生成数据库表
 
         #region 静态方法
 
@@ -186,6 +187,7 @@ namespace Xu.Common
         {
             return new SqlSugarScope(config);
         }
+
         /// <summary>
         /// 功能描述:获取一个自定义的数据库处理对象
         /// </summary>
@@ -195,6 +197,7 @@ namespace Xu.Common
         {
             return new SimpleClient<T>(sugarClient);
         }
+
         /// <summary>
         /// 功能描述:获取一个自定义的数据库处理对象
         /// </summary>
@@ -205,6 +208,7 @@ namespace Xu.Common
             SqlSugarScope sugarClient = GetCustomDB(config);
             return GetCustomEntityDB<T>(sugarClient);
         }
-        #endregion
+
+        #endregion 静态方法
     }
 }

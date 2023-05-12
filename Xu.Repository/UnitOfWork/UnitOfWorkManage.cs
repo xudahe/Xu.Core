@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using SqlSugar;
+using System;
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading;
 using Xu.Common;
-using Microsoft.Extensions.Logging;
-using SqlSugar;
 
 namespace Xu.Repository
 {
@@ -34,13 +34,12 @@ namespace Xu.Repository
             return _sqlSugarClient as SqlSugarScope;
         }
 
-
         public UnitOfWork CreateUnitOfWork()
         {
             UnitOfWork uow = new UnitOfWork();
             uow.Logger = _logger;
             uow.Db = _sqlSugarClient;
-            uow.Tenant = (ITenant) _sqlSugarClient;
+            uow.Tenant = (ITenant)_sqlSugarClient;
             uow.IsTran = true;
 
             uow.Db.Open();
@@ -97,7 +96,6 @@ namespace Xu.Repository
                 {
                     Thread.Sleep(1);
                 }
-
 
                 if (result == method.GetFullName())
                 {

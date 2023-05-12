@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
 using Xu.Model.Models;
@@ -45,9 +41,9 @@ namespace Xu.WebApi.Controllers
                 if (string.IsNullOrEmpty(data[i].ParentId)) continue;
 
                 if (GUIDHelper.IsGuidByReg(data[i].ParentId))
-                    data[i].ParentName = data.First(s => s.Guid == data[i].ParentId).MenuName;
+                    data[i].ParentName = data.Where(s => s.Guid == data[i].ParentId).FirstOrDefault()?.MenuName;
                 else
-                    data[i].ParentName = data.First(s => s.Id == data[i].ParentId.ToInt32()).MenuName;
+                    data[i].ParentName = data.Where(s => s.Id == data[i].ParentId.ToInt32()).FirstOrDefault()?.MenuName;
             }
 
             if (!string.IsNullOrEmpty(menuName))
@@ -99,7 +95,7 @@ namespace Xu.WebApi.Controllers
             var systemList = await _systemSvc.Query();
 
             //获取数据结构
-            var menuList1 = await _menuSvc.GetMenuTree(menuData,menuList,systemList);
+            var menuList1 = await _menuSvc.GetMenuTree(menuData, menuList, systemList);
 
             return new MessageModel<object>()
             {
@@ -132,7 +128,7 @@ namespace Xu.WebApi.Controllers
             var systemList = await _systemSvc.Query();
 
             //获取数据结构
-            var menuList1 = await _menuSvc.GetMenuTree(menuData,menuList,systemList);
+            var menuList1 = await _menuSvc.GetMenuTree(menuData, menuList, systemList);
 
             return new MessageModel<object>()
             {

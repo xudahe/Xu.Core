@@ -1,17 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.XmlModels;
-using Xu.Services;
 
 namespace Xu.WebApi.Controllers
 {
@@ -185,7 +179,7 @@ namespace Xu.WebApi.Controllers
         public async Task<object> PlatformBysystemId(string platId, string systemId)
         {
             var data = new MessageModel<string>();
-            var platInfo = (await _platformSvc.GetDataByids(platId)).First();
+            var platInfo = (await _platformSvc.GetDataByids(platId)).FirstOrDefault();
 
             if (platInfo != null && platInfo.Id > 0)
             {

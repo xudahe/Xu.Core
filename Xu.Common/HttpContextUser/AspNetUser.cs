@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Xu.Common;
-using Xu.Common.HttpContextUser;
 using Xu.Model.ResultModel;
 
 namespace Xu.Common.HttpContextUser
@@ -47,7 +45,6 @@ namespace Xu.Common.HttpContextUser
         {
             return _accessor.HttpContext.User.Identity.IsAuthenticated;
         }
-
 
         public string GetToken()
         {

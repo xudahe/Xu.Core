@@ -15,7 +15,6 @@ namespace Xu.WebApi.Controllers
     {
         private readonly IHttpContextAccessor _accessor;
 
-
         public PublicController(IHttpContextAccessor accessor)
         {
             _accessor = accessor;

@@ -1,22 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Xu.Common;
 using Xu.Extensions;
 using Xu.IServices;
-using Xu.Model;
 using Xu.Model.Models;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
-
 
 namespace Xu.WebApi.Controllers
 {
@@ -219,7 +212,8 @@ namespace Xu.WebApi.Controllers
                             var platformList = await _platformSvc.Query();
                             var systemList = await _systemSvc.Query();
 
-                            #region  通过InfoList来获取所关联平台菜单等数据
+                            #region 通过InfoList来获取所关联平台菜单等数据
+
                             var InfoPlatformList = new List<PlatformModel>();
 
                             var p_ids = new List<string>();
@@ -263,7 +257,9 @@ namespace Xu.WebApi.Controllers
                             {
                                 for (int i = 0; i < p_ids.Count; i++)
                                 {
-                                    var p_model = platformList.First(s => s.Guid == p_ids[i]);
+                                    var p_model = platformList.Where(s => s.Guid == p_ids[i]).FirstOrDefault();
+                                    if (p_model == null) continue;
+
                                     var pmodel = _mapper.Map<Platform, PlatformModel>(p_model);
 
                                     var sList = s_ids.Where(s => s.ParentId == p_ids[i]).ToList();
@@ -271,7 +267,9 @@ namespace Xu.WebApi.Controllers
                                     var s_list = new List<SystemModel>();
                                     for (int j = 0; j < sList.Count; j++)
                                     {
-                                        var s_model = systemList.First(s => s.Guid == sList[j].Guid);
+                                        var s_model = systemList.Where(s => s.Guid == sList[j].Guid).FirstOrDefault();
+                                        if (s_model == null) continue;
+
                                         var smodel = _mapper.Map<Systems, SystemModel>(s_model);
 
                                         var mList = m_ids.Where(s => s.ParentId == sList[j].Guid).ToList();
@@ -279,7 +277,9 @@ namespace Xu.WebApi.Controllers
                                         var m_list = new List<Menu>();
                                         for (int k = 0; k < mList.Count; k++)
                                         {
-                                            var m_model = menuData.First(s => s.Guid == mList[k].Guid);
+                                            var m_model = menuData.Where(s => s.Guid == mList[k].Guid).FirstOrDefault();
+                                            if (m_model == null) continue;
+
                                             m_list.Add(m_model);
                                         }
                                         var m_list1 = await _menuSvc.GetMenuTree(menuData, m_list, systemList);
@@ -292,7 +292,8 @@ namespace Xu.WebApi.Controllers
                                     InfoPlatformList.Add(pmodel);
                                 }
                             }
-                            #endregion
+
+                            #endregion 通过InfoList来获取所关联平台菜单等数据
 
                             loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleViewModel>>(roleList);
                             loginViewModel.PlatformInfoList = InfoPlatformList;

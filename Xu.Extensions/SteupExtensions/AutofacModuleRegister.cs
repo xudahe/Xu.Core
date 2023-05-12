@@ -60,7 +60,6 @@ namespace Xu.Extensions
                 cacheType.Add(typeof(LogAOP));
             }
 
-           
             builder.RegisterGeneric(typeof(BaseRepo<>)).As(typeof(IBaseRepo<>)).InstancePerDependency();//注册仓储
             builder.RegisterGeneric(typeof(BaseSvc<>)).As(typeof(IBaseSvc<>)).InstancePerDependency();//注册服务
 

@@ -1,11 +1,10 @@
-﻿
-using Xu.Common;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NetDevPack.Security.JwtExtensions;
 using System;
+using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -46,7 +45,6 @@ namespace Xu.Extensions
                 o.SetJwksOptions(new JwkOptions(AppSettings.App(new string[] { "Startup", "Authing", "JwksUri" }), AppSettings.App(new string[] { "Startup", "Authing", "Issuer" }), new TimeSpan(TimeSpan.TicksPerDay)));
             })
             .AddScheme<AuthenticationSchemeOptions, ApiResponseHandler>(nameof(ApiResponseHandler), o => { });
-
         }
     }
 }

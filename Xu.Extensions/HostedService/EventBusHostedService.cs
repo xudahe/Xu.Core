@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SqlSugar.Extensions;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xu.Common;
 using Xu.EventBus;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SqlSugar.Extensions;
 using Xu.Extensions.EventHandling;
 
 namespace Xu.Extensions.HostedService;

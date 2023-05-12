@@ -204,11 +204,11 @@ namespace Xu.Model.ViewModels
         public List<Menu> Children { get; set; }
     }
 
-
     public class SParent : ModelBase
     {
         public string ParentId { get; set; }
     }
+
     public class MParent : ModelBase
     {
         public string ParentId { get; set; }

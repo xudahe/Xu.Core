@@ -4,71 +4,31 @@
         <name>Xu.WebApi</name>
     </assembly>
     <members>
-        <member name="T:Blog.Core.Controllers.FileController">
+        <member name="T:Xu.Controllers.FileController">
             <summary>
             图片管理
             </summary>
         </member>
-        <member name="M:Blog.Core.Controllers.FileController.DownloadPicture(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:Xu.Controllers.FileController.DownloadPicture(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             下载图片（支持中文字符）
             </summary>
             <param name="environment"></param>
             <returns></returns>
         </member>
-        <member name="M:Blog.Core.Controllers.FileController.InsertPicture(Xu.Model.ViewModels.UploadFileDto)">
+        <member name="M:Xu.Controllers.FileController.InsertPicture(Xu.Model.ViewModels.UploadFileDto)">
             <summary>
             上传图片,多文件
             </summary>
             <param name="dto"></param>
             <returns></returns>
         </member>
-        <member name="M:Blog.Core.Controllers.FileController.FileUpload(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:Xu.Controllers.FileController.FileUpload(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             文件切片上传(测试)
             </summary>
             <param name="environment"></param>
             <param name="file">文件</param>
-            <returns></returns>
-        </member>
-        <member name="T:Blog.Core.Api.Controllers.NacosController">
-            <summary>
-            服务管理
-            </summary>
-        </member>
-        <member name="F:Blog.Core.Api.Controllers.NacosController.NacosNamingService">
-            <summary>
-            INacosNamingService
-            </summary>
-        </member>
-        <member name="M:Blog.Core.Api.Controllers.NacosController.#ctor(Nacos.V2.INacosNamingService)">
-             <summary>
-            
-             </summary>
-             <param name="nacosNamingService"></param>
-        </member>
-        <member name="M:Blog.Core.Api.Controllers.NacosController.CheckSystemStartFinish">
-            <summary>
-            系统实例是否启动完成
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Blog.Core.Api.Controllers.NacosController.GetStatus">
-            <summary>
-            获取Nacos 状态
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Blog.Core.Api.Controllers.NacosController.Register">
-            <summary>
-            服务上线
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Blog.Core.Api.Controllers.NacosController.Deregister">
-            <summary>
-            服务下线
-            </summary>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.MonitorController">
@@ -137,6 +97,46 @@
             <summary>
             本月活跃用户
             </summary>
+        </member>
+        <member name="T:Xu.WebApi.Controllers.NacosController">
+            <summary>
+            服务管理
+            </summary>
+        </member>
+        <member name="F:Xu.WebApi.Controllers.NacosController.NacosNamingService">
+            <summary>
+            INacosNamingService
+            </summary>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.NacosController.#ctor(Nacos.V2.INacosNamingService)">
+             <summary>
+            
+             </summary>
+             <param name="nacosNamingService"></param>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.NacosController.CheckSystemStartFinish">
+            <summary>
+            系统实例是否启动完成
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.NacosController.GetStatus">
+            <summary>
+            获取Nacos 状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.NacosController.Register">
+            <summary>
+            服务上线
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.WebApi.Controllers.NacosController.Deregister">
+            <summary>
+            服务下线
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.PublicController">
             <summary>

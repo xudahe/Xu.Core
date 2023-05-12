@@ -78,6 +78,13 @@ namespace Xu.IRepository
         /// <returns></returns>
         Task<bool> Update(T model);
 
+        /// <summary>
+        /// 更新model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<bool> Update(List<T> model);
+
         Task<bool> Update(T entity, string strWhere);
 
         Task<bool> Update(object operateAnonymousObjects);

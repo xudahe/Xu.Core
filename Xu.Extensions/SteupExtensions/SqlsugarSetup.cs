@@ -93,7 +93,7 @@ namespace Xu.Extensions
                         MoreSettings = new ConnMoreSettings()
                         {
                             IsAutoRemoveDataCache = true,
-                            DbMinDate = DateTime.MinValue//默认最小时间是 1900-01-01 00:00:00.000 
+                            DbMinDate = DateTime.MinValue//默认最小时间是 1900-01-01 00:00:00.000
                         },
                         // 从库
                         SlaveConnectionConfigs = listConfig_Slave,

@@ -46,7 +46,7 @@ namespace Xu.EventBus
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"Could not publish event: {@event.Id.ToString("N")} ({ex.Message});  Message:{ JsonConvert.SerializeObject(@event)}");
+                _logger.LogWarning($"Could not publish event: {@event.Id.ToString("N")} ({ex.Message});  Message:{JsonConvert.SerializeObject(@event)}");
             }
             finally
             {

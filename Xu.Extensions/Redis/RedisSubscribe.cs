@@ -1,5 +1,4 @@
-﻿using Xu.IServices;
-using InitQ.Abstractions;
+﻿using InitQ.Abstractions;
 using InitQ.Attributes;
 using System;
 using System.Threading.Tasks;

@@ -1,11 +1,9 @@
 ﻿using Castle.DynamicProxy;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xu.Common;
-using Xu.IRepository;
 using Xu.Repository;
 
 namespace Xu.Extensions
@@ -79,6 +77,7 @@ namespace Xu.Extensions
                     }
 
                     break;
+
                 case Propagation.Mandatory:
                     if (_unitOfWorkManage.TranCount <= 0)
                     {
@@ -86,11 +85,13 @@ namespace Xu.Extensions
                     }
 
                     break;
+
                 case Propagation.Nested:
                     _logger.LogDebug($"Begin Transaction");
                     Console.WriteLine($"Begin Transaction");
                     _unitOfWorkManage.BeginTran(method);
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(propagation), propagation, null);
             }
@@ -105,7 +106,6 @@ namespace Xu.Extensions
         {
             _unitOfWorkManage.RollbackTran(method);
         }
-
 
         private static async Task SuccessAction(IInvocation invocation)
         {

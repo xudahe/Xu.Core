@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Xu.Model.XmlModels;
 
 namespace Xu.Model.Models
 {

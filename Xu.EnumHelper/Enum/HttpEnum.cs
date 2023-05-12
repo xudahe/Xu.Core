@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Xu.EnumHelper
+﻿namespace Xu.EnumHelper
 {
     public enum HttpEnum
     {

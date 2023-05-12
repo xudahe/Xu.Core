@@ -1,9 +1,8 @@
-﻿
-using Xu.Common;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Xu.Common;
 
 namespace Xu.Extensions
 {
@@ -15,7 +14,6 @@ namespace Xu.Extensions
         public static void AddAuthentication_Ids4Setup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
-
 
             // 添加Identityserver4认证
             services.AddAuthentication(o =>

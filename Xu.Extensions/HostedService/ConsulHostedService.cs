@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Consul;
+﻿using Consul;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SqlSugar.Extensions;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Xu.Extensions.HostedService;
 

@@ -1,11 +1,10 @@
-﻿using Xu.Common.HttpPolly;
-using Xu.Model;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
 using System;
 using System.Net.Http;
+using Xu.Common.HttpPolly;
 using Xu.EnumHelper;
 
 namespace Xu.Extensions

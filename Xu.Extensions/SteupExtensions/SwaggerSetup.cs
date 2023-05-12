@@ -133,7 +133,6 @@ namespace Xu.Extensions
         }
     }
 
-
     public class SwaggerHiddenApi : IDocumentFilter
     {
         /// <summary>
