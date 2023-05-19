@@ -395,7 +395,7 @@
             登录管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(AutoMapper.IMapper,Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.Extensions.PermissionRequirement,Xu.IServices.ISystemSvc,Xu.IServices.IPlatformSvc)">
+        <member name="M:Xu.WebApi.Controllers.LoginController.#ctor(AutoMapper.IMapper,Xu.IServices.IUserSvc,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.Extensions.PermissionRequirement,Xu.IServices.ISystemSvc)">
             <summary>
             构造函数注入
             </summary>
@@ -405,7 +405,6 @@
             <param name="menuSvc"></param>
             <param name="requirement"></param>
             <param name="systemSvc"></param>
-            <param name="platformSvc"></param>
         </member>
         <member name="M:Xu.WebApi.Controllers.LoginController.GetJwtToken(System.String,System.String)">
             <summary>
@@ -508,71 +507,12 @@
             <param name="falg">true(禁用),false(启用)</param>
             <returns></returns>
         </member>
-        <member name="T:Xu.WebApi.Controllers.PlatformController">
-            <summary>
-            平台管理
-            </summary>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.GetPlatform(System.String,System.String)">
-            <summary>
-            获取平台数据
-            </summary>
-            <param name="ids">平台id或guid集合（可空）</param>
-            <param name="key">平台名称或平台简码（可空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.GetPlatformByPage(System.Int32,System.Int32,System.String)">
-            <summary>
-            获取全部平台并分页
-            </summary>
-            <param name="page">页码</param>
-            <param name="pageSize">页大小</param>
-            <param name="deptName">平台名称（可空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.PostPlatform(Xu.Model.Models.Platform)">
-            <summary>
-            添加平台
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.PutPlatform(Xu.Model.Models.Platform)">
-            <summary>
-            更新平台
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.DeletePlatform(System.Int32)">
-            <summary>
-            删除平台
-            </summary>
-            <param name="id">平台id（非空）</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.DisablePlatform(System.Int32,System.Boolean)">
-            <summary>
-            禁用平台
-            </summary>
-            <param name="id">平台id（非空）</param>
-            <param name="falg">true(禁用),false(启用)</param>
-            <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.PlatformController.PlatformBysystemId(System.String,System.String)">
-            <summary>
-            平台-->系统
-            </summary>
-            <param name="platId">用户id或guid</param>
-            <param name="systemId">角色id或guid，小写逗号隔开","</param>
-            <returns></returns>
-        </member>
         <member name="T:Xu.WebApi.Controllers.RoleController">
             <summary>
             角色管理
             </summary>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.#ctor(AutoMapper.IMapper,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.IServices.ISystemSvc,Xu.IServices.IPlatformSvc)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.#ctor(AutoMapper.IMapper,Xu.IServices.IRoleSvc,Xu.IServices.IMenuSvc,Xu.IServices.ISystemSvc)">
             <summary>
             构造函数
             </summary>
@@ -628,12 +568,11 @@
             <param name="falg">true(禁用),false(启用)</param>
             <returns></returns>
         </member>
-        <member name="M:Xu.WebApi.Controllers.RoleController.RoleByMenuId(System.String,System.String,System.String,System.String)">
+        <member name="M:Xu.WebApi.Controllers.RoleController.RoleByMenuId(System.String,System.String,System.String)">
             <summary>
-            角色-->平台-->系统-->菜单
+            角色-->系统-->菜单
             </summary>
             <param name="roleId">角色id或guid</param>
-            <param name="platId">平台id或guid</param>
             <param name="systemId">系统id或guid</param>
             <param name="menuIds">菜单id或guid，小写逗号隔开","</param>
             <returns></returns>

@@ -42,6 +42,7 @@ namespace Xu.Extensions
             var signingKey = new SymmetricSecurityKey(keyByteArray);            //验证私钥
             var Issuer = AppSettings.App(new string[] { "Audience", "Issuer" }); //注册人
             var Audience = AppSettings.App(new string[] { "Audience", "Audience" }); //访问人
+            var Expiration = AppSettings.App(new string[] { "Audience", "Expiration" }).ToInt32Req(); //accessToken过期时间
 
             //使用HmacSha256来验证加密后的私钥生成数字签名
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
@@ -57,7 +58,7 @@ namespace Xu.Extensions
                 Issuer,//发行人
                 Audience,//听众
                 signingCredentials,//签名凭据
-                expiration: TimeSpan.FromSeconds(60 * 60)//接口的过期时间
+                expiration: TimeSpan.FromSeconds(Expiration * 60)//接口的过期时间 (分钟*秒数)
                 );
 
             #endregion 参数

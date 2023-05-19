@@ -11,10 +11,16 @@ namespace Xu.Model.Models
     public class Menu : ModelBase
     {
         /// <summary>
-        /// 系统Id
+        /// 关联的系统Id或guid
         /// </summary>
         [SugarColumn(ColumnDescription = "系统Id")]
         public string SystemId { get; set; }
+
+        /// <summary>
+        /// 系统名称
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public string SystemName { get; set; }
 
         /// <summary>
         /// 菜单类名
@@ -45,6 +51,12 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "父级菜单Id或guid")]
         public string ParentId { get; set; }
+
+        /// <summary>
+        /// 父级菜单名称
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public string ParentName { get; set; }
 
         /// <summary>
         /// 加载方式
@@ -78,17 +90,6 @@ namespace Xu.Model.Models
         [SugarColumn(IsIgnore = true)]
         public List<Menu> Children { get; set; }
 
-        /// <summary>
-        /// 父级菜单名称
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public string ParentName { get; set; }
-
-        /// <summary>
-        /// 系统名称
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public string SystemName { get; set; }
 
         #endregion 临时类
     }

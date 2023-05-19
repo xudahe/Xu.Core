@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Xu.Common;
@@ -21,7 +22,6 @@ namespace Xu.WebApi.Controllers
         private readonly IRoleSvc _roleSvc;
         private readonly IMenuSvc _menuSvc;
         private readonly ISystemSvc _systemSvc;
-        private readonly IPlatformSvc _platformSvc;
 
         /// <summary>
         /// 构造函数
@@ -31,13 +31,12 @@ namespace Xu.WebApi.Controllers
         /// <param name="menuSvc"></param>
         /// <param name="systemSvc"></param>
         /// <param name="platformSvc"></param>
-        public RoleController(IMapper mapper, IRoleSvc roleSvc, IMenuSvc menuSvc, ISystemSvc systemSvc, IPlatformSvc platformSvc)
+        public RoleController(IMapper mapper, IRoleSvc roleSvc, IMenuSvc menuSvc, ISystemSvc systemSvc)
         {
             _mapper = mapper;
             _roleSvc = roleSvc;
             _menuSvc = menuSvc;
             _systemSvc = systemSvc;
-            _platformSvc = platformSvc;
         }
 
         /// <summary>
@@ -179,92 +178,72 @@ namespace Xu.WebApi.Controllers
         }
 
         /// <summary>
-        /// 角色-->平台-->系统-->菜单
+        /// 角色-->系统-->菜单
         /// </summary>
         /// <param name="roleId">角色id或guid</param>
-        /// <param name="platId">平台id或guid</param>
         /// <param name="systemId">系统id或guid</param>
         /// <param name="menuIds">菜单id或guid，小写逗号隔开","</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<object> RoleByMenuId(string roleId, string platId, string systemId, string menuIds)
+        public async Task<object> RoleByMenuId(string roleId, string systemId, string menuIds)
         {
             try
             {
                 var roleModal = (await _roleSvc.GetDataByids(roleId.ToString())).First();
 
-                var platModal = (await _platformSvc.GetDataByids(platId.ToString())).First();
-
-                var systemModal = (await _systemSvc.GetDataByids(systemId.ToString())).First();
-
-                var menuModal = new List<Menu>();
-
-                InfoPlatform infoPlatform = _mapper.Map<Platform, InfoPlatform>(platModal);
-                InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal);
                 IList<InfoMenu> infoMenuList = new List<InfoMenu>();
+                IList<InfoSystem> infoSystemList = new List<InfoSystem>();
 
                 if (!string.IsNullOrEmpty(menuIds))
                 {
-                    menuModal = await _menuSvc.GetDataByids(menuIds);
+                    var systemModal = (await _systemSvc.GetDataByids(systemId.ToString())).First();
+
+                    InfoSystem infoSystem = _mapper.Map<Systems, InfoSystem>(systemModal);
+
+                    var menuModal = await _menuSvc.GetDataByids(menuIds);
                     infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
-                }
-                else
-                {
-                    return new MessageModel<string>()
+
+
+                    var systemFalg = false;
+
+                    if (roleModal.InfoList != null && roleModal.InfoList.Count > 0)
                     {
-                        Message = "关联的菜单为空！"
-                    };
-                }
+                        infoSystemList = roleModal.InfoList;
 
-                IList<InfoPlatform> defaultList = new List<InfoPlatform>();
-
-                var platFalg = false;
-                var menuIds_new = menuIds;
-
-                if (roleModal.InfoList != null && roleModal.InfoList.Count > 0)
-                {
-                    defaultList = roleModal.InfoList;
-
-                    for (int i = 0; i < defaultList.Count; i++)
-                    {
-                        //是否存在该平台
-                        if (defaultList[i].Guid == infoPlatform.Guid)
+                        for (int i = 0; i < infoSystemList.Count; i++)
                         {
-                            platFalg = true;
-
-                            var systemFlag = false;
-
-                            if (defaultList[i].InfoSystemList != null && defaultList[i].InfoSystemList.Count > 0)
+                            //是否存在该系统
+                            if (infoSystemList[i].Guid == systemModal.Guid)
                             {
-                                for (int j = 0; j < defaultList[i].InfoSystemList.Count; j++)
-                                {
-                                    //是否存在该系统
-                                    if (defaultList[i].InfoSystemList[j].Guid == infoSystem.Guid)
-                                    {
-                                        systemFlag = true;
-                                        defaultList[i].InfoSystemList[j].InfoMenuList = infoMenuList;
-                                    }
-                                    menuIds_new += "," + defaultList[i].InfoSystemList[j].InfoMenuList.Select(s => s.Guid).JoinToString(",");
-                                }
-                            }
-
-                            if (!systemFlag)
-                            {
-                                infoSystem.InfoMenuList = infoMenuList;
-                                defaultList[i].InfoSystemList.Add(infoSystem);
+                                systemFalg = true;
+                                infoSystemList[i].InfoMenuList = infoMenuList;
                             }
                         }
                     }
+                    if (!systemFalg)
+                    {
+                        infoSystem.InfoMenuList = infoMenuList;
+                        infoSystemList.Add(infoSystem);
+                    }
+
+                    var menuIds_new = new List<string>();
+                    for (int i = 0; i < infoSystemList.Count; i++)
+                    {
+                        for (int j = 0; j < infoSystemList[i].InfoMenuList.Count; j++)
+                        {
+                            menuIds_new.Add(infoSystemList[i].InfoMenuList[j].Guid);
+                        }
+                    }
+
+                    roleModal.MenuIds = menuIds_new.JoinToString(",");
+                    roleModal.InfoList = infoSystemList;
                 }
-                if (!platFalg)
+                else
                 {
-                    infoSystem.InfoMenuList = infoMenuList;
-                    infoPlatform.InfoSystemList.Add(infoSystem);
-                    defaultList.Add(infoPlatform);
+                    roleModal.MenuIds = "";
+                    roleModal.InfoList = infoSystemList;
                 }
 
-                roleModal.MenuIds = menuIds_new.TrimStart(',').TrimEnd(',');
-                roleModal.InfoList = defaultList;
                 await _roleSvc.Update(roleModal);
 
                 return new MessageModel<string>()

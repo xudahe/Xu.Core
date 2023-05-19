@@ -25,7 +25,6 @@ namespace Xu.WebApi.Controllers
         private readonly IUserSvc _userSvc;
         private readonly IRoleSvc _roleSvc;
         private readonly IMenuSvc _menuSvc;
-        private readonly IPlatformSvc _platformSvc;
         private readonly ISystemSvc _systemSvc;
         private readonly PermissionRequirement _requirement;
 
@@ -38,15 +37,13 @@ namespace Xu.WebApi.Controllers
         /// <param name="menuSvc"></param>
         /// <param name="requirement"></param>
         /// <param name="systemSvc"></param>
-        /// <param name="platformSvc"></param>
-        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement, ISystemSvc systemSvc, IPlatformSvc platformSvc)
+        public LoginController(IMapper mapper, IUserSvc userSvc, IRoleSvc roleSvc, IMenuSvc menuSvc, PermissionRequirement requirement, ISystemSvc systemSvc)
         {
             _mapper = mapper;
             _userSvc = userSvc;
             _roleSvc = roleSvc;
             _menuSvc = menuSvc;
             _systemSvc = systemSvc;
-            _platformSvc = platformSvc;
             _requirement = requirement;
         }
 
@@ -209,101 +206,16 @@ namespace Xu.WebApi.Controllers
                             var menuData = await _menuSvc.Query();
                             var menuList = await _menuSvc.GetDataByids(roleList.Select(s => s.MenuIds).JoinToString(","), menuData);
 
-                            var platformList = await _platformSvc.Query();
                             var systemList = await _systemSvc.Query();
 
-                            #region 通过InfoList来获取所关联平台菜单等数据
-
-                            var InfoPlatformList = new List<PlatformModel>();
-
-                            var p_ids = new List<string>();
-                            var s_ids = new List<SParent>();
-                            var m_ids = new List<MParent>();
-
-                            for (int i = 0; i < roleList.Count; i++)
-                            {
-                                if (roleList[i].InfoList == null || roleList[i].InfoList.Count == 0) continue;
-
-                                for (int j = 0; j < roleList[i].InfoList.Count; j++)
-                                {
-                                    var platModel = roleList[i].InfoList[j];
-                                    p_ids.Add(platModel.Guid);
-
-                                    for (int k = 0; k < platModel.InfoSystemList.Count; k++)
-                                    {
-                                        var systemModel = platModel.InfoSystemList[k];
-                                        s_ids.Add(new SParent()
-                                        {
-                                            Guid = systemModel.Guid,
-                                            ParentId = platModel.Guid
-                                        });
-
-                                        for (int x = 0; x < systemModel.InfoMenuList.Count; x++)
-                                        {
-                                            var menuModel = systemModel.InfoMenuList[x];
-                                            m_ids.Add(new MParent()
-                                            {
-                                                Guid = menuModel.Guid,
-                                                ParentId = systemModel.Guid
-                                            });
-                                        }
-                                    }
-                                }
-                            }
-
-                            p_ids = p_ids.Distinct().ToList();
-
-                            if (p_ids.Count > 0)
-                            {
-                                for (int i = 0; i < p_ids.Count; i++)
-                                {
-                                    var p_model = platformList.Where(s => s.Guid == p_ids[i]).FirstOrDefault();
-                                    if (p_model == null) continue;
-
-                                    var pmodel = _mapper.Map<Platform, PlatformModel>(p_model);
-
-                                    var sList = s_ids.Where(s => s.ParentId == p_ids[i]).ToList();
-
-                                    var s_list = new List<SystemModel>();
-                                    for (int j = 0; j < sList.Count; j++)
-                                    {
-                                        var s_model = systemList.Where(s => s.Guid == sList[j].Guid).FirstOrDefault();
-                                        if (s_model == null) continue;
-
-                                        var smodel = _mapper.Map<Systems, SystemModel>(s_model);
-
-                                        var mList = m_ids.Where(s => s.ParentId == sList[j].Guid).ToList();
-
-                                        var m_list = new List<Menu>();
-                                        for (int k = 0; k < mList.Count; k++)
-                                        {
-                                            var m_model = menuData.Where(s => s.Guid == mList[k].Guid).FirstOrDefault();
-                                            if (m_model == null) continue;
-
-                                            m_list.Add(m_model);
-                                        }
-                                        var m_list1 = await _menuSvc.GetMenuTree(menuData, m_list, systemList);
-
-                                        smodel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuModel>>(m_list1);
-                                        s_list.Add(smodel);
-                                    }
-
-                                    pmodel.SystemfoList = s_list;
-                                    InfoPlatformList.Add(pmodel);
-                                }
-                            }
-
-                            #endregion 通过InfoList来获取所关联平台菜单等数据
-
                             loginViewModel.RoleInfoList = _mapper.Map<IList<Role>, IList<RoleViewModel>>(roleList);
-                            loginViewModel.PlatformInfoList = InfoPlatformList;
 
                             if (menuList.Count > 0)
                             {
                                 //获取数据结构
                                 var menuList1 = await _menuSvc.GetMenuTree(menuData, menuList, systemList);
 
-                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuModel>>(menuList1);
+                                loginViewModel.MenuInfoList = _mapper.Map<IList<Menu>, IList<MenuViewModel>>(menuList1);
 
                                 data.Success = true;
                                 data.Message = "登陆成功";

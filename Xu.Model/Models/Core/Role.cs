@@ -44,18 +44,18 @@ namespace Xu.Model.Models
         [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "角色关联菜单的id或guid集合")]
         public string MenuIds { get; set; }
 
-        #region 绑定平台--（新：平台-->系统-->菜单）
+        #region 绑定（新：系统-->菜单）
 
         private string _infoItem;
 
         [SugarColumn(IsIgnore = true)]
-        private IList<InfoPlatform> _infoList { get; set; }
+        private IList<InfoSystem> _infoList { get; set; }
 
         /// <summary>
-        /// 关联平台List
+        /// 关联系统List
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, IsJson = true, ColumnDescription = "关联平台 json")]
-        public IList<InfoPlatform> InfoList
+        public IList<InfoSystem> InfoList
         {
             get { return _infoList; }
             set
@@ -69,7 +69,7 @@ namespace Xu.Model.Models
         }
 
         /// <summary>
-        /// 关联平台--系统--菜单 Xml
+        /// 关联系统--菜单 Xml
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "关联平台--系统--菜单 xml")]
         public string InfoXml
@@ -88,38 +88,25 @@ namespace Xu.Model.Models
             XElement xElement = new XElement("Xml");
             xElement.SetAttributeValue("Version", "1");
 
-            //平台
+            //系统
             if (_infoList.Count > 0)
             {
                 foreach (var item in _infoList)
                 {
-                    XElement xItem = new XElement("Platform");
+                    XElement xItem = new XElement("System");
                     xItem.SetAttributeValue("Id", item.Id);
                     xItem.SetAttributeValue("Guid", item.Guid);
-                    xItem.SetAttributeValue("PlatformName", item.PlatformName);
+                    xItem.SetAttributeValue("SystemName", item.SystemName);
 
                     //系统
-                    if (item.InfoSystemList.Count > 0)
+                    if (item.InfoMenuList.Count > 0)
                     {
-                        foreach (var item2 in item.InfoSystemList)
+                        foreach (var item2 in item.InfoMenuList)
                         {
-                            XElement xItem2 = new XElement("System");
+                            XElement xItem2 = new XElement("Menu");
                             xItem2.SetAttributeValue("Id", item2.Id);
                             xItem2.SetAttributeValue("Guid", item2.Guid);
-                            xItem2.SetAttributeValue("SystemName", item2.SystemName);
-
-                            //菜单
-                            if (item2.InfoMenuList.Count > 0)
-                            {
-                                foreach (var item3 in item2.InfoMenuList)
-                                {
-                                    XElement xItem3 = new XElement("Menu");
-                                    xItem3.SetAttributeValue("Id", item3.Id);
-                                    xItem3.SetAttributeValue("Guid", item3.Guid);
-                                    xItem3.SetAttributeValue("MenuName", item3.MenuName);
-                                    xItem2.Add(xItem3);
-                                }
-                            }
+                            xItem2.SetAttributeValue("MenuName", item2.MenuName);
 
                             xItem.Add(xItem2);
                         }
@@ -132,9 +119,9 @@ namespace Xu.Model.Models
             return null;
         }
 
-        public IList<InfoPlatform> FromItemInfo_Xml()
+        public IList<InfoSystem> FromItemInfo_Xml()
         {
-            IList<InfoPlatform> list = new List<InfoPlatform>();
+            IList<InfoSystem> list = new List<InfoSystem>();
             XElement x = XElement.Parse(_infoItem);
             if (x.Name != "Xml")
                 return list;
@@ -142,50 +129,33 @@ namespace Xu.Model.Models
             if (ver == null || ver.Value != "1")
                 return list;
 
-            //平台
-            IList<XElement> xitems = x.Descendants("Platform").ToList();
+            //系统
+            IList<XElement> xitems = x.Descendants("System").ToList();
             if (xitems.Count > 0)
             {
                 foreach (var xElement in xitems)
                 {
-                    InfoPlatform item = new InfoPlatform
+                    InfoSystem item = new InfoSystem
                     {
                         Id = xElement.Attribute("Id").Value.ObjToInt(),
                         Guid = xElement.Attribute("Guid").Value,
-                        PlatformName = xElement.Attribute("PlatformName").Value,
+                        SystemName = xElement.Attribute("SystemName").Value,
                     };
 
-                    //系统
-                    IList<XElement> xitems2 = xElement.Descendants("System").ToList();
+                    //菜单
+                    IList<XElement> xitems2 = xElement.Descendants("Menu").ToList();
                     if (xitems2.Count > 0)
                     {
                         foreach (var xElement2 in xitems2)
                         {
-                            InfoSystem item2 = new InfoSystem
+                            InfoMenu item2 = new InfoMenu
                             {
                                 Id = xElement2.Attribute("Id").Value.ObjToInt(),
                                 Guid = xElement2.Attribute("Guid").Value,
-                                SystemName = xElement2.Attribute("SystemName").Value,
+                                MenuName = xElement2.Attribute("MenuName").Value,
                             };
 
-                            //菜单
-                            IList<XElement> xitems3 = xElement2.Descendants("Menu").ToList();
-                            if (xitems3.Count > 0)
-                            {
-                                foreach (var xElement3 in xitems3)
-                                {
-                                    InfoMenu item3 = new InfoMenu
-                                    {
-                                        Id = xElement3.Attribute("Id").Value.ObjToInt(),
-                                        Guid = xElement3.Attribute("Guid").Value,
-                                        MenuName = xElement3.Attribute("MenuName").Value,
-                                    };
-
-                                    item2.InfoMenuList.Add(item3);
-                                }
-                            }
-
-                            item.InfoSystemList.Add(item2);
+                            item.InfoMenuList.Add(item2);
                         }
                     }
 
@@ -196,6 +166,6 @@ namespace Xu.Model.Models
             return null;
         }
 
-        #endregion 绑定平台--（新：平台-->系统-->菜单）
+        #endregion 绑定（新：系统-->菜单）
     }
 }

@@ -1,16 +1,19 @@
-﻿namespace Xu.Model.ViewModels
+﻿using System.Collections.Generic;
+using Xu.Model.Models;
+
+namespace Xu.Model.ViewModels
 {
     public class MenuViewModel : ModelBase
     {
         /// <summary>
-        /// 系统名称(大屏/应用)
-        /// </summary>
-        public string SystemName { get; set; }
-
-        /// <summary>
         /// 关联的系统Id或guid
         /// </summary>
         public string SystemId { get; set; }
+
+        /// <summary>
+        /// 系统名称
+        /// </summary>
+        public string SystemName { get; set; }
 
         /// <summary>
         /// 菜单类名
@@ -35,7 +38,7 @@
         /// <summary>
         /// 父级菜单Id
         /// </summary>
-        public int? ParentId { get; set; }
+        public string ParentId { get; set; }
 
         /// <summary>
         /// 父级菜单名称
@@ -61,5 +64,10 @@
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 子级菜单
+        /// </summary>
+        public List<Menu> Children { get; set; }
     }
 }

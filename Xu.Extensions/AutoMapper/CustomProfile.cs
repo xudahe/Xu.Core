@@ -20,7 +20,6 @@ namespace Xu.Extensions
             CreateMap<Menu, InfoMenu>(); //第一个参数是原对象，第二个是目的对象
             CreateMap<Role, InfoRole>();
             CreateMap<Systems, InfoSystem>();
-            CreateMap<Platform, InfoPlatform>();
 
             CreateMap<User, LoginViewModel>()
                 .ForMember(d => d.RoleInfoList, s => s.Ignore())
@@ -32,12 +31,6 @@ namespace Xu.Extensions
             CreateMap<Menu, MenuViewModel>();
             CreateMap<Dept, DeptViewModel>();
             CreateMap<Systems, SystemViewModel>();
-            CreateMap<Platform, PlatformViewModel>();
-
-            //登录接口成功后返回映射类
-            CreateMap<Platform, PlatformModel>();
-            CreateMap<Systems, SystemModel>();
-            CreateMap<Menu, MenuModel>();
 
             //在使用当中，就这一句话完全搞定所有转换：XuViewModels models = IMapper.Map<XuViewModels>(XuArticle);
         }

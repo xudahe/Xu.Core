@@ -197,20 +197,6 @@ namespace Xu.Common
 
                     #endregion TasksQz
 
-                    #region Platform
-
-                    if (!await myContext.Db.Queryable<Platform>().AnyAsync())
-                    {
-                        myContext.GetEntityDB<Platform>().InsertRange(JsonHelper.ParseFormByJson<List<Platform>>(FileHelper.ReadFile(string.Format(SeedDataFolder, "Platform"), Encoding.UTF8)));
-                        Console.WriteLine("Table:Platform created success!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Table:Platform already exists...");
-                    }
-
-                    #endregion Platform
-
                     #region Systems
 
                     if (!await myContext.Db.Queryable<Systems>().AnyAsync())

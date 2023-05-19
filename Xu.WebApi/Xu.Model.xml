@@ -208,7 +208,12 @@
         </member>
         <member name="P:Xu.Model.Models.Menu.SystemId">
             <summary>
-            系统Id
+            关联的系统Id或guid
+            </summary>
+        </member>
+        <member name="P:Xu.Model.Models.Menu.SystemName">
+            <summary>
+            系统名称
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Menu.ClassName">
@@ -236,6 +241,11 @@
             父级菜单Id或guid
             </summary>
         </member>
+        <member name="P:Xu.Model.Models.Menu.ParentName">
+            <summary>
+            父级菜单名称
+            </summary>
+        </member>
         <member name="P:Xu.Model.Models.Menu.LoadWay">
             <summary>
             加载方式
@@ -259,66 +269,6 @@
         <member name="P:Xu.Model.Models.Menu.Children">
             <summary>
             子级菜单
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Menu.ParentName">
-            <summary>
-            父级菜单名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Menu.SystemName">
-            <summary>
-            系统名称
-            </summary>
-        </member>
-        <member name="T:Xu.Model.Models.Platform">
-            <summary>
-            平台信息表
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.PlatformCode">
-            <summary>
-            平台简码
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.PlatformName">
-            <summary>
-            平台名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.Index">
-            <summary>
-            加载序号
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.Theme">
-            <summary>
-            主题
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.Enabled">
-            <summary>
-            是否禁用
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.Remark">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.SystemIds">
-            <summary>
-            平台关联系统的id或guid集合，不能同时包含两者
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.SystemInfoList">
-            <summary>
-            关联系统List
-            </summary>
-        </member>
-        <member name="P:Xu.Model.Models.Platform.SystemInfoXml">
-            <summary>
-            关联系统Xml
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Role">
@@ -353,12 +303,12 @@
         </member>
         <member name="P:Xu.Model.Models.Role.InfoList">
             <summary>
-            关联平台List
+            关联系统List
             </summary>
         </member>
         <member name="P:Xu.Model.Models.Role.InfoXml">
             <summary>
-            关联平台--系统--菜单 Xml
+            关联系统--菜单 Xml
             </summary>
         </member>
         <member name="T:Xu.Model.Models.Systems">
@@ -746,21 +696,6 @@
             返回数据
             </summary>
         </member>
-        <member name="F:Xu.Model.ResultModel.ResponseEnum.NoPermissions">
-            <summary>
-            无权限
-            </summary>
-        </member>
-        <member name="F:Xu.Model.ResultModel.ResponseEnum.NoFound">
-            <summary>
-            找不到指定资源
-            </summary>
-        </member>
-        <member name="F:Xu.Model.ResultModel.ResponseEnum.ServerError">
-            <summary>
-            找不到指定资源
-            </summary>
-        </member>
         <member name="T:Xu.Model.ResultModel.TableModel`1">
             <summary>
             表格数据，支持分页
@@ -891,159 +826,14 @@
             是否禁用
             </summary>
         </member>
-        <member name="P:Xu.Model.ViewModels.LoginViewModel.PlatformInfoList">
+        <member name="P:Xu.Model.ViewModels.MenuViewModel.SystemId">
             <summary>
-            返回所关联数据： 平台-->系统-->菜单
-            </summary>
-        </member>
-        <member name="T:Xu.Model.ViewModels.PlatformModel">
-            <summary>
-            返回的平台信息
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformModel.PlatformCode">
-            <summary>
-            平台简码
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformModel.PlatformName">
-            <summary>
-            平台名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformModel.Index">
-            <summary>
-            加载序号
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformModel.Enabled">
-            <summary>
-            是否禁用
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformModel.Remark">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformModel.SystemfoList">
-            <summary>
-            所关联的菜单
-            </summary>
-        </member>
-        <member name="T:Xu.Model.ViewModels.SystemModel">
-            <summary>
-            平台所关联的系统信息
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.SystemModel.SystemCode">
-            <summary>
-            系统简码
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.SystemModel.SystemName">
-            <summary>
-            系统名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.SystemModel.Index">
-            <summary>
-            加载序号
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.SystemModel.Enabled">
-            <summary>
-            是否禁用
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.SystemModel.Remark">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.SystemModel.MenuInfoList">
-            <summary>
-            所关联的菜单
-            </summary>
-        </member>
-        <member name="T:Xu.Model.ViewModels.MenuModel">
-            <summary>
-            系统所关联的菜单信息
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.SystemId">
-            <summary>
-            所关联的系统Id
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.SystemName">
-            <summary>
-            系统名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.ClassName">
-            <summary>
-            菜单类名
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.MenuName">
-            <summary>
-            菜单名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.Icon">
-            <summary>
-            菜单图标
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.RouterUrl">
-            <summary>
-            菜单路由
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.ParentId">
-            <summary>
-            父级菜单Id或guid
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.ParentName">
-            <summary>
-            父级菜单名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.LoadWay">
-            <summary>
-            加载方式
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.Index">
-            <summary>
-            加载序号
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.Enabled">
-            <summary>
-            是否禁用
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.Remark">
-            <summary>
-            备注
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuModel.Children">
-            <summary>
-            子级菜单
+            关联的系统Id或guid
             </summary>
         </member>
         <member name="P:Xu.Model.ViewModels.MenuViewModel.SystemName">
             <summary>
-            系统名称(大屏/应用)
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.MenuViewModel.SystemId">
-            <summary>
-            关联的系统Id或guid
+            系统名称
             </summary>
         </member>
         <member name="P:Xu.Model.ViewModels.MenuViewModel.ClassName">
@@ -1096,29 +886,9 @@
             备注
             </summary>
         </member>
-        <member name="P:Xu.Model.ViewModels.PlatformViewModel.PlatformCode">
+        <member name="P:Xu.Model.ViewModels.MenuViewModel.Children">
             <summary>
-            平台简码
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformViewModel.PlatformName">
-            <summary>
-            平台名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformViewModel.Index">
-            <summary>
-            加载序号
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformViewModel.Enabled">
-            <summary>
-            是否禁用
-            </summary>
-        </member>
-        <member name="P:Xu.Model.ViewModels.PlatformViewModel.Remark">
-            <summary>
-            备注
+            子级菜单
             </summary>
         </member>
         <member name="P:Xu.Model.ViewModels.RoleViewModel.RoleCode">
@@ -1269,11 +1039,6 @@
         <member name="P:Xu.Model.XmlModels.InfoMenu.MenuName">
             <summary>
             菜单名称
-            </summary>
-        </member>
-        <member name="P:Xu.Model.XmlModels.InfoPlatform.PlatformName">
-            <summary>
-            平台名称
             </summary>
         </member>
         <member name="P:Xu.Model.XmlModels.InfoSystem.SystemName">
