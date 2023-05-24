@@ -1,1 +1,26 @@
-﻿[{"Guid":"8d623338-75bd-431a-aa1c-1602496c99c7","Id":1,"CreateTime":"\/Date(1679640803000+0800)\/","DeleteTime":null,"ModifyTime":null,"Enabled":false,"Index":1,"Remark":"系统、用户、角色、权限配置模块","SystemCode":"YW","SystemName":"运维系统"},{"Guid":"8f35fc4e-fd2d-41ec-b695-7da82f1d50a1","Id":2,"CreateTime":"\/Date(1679640803000+0800)\/","DeleteTime":null,"ModifyTime":"\/Date(1684313033000+0800)\/","Enabled":false,"Index":2,"Remark":"","SystemCode":"KP","SystemName":"考评系统"}]
+﻿[
+  {
+    "Guid": "8d623338-75bd-431a-aa1c-1602496c99c7",
+    "Id": 1,
+    "CreateTime": "\/Date(1679640803000+0800)\/",
+    "DeleteTime": null,
+    "ModifyTime": null,
+    "Enabled": false,
+    "Index": 1,
+    "Remark": "系统、用户、角色、权限配置模块",
+    "SystemCode": "YW",
+    "SystemName": "运维系统"
+  },
+  {
+    "Guid": "8f35fc4e-fd2d-41ec-b695-7da82f1d50a1",
+    "Id": 2,
+    "CreateTime": "\/Date(1679640803000+0800)\/",
+    "DeleteTime": null,
+    "ModifyTime": "\/Date(1684313033000+0800)\/",
+    "Enabled": false,
+    "Index": 2,
+    "Remark": "",
+    "SystemCode": "KP",
+    "SystemName": "考评系统"
+  }
+]

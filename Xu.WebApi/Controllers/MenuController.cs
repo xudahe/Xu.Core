@@ -169,7 +169,7 @@ namespace Xu.WebApi.Controllers
             var dataList = await _menuSvc.Query(a => a.MenuName == model.MenuName);
             if (dataList.Count > 0)
             {
-                data.Message = "该菜单已存在";
+                data.Message = "菜单已存在";
                 data.Success = false;
             }
             else

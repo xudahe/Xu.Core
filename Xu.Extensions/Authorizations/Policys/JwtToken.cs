@@ -16,7 +16,7 @@ namespace Xu.Extensions
         /// <param name="claims">需要在登陆的时候配置</param>
         /// <param name="permissionRequirement">在startup中定义的参数</param>
         /// <returns></returns>
-        public static TokenInfoViewModel BuildJwtToken(Claim[] claims, PermissionRequirement permissionRequirement)
+        public static TokenInfoDto BuildJwtToken(Claim[] claims, PermissionRequirement permissionRequirement)
         {
             var now = DateTime.Now;
             // 实例化JwtSecurityToken
@@ -32,7 +32,7 @@ namespace Xu.Extensions
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             //打包返回前台
-            var responseJson = new TokenInfoViewModel
+            var responseJson = new TokenInfoDto
             {
                 Token = encodedJwt,
                 Expires_in = permissionRequirement.Expiration.TotalSeconds,

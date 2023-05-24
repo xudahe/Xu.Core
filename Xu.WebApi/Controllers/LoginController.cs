@@ -101,7 +101,7 @@ namespace Xu.WebApi.Controllers
 
                 var token = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
 
-                return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功", token);
+                return MessageModel<TokenInfoDto>.Msg(true, "获取成功", token);
             }
             else
             {
@@ -151,7 +151,7 @@ namespace Xu.WebApi.Controllers
                     identity.AddClaims(claims);
 
                     var refreshToken = JwtToken.BuildJwtToken(claims.ToArray(), _requirement);
-                    return MessageModel<TokenInfoViewModel>.Msg(true, "获取成功", refreshToken);
+                    return MessageModel<TokenInfoDto>.Msg(true, "获取成功", refreshToken);
                 }
             }
 
@@ -223,17 +223,17 @@ namespace Xu.WebApi.Controllers
                             }
                             else
                             {
-                                data.Message = "该角色没有绑定菜单！";
+                                data.Message = "角色没有绑定菜单！";
                             }
                         }
                         else
                         {
-                            data.Message = "该用户没有绑定角色！";
+                            data.Message = "用户没有绑定角色！";
                         }
                     }
                     else
                     {
-                        data.Message = "该用户不存在，请核实！";
+                        data.Message = "用户不存在，请核实！";
                     }
                 }
             }

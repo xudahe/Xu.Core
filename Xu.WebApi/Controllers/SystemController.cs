@@ -78,7 +78,7 @@ namespace Xu.WebApi.Controllers
             var dataList = await _systemSvc.Query(a => a.SystemName == model.SystemName);
             if (dataList.Count > 0)
             {
-                data.Message = "该系统名称已存在";
+                data.Message = "系统名称已存在";
                 data.Success = false;
             }
             else

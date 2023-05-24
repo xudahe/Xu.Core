@@ -15,11 +15,18 @@ namespace Xu.Common
     /// </summary>
     public class RSACryption
     {
+        /// <summary>
+        /// 公钥 必须与前端保持一致
+        /// </summary>
         private static readonly string PublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCD84Pei8dcNzhz8JqaL0d0j0og4YZL++BWNCxBumgBGGPl7dKkTO1hzeF3ixudgrp1TPafc0pCGXvvnczwBxuAb7nseoP5Oj4H9TVsOxmV1fqLMmikLGdwjvPlK1Yclck+9bbe+h8fzv0bWM3uvQb8fF6qhNMhJGs/oZTEQB2BSwIDAQAB";
+        
+        /// <summary>
+        /// 私钥 必须与前端保持一致
+        /// </summary>
         private static readonly string PrivateKey = "MIICWwIBAAKBgQCD84Pei8dcNzhz8JqaL0d0j0og4YZL++BWNCxBumgBGGPl7dKkTO1hzeF3ixudgrp1TPafc0pCGXvvnczwBxuAb7nseoP5Oj4H9TVsOxmV1fqLMmikLGdwjvPlK1Yclck+9bbe+h8fzv0bWM3uvQb8fF6qhNMhJGs/oZTEQB2BSwIDAQABAoGAQENjIAnXiFPkjKLLyPfpxxzaL3Vm4K7FLXavbzuH17C3Ro4zHo3Qtud8PapkQqwef26CVlnh+ptKvwKNgwETJRohUlM6Fwhl/CJpdRDnbV1w5y8/NlFyXgI4mS35H8wj0N7OWO1aRgsZ3g55o6w1iajSb0yys4ME0kdXTUQk0uECQQDzbGEw7zgJA1SfDGJC3+fIiEHAWL/LxzB6l9BmbXpEkKKsqYbxLaeBnNUusWa40hb/+Jej4+wX/sxVdRb6YDjzAkEAisTCCASLBH+f+MWzWEJrjiBDglcyw9nLS6ogO+YymMy1vNO588aAKts4SUQF+O+hyiIXL0Nbb+hr8wCyVG6sSQJASdYbGQPG5Hz9Iw1XlN9j6CDkiNqiusYdv2HjVd5pUvjoTyVRCEEH6TnQNEydUvxu+4/FN3JAP/sKsfVFVgbv3wJAQOcdyRo22vfGHlh5NUJ7g5HbgU6/U5K93rnHMbzM1WKJbbOpOTcSIvk9Lic+k9ugVCX1qgla7tBKDPG6dnr84QJAaWKR8MfVRpOUC7yANLj/+mbh9NTcBEt4grpziKpj5Plt8B6pQFdZtEJHOr4Vlc8f3MbzQPgC9vNcC4XY1bSQGg==";
 
         /// <summary>
-        /// 生成PEM格式的公钥和密钥
+        /// 生成PEM格式的公钥和私钥
         /// </summary>
         /// <param name="strength">长度</param>
         /// <returns>Item1:公钥；Item2:私钥；</returns>
@@ -100,7 +107,7 @@ namespace Xu.Common
             }
         }
 
-        #region 解析
+        #region 
 
         /// <summary>
         /// 使用私钥创建RSA实例
@@ -146,7 +153,7 @@ namespace Xu.Common
         }
 
         /// <summary>
-        /// 导入密钥算法
+        /// 导入私钥算法
         /// </summary>
         /// <param name="binr"></param>
         /// <returns></returns>
@@ -288,7 +295,7 @@ namespace Xu.Common
             return true;
         }
 
-        #endregion 解析
+        #endregion 
 
         /// <summary>
         /// 判断一个字符串是否被Base64加密

@@ -46,7 +46,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 执行日志
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "执行日志")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "longtext", ColumnDescription = "执行日志")]
         public string TasksLog { get; set; }
 
         /// <summary>

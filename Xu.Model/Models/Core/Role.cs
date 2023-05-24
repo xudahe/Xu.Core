@@ -54,7 +54,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联系统List
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, IsJson = true, ColumnDescription = "关联平台 json")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "longtext", Length = int.MaxValue, IsJson = true, ColumnDescription = "关联平台 json")]
         public IList<InfoSystem> InfoList
         {
             get { return _infoList; }
@@ -71,7 +71,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联系统--菜单 Xml
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "关联平台--系统--菜单 xml")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "longtext", ColumnDescription = "关联平台--系统--菜单 xml")]
         public string InfoXml
         {
             get { return _infoItem; }

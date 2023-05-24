@@ -137,7 +137,7 @@ namespace Xu.Tasks
                     if (await _scheduler.Result.CheckExists(jobKey))
                     {
                         result.Success = false;
-                        result.Message = $"该任务计划已经在执行:【{tasksQz.JobName}】,请勿重复启动！";
+                        result.Message = $"任务计划已经在执行:【{tasksQz.JobName}】,请勿重复启动！";
                         return result;
                     }
 

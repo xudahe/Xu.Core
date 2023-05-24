@@ -16,7 +16,7 @@ namespace Xu.Model
         // MappingKeys //映射key
         // ColumnDescription //列描述
         // Length //长度
-        // IsNullable //是否为空
+        // IsNullable //默为false 不可以为null
         // IsIgnore 为true表示不会生成字段到数据库
         // OldColumnName //旧的列名
         // ColumnDataType //列类型，自定义
@@ -45,18 +45,4 @@ namespace Xu.Model
         [SugarColumn(IsNullable = true, IsOnlyIgnoreInsert = true, ColumnDescription = "删除时间")]
         public DateTime? DeleteTime { get; set; }
     }
-
-    ///////////////////Model数据验证///////////////////
-
-    //[Required] //表示属性必须有值；但用户可输入空格来满足此验证
-    //[StringLenght(100)]//最大长度100
-    //[Range(0, 999)]//取值范围是0-999
-    //[DateType(DataType.Date)]//要求此数据必为日期类型
-    //[CreaitCard]//信用卡
-    //[Phone]//电话号码
-    //[EmailAddress]//邮箱地址
-    //[DataType(DataType.Password)] //密码
-    //[RegularExpression(@"^[A-Z]+[a-zA-Z0-9""'\s-]*$")]
-    //[Url]//必须是url链接
-    //[Compare]//比较数据是否相同
 }

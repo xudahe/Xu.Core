@@ -17,12 +17,6 @@ namespace Xu.Model.Models
         public string SystemId { get; set; }
 
         /// <summary>
-        /// 系统名称
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public string SystemName { get; set; }
-
-        /// <summary>
         /// 菜单类名
         /// </summary>
         [SugarColumn(ColumnDescription = "菜单类名")]
@@ -37,13 +31,13 @@ namespace Xu.Model.Models
         /// <summary>
         /// 菜单图标
         /// </summary>
-        [SugarColumn(Length = 255, ColumnDescription = "菜单图标")]
+        [SugarColumn(ColumnDescription = "菜单图标")]
         public string Icon { get; set; }
 
         /// <summary>
         /// 菜单路由
         /// </summary>
-        [SugarColumn(IsNullable = true, Length = 255, ColumnDescription = "菜单路由")]
+        [SugarColumn(IsNullable = true, ColumnDescription = "菜单路由")]
         public string RouterUrl { get; set; }
 
         /// <summary>
@@ -51,12 +45,6 @@ namespace Xu.Model.Models
         /// </summary>
         [SugarColumn(IsNullable = true, ColumnDescription = "父级菜单Id或guid")]
         public string ParentId { get; set; }
-
-        /// <summary>
-        /// 父级菜单名称
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public string ParentName { get; set; }
 
         /// <summary>
         /// 加载方式
@@ -85,11 +73,22 @@ namespace Xu.Model.Models
         #region 临时类
 
         /// <summary>
+        /// 父级菜单名称
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public string ParentName { get; set; }
+
+        /// <summary>
+        /// 系统名称
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public string SystemName { get; set; }
+
+        /// <summary>
         /// 子级菜单
         /// </summary>
         [SugarColumn(IsIgnore = true)]
         public List<Menu> Children { get; set; }
-
 
         #endregion 临时类
     }

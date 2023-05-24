@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using Xu.Common;
 using Xu.Model.ResultModel;
 using Xu.Model.ViewModels;
@@ -36,11 +34,11 @@ namespace Xu.WebApi.Controllers
         [HttpGet]
         public object GetServerInfo()
         {
-            return new MessageModel<ServerViewModel>()
+            return new MessageModel<ServerViewDto>()
             {
                 Message = "获取成功",
                 Success = true,
-                Response = new ServerViewModel()
+                Response = new ServerViewDto()
                 {
                     //环境变量
                     EnvironmentName = _env.EnvironmentName,
@@ -192,137 +190,5 @@ namespace Xu.WebApi.Controllers
                 Response = LogLock.AccessApiByHour()
             };
         }
-
-        private static List<UserAccessModel> GetAccessLogsToday(IWebHostEnvironment environment)
-        {
-            List<UserAccessModel> userAccessModels = new();
-            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log"), "RecordAccessLogs", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
-
-            try
-            {
-                return JsonConvert.DeserializeObject<List<UserAccessModel>>("[" + accessLogs + "]");
-            }
-            catch (Exception)
-            {
-                var accLogArr = accessLogs.Split("\n");
-                foreach (var item in accLogArr)
-                {
-                    if (item.ObjToString() != "")
-                    {
-                        try
-                        {
-                            var accItem = JsonConvert.DeserializeObject<UserAccessModel>(item.TrimEnd(','));
-                            userAccessModels.Add(accItem);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-            }
-
-            return userAccessModels;
-        }
-
-        private static List<ActiveUserVM> GetAccessLogsTrend(IWebHostEnvironment environment)
-        {
-            List<ActiveUserVM> userAccessModels = new();
-            var accessLogs = LogLock.ReadLog(Path.Combine(environment.ContentRootPath, "Log"), "AccessTrendLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
-
-            try
-            {
-                return JsonConvert.DeserializeObject<List<ActiveUserVM>>(accessLogs);
-            }
-            catch (Exception)
-            {
-                var accLogArr = accessLogs.Split("\n");
-                foreach (var item in accLogArr)
-                {
-                    if (item.ObjToString() != "")
-                    {
-                        try
-                        {
-                            var accItem = JsonConvert.DeserializeObject<ActiveUserVM>(item.TrimStart('[').TrimEnd(']'));
-                            userAccessModels.Add(accItem);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                }
-            }
-
-            return userAccessModels;
-        }
-
-        /// <summary>
-        /// 活跃用户
-        /// </summary>
-        /// <param name="environment"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public MessageModel<WelcomeInitData> GetActiveUsers([FromServices] IWebHostEnvironment environment)
-        {
-            var accessLogsToday = GetAccessLogsToday(environment).Where(d => d.BeginTime.ToDateTimeReq() >= DateTime.Today);
-
-            var Logs = accessLogsToday.OrderByDescending(d => d.BeginTime).Take(50).ToList();
-
-            var errorCountToday = LogLock.GetLogData().Where(d => d.Import == 9).Count();
-
-            accessLogsToday = accessLogsToday.Where(d => d.User != "").ToList();
-
-            var activeUsers = (from n in accessLogsToday
-                               group n by new { n.User } into g
-                               select new ActiveUserVM
-                               {
-                                   User = g.Key.User,
-                                   Count = g.Count(),
-                               }).ToList();
-
-            int activeUsersCount = activeUsers.Count;
-            activeUsers = activeUsers.OrderByDescending(d => d.Count).Take(10).ToList();
-
-            return new MessageModel<WelcomeInitData>()
-            {
-                Message = "获取成功",
-                Success = true,
-                Response = new WelcomeInitData()
-                {
-                    ActiveUsers = activeUsers,
-                    ActiveUserCount = activeUsersCount,
-                    ErrorCount = errorCountToday,
-                    Logs = Logs,
-                    ActiveCount = GetAccessLogsTrend(environment)
-                }
-            };
-        }
-    }
-
-    public class WelcomeInitData
-    {
-        /// <summary>
-        /// 今日活跃用户
-        /// </summary>
-        public List<ActiveUserVM> ActiveUsers { get; set; }
-
-        /// <summary>
-        /// 今日活跃用户数量
-        /// </summary>
-        public int ActiveUserCount { get; set; }
-
-        /// <summary>
-        /// 访问日志
-        /// </summary>
-        public List<UserAccessModel> Logs { get; set; }
-
-        /// <summary>
-        /// 今日异常数量
-        /// </summary>
-        public int ErrorCount { get; set; }
-
-        /// <summary>
-        /// 本月活跃用户
-        /// </summary>
-        public List<ActiveUserVM> ActiveCount { get; set; }
     }
 }

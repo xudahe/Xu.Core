@@ -15,12 +15,6 @@ namespace Xu.Common
         public int Count { get; set; }
     }
 
-    public class ActiveUserVM
-    {
-        public string User { get; set; }
-        public int Count { get; set; }
-    }
-
     public class RequestApiWeekView
     {
         public List<string> Columns { get; set; }

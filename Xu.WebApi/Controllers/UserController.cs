@@ -144,24 +144,72 @@ namespace Xu.WebApi.Controllers
             {
                 _unitOfWorkManage.BeginTran();
 
-                var roleList = await _roleSvc.GetDataByids(model.RoleIds);
-                model.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
-
                 if (model != null && model.Id > 0)
                 {
-                    data.Success = await _userSvc.Update(model);
+                    var roleList = await _roleSvc.GetDataByids(model.RoleIds);
+                    model.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
 
-                    _unitOfWorkManage.CommitTran();
+                    data.Success = await _userSvc.Update(model);
 
                     if (data.Success)
                     {
                         data.Message = "更新成功";
                     }
+
+                    _unitOfWorkManage.CommitTran();
                 }
             }
             catch (Exception)
             {
                 _unitOfWorkManage.RollbackTran();
+            }
+
+            return data;
+        }
+
+        /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="userId">用户id或guid</param>
+        /// <param name="oldPwd">原密码</param>
+        /// <param name="newPwd">新密码</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<object> UpdatePassword([FromForm] string userId, [FromForm] string oldPwd, [FromForm] string newPwd)
+        {
+            var data = new MessageModel<string>();
+
+            if (RSACryption.IsBase64(oldPwd)) oldPwd = RSACryption.RSADecrypt(oldPwd); //解密
+            if (RSACryption.IsBase64(newPwd)) newPwd = RSACryption.RSADecrypt(newPwd); //解密
+
+            if (string.IsNullOrEmpty(oldPwd))
+                data.Message = "原密码不能为空";
+            else if (string.IsNullOrEmpty(newPwd))
+                data.Message = "新密码不能为空";
+            else
+            {
+                var model = (await _userSvc.GetDataByids(userId)).FirstOrDefault();
+                if (model != null && model.Id > 0)
+                {
+                    if (!model.LoginPwd.Equals(oldPwd))
+                    {
+                        data.Message = "原密码验证错误";
+                    }
+                    else
+                    {
+                        model.LoginPwd = newPwd;
+                        model.CriticalModifyTime = DateTime.Now;
+                        data.Success = await _userSvc.Update(model);
+                        if (data.Success)
+                        {
+                            data.Message = "更新成功";
+                        }
+                    }
+                }
+                else
+                {
+                    data.Message = "用户不存在，请联系管理员";
+                }
             }
 
             return data;
@@ -219,19 +267,19 @@ namespace Xu.WebApi.Controllers
         /// 用户-->角色
         /// </summary>
         /// <param name="userId">用户id或guid</param>
-        /// <param name="roleId">角色id或guid，小写逗号隔开","</param>
+        /// <param name="roleIds">角色id或guid，小写逗号隔开","</param>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<object> UserByRoleId(string userId, string roleId)
+        [HttpPost]
+        public async Task<object> UserByRoleId([FromForm] string userId, [FromForm] string roleIds)
         {
             var data = new MessageModel<string>();
             var userInfo = (await _userSvc.GetDataByids(userId)).FirstOrDefault();
 
             if (userInfo != null && userInfo.Id > 0)
             {
-                var roleList = await _roleSvc.GetDataByids(roleId);
+                var roleList = await _roleSvc.GetDataByids(roleIds);
                 userInfo.RoleInfoList = _mapper.Map<IList<Role>, IList<InfoRole>>(roleList);
-                userInfo.RoleIds = roleId;
+                userInfo.RoleIds = roleIds;
 
                 data.Success = await _userSvc.Update(userInfo);
                 if (data.Success)
@@ -241,7 +289,7 @@ namespace Xu.WebApi.Controllers
             }
             else
             {
-                data.Message = "该用户不存在，请联系管理员";
+                data.Message = "用户不存在，请联系管理员";
             }
 
             return data;

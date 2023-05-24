@@ -133,9 +133,9 @@ namespace Xu.Controllers
 
             if (file == null) { data.Message = "请选择上传的文件。"; return data; }
 
-            if (string.IsNullOrEmpty(fileName)) { data.Message = "文件夹名称不能为空。"; return data; }
+            if (string.IsNullOrEmpty(fileName)) { data.Message = "文件夹名称不能为空！"; return data; }
 
-            if (string.IsNullOrEmpty(chunkName)) { data.Message = "文件名称不能为空。"; return data; }
+            if (string.IsNullOrEmpty(chunkName)) { data.Message = "文件名称不能为空！"; return data; }
 
             string folderpath = Path.Combine(environment.WebRootPath, fileName);
             if (!Directory.Exists(folderpath))

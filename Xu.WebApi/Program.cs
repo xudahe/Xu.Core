@@ -80,6 +80,7 @@ builder.Services.AddKafkaSetup(builder.Configuration);
 builder.Services.AddEventBusSetup();
 builder.Services.AddNacosSetup(builder.Configuration);
 builder.Services.AddInitializationHostServiceSetup();
+builder.Services.AddFileProviderSetup(builder.Configuration);
 
 // 授权+认证 (jwt or ids4)
 builder.Services.AddAuthorizationSetup();
@@ -234,10 +235,12 @@ defaultFilesOptions.DefaultFileNames.Clear();
 defaultFilesOptions.DefaultFileNames.Add("index.html");
 app.UseDefaultFiles(defaultFilesOptions);
 
-app.UseStaticFiles();// 默认使用wwwroot静态文件
+app.UseStaticFiles(); // 默认注册wwwroot静态文件
+app.UseDirectoryBrowser(); // 默认注册wwwroot目录结构
 app.UseCookiePolicy();  // 使用cookie
 app.UseStatusCodePages();     // 返回错误码
 app.UseRouting();  // Routing
+app.UseFileProviderMiddle();
 
 if (builder.Configuration.GetValue<bool>("AppSettings:UseLoadTest"))
 {

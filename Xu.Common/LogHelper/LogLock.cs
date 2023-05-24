@@ -92,8 +92,8 @@ namespace Xu.Common
                     //如果路径不存在，创建一个路径的文件夹
                     Directory.CreateDirectory(folderPath);
                 }
-                //string logFilePath = Path.Combine(path, $@"{filename}.log");
-                var logFilePath = FileHelper.GetAvailableFileWithPrefixOrderSize(folderPath, prefix);
+                string logFilePath = Path.Combine(folderPath, $@"{prefix}.log");
+                // var logFilePath = FileHelper.GetAvailableFileWithPrefixOrderSize(folderPath, prefix);
                 switch (prefix)
                 {
                     case "AOPLog":
@@ -338,7 +338,7 @@ namespace Xu.Common
 
             try
             {
-                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "AOPLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd")), "AOPLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
                 if (!string.IsNullOrEmpty(logContent))
                 {
@@ -367,7 +367,7 @@ namespace Xu.Common
 
             try
             {
-                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RequestResponseLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd")), "RequestResponseLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
                 resLogs = logContent.Split("--------------------------------")
                                        .Where(d => !string.IsNullOrEmpty(d) && d != "\n" && d != "\r\n")
@@ -423,7 +423,7 @@ namespace Xu.Common
 
             try
             {
-                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "SqlLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd")), "SqlLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
                 if (!string.IsNullOrEmpty(logContent))
                 {
@@ -452,7 +452,7 @@ namespace Xu.Common
 
             try
             {
-                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd")), "RequestIpInfoLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
                 var Logs = JsonConvert.DeserializeObject<List<RequestInfo>>("[" + logContent + "]");
 
@@ -481,7 +481,7 @@ namespace Xu.Common
 
             try
             {
-                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RecordAccessLogs", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+                var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd")), "RecordAccessLogs", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
                 var Logs = JsonConvert.DeserializeObject<List<UserAccessModel>>("[" + logContent + "]");
 
@@ -498,7 +498,7 @@ namespace Xu.Common
         {
             List<RequestInfo> requestInfos = new();
 
-            var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log"), "RequestIpInfoLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
+            var logContent = LogLock.ReadLog(Path.Combine(_contentRoot, "Log", DateTime.Now.ToString("yyyyMMdd")), "RequestIpInfoLog", Encoding.UTF8, ReadType.Prefix, 2).ObjToString().TrimEnd(',');
 
             try
             {

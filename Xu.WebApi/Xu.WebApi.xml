@@ -31,6 +31,37 @@
             <param name="file">文件</param>
             <returns></returns>
         </member>
+        <member name="T:Xu.Controllers.FileDirectoryController">
+            <summary>
+            树结构制作文件目录
+            </summary>
+        </member>
+        <member name="M:Xu.Controllers.FileDirectoryController.GetFileDirectory(System.String,System.String)">
+            <summary>
+            获取文件夹目录
+            E:\\test1\\Files 物理真实地址，电脑中一定要存在
+            </summary>
+            <param name="alias">（非空）物理真实地址对应别名(first second third) 具体看appsettings.json的VirtualPath配置</param>
+            <param name="jobNo">（可空）File文件夹下面的文件夹名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.FileDirectoryController.GetFileDirList(System.IO.DirectoryInfo[],System.Int32,System.Collections.Generic.List{Xu.Model.ViewModels.FileDirectoryDto}@)">
+            <summary>
+            获取文件夹List
+            </summary>
+            <param name="dirInfo"></param>
+            <param name="fileDirectoruList"></param>
+            <param name="level"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Xu.Controllers.FileDirectoryController.AddFiles(System.IO.DirectoryInfo,System.Int32,System.Collections.Generic.List{Xu.Model.ViewModels.FileDirectoryDto}@)">
+            <summary>
+            获取文件夹中的文件list
+            </summary>
+            <param name="directoryInfo"></param>
+            <param name="level"></param>
+            <param name="fileDirectoryModels"></param>
+        </member>
         <member name="T:Xu.WebApi.Controllers.MonitorController">
             <summary>
             监控管理
@@ -65,38 +96,6 @@
             Api请求访问日志
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Xu.WebApi.Controllers.MonitorController.GetActiveUsers(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
-            <summary>
-            活跃用户
-            </summary>
-            <param name="environment"></param>
-            <returns></returns>
-        </member>
-        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveUsers">
-            <summary>
-            今日活跃用户
-            </summary>
-        </member>
-        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveUserCount">
-            <summary>
-            今日活跃用户数量
-            </summary>
-        </member>
-        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.Logs">
-            <summary>
-            访问日志
-            </summary>
-        </member>
-        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ErrorCount">
-            <summary>
-            今日异常数量
-            </summary>
-        </member>
-        <member name="P:Xu.WebApi.Controllers.WelcomeInitData.ActiveCount">
-            <summary>
-            本月活跃用户
-            </summary>
         </member>
         <member name="T:Xu.WebApi.Controllers.NacosController">
             <summary>
@@ -671,6 +670,15 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:Xu.WebApi.Controllers.UserController.UpdatePassword(System.String,System.String,System.String)">
+            <summary>
+            修改用户密码
+            </summary>
+            <param name="userId">用户id或guid</param>
+            <param name="oldPwd">原密码</param>
+            <param name="newPwd">新密码</param>
+            <returns></returns>
+        </member>
         <member name="M:Xu.WebApi.Controllers.UserController.DeleteUser(System.Int32)">
             <summary>
             删除用户
@@ -691,7 +699,7 @@
             用户-->角色
             </summary>
             <param name="userId">用户id或guid</param>
-            <param name="roleId">角色id或guid，小写逗号隔开","</param>
+            <param name="roleIds">角色id或guid，小写逗号隔开","</param>
             <returns></returns>
         </member>
         <member name="T:Xu.WebApi.Controllers.ValueController">

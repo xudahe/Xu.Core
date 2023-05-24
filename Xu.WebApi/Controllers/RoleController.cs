@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Xu.Common;
@@ -95,7 +94,7 @@ namespace Xu.WebApi.Controllers
             var dataList = await _roleSvc.Query(a => a.RoleName == model.RoleName);
             if (dataList.Count > 0)
             {
-                data.Message = "该角色已存在";
+                data.Message = "角色已存在";
             }
             else
             {
@@ -202,7 +201,6 @@ namespace Xu.WebApi.Controllers
 
                     var menuModal = await _menuSvc.GetDataByids(menuIds);
                     infoMenuList = _mapper.Map<IList<Menu>, IList<InfoMenu>>(menuModal);
-
 
                     var systemFalg = false;
 

@@ -106,7 +106,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联角色List
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, IsJson = true, ColumnDescription = "关联角色 json")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "longtext", IsJson = true, ColumnDescription = "关联角色 json")]
         public IList<InfoRole> RoleInfoList
         {
             get { return _roleInfoList; }
@@ -123,7 +123,7 @@ namespace Xu.Model.Models
         /// <summary>
         /// 关联角色Xml
         /// </summary>
-        [SugarColumn(IsNullable = true, ColumnDataType = "varchar", Length = int.MaxValue, ColumnDescription = "关联角色 xml")]
+        [SugarColumn(IsNullable = true, ColumnDataType = "longtext", ColumnDescription = "关联角色 xml")]
         public string RoleInfoXml
         {
             get { return _roleInfoItem; }

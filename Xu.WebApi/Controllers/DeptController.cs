@@ -89,7 +89,7 @@ namespace Xu.WebApi.Controllers
             var dataList = await _deptSvc.Query(a => a.DeptName == model.DeptName);
             if (dataList.Count > 0)
             {
-                data.Message = "该部门名称已存在";
+                data.Message = "部门名称已存在";
                 data.Success = false;
             }
             else

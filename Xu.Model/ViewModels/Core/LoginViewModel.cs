@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xu.Model.Models;
 
 namespace Xu.Model.ViewModels
 {

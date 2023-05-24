@@ -377,7 +377,7 @@ namespace Xu.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public MessageModel<List<QuartzReflectionViewModel>> GetTaskNameSpace()
+        public MessageModel<List<QuartzReflectionDto>> GetTaskNameSpace()
         {
             var baseType = typeof(IJob);
             var path = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
@@ -386,8 +386,8 @@ namespace Xu.WebApi.Controllers
                 .SelectMany(a => a.DefinedTypes)
                 .Select(type => type.AsType())
                 .Where(x => x != baseType && baseType.IsAssignableFrom(x)).ToArray();
-            var implementTypes = types.Where(x => x.IsClass).Select(item => new QuartzReflectionViewModel { nameSpace = item.Namespace, nameClass = item.Name, remark = "" }).ToList();
-            return MessageModel<List<QuartzReflectionViewModel>>.Msg(true, "获取成功", implementTypes);
+            var implementTypes = types.Where(x => x.IsClass).Select(item => new QuartzReflectionDto { nameSpace = item.Namespace, nameClass = item.Name, remark = "" }).ToList();
+            return MessageModel<List<QuartzReflectionDto>>.Msg(true, "获取成功", implementTypes);
         }
     }
 }
